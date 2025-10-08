@@ -81,6 +81,28 @@ const Navigation = ({ showBackButton = false, title = '' }) => {
               Sobre
             </Link>
             <Link
+              to="/casos-sucesso"
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                isActive('/casos-sucesso') 
+                  ? 'text-cyan-400 bg-slate-800' 
+                  : 'text-white hover:text-cyan-400 hover:bg-slate-800'
+              }`}
+              data-testid="nav-casos"
+            >
+              Casos de Sucesso
+            </Link>
+            <Link
+              to="/agendamento"
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                isActive('/agendamento') 
+                  ? 'text-cyan-400 bg-slate-800' 
+                  : 'text-white hover:text-cyan-400 hover:bg-slate-800'
+              }`}
+              data-testid="nav-agendamento"
+            >
+              Agendamento
+            </Link>
+            <Link
               to="/contact"
               className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                 isActive('/contact') 
