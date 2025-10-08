@@ -173,15 +173,15 @@ const Navigation = ({ showBackButton = false, title = '' }) => {
                 <div className="text-sm text-slate-300 space-y-2">
                   <div className="flex items-center space-x-2">
                     <Phone className="h-4 w-4" />
-                    <span>(xx) xxxx-xxxx</span>
+                    <span>(11) 9 1646‑8611</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Mail className="h-4 w-4" />
-                    <span>contato@apelite.com.br</span>
+                    <span>elitecdel@gmail.com</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Globe className="h-4 w-4" />
-                    <span>www.lauraedel.com.br/elite</span>
+                    <span>www.elitecdel.com.br</span>
                   </div>
                 </div>
               </div>
