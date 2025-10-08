@@ -179,9 +179,13 @@ class InterceptionLocation(Base):
     bearing = Column(Float)  # degrees
     created_at = Column(DateTime, default=datetime.utcnow)
 
-# Create tables
-if pg_engine:
-    Base.metadata.create_all(bind=pg_engine)
+# Create tables only if PostgreSQL is available
+try:
+    if pg_engine:
+        Base.metadata.create_all(bind=pg_engine)
+        print("✅ PostgreSQL tables created")
+except:
+    print("⚠️ Could not create PostgreSQL tables")
 
 # Pydantic Models
 class DashboardMetrics(BaseModel):
