@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Menu, X, Phone, Mail, Globe } from 'lucide-react';
+import { ArrowLeft, Menu, X, Phone, Mail, Globe, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Navigation = ({ showBackButton = false, title = '' }) => {
