@@ -1,0 +1,449 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { 
+  Calendar, 
+  Users, 
+  FileText, 
+  BarChart3, 
+  Settings, 
+  LogOut, 
+  Plus,
+  Eye,
+  Phone,
+  Mail,
+  Clock,
+  CheckCircle,
+  AlertTriangle,
+  TrendingUp
+} from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { toast } from 'sonner';
+
+const AdminDashboard = () => {
+  const [user, setUser] = useState(null);
+  const [activeTab, setActiveTab] = useState('overview');
+  const navigate = useNavigate();
+
+  // Sample data - in real app this would come from API
+  const [dashboardData, setDashboardData] = useState({
+    stats: {
+      totalAppointments: 23,
+      pendingAppointments: 5,
+      totalClients: 156,
+      monthlyRevenue: 45600,
+      newMessages: 8
+    },
+    recentAppointments: [
+      {
+        id: 1,
+        clientName: 'João Silva',
+        service: 'Perícia Digital',
+        date: '2024-10-10',
+        time: '14:00',
+        status: 'confirmed',
+        phone: '(11) 99999-9999',
+        email: 'joao@email.com'
+      },
+      {
+        id: 2,
+        clientName: 'Maria Santos',
+        service: 'Advocacia Criminal',
+        date: '2024-10-12',
+        time: '09:30',
+        status: 'pending',
+        phone: '(11) 88888-8888',
+        email: 'maria@email.com'
+      },
+      {
+        id: 3,
+        clientName: 'Carlos Oliveira',
+        service: 'Consultoria Técnica',
+        date: '2024-10-15',
+        time: '16:00',
+        status: 'pending',
+        phone: '(11) 77777-7777',
+        email: 'carlos@email.com'
+      }
+    ],
+    recentMessages: [
+      {
+        id: 1,
+        name: 'Ana Beatriz',
+        subject: 'Solicitação de Orçamento',
+        message: 'Gostaria de solicitar um orçamento para perícia digital em caso de fraude.',
+        date: '2024-10-08',
+        read: false
+      },
+      {
+        id: 2,
+        name: 'Roberto Lima',
+        subject: 'Dúvida sobre Processo',
+        message: 'Tenho algumas dúvidas sobre o andamento do meu processo criminal.',
+        date: '2024-10-07',
+        read: true
+      }
+    ]
+  });
+
+  useEffect(() => {
+    // Check authentication
+    const userData = localStorage.getItem('ap_elite_user');
+    const token = localStorage.getItem('ap_elite_token');
+    
+    if (!userData || !token) {
+      navigate('/login');
+      return;
+    }
+    
+    const parsedUser = JSON.parse(userData);
+    if (parsedUser.role !== 'administrator') {
+      toast.error('Acesso não autorizado');
+      navigate('/login');
+      return;
+    }
+    
+    setUser(parsedUser);
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('ap_elite_user');
+    localStorage.removeItem('ap_elite_token');
+    toast.success('Logout realizado com sucesso');
+    navigate('/login');
+  };
+
+  const getStatusBadge = (status) => {
+    const statusConfig = {
+      'confirmed': { label: 'Confirmado', className: 'bg-green-500 text-white' },
+      'pending': { label: 'Pendente', className: 'bg-yellow-500 text-white' },
+      'cancelled': { label: 'Cancelado', className: 'bg-red-500 text-white' },
+      'completed': { label: 'Concluído', className: 'bg-blue-500 text-white' }
+    };
+    
+    const config = statusConfig[status] || statusConfig['pending'];
+    return <Badge className={config.className}>{config.label}</Badge>;
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('pt-BR');
+  };
+
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }).format(value);
+  };
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+        <div className="text-white">Carregando...</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-slate-900">
+      {/* Header */}
+      <header className="bg-slate-800 border-b border-slate-700 px-4 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <div className="text-2xl font-bold text-white">
+              <span className="text-cyan-400">AP</span> Elite
+            </div>
+            <Badge className="bg-purple-500 text-white">Admin</Badge>
+          </div>
+          
+          <div className="flex items-center space-x-4">
+            <span className="text-slate-300">Bem-vinda, {user.name}</span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleLogout}
+              className="text-slate-300 border-slate-600 hover:bg-slate-700"
+              data-testid="admin-logout-button"
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Sair
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      <div className="flex">
+        {/* Sidebar */}
+        <aside className="w-64 bg-slate-800 min-h-screen p-4">
+          <nav className="space-y-2">
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`w-full text-left p-3 rounded-lg transition-colors flex items-center space-x-3 ${
+                activeTab === 'overview' ? 'bg-cyan-500 bg-opacity-20 text-cyan-400' : 'text-slate-300 hover:bg-slate-700'
+              }`}
+              data-testid="nav-overview"
+            >
+              <BarChart3 className="h-5 w-5" />
+              <span>Visão Geral</span>
+            </button>
+            
+            <button
+              onClick={() => setActiveTab('appointments')}
+              className={`w-full text-left p-3 rounded-lg transition-colors flex items-center space-x-3 ${
+                activeTab === 'appointments' ? 'bg-cyan-500 bg-opacity-20 text-cyan-400' : 'text-slate-300 hover:bg-slate-700'
+              }`}
+              data-testid="nav-appointments"
+            >
+              <Calendar className="h-5 w-5" />
+              <span>Agendamentos</span>
+              {dashboardData.stats.pendingAppointments > 0 && (
+                <Badge className="bg-red-500 text-white ml-auto">
+                  {dashboardData.stats.pendingAppointments}
+                </Badge>
+              )}
+            </button>
+            
+            <button
+              onClick={() => setActiveTab('clients')}
+              className={`w-full text-left p-3 rounded-lg transition-colors flex items-center space-x-3 ${
+                activeTab === 'clients' ? 'bg-cyan-500 bg-opacity-20 text-cyan-400' : 'text-slate-300 hover:bg-slate-700'
+              }`}
+              data-testid="nav-clients"
+            >
+              <Users className="h-5 w-5" />
+              <span>Clientes</span>
+            </button>
+            
+            <button
+              onClick={() => setActiveTab('messages')}
+              className={`w-full text-left p-3 rounded-lg transition-colors flex items-center space-x-3 ${
+                activeTab === 'messages' ? 'bg-cyan-500 bg-opacity-20 text-cyan-400' : 'text-slate-300 hover:bg-slate-700'
+              }`}
+              data-testid="nav-messages"
+            >
+              <Mail className="h-5 w-5" />
+              <span>Mensagens</span>
+              {dashboardData.stats.newMessages > 0 && (
+                <Badge className="bg-red-500 text-white ml-auto">
+                  {dashboardData.stats.newMessages}
+                </Badge>
+              )}
+            </button>
+            
+            <button
+              onClick={() => setActiveTab('reports')}
+              className={`w-full text-left p-3 rounded-lg transition-colors flex items-center space-x-3 ${
+                activeTab === 'reports' ? 'bg-cyan-500 bg-opacity-20 text-cyan-400' : 'text-slate-300 hover:bg-slate-700'
+              }`}
+              data-testid="nav-reports"
+            >
+              <FileText className="h-5 w-5" />
+              <span>Relatórios</span>
+            </button>
+          </nav>
+        </aside>
+
+        {/* Main Content */}
+        <main className="flex-1 p-6">
+          {activeTab === 'overview' && (
+            <div className="space-y-6">
+              <h1 className="text-3xl font-bold text-white">Painel Administrativo</h1>
+              
+              {/* Stats Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <Card className="bg-slate-800 border-slate-700">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-slate-400 text-sm">Agendamentos</p>
+                        <p className="text-2xl font-bold text-white">{dashboardData.stats.totalAppointments}</p>
+                      </div>
+                      <Calendar className="h-8 w-8 text-cyan-400" />
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card className="bg-slate-800 border-slate-700">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-slate-400 text-sm">Pendentes</p>
+                        <p className="text-2xl font-bold text-yellow-400">{dashboardData.stats.pendingAppointments}</p>
+                      </div>
+                      <AlertTriangle className="h-8 w-8 text-yellow-400" />
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card className="bg-slate-800 border-slate-700">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-slate-400 text-sm">Clientes</p>
+                        <p className="text-2xl font-bold text-white">{dashboardData.stats.totalClients}</p>
+                      </div>
+                      <Users className="h-8 w-8 text-green-400" />
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card className="bg-slate-800 border-slate-700">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-slate-400 text-sm">Receita Mensal</p>
+                        <p className="text-2xl font-bold text-white">{formatCurrency(dashboardData.stats.monthlyRevenue)}</p>
+                      </div>
+                      <TrendingUp className="h-8 w-8 text-cyan-400" />
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Recent Activity */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Recent Appointments */}
+                <Card className="bg-slate-800 border-slate-700">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center justify-between">
+                      Agendamentos Recentes
+                      <Button size="sm" className="btn-primary">
+                        <Plus className="h-4 w-4 mr-2" />
+                        Novo
+                      </Button>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {dashboardData.recentAppointments.map((appointment) => (
+                        <div key={appointment.id} className="flex items-center justify-between p-3 bg-slate-700 rounded-lg">
+                          <div className="flex-1">
+                            <p className="font-medium text-white">{appointment.clientName}</p>
+                            <p className="text-sm text-slate-400">{appointment.service}</p>
+                            <div className="flex items-center space-x-2 mt-1">
+                              <Clock className="h-3 w-3 text-slate-400" />
+                              <span className="text-xs text-slate-400">
+                                {formatDate(appointment.date)} às {appointment.time}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            {getStatusBadge(appointment.status)}
+                            <Button size="sm" variant="outline" className="text-slate-300 border-slate-600">
+                              <Eye className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Recent Messages */}
+                <Card className="bg-slate-800 border-slate-700">
+                  <CardHeader>
+                    <CardTitle className="text-white">Mensagens Recentes</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {dashboardData.recentMessages.map((message) => (
+                        <div key={message.id} className="p-3 bg-slate-700 rounded-lg">
+                          <div className="flex items-center justify-between mb-2">
+                            <p className="font-medium text-white">{message.name}</p>
+                            <div className="flex items-center space-x-2">
+                              {!message.read && (
+                                <Badge className="bg-red-500 text-white text-xs">Nova</Badge>
+                              )}
+                              <span className="text-xs text-slate-400">{formatDate(message.date)}</span>
+                            </div>
+                          </div>
+                          <p className="text-sm text-slate-300 mb-2">{message.subject}</p>
+                          <p className="text-xs text-slate-400 line-clamp-2">{message.message}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'appointments' && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h1 className="text-3xl font-bold text-white">Gerenciar Agendamentos</h1>
+                <Button className="btn-primary">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Novo Agendamento
+                </Button>
+              </div>
+              
+              <Card className="bg-slate-800 border-slate-700">
+                <CardContent className="p-6">
+                  <div className="text-center py-12 text-slate-400">
+                    <Calendar className="h-12 w-12 mx-auto mb-4" />
+                    <p>Sistema de gerenciamento de agendamentos em desenvolvimento</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {activeTab === 'clients' && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h1 className="text-3xl font-bold text-white">Gerenciar Clientes</h1>
+                <Button className="btn-primary">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Novo Cliente
+                </Button>
+              </div>
+              
+              <Card className="bg-slate-800 border-slate-700">
+                <CardContent className="p-6">
+                  <div className="text-center py-12 text-slate-400">
+                    <Users className="h-12 w-12 mx-auto mb-4" />
+                    <p>Sistema de gerenciamento de clientes em desenvolvimento</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {activeTab === 'messages' && (
+            <div className="space-y-6">
+              <h1 className="text-3xl font-bold text-white">Mensagens de Contato</h1>
+              
+              <Card className="bg-slate-800 border-slate-700">
+                <CardContent className="p-6">
+                  <div className="text-center py-12 text-slate-400">
+                    <Mail className="h-12 w-12 mx-auto mb-4" />
+                    <p>Sistema de gerenciamento de mensagens em desenvolvimento</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {activeTab === 'reports' && (
+            <div className="space-y-6">
+              <h1 className="text-3xl font-bold text-white">Relatórios e Analytics</h1>
+              
+              <Card className="bg-slate-800 border-slate-700">
+                <CardContent className="p-6">
+                  <div className="text-center py-12 text-slate-400">
+                    <BarChart3 className="h-12 w-12 mx-auto mb-4" />
+                    <p>Sistema de relatórios em desenvolvimento</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+        </main>
+      </div>
+    </div>
+  );
+};
+
+export default AdminDashboard;
