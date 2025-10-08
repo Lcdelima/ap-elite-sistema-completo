@@ -82,6 +82,13 @@ const AdminLayout = ({ children }) => {
       title: 'Calendário',
       path: '/admin/calendar',
       icon: CalendarIcon
+    },
+    {
+      title: 'Relatórios e Exportação',
+      path: '/admin/reports',
+      icon: FileText,
+      badge: 'Novo',
+      badgeColor: 'bg-green-500'
     }
   ];
 
