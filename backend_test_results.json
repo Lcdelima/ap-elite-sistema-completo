@@ -1,0 +1,72 @@
+[
+  {
+    "test": "Authentication",
+    "success": true,
+    "message": "Successfully authenticated as laura@apelite.com",
+    "timestamp": "2025-10-08T17:19:43.139150",
+    "response_data": null
+  },
+  {
+    "test": "Analytics Overview",
+    "success": false,
+    "message": "Failed with status 404",
+    "timestamp": "2025-10-08T17:19:43.149916",
+    "response_data": "{\"detail\":\"Not Found\"}"
+  },
+  {
+    "test": "Analytics KPIs",
+    "success": false,
+    "message": "Failed with status 404",
+    "timestamp": "2025-10-08T17:19:43.158761",
+    "response_data": "{\"detail\":\"Not Found\"}"
+  },
+  {
+    "test": "Interception Upload",
+    "success": false,
+    "message": "Failed with status 404",
+    "timestamp": "2025-10-08T17:19:43.205974",
+    "response_data": "{\"detail\":\"Not Found\"}"
+  },
+  {
+    "test": "IPED Create Project",
+    "success": false,
+    "message": "Failed with status 404",
+    "timestamp": "2025-10-08T17:19:43.212584",
+    "response_data": "{\"detail\":\"Not Found\"}"
+  },
+  {
+    "test": "IPED List Projects",
+    "success": false,
+    "message": "Failed with status 404",
+    "timestamp": "2025-10-08T17:19:43.259823",
+    "response_data": "{\"detail\":\"Not Found\"}"
+  },
+  {
+    "test": "Communications Email",
+    "success": false,
+    "message": "Failed with status 404",
+    "timestamp": "2025-10-08T17:19:43.272496",
+    "response_data": "{\"detail\":\"Not Found\"}"
+  },
+  {
+    "test": "Communications WhatsApp",
+    "success": false,
+    "message": "Failed with status 404",
+    "timestamp": "2025-10-08T17:19:43.318284",
+    "response_data": "{\"detail\":\"Not Found\"}"
+  },
+  {
+    "test": "Communications Video Room",
+    "success": false,
+    "message": "Exception: type object 'datetime.datetime' has no attribute 'timedelta'",
+    "timestamp": "2025-10-08T17:19:43.318393",
+    "response_data": null
+  },
+  {
+    "test": "Communications Messages",
+    "success": false,
+    "message": "Failed with status 404",
+    "timestamp": "2025-10-08T17:19:43.326428",
+    "response_data": "{\"detail\":\"Not Found\"}"
+  }
+]
