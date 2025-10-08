@@ -11,6 +11,8 @@ import Contact from './pages/Contact';
 import ServiceDetails from './pages/ServiceDetails';
 import Agendamento from './pages/Agendamento';
 import CasosSucesso from './pages/CasosSucesso';
+import FAQ from './pages/FAQ';
+import Depoimentos from './pages/Depoimentos';
 
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
