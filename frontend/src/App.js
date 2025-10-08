@@ -86,9 +86,9 @@ function App() {
           
           {/* Athena Module Routes - All 18 Modules */}
           <Route path="/athena/dashboard" element={<AthenaDashboard />} />
-          <Route path="/athena/clients" element={<AthenaClients />} />
+          <Route path="/athena/clients" element={<AthenaClientsEnhanced />} />
           <Route path="/athena/processes" element={<AthenaProcesses />} />
-          <Route path="/athena/communications" element={<AthenaCommunications />} />
+          <Route path="/athena/communications" element={<AthenaCommunicationsEnhanced />} />
           <Route path="/athena/calendar" element={<AthenaCalendar />} />
           <Route path="/athena/meeting-links" element={<AthenaMeetingLinks />} />
           <Route path="/athena/video" element={<AthenaVideoConference />} />
