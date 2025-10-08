@@ -580,10 +580,12 @@ async def get_tasks(current_user: dict = Depends(get_current_user)):
 
 # Import advanced features
 from advanced_features import advanced_router
+from advanced_integrations import integrations_router
 
 # Add all routes to main app
 app.include_router(api_router)
 app.include_router(advanced_router)
+app.include_router(integrations_router)
 
 # Health check
 @app.get("/")
