@@ -228,6 +228,17 @@ const Navigation = ({ showBackButton = false, title = '' }) => {
                 Contato
               </Link>
               
+              {/* Mobile Login Button */}
+              <Link
+                to="/login"
+                className="flex items-center space-x-2 px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition-colors mt-3"
+                onClick={() => setIsMobileMenuOpen(false)}
+                data-testid="mobile-login-button"
+              >
+                <User className="h-4 w-4" />
+                <span>Portal de Acesso</span>
+              </Link>
+              
               <div className="border-t border-slate-600 pt-3 mt-3">
                 <div className="text-sm text-slate-300 space-y-2">
                   <div className="flex items-center space-x-2">
