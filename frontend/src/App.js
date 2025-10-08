@@ -34,9 +34,20 @@ import AthenaDashboard from './pages/athena/Dashboard';
 import AthenaClients from './pages/athena/Clients';
 import AthenaProcesses from './pages/athena/Processes';
 import AthenaCommunications from './pages/athena/Communications';
+import AthenaCalendar from './pages/athena/Calendar';
+import AthenaMeetingLinks from './pages/athena/MeetingLinks';
+import AthenaVideoConference from './pages/athena/VideoConference';
+import AthenaForensics from './pages/athena/Forensics';
+import AthenaPhoneInterceptions from './pages/athena/PhoneInterceptions';
+import AthenaDataInterceptions from './pages/athena/DataInterceptions';
+import AthenaDataExtraction from './pages/athena/DataExtraction';
 import AthenaERBs from './pages/athena/ERBs';
-import AthenaInterceptions from './pages/athena/Interceptions';
-import AthenaPlaceholder from './pages/athena/Placeholder';
+import AthenaIPED from './pages/athena/IPED';
+import AthenaEvidenceProcessing from './pages/athena/EvidenceProcessing';
+import AthenaProcessAnalysis from './pages/athena/ProcessAnalysis';
+import AthenaReports from './pages/athena/Reports';
+import AthenaFinancial from './pages/athena/Financial';
+import AthenaIntelligentDashboards from './pages/athena/IntelligentDashboards';
 
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
