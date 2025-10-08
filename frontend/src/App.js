@@ -13,6 +13,9 @@ import Agendamento from './pages/Agendamento';
 import CasosSucesso from './pages/CasosSucesso';
 import FAQ from './pages/FAQ';
 import Depoimentos from './pages/Depoimentos';
+import Login from './pages/Login';
+import AdminDashboard from './pages/AdminDashboard';
+import ClientDashboard from './pages/ClientDashboard';
 
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
