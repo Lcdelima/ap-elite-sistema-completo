@@ -26,6 +26,7 @@ import DigitalForensics from './pages/admin/DigitalForensics';
 import FinancialManagement from './pages/admin/FinancialManagement';
 import Communications from './pages/admin/Communications';
 import Calendar from './pages/admin/Calendar';
+import ReportsExport from './pages/admin/ReportsExport';
 
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
