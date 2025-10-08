@@ -237,6 +237,169 @@ async def get_appointments():
             appointment['created_at'] = datetime.fromisoformat(appointment['created_at'])
     return appointments
 
+# Authentication and User Management
+@api_router.post("/auth/login")
+async def login_user(login_data: UserLogin):
+    # Find user by email and role
+    user = await db.users.find_one({
+        "email": login_data.email, 
+        "role": login_data.role,
+        "active": True
+    }, {"_id": 0})
+    
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    # In production, verify hashed password
+    if user["password"] != login_data.password:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    # Update last login
+    await db.users.update_one(
+        {"id": user["id"]},
+        {"$set": {"last_login": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    # Remove password from response
+    user.pop("password", None)
+    
+    return {
+        "user": user,
+        "token": f"token_{user['id']}_{datetime.now().timestamp()}"
+    }
+
+@api_router.post("/users", response_model=User)
+async def create_user(user_data: UserCreate):
+    # Check if user already exists
+    existing_user = await db.users.find_one({"email": user_data.email})
+    if existing_user:
+        raise HTTPException(status_code=400, detail="User already exists")
+    
+    user_dict = user_data.model_dump()
+    user_obj = User(**user_dict)
+    
+    doc = user_obj.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    
+    await db.users.insert_one(doc)
+    
+    # Remove password from response
+    user_obj.password = "***"
+    return user_obj
+
+@api_router.get("/users", response_model=List[User])
+async def get_users():
+    users = await db.users.find({"active": True}, {"_id": 0, "password": 0}).to_list(100)
+    for user in users:
+        if isinstance(user['created_at'], str):
+            user['created_at'] = datetime.fromisoformat(user['created_at'])
+    return users
+
+# Case Management
+@api_router.post("/cases", response_model=Case)
+async def create_case(case_data: CaseCreate):
+    case_dict = case_data.model_dump()
+    if case_dict.get('estimated_completion'):
+        case_dict['estimated_completion'] = datetime.fromisoformat(case_dict['estimated_completion'])
+    
+    case_obj = Case(**case_dict)
+    
+    doc = case_obj.model_dump()
+    doc['start_date'] = doc['start_date'].isoformat()
+    doc['created_at'] = doc['created_at'].isoformat()
+    if doc.get('estimated_completion'):
+        doc['estimated_completion'] = doc['estimated_completion'].isoformat()
+    
+    await db.cases.insert_one(doc)
+    return case_obj
+
+@api_router.get("/cases", response_model=List[Case])
+async def get_cases():
+    cases = await db.cases.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
+    for case in cases:
+        if isinstance(case['start_date'], str):
+            case['start_date'] = datetime.fromisoformat(case['start_date'])
+        if isinstance(case['created_at'], str):
+            case['created_at'] = datetime.fromisoformat(case['created_at'])
+        if case.get('completion_date') and isinstance(case['completion_date'], str):
+            case['completion_date'] = datetime.fromisoformat(case['completion_date'])
+    return cases
+
+@api_router.get("/cases/client/{client_id}", response_model=List[Case])
+async def get_client_cases(client_id: str):
+    cases = await db.cases.find({"client_id": client_id}, {"_id": 0}).sort("created_at", -1).to_list(100)
+    for case in cases:
+        if isinstance(case['start_date'], str):
+            case['start_date'] = datetime.fromisoformat(case['start_date'])
+        if isinstance(case['created_at'], str):
+            case['created_at'] = datetime.fromisoformat(case['created_at'])
+    return cases
+
+@api_router.put("/cases/{case_id}/status")
+async def update_case_status(case_id: str, status: str):
+    update_data = {"status": status}
+    if status == "completed":
+        update_data["completion_date"] = datetime.now(timezone.utc).isoformat()
+    
+    result = await db.cases.update_one(
+        {"id": case_id},
+        {"$set": update_data}
+    )
+    if result.modified_count == 1:
+        return {"message": "Case status updated successfully"}
+    else:
+        raise HTTPException(status_code=404, detail="Case not found")
+
+# Document Management
+@api_router.post("/documents", response_model=Document)
+async def create_document(document_data: DocumentCreate):
+    doc_dict = document_data.model_dump()
+    doc_obj = Document(**doc_dict)
+    
+    doc = doc_obj.model_dump()
+    doc['upload_date'] = doc['upload_date'].isoformat()
+    
+    await db.documents.insert_one(doc)
+    return doc_obj
+
+@api_router.get("/documents/case/{case_id}", response_model=List[Document])
+async def get_case_documents(case_id: str):
+    docs = await db.documents.find({"case_id": case_id}, {"_id": 0}).sort("upload_date", -1).to_list(100)
+    for doc in docs:
+        if isinstance(doc['upload_date'], str):
+            doc['upload_date'] = datetime.fromisoformat(doc['upload_date'])
+    return docs
+
+@api_router.get("/documents/client/{client_id}", response_model=List[Document])
+async def get_client_documents(client_id: str):
+    docs = await db.documents.find({"client_id": client_id}, {"_id": 0}).sort("upload_date", -1).to_list(100)
+    for doc in docs:
+        if isinstance(doc['upload_date'], str):
+            doc['upload_date'] = datetime.fromisoformat(doc['upload_date'])
+    return docs
+
+# Admin Statistics
+@api_router.get("/admin/stats")
+async def get_admin_statistics():
+    total_appointments = await db.appointments.count_documents({})
+    pending_appointments = await db.appointments.count_documents({"status": "pending"})
+    total_cases = await db.cases.count_documents({})
+    active_cases = await db.cases.count_documents({"status": "active"})
+    total_clients = await db.users.count_documents({"role": "client", "active": True})
+    total_documents = await db.documents.count_documents({})
+    unread_messages = await db.contact_messages.count_documents({"read": False})
+    
+    return {
+        "total_appointments": total_appointments,
+        "pending_appointments": pending_appointments,
+        "total_cases": total_cases,
+        "active_cases": active_cases,
+        "total_clients": total_clients,
+        "total_documents": total_documents,
+        "unread_messages": unread_messages
+    }
+
+# Appointment Management
 @api_router.put("/appointments/{appointment_id}/status")
 async def update_appointment_status(appointment_id: str, status: str):
     result = await db.appointments.update_one(
@@ -247,6 +410,26 @@ async def update_appointment_status(appointment_id: str, status: str):
         return {"message": "Status updated successfully"}
     else:
         raise HTTPException(status_code=404, detail="Appointment not found")
+
+@api_router.get("/appointments/client/{client_id}")
+async def get_client_appointments(client_id: str):
+    # Get appointments by client email (since we store email in appointments)
+    client = await db.users.find_one({"id": client_id}, {"_id": 0})
+    if not client:
+        raise HTTPException(status_code=404, detail="Client not found")
+    
+    appointments = await db.appointments.find(
+        {"email": client["email"]}, 
+        {"_id": 0}
+    ).sort("datetime", 1).to_list(100)
+    
+    for appointment in appointments:
+        if isinstance(appointment['datetime'], str):
+            appointment['datetime'] = datetime.fromisoformat(appointment['datetime'])
+        if isinstance(appointment['created_at'], str):
+            appointment['created_at'] = datetime.fromisoformat(appointment['created_at'])
+    
+    return appointments
 
 # Include the router in the main app
 app.include_router(api_router)
