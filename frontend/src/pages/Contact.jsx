@@ -261,22 +261,21 @@ const Contact = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-slate-300">Segunda - Sexta:</span>
-                    <span className="text-white">8h às 18h</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-300">Sábado:</span>
-                    <span className="text-white">8h às 12h</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-300">Domingo:</span>
-                    <span className="text-slate-400">Fechado</span>
+                  <div className="space-y-2">
+                    <div className="text-slate-300">
+                      <span className="font-medium text-white">Perícia Digital:</span><br/>
+                      <span>(11) 9 1646‑8611</span>
+                    </div>
+                    <div className="text-slate-300">
+                      <span className="font-medium text-white">Advocacia Criminal:</span><br/>
+                      <span>(11) 9 7219‑0768</span>
+                    </div>
                   </div>
                   <div className="border-t border-slate-700 pt-3 mt-3">
-                    <p className="text-slate-400 text-sm">
-                      Atendimentos de emergência podem ser agendados fora do horário comercial.
-                    </p>
+                    <div className="text-slate-300 space-y-1">
+                      <p><span className="font-medium text-white">Email:</span> elitecdel@gmail.com</p>
+                      <p><span className="font-medium text-white">Instagram:</span> @lauracunhadel</p>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
