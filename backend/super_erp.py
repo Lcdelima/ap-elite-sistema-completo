@@ -111,7 +111,7 @@ class E2EEncryption:
         if salt is None:
             salt = secrets.token_bytes(16)
         
-        kdf = PBKDF2(
+        kdf = PBKDF2HMAC(
             algorithm=hashes.SHA256(),
             length=32,
             salt=salt,
