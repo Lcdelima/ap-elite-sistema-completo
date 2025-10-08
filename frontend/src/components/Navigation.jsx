@@ -131,6 +131,16 @@ const Navigation = ({ showBackButton = false, title = '' }) => {
               </div>
             </div>
             
+            {/* Login Button */}
+            <Link 
+              to="/login" 
+              className="hidden md:flex items-center space-x-2 px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition-colors"
+              data-testid="header-login-button"
+            >
+              <User className="h-4 w-4" />
+              <span>Portal de Acesso</span>
+            </Link>
+            
             <button
               className="md:hidden text-white hover:text-cyan-400 p-2"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
