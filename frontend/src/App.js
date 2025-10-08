@@ -82,25 +82,25 @@ function App() {
           <Route path="/admin/reports" element={<ReportsExport />} />
           <Route path="/athena" element={<AthenaMain />} />
           
-          {/* Athena Module Routes */}
+          {/* Athena Module Routes - All 18 Modules */}
           <Route path="/athena/dashboard" element={<AthenaDashboard />} />
           <Route path="/athena/clients" element={<AthenaClients />} />
           <Route path="/athena/processes" element={<AthenaProcesses />} />
           <Route path="/athena/communications" element={<AthenaCommunications />} />
-          <Route path="/athena/calendar" element={<AthenaPlaceholder title="Calendário Corporativo" subtitle="Sincronização com Google/Outlook" />} />
-          <Route path="/athena/meeting-links" element={<AthenaPlaceholder title="Gerador de Links" subtitle="Links de reunião instantâneos" />} />
-          <Route path="/athena/video" element={<AthenaPlaceholder title="Videoconferência" subtitle="Jitsi Meet com E2E" />} />
-          <Route path="/athena/forensics" element={<AthenaPlaceholder title="Perícia Digital" subtitle="Análise forense de evidências" />} />
-          <Route path="/athena/phone-interceptions" element={<AthenaInterceptions />} />
-          <Route path="/athena/data-interceptions" element={<AthenaInterceptions />} />
-          <Route path="/athena/data-extraction" element={<AthenaPlaceholder title="Extração de Dados" subtitle="Cellebrite, UFED, Oxygen" />} />
+          <Route path="/athena/calendar" element={<AthenaCalendar />} />
+          <Route path="/athena/meeting-links" element={<AthenaMeetingLinks />} />
+          <Route path="/athena/video" element={<AthenaVideoConference />} />
+          <Route path="/athena/forensics" element={<AthenaForensics />} />
+          <Route path="/athena/phone-interceptions" element={<AthenaPhoneInterceptions />} />
+          <Route path="/athena/data-interceptions" element={<AthenaDataInterceptions />} />
+          <Route path="/athena/data-extraction" element={<AthenaDataExtraction />} />
           <Route path="/athena/erbs" element={<AthenaERBs />} />
-          <Route path="/athena/iped" element={<AthenaPlaceholder title="IPED" subtitle="Indexação e processamento forense" />} />
-          <Route path="/athena/evidence-processing" element={<AthenaPlaceholder title="Processamento de Evidências" subtitle="Chain of custody completo" />} />
-          <Route path="/athena/process-analysis" element={<AthenaPlaceholder title="Análise Processual" subtitle="IA Preditiva para processos" />} />
-          <Route path="/athena/reports" element={<AthenaPlaceholder title="Relatórios Avançados" subtitle="PDF com gráficos e análises" />} />
-          <Route path="/athena/financial" element={<AthenaPlaceholder title="Gestão Financeira" subtitle="Controle financeiro completo" />} />
-          <Route path="/athena/intelligent-dashboards" element={<AthenaPlaceholder title="Dashboards Inteligentes" subtitle="Analytics com IA" />} />
+          <Route path="/athena/iped" element={<AthenaIPED />} />
+          <Route path="/athena/evidence-processing" element={<AthenaEvidenceProcessing />} />
+          <Route path="/athena/process-analysis" element={<AthenaProcessAnalysis />} />
+          <Route path="/athena/reports" element={<AthenaReports />} />
+          <Route path="/athena/financial" element={<AthenaFinancial />} />
+          <Route path="/athena/intelligent-dashboards" element={<AthenaIntelligentDashboards />} />
         </Routes>
       </Router>
       <WhatsAppButton />
