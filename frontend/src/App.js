@@ -47,6 +47,16 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/client/dashboard" element={<ClientDashboard />} />
+          
+          {/* Admin Module Routes */}
+          <Route path="/admin/smart-dashboard" element={<SmartDashboard />} />
+          <Route path="/admin/interception" element={<InterceptionAnalysis />} />
+          <Route path="/admin/cases" element={<CaseManagement />} />
+          <Route path="/admin/clients" element={<ClientManagement />} />
+          <Route path="/admin/forensics" element={<DigitalForensics />} />
+          <Route path="/admin/financial" element={<FinancialManagement />} />
+          <Route path="/admin/communications" element={<Communications />} />
+          <Route path="/admin/calendar" element={<Calendar />} />
         </Routes>
       </Router>
       <WhatsAppButton />
