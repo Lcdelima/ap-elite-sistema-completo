@@ -237,7 +237,48 @@ const AdminDashboard = () => {
         <main className="flex-1 p-6">
           {activeTab === 'overview' && (
             <div className="space-y-6">
-              <h1 className="text-3xl font-bold text-white">Painel Administrativo</h1>
+              <div className="flex items-center justify-between">
+                <h1 className="text-3xl font-bold text-white">Painel Administrativo</h1>
+                <Badge className="bg-purple-500 text-white">ERP v2.0</Badge>
+              </div>
+
+              {/* ERP Modules Quick Access */}
+              <div>
+                <h2 className="text-xl font-semibold text-white mb-4">Módulos ERP Avançados</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <Card className="bg-gradient-to-br from-cyan-500 to-blue-600 border-0 cursor-pointer hover:scale-105 transition-transform" onClick={() => navigate('/admin/smart-dashboard')}>
+                    <CardContent className="p-4 text-center">
+                      <BarChart3 className="h-8 w-8 text-white mx-auto mb-2" />
+                      <p className="text-white font-semibold">Dashboard Inteligente</p>
+                      <Badge className="mt-2 bg-white text-cyan-600 text-xs">Analytics</Badge>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card className="bg-gradient-to-br from-purple-500 to-pink-600 border-0 cursor-pointer hover:scale-105 transition-transform" onClick={() => navigate('/admin/interception')}>
+                    <CardContent className="p-4 text-center">
+                      <Phone className="h-8 w-8 text-white mx-auto mb-2" />
+                      <p className="text-white font-semibold">Análise de Interceptação</p>
+                      <Badge className="mt-2 bg-white text-purple-600 text-xs">IA Powered</Badge>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-gradient-to-br from-green-500 to-teal-600 border-0 cursor-pointer hover:scale-105 transition-transform" onClick={() => navigate('/admin/forensics')}>
+                    <CardContent className="p-4 text-center">
+                      <FileText className="h-8 w-8 text-white mx-auto mb-2" />
+                      <p className="text-white font-semibold">Perícia Digital</p>
+                      <Badge className="mt-2 bg-white text-green-600 text-xs">IPED</Badge>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-gradient-to-br from-yellow-500 to-orange-600 border-0 cursor-pointer hover:scale-105 transition-transform" onClick={() => navigate('/admin/communications')}>
+                    <CardContent className="p-4 text-center">
+                      <Mail className="h-8 w-8 text-white mx-auto mb-2" />
+                      <p className="text-white font-semibold">Comunicações</p>
+                      <Badge className="mt-2 bg-white text-yellow-600 text-xs">Integrado</Badge>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
               
               {/* Stats Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
