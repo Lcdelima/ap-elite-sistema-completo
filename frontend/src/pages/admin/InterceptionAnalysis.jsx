@@ -455,6 +455,7 @@ const InterceptionAnalysis = () => {
         </div>
       )}
     </div>
+    </AdminLayout>
   );
 };
 
