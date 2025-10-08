@@ -153,13 +153,16 @@ const Home = () => {
                 Entre em Contato
               </h3>
               <div className="space-y-4">
-                <div className="flex items-center space-x-3 text-slate-300">
-                  <Phone className="h-5 w-5 text-cyan-400" />
-                  <span>(xx) xxxx-xxxx</span>
+                <div className="flex items-start space-x-3 text-slate-300">
+                  <Phone className="h-5 w-5 text-cyan-400 mt-0.5" />
+                  <div className="text-sm">
+                    <p>Perícia Digital: (11) 9 1646‑8611</p>
+                    <p>Advocacia Criminal: (11) 9 7219‑0768</p>
+                  </div>
                 </div>
                 <div className="flex items-center space-x-3 text-slate-300">
                   <Mail className="h-5 w-5 text-cyan-400" />
-                  <span>contato@apelite.com.br</span>
+                  <span>elitecdel@gmail.com</span>
                 </div>
               </div>
               
