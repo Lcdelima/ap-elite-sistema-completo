@@ -446,6 +446,14 @@ try:
 except ImportError as e:
     logger.error(f"⚠️ Advanced features not available: {e}")
 
+# Import and include advanced integrations
+try:
+    from advanced_integrations import integrations_router
+    app.include_router(integrations_router)
+    logger.info("✅ Advanced integrations loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ Advanced integrations not available: {e}")
+
 # Include the router in the main app
 app.include_router(api_router)
 
