@@ -108,7 +108,7 @@ const Contact = () => {
       {/* Contact Info Cards */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {contactInfo.map((contact, index) => {
               const IconComponent = contact.icon;
               return (
@@ -136,6 +136,60 @@ const Contact = () => {
                 </Card>
               );
             })}
+          </div>
+          
+          {/* Additional Contact Information */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+            <Card className="bg-slate-800 border-slate-700 text-center p-6">
+              <CardContent>
+                <div className="flex justify-center mb-4">
+                  <div className="p-3 bg-cyan-500 bg-opacity-20 rounded-full">
+                    <Globe className="h-6 w-6 text-cyan-400" />
+                  </div>
+                </div>
+                <h3 className="text-lg font-semibold text-white mb-2">
+                  Websites Oficiais
+                </h3>
+                <div className="space-y-1">
+                  <p className="text-cyan-400 font-medium">
+                    www.elitecdel.com.br
+                  </p>
+                  <p className="text-cyan-400 font-medium">
+                    www.lcdel.com.br
+                  </p>
+                </div>
+                <p className="text-slate-400 text-sm mt-2">
+                  Portais oficiais da empresa
+                </p>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-slate-800 border-slate-700 text-center p-6">
+              <CardContent>
+                <div className="flex justify-center mb-4">
+                  <div className="p-3 bg-cyan-500 bg-opacity-20 rounded-full">
+                    <MapPin className="h-6 w-6 text-cyan-400" />
+                  </div>
+                </div>
+                <h3 className="text-lg font-semibold text-white mb-2">
+                  Endereço Completo
+                </h3>
+                <div className="space-y-1">
+                  <p className="text-cyan-400 font-medium">
+                    R Paraguai, 454
+                  </p>
+                  <p className="text-cyan-400 font-medium">
+                    Jardim America
+                  </p>
+                  <p className="text-cyan-400 font-medium">
+                    Tres Coracoes - MG
+                  </p>
+                  <p className="text-cyan-400 font-medium">
+                    CEP: 37410-866
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Contact Form and Info */}
