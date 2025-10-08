@@ -431,14 +431,19 @@ async def get_client_appointments(client_id: str):
     
     return appointments
 
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
 # Import and include advanced features
 try:
     from advanced_features import advanced_router
     app.include_router(advanced_router)
-    logger = logging.getLogger(__name__)
     logger.info("✅ Advanced features loaded successfully")
 except ImportError as e:
-    logger = logging.getLogger(__name__)
     logger.error(f"⚠️ Advanced features not available: {e}")
 
 # Include the router in the main app
@@ -451,13 +456,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
