@@ -85,6 +85,86 @@ class AppointmentCreate(BaseModel):
     description: Optional[str] = None
     urgency: str = "normal"
 
+class User(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    email: str
+    password: str  # In production, this should be hashed
+    role: str  # "administrator" or "client"
+    phone: Optional[str] = None
+    cpf: Optional[str] = None
+    address: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    last_login: Optional[datetime] = None
+    active: bool = True
+
+class UserCreate(BaseModel):
+    name: str
+    email: str
+    password: str
+    role: str
+    phone: Optional[str] = None
+    cpf: Optional[str] = None
+    address: Optional[str] = None
+
+class UserLogin(BaseModel):
+    email: str
+    password: str
+    role: str
+
+class Case(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    client_id: str
+    title: str
+    service_type: str
+    description: str
+    status: str = "active"  # active, completed, suspended, cancelled
+    priority: str = "normal"  # low, normal, high, urgent
+    start_date: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    completion_date: Optional[datetime] = None
+    estimated_completion: Optional[datetime] = None
+    assigned_to: Optional[str] = None
+    fee: Optional[float] = None
+    notes: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class CaseCreate(BaseModel):
+    client_id: str
+    title: str
+    service_type: str
+    description: str
+    priority: str = "normal"
+    estimated_completion: Optional[str] = None
+    fee: Optional[float] = None
+    notes: Optional[str] = None
+
+class Document(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    case_id: str
+    client_id: str
+    filename: str
+    file_type: str
+    file_size: int
+    description: Optional[str] = None
+    category: str  # "laudo", "relatorio", "petição", "contrato", "evidencia"
+    upload_date: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    confidential: bool = True
+
+class DocumentCreate(BaseModel):
+    case_id: str
+    client_id: str
+    filename: str
+    file_type: str
+    file_size: int
+    description: Optional[str] = None
+    category: str
+
 # Routes
 @api_router.get("/")
 async def root():
