@@ -58,6 +58,7 @@ function App() {
           <Route path="/admin/financial" element={<FinancialManagement />} />
           <Route path="/admin/communications" element={<Communications />} />
           <Route path="/admin/calendar" element={<Calendar />} />
+          <Route path="/admin/reports" element={<ReportsExport />} />
         </Routes>
       </Router>
       <WhatsAppButton />
