@@ -25,27 +25,27 @@ const Contact = () => {
   const contactInfo = [
     {
       icon: Phone,
-      title: 'Telefone',
-      info: '(xx) xxxx-xxxx',
-      description: 'Segunda a Sexta, 8h às 18h'
+      title: 'Telefones',
+      info: 'Perícia Digital: (11) 9 1646‑8611',
+      description: 'Advocacia Criminal: (11) 9 7219‑0768'
     },
     {
       icon: Mail,
       title: 'E-mail',
-      info: 'contato@apelite.com.br',
+      info: 'elitecdel@gmail.com',
       description: 'Resposta em até 24 horas'
     },
     {
       icon: Globe,
-      title: 'Website',
-      info: 'www.lauraedel.com.br/elite',
-      description: 'Portal oficial'
+      title: 'Websites',
+      info: 'www.elitecdel.com.br',
+      description: 'www.lcdel.com.br'
     },
     {
       icon: MapPin,
       title: 'Endereço',
-      info: 'Endereço do Escritório',
-      description: 'Cidade, Estado - CEP'
+      info: 'R Paraguai, 454 - Jardim America',
+      description: 'Tres Coracoes - MG - CEP: 37410-866'
     }
   ];
 
