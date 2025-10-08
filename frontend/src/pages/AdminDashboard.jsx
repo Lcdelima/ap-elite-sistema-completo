@@ -26,66 +26,22 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const navigate = useNavigate();
 
-  // Sample data - in real app this would come from API
+  // Real data from API
   const [dashboardData, setDashboardData] = useState({
     stats: {
-      totalAppointments: 23,
-      pendingAppointments: 5,
-      totalClients: 156,
-      monthlyRevenue: 45600,
-      newMessages: 8
+      totalAppointments: 0,
+      pendingAppointments: 0,
+      totalClients: 0,
+      totalCases: 0,
+      activeCases: 0,
+      totalDocuments: 0,
+      unreadMessages: 0
     },
-    recentAppointments: [
-      {
-        id: 1,
-        clientName: 'João Silva',
-        service: 'Perícia Digital',
-        date: '2024-10-10',
-        time: '14:00',
-        status: 'confirmed',
-        phone: '(11) 99999-9999',
-        email: 'joao@email.com'
-      },
-      {
-        id: 2,
-        clientName: 'Maria Santos',
-        service: 'Advocacia Criminal',
-        date: '2024-10-12',
-        time: '09:30',
-        status: 'pending',
-        phone: '(11) 88888-8888',
-        email: 'maria@email.com'
-      },
-      {
-        id: 3,
-        clientName: 'Carlos Oliveira',
-        service: 'Consultoria Técnica',
-        date: '2024-10-15',
-        time: '16:00',
-        status: 'pending',
-        phone: '(11) 77777-7777',
-        email: 'carlos@email.com'
-      }
-    ],
-    recentMessages: [
-      {
-        id: 1,
-        name: 'Ana Beatriz',
-        subject: 'Solicitação de Orçamento',
-        message: 'Gostaria de solicitar um orçamento para perícia digital em caso de fraude.',
-        date: '2024-10-08',
-        read: false
-      },
-      {
-        id: 2,
-        name: 'Roberto Lima',
-        subject: 'Dúvida sobre Processo',
-        message: 'Tenho algumas dúvidas sobre o andamento do meu processo criminal.',
-        date: '2024-10-07',
-        read: true
-      }
-    ]
+    recentAppointments: [],
+    recentMessages: [],
+    recentCases: []
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Check authentication
