@@ -25,6 +25,8 @@ function App() {
           <Route path="/services/:id" element={<ServiceDetails />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/agendamento" element={<Agendamento />} />
+          <Route path="/casos-sucesso" element={<CasosSucesso />} />
         </Routes>
       </Router>
       <Toaster position="top-right" richColors />
