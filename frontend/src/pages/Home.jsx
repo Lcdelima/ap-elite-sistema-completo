@@ -150,23 +150,40 @@ const Home = () => {
             
             <div className="bg-slate-800 p-8 rounded-lg border border-slate-700">
               <h3 className="text-2xl font-bold text-white mb-6 text-center">
-                Entre em Contato
+                Contatos Diretos
               </h3>
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3 text-slate-300">
-                  <Phone className="h-5 w-5 text-cyan-400 mt-0.5" />
-                  <div className="text-sm">
-                    <p>Perícia Digital: (11) 9 1646‑8611</p>
-                    <p>Advocacia Criminal: (11) 9 7219‑0768</p>
-                  </div>
+              
+              {/* Perícia Digital */}
+              <div className="mb-4 p-4 bg-slate-700 rounded-lg">
+                <h4 className="text-cyan-400 font-semibold mb-2 flex items-center">
+                  <Phone className="h-4 w-4 mr-2" />
+                  Perícia Digital
+                </h4>
+                <p className="text-white font-medium">(11) 9 1646‑8611</p>
+              </div>
+              
+              {/* Advocacia Criminal */}
+              <div className="mb-4 p-4 bg-slate-700 rounded-lg">
+                <h4 className="text-cyan-400 font-semibold mb-2 flex items-center">
+                  <Phone className="h-4 w-4 mr-2" />
+                  Advocacia Criminal  
+                </h4>
+                <p className="text-white font-medium">(11) 9 7219‑0768</p>
+              </div>
+              
+              {/* Email e Instagram */}
+              <div className="mb-6 space-y-2">
+                <div className="flex items-center space-x-3 text-slate-300">
+                  <Mail className="h-4 w-4 text-cyan-400" />
+                  <span>elitecdel@gmail.com</span>
                 </div>
                 <div className="flex items-center space-x-3 text-slate-300">
-                  <Mail className="h-5 w-5 text-cyan-400" />
-                  <span>elitecdel@gmail.com</span>
+                  <span className="text-cyan-400">@</span>
+                  <span>@lauracunhadel</span>
                 </div>
               </div>
               
-              <Link to="/contact" className="block mt-6">
+              <Link to="/contact" className="block">
                 <Button 
                   className="btn-primary w-full"
                   data-testid="contact-sidebar-button"
