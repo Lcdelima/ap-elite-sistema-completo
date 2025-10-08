@@ -29,6 +29,7 @@ function App() {
           <Route path="/casos-sucesso" element={<CasosSucesso />} />
         </Routes>
       </Router>
+      <WhatsAppButton />
       <Toaster position="top-right" richColors />
     </div>
   );
