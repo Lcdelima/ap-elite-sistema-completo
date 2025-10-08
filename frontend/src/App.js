@@ -9,6 +9,11 @@ import Services from './pages/Services';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import ServiceDetails from './pages/ServiceDetails';
+import Agendamento from './pages/Agendamento';
+import CasosSucesso from './pages/CasosSucesso';
+
+// Import components
+import WhatsAppButton from './components/WhatsAppButton';
 
 function App() {
   return (
