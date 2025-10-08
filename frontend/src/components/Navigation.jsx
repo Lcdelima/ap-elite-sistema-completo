@@ -98,11 +98,11 @@ const Navigation = ({ showBackButton = false, title = '' }) => {
             <div className="hidden lg:flex items-center space-x-4 text-sm text-slate-300">
               <div className="flex items-center space-x-1">
                 <Phone className="h-4 w-4" />
-                <span>(xx) xxxx-xxxx</span>
+                <span>(11) 9 1646‑8611</span>
               </div>
               <div className="flex items-center space-x-1">
                 <Mail className="h-4 w-4" />
-                <span>contato@apelite.com.br</span>
+                <span>elitecdel@gmail.com</span>
               </div>
             </div>
             
