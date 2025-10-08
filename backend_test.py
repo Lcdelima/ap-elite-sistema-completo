@@ -365,7 +365,7 @@ class BackendTester:
             data = aiohttp.FormData()
             data.add_field('title', 'Test Video Conference')
             data.add_field('scheduled_time', (datetime.now(timezone.utc).replace(microsecond=0) + 
-                                            datetime.timedelta(hours=1)).isoformat())
+                                            timedelta(hours=1)).isoformat())
             data.add_field('participants', 'participant1@example.com')
             data.add_field('participants', 'participant2@example.com')
             data.add_field('case_id', 'test-case-video-123')
