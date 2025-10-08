@@ -202,16 +202,17 @@ const Login = () => {
           </CardContent>
         </Card>
 
-        {/* Demo Credentials Info */}
+        {/* Registration Info */}
         <Card className="bg-slate-800 border-slate-700 mt-4">
           <CardContent className="p-4">
-            <h3 className="text-sm font-semibold text-white mb-2">Credenciais de Demonstração:</h3>
+            <h3 className="text-sm font-semibold text-white mb-2">Não possui conta?</h3>
             <div className="space-y-2 text-xs text-slate-300">
+              <p>Entre em contato para criar sua conta:</p>
               <div>
-                <strong className="text-cyan-400">Admin:</strong> admin@apelite.com / admin123
+                <strong className="text-cyan-400">Perícia Digital:</strong> (11) 9 1646‑8611
               </div>
               <div>
-                <strong className="text-green-400">Cliente:</strong> cliente@email.com / cliente123
+                <strong className="text-green-400">Advocacia:</strong> (11) 9 7219‑0768
               </div>
             </div>
           </CardContent>
