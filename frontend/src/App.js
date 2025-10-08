@@ -29,6 +29,15 @@ import Calendar from './pages/admin/Calendar';
 import ReportsExport from './pages/admin/ReportsExport';
 import AthenaMain from './pages/admin/AthenaMain';
 
+// Athena modules
+import AthenaDashboard from './pages/athena/Dashboard';
+import AthenaClients from './pages/athena/Clients';
+import AthenaProcesses from './pages/athena/Processes';
+import AthenaCommunications from './pages/athena/Communications';
+import AthenaERBs from './pages/athena/ERBs';
+import AthenaInterceptions from './pages/athena/Interceptions';
+import AthenaPlaceholder from './pages/athena/Placeholder';
+
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
 
