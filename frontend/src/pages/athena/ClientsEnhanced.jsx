@@ -504,7 +504,7 @@ const ClientsEnhanced = () => {
                   </CardContent>
                 </Card>
               </div>
-            </Card>
+            </div>
           )}
         </div>
       </AthenaLayout>
