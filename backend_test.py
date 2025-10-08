@@ -465,13 +465,13 @@ class BackendTester:
         """Test POST /api/integrations/email/send-report"""
         case_id = "930acd82-3003-4872-8c23-c08b9ca5e541"  # Using existing case
         try:
-            email_data = {
+            params = {
                 "case_id": case_id,
                 "recipient_email": "test@apelite.com"
             }
             
             headers = self.get_headers()
-            async with self.session.post(f"{BASE_URL}/integrations/email/send-report", json=email_data, headers=headers) as response:
+            async with self.session.post(f"{BASE_URL}/integrations/email/send-report", params=params, headers=headers) as response:
                 if response.status == 200:
                     data = await response.json()
                     
