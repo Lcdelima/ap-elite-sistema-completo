@@ -574,6 +574,364 @@ async def upload_data_interception(
         "created_at": datetime.now(timezone.utc).isoformat(),
         "updated_at": datetime.now(timezone.utc).isoformat()
     }
+
+
+# ==================== ENHANCED CLIENT MANAGEMENT APIs ====================
+
+@super_router.get("/clients/enhanced")
+async def get_enhanced_clients(current_user: dict = Depends(get_current_user)):
+    """Get all clients with enhanced information"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    clients = await db.clients_enhanced.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
+    return {"clients": clients}
+
+@super_router.post("/clients/enhanced")
+async def create_enhanced_client(client_data: dict, current_user: dict = Depends(get_current_user)):
+    """Create client with complete information"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    client = {
+        **client_data,
+        "id": str(uuid.uuid4()),
+        "created_by": current_user["id"],
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "files": {
+            "documents": [],
+            "processes": [],
+            "media": {
+                "audio": [],
+                "video": [],
+                "images": []
+            }
+        },
+        "filesCount": 0
+    }
+    
+    await db.clients_enhanced.insert_one(client)
+    return {"client_id": client["id"], "message": "Cliente criado com sucesso"}
+
+@super_router.get("/clients/{client_id}")
+async def get_client_details(client_id: str, current_user: dict = Depends(get_current_user)):
+    """Get complete client details"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    client = await db.clients_enhanced.find_one({"id": client_id}, {"_id": 0})
+    if not client:
+        raise HTTPException(status_code=404, detail="Cliente não encontrado")
+    
+    return client
+
+@super_router.post("/clients/{client_id}/files")
+async def upload_client_files(
+    client_id: str,
+    category: str = Form(...),
+    files: list[UploadFile] = File(...),
+    current_user: dict = Depends(get_current_user)
+):
+    """Upload files to client folder"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    client = await db.clients_enhanced.find_one({"id": client_id})
+    if not client:
+        raise HTTPException(status_code=404, detail="Cliente não encontrado")
+    
+    uploaded_files = []
+    base_path = Path(f"/app/backend/client_files/{client_id}/{category}")
+    base_path.mkdir(exist_ok=True, parents=True)
+    
+    for file in files:
+        file_id = str(uuid.uuid4())
+        file_ext = os.path.splitext(file.filename)[1]
+        filename = f"{file_id}{file_ext}"
+        filepath = base_path / filename
+        
+        async with aiofiles.open(filepath, 'wb') as f:
+            content = await file.read()
+            await f.write(content)
+        
+        file_info = {
+            "id": file_id,
+            "name": file.filename,
+            "originalName": file.filename,
+            "size": f"{len(content) / 1024:.1f} KB",
+            "path": str(filepath),
+            "uploadDate": datetime.now(timezone.utc).isoformat(),
+            "uploadedBy": current_user["id"]
+        }
+        uploaded_files.append(file_info)
+    
+    # Update client record
+    if category == "documents":
+        await db.clients_enhanced.update_one(
+            {"id": client_id},
+            {"$push": {"files.documents": {"$each": uploaded_files}},
+             "$inc": {"filesCount": len(uploaded_files)}}
+        )
+    elif category == "processes":
+        await db.clients_enhanced.update_one(
+            {"id": client_id},
+            {"$push": {"files.processes": {"$each": uploaded_files}},
+             "$inc": {"filesCount": len(uploaded_files)}}
+        )
+    elif category == "media":
+        # Categorize by file type
+        for file_info in uploaded_files:
+            ext = file_info["originalName"].split('.')[-1].lower()
+            if ext in ['mp3', 'wav', 'ogg', 'm4a']:
+                await db.clients_enhanced.update_one(
+                    {"id": client_id},
+                    {"$push": {"files.media.audio": file_info},
+                     "$inc": {"filesCount": 1}}
+                )
+            elif ext in ['mp4', 'avi', 'mov']:
+                await db.clients_enhanced.update_one(
+                    {"id": client_id},
+                    {"$push": {"files.media.video": file_info},
+                     "$inc": {"filesCount": 1}}
+                )
+            elif ext in ['jpg', 'jpeg', 'png', 'gif']:
+                await db.clients_enhanced.update_one(
+                    {"id": client_id},
+                    {"$push": {"files.media.images": file_info},
+                     "$inc": {"filesCount": 1}}
+                )
+    
+    return {"uploaded": len(uploaded_files), "files": uploaded_files}
+
+# ==================== ENHANCED COMMUNICATIONS APIs ====================
+
+@super_router.get("/communications/contacts")
+async def get_communication_contacts(current_user: dict = Depends(get_current_user)):
+    """Get all contacts for messaging"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    # Get all users except current user
+    users = await db.users.find(
+        {"id": {"$ne": current_user["id"]}},
+        {"_id": 0, "id": 1, "name": 1, "email": 1, "role": 1}
+    ).to_list(100)
+    
+    contacts = []
+    for user in users:
+        # Get last conversation
+        conversation = await db.conversations.find_one(
+            {"participants": {"$all": [current_user["id"], user["id"]]}},
+            {"_id": 0}
+        )
+        
+        unread_count = 0
+        last_message = None
+        
+        if conversation:
+            # Count unread messages
+            unread_count = await db.messages.count_documents({
+                "conversation_id": conversation["id"],
+                "sender_id": {"$ne": current_user["id"]},
+                "read": False
+            })
+            
+            # Get last message
+            last_msg = await db.messages.find_one(
+                {"conversation_id": conversation["id"]},
+                {"_id": 0},
+                sort=[("timestamp", -1)]
+            )
+            if last_msg:
+                last_message = last_msg.get("content", "")[:50]
+        
+        contacts.append({
+            **user,
+            "unreadCount": unread_count,
+            "lastMessage": last_message
+        })
+    
+    return {"contacts": contacts}
+
+@super_router.get("/communications/conversations")
+async def get_conversations(current_user: dict = Depends(get_current_user)):
+    """Get all conversations"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    conversations = await db.conversations.find(
+        {"participants": current_user["id"]},
+        {"_id": 0}
+    ).to_list(100)
+    
+    return {"conversations": conversations}
+
+@super_router.get("/communications/messages/{conversation_id}")
+async def get_messages(conversation_id: str, current_user: dict = Depends(get_current_user)):
+    """Get messages from a conversation"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    messages = await db.messages.find(
+        {"conversation_id": conversation_id},
+        {"_id": 0}
+    ).sort("timestamp", 1).to_list(500)
+    
+    # Mark messages as read
+    await db.messages.update_many(
+        {
+            "conversation_id": conversation_id,
+            "sender_id": {"$ne": current_user["id"]},
+            "read": False
+        },
+        {"$set": {"read": True, "status": "read"}}
+    )
+    
+    return {"messages": messages}
+
+@super_router.post("/communications/send")
+async def send_message(message_data: dict, current_user: dict = Depends(get_current_user)):
+    """Send a message"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    conversation_id = message_data.get("conversationId")
+    
+    # Create conversation if doesn't exist
+    if not conversation_id:
+        recipient_id = message_data.get("recipientId")
+        conversation = await db.conversations.find_one({
+            "participants": {"$all": [current_user["id"], recipient_id]}
+        })
+        
+        if not conversation:
+            conversation_id = str(uuid.uuid4())
+            await db.conversations.insert_one({
+                "id": conversation_id,
+                "participants": [current_user["id"], recipient_id],
+                "created_at": datetime.now(timezone.utc).isoformat()
+            })
+        else:
+            conversation_id = conversation["id"]
+    
+    message = {
+        "id": str(uuid.uuid4()),
+        "conversation_id": conversation_id,
+        "sender_id": current_user["id"],
+        "sender": {
+            "id": current_user["id"],
+            "name": current_user.get("name", "User"),
+            "email": current_user.get("email", "")
+        },
+        "content": message_data.get("content", ""),
+        "type": message_data.get("type", "text"),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "read": False,
+        "status": "sent"
+    }
+    
+    await db.messages.insert_one(message)
+    
+    return {"message_id": message["id"], "status": "sent"}
+
+@super_router.post("/communications/upload")
+async def upload_communication_files(
+    conversationId: str = Form(...),
+    files: list[UploadFile] = File(...),
+    current_user: dict = Depends(get_current_user)
+):
+    """Upload files in chat"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    uploaded_files = []
+    base_path = Path(f"/app/backend/chat_files/{conversationId}")
+    base_path.mkdir(exist_ok=True, parents=True)
+    
+    for file in files:
+        file_id = str(uuid.uuid4())
+        file_ext = os.path.splitext(file.filename)[1]
+        filename = f"{file_id}{file_ext}"
+        filepath = base_path / filename
+        
+        async with aiofiles.open(filepath, 'wb') as f:
+            content = await file.read()
+            await f.write(content)
+        
+        # Create message for file
+        message = {
+            "id": str(uuid.uuid4()),
+            "conversation_id": conversationId,
+            "sender_id": current_user["id"],
+            "sender": {
+                "id": current_user["id"],
+                "name": current_user.get("name", "User"),
+                "email": current_user.get("email", "")
+            },
+            "content": f"Enviou um arquivo: {file.filename}",
+            "type": "file",
+            "fileName": file.filename,
+            "filePath": str(filepath),
+            "fileSize": f"{len(content) / 1024:.1f} KB",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "read": False,
+            "status": "sent"
+        }
+        
+        await db.messages.insert_one(message)
+        uploaded_files.append(message)
+    
+    return {"uploaded": len(uploaded_files), "messages": uploaded_files}
+
+@super_router.post("/communications/nudge")
+async def send_nudge(data: dict, current_user: dict = Depends(get_current_user)):
+    """Send attention nudge"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    conversation_id = data.get("conversationId")
+    
+    message = {
+        "id": str(uuid.uuid4()),
+        "conversation_id": conversation_id,
+        "sender_id": current_user["id"],
+        "sender": {
+            "id": current_user["id"],
+            "name": current_user.get("name", "User")
+        },
+        "content": "🔔 Chamou sua atenção!",
+        "type": "nudge",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "read": False,
+        "status": "sent"
+    }
+    
+    await db.messages.insert_one(message)
+    
+    return {"nudge_sent": True}
+
+@super_router.get("/communications/online-status")
+async def get_online_status(current_user: dict = Depends(get_current_user)):
+    """Get online users"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    # Update current user's last seen
+    await db.users.update_one(
+        {"id": current_user["id"]},
+        {"$set": {"last_seen": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    # Get users online in last 5 minutes
+    five_min_ago = (datetime.now(timezone.utc) - timedelta(minutes=5)).isoformat()
+    online_users = await db.users.find(
+        {"last_seen": {"$gte": five_min_ago}},
+        {"_id": 0, "id": 1}
+    ).to_list(100)
+    
+    return {"onlineUsers": [u["id"] for u in online_users]}
+
     
     await db.interceptions.insert_one(interception)
     
