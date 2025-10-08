@@ -60,6 +60,7 @@ function App() {
           <Route path="/admin/communications" element={<Communications />} />
           <Route path="/admin/calendar" element={<Calendar />} />
           <Route path="/admin/reports" element={<ReportsExport />} />
+          <Route path="/athena" element={<AthenaMain />} />
         </Routes>
       </Router>
       <WhatsAppButton />
