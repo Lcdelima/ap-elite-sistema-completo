@@ -17,6 +17,16 @@ import Login from './pages/Login';
 import AdminDashboard from './pages/AdminDashboard';
 import ClientDashboard from './pages/ClientDashboard';
 
+// Import admin modules
+import SmartDashboard from './pages/admin/SmartDashboard';
+import InterceptionAnalysis from './pages/admin/InterceptionAnalysis';
+import CaseManagement from './pages/admin/CaseManagement';
+import ClientManagement from './pages/admin/ClientManagement';
+import DigitalForensics from './pages/admin/DigitalForensics';
+import FinancialManagement from './pages/admin/FinancialManagement';
+import Communications from './pages/admin/Communications';
+import Calendar from './pages/admin/Calendar';
+
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
 
