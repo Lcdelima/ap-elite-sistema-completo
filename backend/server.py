@@ -431,6 +431,14 @@ async def get_client_appointments(client_id: str):
     
     return appointments
 
+# Import and include advanced features
+try:
+    from advanced_features import advanced_router
+    app.include_router(advanced_router)
+    print("✅ Advanced features loaded successfully")
+except ImportError as e:
+    print(f"⚠️ Advanced features not available: {e}")
+
 # Include the router in the main app
 app.include_router(api_router)
 
