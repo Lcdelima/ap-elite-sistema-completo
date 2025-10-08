@@ -36,6 +36,11 @@ class UserCreate(BaseModel):
     department: Optional[str] = None
     permissions: List[str] = []
 
+class UserLogin(BaseModel):
+    email: str
+    password: str
+    role: str
+
 # Case/Process Management
 class Case(BaseDocument):
     client_id: str
