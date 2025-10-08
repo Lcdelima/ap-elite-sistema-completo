@@ -307,6 +307,7 @@ const SmartDashboard = () => {
         </Card>
       </div>
     </div>
+    </AdminLayout>
   );
 };
 
