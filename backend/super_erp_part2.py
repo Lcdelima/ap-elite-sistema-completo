@@ -466,3 +466,116 @@ async def process_evidence(evidence_id: str, current_user: dict = Depends(get_cu
     return {"evidence_id": evidence_id, "status": "processing"}
 
 # Continue with modules 15-18...
+
+# ==================== PHONE & DATA INTERCEPTIONS - SPECIFIC ROUTES ====================
+
+@super_router.get("/phone-interceptions")
+async def get_phone_interceptions(current_user: dict = Depends(get_current_user)):
+    """Get all phone interceptions"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    interceptions = await db.interceptions.find(
+        {"interception_type": {"$in": ["phone", "voice", "call"]}},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(100)
+    
+    return {"interceptions": interceptions}
+
+@super_router.post("/phone-interceptions/upload")
+async def upload_phone_interception(
+    file: UploadFile = File(...),
+    current_user: dict = Depends(get_current_user)
+):
+    """Upload phone interception audio file"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    # Validate file type
+    allowed_types = ['.mp3', '.wav', '.m4a', '.ogg', '.aac', '.flac']
+    file_ext = os.path.splitext(file.filename)[1].lower()
+    if file_ext not in allowed_types:
+        raise HTTPException(status_code=400, detail="Invalid file type")
+    
+    # Save file
+    file_id = str(uuid.uuid4())
+    filename = f"{file_id}{file_ext}"
+    filepath = Path(f"/app/backend/interceptions/phone/{filename}")
+    filepath.parent.mkdir(exist_ok=True, parents=True)
+    
+    async with aiofiles.open(filepath, 'wb') as f:
+        content = await file.read()
+        await f.write(content)
+    
+    # Create interception record
+    interception = {
+        "id": file_id,
+        "filename": file.filename,
+        "filepath": str(filepath),
+        "file_size": len(content),
+        "interception_type": "phone",
+        "status": "pending",
+        "uploaded_by": current_user["id"],
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.interceptions.insert_one(interception)
+    
+    return {"interception_id": file_id, "status": "uploaded"}
+
+@super_router.get("/data-interceptions")
+async def get_data_interceptions(current_user: dict = Depends(get_current_user)):
+    """Get all data interceptions"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    interceptions = await db.interceptions.find(
+        {"interception_type": {"$in": ["data", "telematic", "digital"]}},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(100)
+    
+    return {"interceptions": interceptions}
+
+@super_router.post("/data-interceptions/upload")
+async def upload_data_interception(
+    file: UploadFile = File(...),
+    current_user: dict = Depends(get_current_user)
+):
+    """Upload data interception file"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    # Validate file type
+    allowed_types = ['.json', '.csv', '.xml', '.txt', '.zip', '.pcap']
+    file_ext = os.path.splitext(file.filename)[1].lower()
+    if file_ext not in allowed_types:
+        raise HTTPException(status_code=400, detail="Invalid file type")
+    
+    # Save file
+    file_id = str(uuid.uuid4())
+    filename = f"{file_id}{file_ext}"
+    filepath = Path(f"/app/backend/interceptions/data/{filename}")
+    filepath.parent.mkdir(exist_ok=True, parents=True)
+    
+    async with aiofiles.open(filepath, 'wb') as f:
+        content = await file.read()
+        await f.write(content)
+    
+    # Create interception record
+    interception = {
+        "id": file_id,
+        "filename": file.filename,
+        "filepath": str(filepath),
+        "file_size": len(content),
+        "interception_type": "data",
+        "status": "pending",
+        "uploaded_by": current_user["id"],
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.interceptions.insert_one(interception)
+    
+    return {"interception_id": file_id, "status": "uploaded"}
+
