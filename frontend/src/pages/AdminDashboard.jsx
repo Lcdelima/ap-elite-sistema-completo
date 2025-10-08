@@ -61,7 +61,40 @@ const AdminDashboard = () => {
     }
     
     setUser(parsedUser);
+    fetchDashboardData();
   }, [navigate]);
+
+  const fetchDashboardData = async () => {
+    try {
+      setLoading(true);
+      const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+      const API = `${BACKEND_URL}/api`;
+
+      // Fetch statistics
+      const statsResponse = await axios.get(`${API}/admin/stats`);
+      
+      // Fetch recent appointments
+      const appointmentsResponse = await axios.get(`${API}/appointments`);
+      
+      // Fetch recent messages  
+      const messagesResponse = await axios.get(`${API}/contact`);
+      
+      // Fetch recent cases
+      const casesResponse = await axios.get(`${API}/cases`);
+
+      setDashboardData({
+        stats: statsResponse.data,
+        recentAppointments: appointmentsResponse.data.slice(0, 5),
+        recentMessages: messagesResponse.data.slice(0, 5),
+        recentCases: casesResponse.data.slice(0, 5)
+      });
+    } catch (error) {
+      console.error('Erro ao carregar dados do dashboard:', error);
+      toast.error('Erro ao carregar dados do painel');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('ap_elite_user');
