@@ -46,48 +46,26 @@ const Login = () => {
         return;
       }
 
-      // Demo credentials for development
-      const demoCredentials = {
-        admin: {
-          email: 'admin@apelite.com',
-          password: 'admin123',
-          name: 'Dra. Laura Cunha de Lima',
-          role: 'administrator'
-        },
-        client: {
-          email: 'cliente@email.com',
-          password: 'cliente123',
-          name: 'João Silva',
-          role: 'client'
-        }
-      };
+      // Real API authentication
+      const response = await axios.post(`${API}/auth/login`, {
+        email: loginData.email,
+        password: loginData.password,
+        role: loginData.userType === 'admin' ? 'administrator' : 'client'
+      });
 
-      const expectedCreds = demoCredentials[loginData.userType];
+      const { user, token } = response.data;
+
+      // Store user data in localStorage
+      localStorage.setItem('ap_elite_user', JSON.stringify(user));
+      localStorage.setItem('ap_elite_token', token);
       
-      if (loginData.email === expectedCreds.email && loginData.password === expectedCreds.password) {
-        // Simulate API call
-        const userData = {
-          id: loginData.userType === 'admin' ? 'admin-1' : 'client-1',
-          name: expectedCreds.name,
-          email: loginData.email,
-          role: expectedCreds.role,
-          userType: loginData.userType
-        };
-
-        // Store user data in localStorage
-        localStorage.setItem('ap_elite_user', JSON.stringify(userData));
-        localStorage.setItem('ap_elite_token', 'demo-token-' + Date.now());
-        
-        toast.success(`Bem-vindo(a), ${userData.name}!`);
-        
-        // Redirect based on user type
-        if (loginData.userType === 'admin') {
-          navigate('/admin/dashboard');
-        } else {
-          navigate('/client/dashboard');
-        }
+      toast.success(`Bem-vindo(a), ${user.name}!`);
+      
+      // Redirect based on user type
+      if (user.role === 'administrator') {
+        navigate('/admin/dashboard');
       } else {
-        toast.error('Credenciais inválidas. Tente novamente.');
+        navigate('/client/dashboard');
       }
     } catch (error) {
       console.error('Erro no login:', error);
