@@ -87,7 +87,7 @@ const AdminLayout = ({ children }) => {
     {
       title: 'Relatórios e Exportação',
       path: '/admin/reports',
-      icon: FileText,
+      icon: Download,
       badge: 'Novo',
       badgeColor: 'bg-green-500'
     }
