@@ -121,11 +121,12 @@ const SmartDashboard = () => {
   const financialTimeline = Object.values(financialData);
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-white">Dashboard Inteligente</h1>
-        <Badge className="bg-cyan-500 text-white">Analytics Avançados</Badge>
-      </div>
+    <AdminLayout>
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl font-bold text-white">Dashboard Inteligente</h1>
+          <Badge className="bg-cyan-500 text-white">Analytics Avançados</Badge>
+        </div>
 
       {/* KPIs Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
