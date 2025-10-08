@@ -34,6 +34,9 @@ function App() {
           <Route path="/casos-sucesso" element={<CasosSucesso />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/depoimentos" element={<Depoimentos />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/client/dashboard" element={<ClientDashboard />} />
         </Routes>
       </Router>
       <WhatsAppButton />
