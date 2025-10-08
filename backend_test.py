@@ -430,6 +430,284 @@ class BackendTester:
             self.log_result("Communications Messages", False, f"Exception: {str(e)}")
             return False
     
+    async def test_pdf_report_generation(self):
+        """Test POST /api/integrations/reports/case/{case_id}"""
+        case_id = "930acd82-3003-4872-8c23-c08b9ca5e541"  # Using existing case
+        try:
+            headers = self.get_headers()
+            async with self.session.post(f"{BASE_URL}/integrations/reports/case/{case_id}", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["status", "filename", "download_url"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("PDF Report Generation", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    if data.get("status") != "success":
+                        self.log_result("PDF Report Generation", False, f"Expected status 'success', got '{data.get('status')}'", data)
+                        return False
+                    
+                    self.log_result("PDF Report Generation", True, f"Successfully generated PDF report: {data.get('filename')}")
+                    return data.get("filename")
+                else:
+                    error_text = await response.text()
+                    self.log_result("PDF Report Generation", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("PDF Report Generation", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_email_with_report(self):
+        """Test POST /api/integrations/email/send-report"""
+        case_id = "930acd82-3003-4872-8c23-c08b9ca5e541"  # Using existing case
+        try:
+            email_data = {
+                "case_id": case_id,
+                "recipient_email": "test@apelite.com"
+            }
+            
+            headers = self.get_headers()
+            async with self.session.post(f"{BASE_URL}/integrations/email/send-report", json=email_data, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["status", "message", "recipient"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Email with Report", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    if data.get("status") != "success":
+                        self.log_result("Email with Report", False, f"Expected status 'success', got '{data.get('status')}'", data)
+                        return False
+                    
+                    self.log_result("Email with Report", True, f"Successfully queued email to: {data.get('recipient')}")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Email with Report", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Email with Report", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_data_export_csv(self):
+        """Test GET /api/integrations/export/cases/csv"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/integrations/export/cases/csv", headers=headers) as response:
+                if response.status == 200:
+                    content = await response.text()
+                    content_type = response.headers.get('content-type', '')
+                    content_disposition = response.headers.get('content-disposition', '')
+                    
+                    # Validate response
+                    if 'text/csv' not in content_type:
+                        self.log_result("Data Export CSV", False, f"Expected CSV content-type, got: {content_type}")
+                        return False
+                    
+                    if 'attachment' not in content_disposition:
+                        self.log_result("Data Export CSV", False, f"Expected attachment disposition, got: {content_disposition}")
+                        return False
+                    
+                    if not content or len(content) < 10:
+                        self.log_result("Data Export CSV", False, "CSV content is empty or too short")
+                        return False
+                    
+                    self.log_result("Data Export CSV", True, f"Successfully exported CSV data ({len(content)} bytes)")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Data Export CSV", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Data Export CSV", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_data_export_json_cases(self):
+        """Test GET /api/integrations/export/cases/json"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/integrations/export/cases/json", headers=headers) as response:
+                if response.status == 200:
+                    content = await response.text()
+                    content_type = response.headers.get('content-type', '')
+                    content_disposition = response.headers.get('content-disposition', '')
+                    
+                    # Validate response
+                    if 'application/json' not in content_type:
+                        self.log_result("Data Export JSON Cases", False, f"Expected JSON content-type, got: {content_type}")
+                        return False
+                    
+                    if 'attachment' not in content_disposition:
+                        self.log_result("Data Export JSON Cases", False, f"Expected attachment disposition, got: {content_disposition}")
+                        return False
+                    
+                    # Try to parse JSON
+                    try:
+                        import json
+                        data = json.loads(content)
+                        if not isinstance(data, list):
+                            self.log_result("Data Export JSON Cases", False, "Expected JSON array of cases")
+                            return False
+                    except json.JSONDecodeError:
+                        self.log_result("Data Export JSON Cases", False, "Invalid JSON format")
+                        return False
+                    
+                    self.log_result("Data Export JSON Cases", True, f"Successfully exported JSON cases data ({len(data)} cases)")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Data Export JSON Cases", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Data Export JSON Cases", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_data_export_json_analytics(self):
+        """Test GET /api/integrations/export/analytics/json"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/integrations/export/analytics/json", headers=headers) as response:
+                if response.status == 200:
+                    content = await response.text()
+                    content_type = response.headers.get('content-type', '')
+                    content_disposition = response.headers.get('content-disposition', '')
+                    
+                    # Validate response
+                    if 'application/json' not in content_type:
+                        self.log_result("Data Export JSON Analytics", False, f"Expected JSON content-type, got: {content_type}")
+                        return False
+                    
+                    if 'attachment' not in content_disposition:
+                        self.log_result("Data Export JSON Analytics", False, f"Expected attachment disposition, got: {content_disposition}")
+                        return False
+                    
+                    # Try to parse JSON
+                    try:
+                        import json
+                        data = json.loads(content)
+                        required_keys = ["export_date", "total_cases", "active_cases", "cases_by_status"]
+                        missing_keys = [key for key in required_keys if key not in data]
+                        
+                        if missing_keys:
+                            self.log_result("Data Export JSON Analytics", False, f"Missing analytics keys: {missing_keys}")
+                            return False
+                    except json.JSONDecodeError:
+                        self.log_result("Data Export JSON Analytics", False, "Invalid JSON format")
+                        return False
+                    
+                    self.log_result("Data Export JSON Analytics", True, "Successfully exported analytics JSON data")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Data Export JSON Analytics", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Data Export JSON Analytics", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_backup_creation(self):
+        """Test POST /api/integrations/backup/create"""
+        try:
+            headers = self.get_headers()
+            async with self.session.post(f"{BASE_URL}/integrations/backup/create", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["status", "backup_id", "filename", "download_url"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Backup Creation", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    if data.get("status") != "success":
+                        self.log_result("Backup Creation", False, f"Expected status 'success', got '{data.get('status')}'", data)
+                        return False
+                    
+                    self.log_result("Backup Creation", True, f"Successfully created backup: {data.get('filename')}")
+                    return data.get("filename")
+                else:
+                    error_text = await response.text()
+                    self.log_result("Backup Creation", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Backup Creation", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_audit_logs(self):
+        """Test GET /api/integrations/audit/logs"""
+        try:
+            headers = self.get_headers()
+            # Test with filters
+            params = {"limit": 50, "action": "generate_report"}
+            async with self.session.get(f"{BASE_URL}/integrations/audit/logs", headers=headers, params=params) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["logs", "total"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Audit Logs", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    logs = data.get("logs", [])
+                    if not isinstance(logs, list):
+                        self.log_result("Audit Logs", False, "Logs should be a list")
+                        return False
+                    
+                    self.log_result("Audit Logs", True, f"Successfully retrieved {len(logs)} audit logs")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Audit Logs", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Audit Logs", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_activity_summary(self):
+        """Test GET /api/integrations/audit/activity-summary"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/integrations/audit/activity-summary", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["activity_by_action", "top_users", "recent_activity"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Activity Summary", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    # Validate data types
+                    for key in required_keys:
+                        if not isinstance(data[key], list):
+                            self.log_result("Activity Summary", False, f"{key} should be a list")
+                            return False
+                    
+                    self.log_result("Activity Summary", True, "Successfully retrieved activity summary")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Activity Summary", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Activity Summary", False, f"Exception: {str(e)}")
+            return False
+
     async def run_all_tests(self):
         """Run all backend tests"""
         print("🚀 Starting AP Elite ERP Advanced Features Backend Testing")
@@ -456,6 +734,16 @@ class BackendTester:
         await self.test_communications_whatsapp()
         await self.test_communications_video_room()
         await self.test_communications_messages()
+        
+        print("\n🔧 Testing Advanced Integrations APIs...")
+        await self.test_pdf_report_generation()
+        await self.test_email_with_report()
+        await self.test_data_export_csv()
+        await self.test_data_export_json_cases()
+        await self.test_data_export_json_analytics()
+        await self.test_backup_creation()
+        await self.test_audit_logs()
+        await self.test_activity_summary()
         
         # Summary
         print("\n" + "=" * 70)
