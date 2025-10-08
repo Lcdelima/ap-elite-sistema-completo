@@ -128,6 +128,46 @@ async def get_contact_messages():
             message['created_at'] = datetime.fromisoformat(message['created_at'])
     return messages
 
+@api_router.post("/appointments", response_model=Appointment)
+async def create_appointment(appointment_data: AppointmentCreate):
+    # Convert date and time to datetime
+    datetime_str = f"{appointment_data.date}T{appointment_data.time}:00"
+    appointment_datetime = datetime.fromisoformat(datetime_str)
+    
+    # Create appointment object
+    appointment_dict = appointment_data.model_dump()
+    appointment_dict['datetime'] = appointment_datetime
+    appointment_obj = Appointment(**appointment_dict)
+    
+    # Convert to dict and serialize datetime to ISO string for MongoDB
+    doc = appointment_obj.model_dump()
+    doc['datetime'] = doc['datetime'].isoformat()
+    doc['created_at'] = doc['created_at'].isoformat()
+    
+    await db.appointments.insert_one(doc)
+    return appointment_obj
+
+@api_router.get("/appointments", response_model=List[Appointment])
+async def get_appointments():
+    appointments = await db.appointments.find({}, {"_id": 0}).sort("datetime", 1).to_list(100)
+    for appointment in appointments:
+        if isinstance(appointment['datetime'], str):
+            appointment['datetime'] = datetime.fromisoformat(appointment['datetime'])
+        if isinstance(appointment['created_at'], str):
+            appointment['created_at'] = datetime.fromisoformat(appointment['created_at'])
+    return appointments
+
+@api_router.put("/appointments/{appointment_id}/status")
+async def update_appointment_status(appointment_id: str, status: str):
+    result = await db.appointments.update_one(
+        {"id": appointment_id},
+        {"$set": {"status": status}}
+    )
+    if result.modified_count == 1:
+        return {"message": "Status updated successfully"}
+    else:
+        raise HTTPException(status_code=404, detail="Appointment not found")
+
 # Include the router in the main app
 app.include_router(api_router)
 
