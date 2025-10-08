@@ -620,10 +620,16 @@ async def get_admin_stats(current_user: dict = Depends(get_current_user)):
 from advanced_features import advanced_router
 from advanced_integrations import integrations_router
 
+# Import Super ERP (18 modules)
+import sys
+sys.path.append('/app/backend')
+from super_erp import super_router
+
 # Add all routes to main app
 app.include_router(api_router)
 app.include_router(advanced_router)
 app.include_router(integrations_router)
+app.include_router(super_router)
 
 # Health check
 @app.get("/")
