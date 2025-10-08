@@ -243,9 +243,31 @@ const AdminDashboard = () => {
                 <Badge className="bg-purple-500 text-white">ERP v2.0</Badge>
               </div>
 
-              {/* ERP Modules Quick Access */}
+              {/* ATHENA - 18 Módulos Completos */}
               <div>
-                <h2 className="text-xl font-semibold text-white mb-4">Módulos ERP Avançados</h2>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-semibold text-white">Elite Athena - Sistema Completo</h2>
+                  <Badge className="bg-gradient-to-r from-purple-500 to-pink-600 text-white animate-pulse">18 Módulos</Badge>
+                </div>
+                
+                <Card className="bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 border-0 cursor-pointer hover:scale-105 transition-transform mb-6" onClick={() => navigate('/athena')}>
+                  <CardContent className="p-8 text-center">
+                    <div className="flex items-center justify-center space-x-4">
+                      <BarChart3 className="h-16 w-16 text-white" />
+                      <div className="text-left">
+                        <h3 className="text-3xl font-bold text-white mb-2">ACESSAR ATHENA</h3>
+                        <p className="text-white text-lg mb-2">Sistema Jurídico Completo com 18 Módulos</p>
+                        <div className="flex space-x-2">
+                          <Badge className="bg-white text-purple-600">E2E Encryption</Badge>
+                          <Badge className="bg-white text-cyan-600">Google Maps</Badge>
+                          <Badge className="bg-white text-green-600">IA Preditiva</Badge>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <h2 className="text-xl font-semibold text-white mb-4">Acesso Rápido - Módulos ERP</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   <Card className="bg-gradient-to-br from-cyan-500 to-blue-600 border-0 cursor-pointer hover:scale-105 transition-transform" onClick={() => navigate('/admin/smart-dashboard')}>
                     <CardContent className="p-4 text-center">
