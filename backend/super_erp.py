@@ -33,16 +33,23 @@ db = client[os.environ['DB_NAME']]
 # Google Maps
 gmaps = googlemaps.Client(key=os.environ.get('GOOGLE_MAPS_API_KEY'))
 
-# PostgreSQL for geospatial (ERBs)
+# PostgreSQL for geospatial (ERBs) - optional
 POSTGRES_URL = os.getenv('POSTGRES_URL', 'postgresql://postgres:postgres@localhost:5432/ap_elite')
+pg_engine = None
+PGSessionLocal = None
+Base = declarative_base()
+
+# Try to connect to PostgreSQL, but don't fail if not available
 try:
-    pg_engine = create_engine(POSTGRES_URL)
+    pg_engine = create_engine(POSTGRES_URL, pool_pre_ping=True)
+    # Test connection
+    pg_engine.connect().close()
     PGSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=pg_engine)
-    Base = declarative_base()
-except:
+    print("✅ PostgreSQL connected for geospatial features")
+except Exception as e:
+    print(f"⚠️ PostgreSQL not available (geospatial features will use MongoDB): {e}")
     pg_engine = None
     PGSessionLocal = None
-    Base = declarative_base()
 
 # Security
 security = HTTPBearer(auto_error=False)
