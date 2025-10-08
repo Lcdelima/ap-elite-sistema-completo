@@ -113,6 +113,7 @@ const AdminLayout = ({ children }) => {
           </div>
           
           <div className="flex items-center space-x-4">
+            <NotificationCenter />
             <span className="text-slate-300 hidden md:block">Bem-vindo, {user?.name}</span>
             <Button
               variant="outline"
