@@ -84,6 +84,28 @@ const Footer = () => {
               </div>
             </div>
           </div>
+
+          {/* Quick Links */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-white mb-4">Links Rápidos</h3>
+            <div className="space-y-2 text-slate-300 text-sm">
+              <div>
+                <a href="/agendamento" className="hover:text-cyan-400 transition-colors">Agendamento Online</a>
+              </div>
+              <div>
+                <a href="/casos-sucesso" className="hover:text-cyan-400 transition-colors">Casos de Sucesso</a>
+              </div>
+              <div>
+                <a href="/depoimentos" className="hover:text-cyan-400 transition-colors">Depoimentos</a>
+              </div>
+              <div>
+                <a href="/faq" className="hover:text-cyan-400 transition-colors">Perguntas Frequentes</a>
+              </div>
+              <div>
+                <a href="/contact" className="hover:text-cyan-400 transition-colors">Entre em Contato</a>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Bottom section */}
