@@ -32,8 +32,10 @@ import AthenaMain from './pages/admin/AthenaMain';
 // Athena modules
 import AthenaDashboard from './pages/athena/Dashboard';
 import AthenaClients from './pages/athena/Clients';
+import AthenaClientsEnhanced from './pages/athena/ClientsEnhanced';
 import AthenaProcesses from './pages/athena/Processes';
 import AthenaCommunications from './pages/athena/Communications';
+import AthenaCommunicationsEnhanced from './pages/athena/CommunicationsEnhanced';
 import AthenaCalendar from './pages/athena/Calendar';
 import AthenaMeetingLinks from './pages/athena/MeetingLinks';
 import AthenaVideoConference from './pages/athena/VideoConference';
