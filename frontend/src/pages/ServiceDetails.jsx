@@ -330,13 +330,16 @@ const ServiceDetails = () => {
                   </h3>
                   <div className="space-y-3 text-sm">
                     <p className="text-slate-300">
-                      <strong className="text-white">Telefone:</strong> (xx) xxxx-xxxx
+                      <strong className="text-white">Perícia Digital:</strong> (11) 9 1646‑8611
                     </p>
                     <p className="text-slate-300">
-                      <strong className="text-white">E-mail:</strong> contato@apelite.com.br
+                      <strong className="text-white">Advocacia Criminal:</strong> (11) 9 7219‑0768
                     </p>
                     <p className="text-slate-300">
-                      <strong className="text-white">Atendimento:</strong> Segunda a Sexta, 8h às 18h
+                      <strong className="text-white">E-mail:</strong> elitecdel@gmail.com
+                    </p>
+                    <p className="text-slate-300">
+                      <strong className="text-white">Instagram:</strong> @lauracunhadel
                     </p>
                   </div>
                 </CardContent>
