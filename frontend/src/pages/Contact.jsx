@@ -25,27 +25,27 @@ const Contact = () => {
   const contactInfo = [
     {
       icon: Phone,
-      title: 'Telefones',
-      info: 'Perícia Digital: (11) 9 1646‑8611',
-      description: 'Advocacia Criminal: (11) 9 7219‑0768'
+      title: 'Perícia Digital',
+      info: '(11) 9 1646‑8611',
+      description: 'Especialidades em perícia técnica'
+    },
+    {
+      icon: Phone,
+      title: 'Advocacia Criminal',  
+      info: '(11) 9 7219‑0768',
+      description: 'Consultoria jurídica especializada'
     },
     {
       icon: Mail,
-      title: 'E-mail',
+      title: 'E-mail Principal',
       info: 'elitecdel@gmail.com',
       description: 'Resposta em até 24 horas'
     },
     {
       icon: Globe,
-      title: 'Websites',
-      info: 'www.elitecdel.com.br',
-      description: 'www.lcdel.com.br'
-    },
-    {
-      icon: MapPin,
-      title: 'Endereço',
-      info: 'R Paraguai, 454 - Jardim America',
-      description: 'Tres Coracoes - MG - CEP: 37410-866'
+      title: 'Instagram',
+      info: '@lauracunhadel',
+      description: 'Siga para atualizações'
     }
   ];
 
