@@ -592,6 +592,44 @@ app.include_router(integrations_router)
 async def root():
     return {"message": "AP Elite - Sistema de Gestão Criminal v2.0", "status": "active"}
 
+# Admin stats endpoint
+@api_router.get("/admin/stats")
+async def get_admin_stats(current_user: dict = Depends(get_current_user)):
+    """Get admin dashboard statistics"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    stats = {
+        "total_cases": await db.cases.count_documents({}),
+        "active_cases": await db.cases.count_documents({"status": "active"}),
+        "total_clients": await db.users.count_documents({"role": "client"}),
+        "pending_items": await db.evidence.count_documents({"analysis_status": "pending"}),
+        "monthly_revenue": 0.0
+    }
+    
+    # Calculate monthly revenue
+    first_day_of_month = datetime.now(timezone.utc).replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    pipeline = [
+        {
+            "$match": {
+                "type": {"$in": ["income", "fee"]},
+                "date": {"$gte": first_day_of_month.isoformat()}
+            }
+        },
+        {
+            "$group": {
+                "_id": None,
+                "total": {"$sum": "$amount"}
+            }
+        }
+    ]
+    
+    result = await db.financial_records.aggregate(pipeline).to_list(1)
+    if result:
+        stats["monthly_revenue"] = result[0]["total"]
+    
+    return stats
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
