@@ -63,6 +63,7 @@ import AthenaUnifiedDashboard from './pages/athena/UnifiedDashboard';
 
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
+import HybridNotifications from './components/HybridNotifications';
 
 function AppContent() {
   useKeyboardShortcuts();
