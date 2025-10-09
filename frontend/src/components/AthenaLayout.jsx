@@ -20,11 +20,20 @@ const AthenaLayout = ({ children, title, subtitle }) => {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => navigate('/athena')}
+                onClick={() => navigate('/admin/dashboard')}
                 className="text-white border-white hover:bg-white hover:text-cyan-600"
               >
                 <Home className="h-4 w-4 mr-2" />
-                Athena
+                Painel Admin
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigate('/athena')}
+                className="text-white border-white hover:bg-white hover:text-cyan-600"
+              >
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Athena Home
               </Button>
               <Button
                 variant="outline"
