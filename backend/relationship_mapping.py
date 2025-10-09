@@ -406,13 +406,13 @@ async def predict_network_evolution(network_data: Dict, historical_data: List[Di
         Responda em formato JSON com previsões para 3, 6 e 12 meses.
         """
 
-        response = await llm_provider.complete(
-            messages=[{"role": "user", "content": prompt}],
+        response = await llm_chat.achat(
+            messages=[UserMessage(content=prompt)],
             model="gpt-4o",
             max_tokens=1800
         )
 
-        predictions = json.loads(response.choices[0].message.content)
+        predictions = json.loads(response.content)
 
         return {
             "analysis_type": "network_evolution_prediction",
