@@ -978,6 +978,13 @@ class BackendTester:
         await self.test_athena_processes()
         await self.test_athena_financial_summary()
         
+        print("\n🛡️ Testing Defensive Investigation APIs...")
+        await self.test_defensive_investigation_categories()
+        await self.test_defensive_investigation_cases()
+        await self.test_defensive_investigation_favorites()
+        await self.test_defensive_investigation_stats()
+        await self.test_defensive_investigation_case_creation()
+        
         print("\n🔧 Testing Advanced Features (Legacy)...")
         await self.test_analytics_overview()
         await self.test_analytics_kpis()
