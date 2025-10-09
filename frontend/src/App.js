@@ -64,11 +64,12 @@ import AthenaUnifiedDashboard from './pages/athena/UnifiedDashboard';
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
 
-function App() {
+function AppContent() {
+  useKeyboardShortcuts();
+  
   return (
-    <div className="App min-h-screen bg-slate-900">
-      <Router>
-        <Routes>
+    <>
+      <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/services" element={<Services />} />
           <Route path="/services/:id" element={<ServiceDetails />} />
