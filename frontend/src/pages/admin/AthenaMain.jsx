@@ -234,6 +234,16 @@ const AthenaMain = () => {
       color: 'from-pink-500 to-rose-600',
       badge: 'IA',
       badgeColor: 'bg-purple-500'
+    },
+    {
+      id: 21,
+      title: 'Gerador de Documentos',
+      subtitle: 'Procurações e Termos',
+      icon: FileText,
+      path: '/athena/documents',
+      color: 'from-indigo-500 to-blue-600',
+      badge: 'NOVO',
+      badgeColor: 'bg-green-500'
     }
   ];
 
