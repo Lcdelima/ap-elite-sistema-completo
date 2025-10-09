@@ -624,6 +624,8 @@ from advanced_integrations import integrations_router
 import sys
 sys.path.append('/app/backend')
 from super_erp import super_router
+# Import super_erp_part3 to register additional endpoints including financial
+import super_erp_part3
 from user_management import user_router
 from athena_enhanced_apis import enhanced_router
 from notifications_system import notifications_router
