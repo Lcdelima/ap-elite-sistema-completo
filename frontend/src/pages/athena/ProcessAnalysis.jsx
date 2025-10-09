@@ -1,84 +1,114 @@
-import React from 'react';
-import AthenaLayout from '@/components/AthenaLayout';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { FileText, TrendingUp, AlertCircle, Brain } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { FileText, Search, TrendingUp, BarChart3, Brain, Filter } from 'lucide-react';
+import AthenaLayout from '../../components/AthenaLayout';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const ProcessAnalysis = () => {
+  const [analyses, setAnalyses] = useState([]);
+  const [stats, setStats] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      // Simulated data for now - replace with actual API calls
+      setStats({
+        total_analyses: 0,
+        in_progress: 0,
+        completed: 0,
+        success_rate: 0
+      });
+      setAnalyses([]);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error:', error);
+      setLoading(false);
+    }
+  };
+
   return (
-    <AthenaLayout title="Análise Processual" subtitle="IA Preditiva para Processos">
-      <div className="space-y-6">
-        <Card className="bg-gradient-to-r from-violet-500 to-purple-600 border-0">
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-4">
-              <Brain className="h-12 w-12 text-white" />
-              <div>
-                <h3 className="text-2xl font-bold text-white mb-2">Análise com IA</h3>
-                <p className="text-white text-opacity-90">Predição de resultados baseada em Machine Learning</p>
-              </div>
-              <Badge className="bg-white text-purple-600 ml-auto">IA Powered</Badge>
+    <AthenaLayout>
+      <div className="max-w-7xl mx-auto">
+        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 rounded-lg shadow-lg mb-6">
+          <div className="flex items-center gap-4">
+            <Brain className="w-12 h-12" />
+            <div>
+              <h1 className="text-3xl font-bold mb-1">Análise Processual Inteligente</h1>
+              <p className="text-indigo-100">Análise avançada de processos jurídicos com IA</p>
             </div>
-          </CardContent>
-        </Card>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="bg-slate-800 border-slate-700">
-            <CardContent className="p-6">
-              <TrendingUp className="h-10 w-10 text-green-400 mb-4" />
-              <h3 className="text-white font-semibold mb-2">Taxa de Sucesso</h3>
-              <p className="text-3xl font-bold text-white mb-2">85.5%</p>
-              <p className="text-slate-400 text-sm">Baseado em 1.200 casos similares</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-slate-800 border-slate-700">
-            <CardContent className="p-6">
-              <FileText className="h-10 w-10 text-blue-400 mb-4" />
-              <h3 className="text-white font-semibold mb-2">Duração Média</h3>
-              <p className="text-3xl font-bold text-white mb-2">180 dias</p>
-              <p className="text-slate-400 text-sm">Para processos similares</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-slate-800 border-slate-700">
-            <CardContent className="p-6">
-              <AlertCircle className="h-10 w-10 text-yellow-400 mb-4" />
-              <h3 className="text-white font-semibold mb-2">Fatores de Risco</h3>
-              <p className="text-3xl font-bold text-white mb-2">3</p>
-              <p className="text-slate-400 text-sm">Identificados pela IA</p>
-            </CardContent>
-          </Card>
+          </div>
         </div>
 
-        <Card className="bg-slate-800 border-slate-700">
-          <CardContent className="p-6">
-            <h3 className="text-white font-semibold mb-4">Recomendações da IA:</h3>
-            <div className="space-y-3">
-              <div className="bg-slate-700 p-4 rounded-lg">
-                <div className="flex items-start space-x-3">
-                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-white font-bold">1</span>
-                  </div>
-                  <div>
-                    <p className="text-white font-medium">Adicionar documentação complementar</p>
-                    <p className="text-slate-400 text-sm mt-1">Casos similares com mais documentos tiveram 15% mais sucesso</p>
-                  </div>
-                </div>
-              </div>
-              <div className="bg-slate-700 p-4 rounded-lg">
-                <div className="flex items-start space-x-3">
-                  <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-white font-bold">2</span>
-                  </div>
-                  <div>
-                    <p className="text-white font-medium">Solicitar audiência preliminar</p>
-                    <p className="text-slate-400 text-sm mt-1">Pode acelerar o processo em 30 dias</p>
-                  </div>
-                </div>
-              </div>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <div className="bg-white p-6 rounded-lg shadow">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-sm text-gray-600">Total de Análises</p>
+              <BarChart3 className="w-5 h-5 text-indigo-500" />
             </div>
-          </CardContent>
-        </Card>
+            <p className="text-3xl font-bold text-gray-900">{stats.total_analyses || 0}</p>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-sm text-gray-600">Em Andamento</p>
+              <TrendingUp className="w-5 h-5 text-blue-500" />
+            </div>
+            <p className="text-3xl font-bold text-blue-600">{stats.in_progress || 0}</p>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-sm text-gray-600">Concluídas</p>
+              <FileText className="w-5 h-5 text-green-500" />
+            </div>
+            <p className="text-3xl font-bold text-green-600">{stats.completed || 0}</p>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-sm text-gray-600">Taxa de Sucesso</p>
+              <TrendingUp className="w-5 h-5 text-purple-500" />
+            </div>
+            <p className="text-3xl font-bold text-purple-600">{stats.success_rate || 0}%</p>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-semibold mb-4">Análises Recentes</h2>
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+            </div>
+          ) : analyses.length === 0 ? (
+            <div className="text-center py-12">
+              <Brain className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <p className="text-gray-600">Nenhuma análise processual realizada</p>
+              <p className="text-sm text-gray-500 mt-2">As análises aparecerão aqui quando forem criadas</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {analyses.map((analysis) => (
+                <div key={analysis.id} className="border border-gray-200 rounded-lg p-4">
+                  <h3 className="font-semibold text-gray-900 mb-2">{analysis.title}</h3>
+                  <p className="text-sm text-gray-600 mb-3">{analysis.description}</p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-500">
+                      {new Date(analysis.created_at).toLocaleDateString('pt-BR')}
+                    </span>
+                    <span className={`px-3 py-1 rounded text-sm ${
+                      analysis.status === 'completed' ? 'bg-green-100 text-green-700' :
+                      'bg-blue-100 text-blue-700'
+                    }`}>
+                      {analysis.status === 'completed' ? 'Concluída' : 'Em Andamento'}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </AthenaLayout>
   );
