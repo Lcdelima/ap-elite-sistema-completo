@@ -60,6 +60,8 @@ import AthenaDocumentGenerator from './pages/athena/DocumentGenerator';
 import AthenaDefensiveInvestigation from './pages/athena/DefensiveInvestigation';
 import AthenaUserManagement from './pages/athena/UserManagement';
 import AthenaUnifiedDashboard from './pages/athena/UnifiedDashboard';
+import AdvancedInvestigation from './pages/athena/AdvancedInvestigation';
+import RelationshipMapping from './pages/athena/RelationshipMapping';
 
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
