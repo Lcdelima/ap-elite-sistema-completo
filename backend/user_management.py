@@ -4,13 +4,35 @@ Sistema completo de gerenciamento de usuários com permissões por níveis
 """
 
 from fastapi import APIRouter, HTTPException, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from motor.motor_asyncio import AsyncIOMotorClient
 from datetime import datetime, timezone
 from typing import Optional, List
 import uuid
 import bcrypt
-from server import get_current_user, db
+import os
 
-user_router = APIRouter()
+# Database connection
+mongo_url = os.environ['MONGO_URL']
+client = AsyncIOMotorClient(mongo_url)
+db = client.ap_elite
+
+# Security
+security = HTTPBearer()
+
+# Auth dependency
+async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    if not credentials:
+        return None
+    try:
+        token_parts = credentials.credentials.split('_')
+        user_id = token_parts[1]
+        user = await db.users.find_one({"id": user_id, "status": "active"}, {"_id": 0, "password": 0})
+        return user
+    except:
+        return None
+
+user_router = APIRouter(prefix="/api")
 
 # User Roles and Permissions
 USER_ROLES = {
