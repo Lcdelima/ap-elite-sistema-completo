@@ -1,0 +1,22 @@
+{
+  "sync_interval_minutes": 5,
+  "backup_time": "23:00",
+  "auto_backup": true,
+  "auto_sync": true,
+  "conflict_resolution": "newest_wins",
+  "max_backup_files": 30,
+  "local_storage_enabled": true,
+  "sync_on_startup": true,
+  "backup_on_shutdown": true,
+  "notification_settings": {
+    "sync_notifications": true,
+    "backup_notifications": true,
+    "error_notifications": true
+  },
+  "advanced_settings": {
+    "batch_size": 1000,
+    "retry_attempts": 3,
+    "timeout_seconds": 30,
+    "compression_enabled": true
+  }
+}
