@@ -61,9 +61,10 @@ const DefensiveInvestigation = () => {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
-      setCategories(data.categories);
+      setCategories(data.categories || {});
     } catch (error) {
       console.error('Error fetching categories:', error);
+      setCategories({});
     }
   };
 
@@ -74,9 +75,10 @@ const DefensiveInvestigation = () => {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
-      setCases(data.cases);
+      setCases(data.cases || []);
     } catch (error) {
       console.error('Error fetching cases:', error);
+      setCases([]);
     }
   };
 
