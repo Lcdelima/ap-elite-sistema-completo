@@ -313,7 +313,7 @@ const DocumentGenerator = () => {
                 <CardTitle className="text-white">Selecione o Tipo de Documento</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-3 gap-4">
                   {documentTypes.map((docType) => {
                     const Icon = docType.icon;
                     return (
