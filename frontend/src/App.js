@@ -54,6 +54,7 @@ import AthenaContractGenerator from './pages/athena/ContractGenerator';
 import AthenaEvidenceAnalysis from './pages/athena/EvidenceAnalysis';
 import AthenaDocumentGenerator from './pages/athena/DocumentGenerator';
 import AthenaDefensiveInvestigation from './pages/athena/DefensiveInvestigation';
+import AthenaUserManagement from './pages/athena/UserManagement';
 
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
