@@ -1121,6 +1121,12 @@ class BackendTester:
         print("\n👤 Testing Authentication and User Management...")
         await self.test_user_creation()
         
+        print("\n🔄 Testing Hybrid System...")
+        await self.test_hybrid_status()
+        await self.test_hybrid_sync()
+        await self.test_hybrid_backups_list()
+        await self.test_hybrid_backup_create()
+        
         print("\n📋 Testing Core Modules...")
         await self.test_athena_processes()
         await self.test_athena_financial_summary()
