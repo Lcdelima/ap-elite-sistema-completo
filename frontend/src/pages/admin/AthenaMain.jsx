@@ -274,6 +274,26 @@ const AthenaMain = () => {
       color: 'from-blue-600 via-purple-600 to-pink-600',
       badge: 'NOVO',
       badgeColor: 'bg-gradient-to-r from-blue-500 to-purple-500'
+    },
+    {
+      id: 25,
+      title: 'Investigação Avançada',
+      subtitle: 'IA + OSINT + Forense Digital',
+      icon: Search,
+      path: '/athena/advanced-investigation',
+      color: 'from-indigo-600 via-purple-700 to-blue-800',
+      badge: 'IA TOTAL',
+      badgeColor: 'bg-gradient-to-r from-purple-600 to-indigo-600'
+    },
+    {
+      id: 26,
+      title: 'Mapeamento de Redes',
+      subtitle: 'Análise Criminal + Centralidade',
+      icon: Network,
+      path: '/athena/relationship-mapping',
+      color: 'from-red-600 via-pink-700 to-purple-800',
+      badge: 'REDES',
+      badgeColor: 'bg-gradient-to-r from-red-500 to-pink-500'
     }
   ];
 
