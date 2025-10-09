@@ -496,3 +496,380 @@ async def get_predictive_analytics(current_user: dict = Depends(get_current_user
         "model_accuracy": 85.5,
         "last_trained": "2025-10-01T00:00:00Z"
     }
+
+
+
+# ==================== CONTRACT GENERATOR ====================
+
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.units import cm
+from reportlab.lib.styles import ParagraphStyle
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak
+from reportlab.lib.enums import TA_JUSTIFY, TA_CENTER, TA_LEFT
+from io import BytesIO
+
+@super_router.post("/contracts/generate")
+async def generate_contract(
+    request_data: dict,
+    current_user: dict = Depends(get_current_user)
+):
+    """Generate contract PDF based on template"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    client_id = request_data.get("clientId")
+    contract_data = request_data.get("contractData", {})
+    
+    # Get client details
+    client = await db.clients_enhanced.find_one({"id": client_id}, {"_id": 0})
+    if not client:
+        raise HTTPException(status_code=404, detail="Cliente não encontrado")
+    
+    # Create PDF in memory
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(
+        buffer,
+        pagesize=A4,
+        rightMargin=2*cm,
+        leftMargin=2*cm,
+        topMargin=2*cm,
+        bottomMargin=2*cm
+    )
+    
+    story = []
+    
+    # Define custom styles
+    styles = getSampleStyleSheet()
+    
+    title_style = ParagraphStyle(
+        'CustomTitle',
+        parent=styles['Heading1'],
+        fontSize=18,
+        textColor=colors.HexColor('#1a5490'),
+        spaceAfter=30,
+        alignment=TA_CENTER,
+        fontName='Helvetica-Bold'
+    )
+    
+    heading_style = ParagraphStyle(
+        'CustomHeading',
+        parent=styles['Heading2'],
+        fontSize=14,
+        textColor=colors.HexColor('#1a5490'),
+        spaceAfter=12,
+        spaceBefore=12,
+        fontName='Helvetica-Bold'
+    )
+    
+    clausula_style = ParagraphStyle(
+        'Clausula',
+        parent=styles['Heading3'],
+        fontSize=11,
+        textColor=colors.black,
+        spaceAfter=6,
+        spaceBefore=12,
+        fontName='Helvetica-Bold'
+    )
+    
+    body_style = ParagraphStyle(
+        'CustomBody',
+        parent=styles['BodyText'],
+        fontSize=10,
+        alignment=TA_JUSTIFY,
+        spaceAfter=8,
+        leading=14,
+        fontName='Helvetica'
+    )
+    
+    # === HEADER ===
+    story.append(Paragraph("ELITE ESTRATÉGIAS EM PERÍCIA E INVESTIGAÇÃO CRIMINAL LTDA.", heading_style))
+    story.append(Paragraph("CNPJ: 55.413.321/0001-00", body_style))
+    story.append(Paragraph("Três Corações/MG", body_style))
+    story.append(Spacer(1, 20))
+    
+    # === TITLE ===
+    story.append(Paragraph("ORÇAMENTO E CONTRATO DE PRESTAÇÃO DE SERVIÇOS", title_style))
+    story.append(Paragraph("Perícia Forense Digital e Investigação Criminal", body_style))
+    story.append(Spacer(1, 30))
+    
+    # === PARTIES ===
+    story.append(Paragraph("IDENTIFICAÇÃO DAS PARTES", heading_style))
+    
+    # Contratante
+    story.append(Paragraph("<b>CONTRATANTE:</b>", clausula_style))
+    contratante_text = f"""
+    <b>{contract_data.get('clienteNome', client.get('name', ''))}</b>, {contract_data.get('clienteNacionalidade', 'brasileiro(a)')}, 
+    {contract_data.get('clienteEstadoCivil', '')}, {contract_data.get('clienteProfissao', '')}, 
+    portador(a) da identidade n° {contract_data.get('clienteRG', client.get('rg', ''))}, 
+    inscrito(a) no CPF sob n° {contract_data.get('clienteCPF', client.get('cpf', ''))}, 
+    residente e domiciliado(a) em {contract_data.get('clienteEndereco', '')}, 
+    endereço eletrônico: {contract_data.get('clienteEmail', client.get('email', ''))}, 
+    telefone: {contract_data.get('clienteTelefone', client.get('phone', ''))}.
+    """
+    story.append(Paragraph(contratante_text, body_style))
+    story.append(Spacer(1, 12))
+    
+    # Contratada
+    story.append(Paragraph("<b>CONTRATADA:</b>", clausula_style))
+    contratada_text = """
+    <b>ELITE ESTRATÉGIAS EM PERÍCIA E INVESTIGAÇÃO CRIMINAL LTDA.</b>, 
+    pessoa jurídica de direito privado, inscrita no CNPJ sob n° 55.413.321/0001-00, 
+    com sede em Três Corações/MG, representada neste ato por sua Diretora Técnica, 
+    <b>Dra. Laura Cunha de Lima</b>, Perita Criminal e Especialista em Ciências Forenses.
+    """
+    story.append(Paragraph(contratada_text, body_style))
+    story.append(Spacer(1, 20))
+    
+    # === SERVICES ===
+    story.append(Paragraph("OBJETO DO CONTRATO", heading_style))
+    story.append(Paragraph("""
+    O presente contrato tem por objeto a prestação de serviços técnicos especializados em perícia forense digital, 
+    abrangendo a análise, validação e emissão de parecer técnico sobre as provas digitais apresentadas nos autos.
+    """, body_style))
+    story.append(Spacer(1, 12))
+    
+    story.append(Paragraph("<b>SERVIÇOS INCLUSOS:</b>", clausula_style))
+    for i, servico in enumerate(contract_data.get('servicos', []), 1):
+        story.append(Paragraph(f"{i}. {servico}", body_style))
+    story.append(Spacer(1, 20))
+    
+    # === VALUE ===
+    story.append(Paragraph("VALOR E FORMA DE PAGAMENTO", heading_style))
+    
+    valor_total = float(contract_data.get('valorTotal', 30000))
+    valor_entrada = float(contract_data.get('valorEntrada', 15000))
+    num_parcelas = int(contract_data.get('numeroParcelas', 3))
+    valor_parcela = float(contract_data.get('valorParcela', 5000))
+    
+    story.append(Paragraph(f"""
+    <b>Valor Total:</b> R$ {valor_total:,.2f} ({valor_por_extenso(valor_total)})<br/>
+    <b>Forma de Pagamento:</b> {contract_data.get('formaPagamento', 'PIX/Transferência Bancária')}
+    """, body_style))
+    story.append(Spacer(1, 12))
+    
+    story.append(Paragraph("<b>Condições de Pagamento:</b>", clausula_style))
+    story.append(Paragraph(f"a) Entrada de R$ {valor_entrada:,.2f} ({valor_por_extenso(valor_entrada)}), no ato da assinatura;", body_style))
+    story.append(Paragraph(f"b) {num_parcelas} (três) parcelas de R$ {valor_parcela:,.2f} ({valor_por_extenso(valor_parcela)}) cada:", body_style))
+    
+    data_assinatura = datetime.fromisoformat(contract_data.get('dataAssinatura', datetime.now().isoformat()))
+    data_venc1 = datetime.fromisoformat(contract_data.get('dataVencimento1'))
+    data_venc2 = datetime.fromisoformat(contract_data.get('dataVencimento2'))
+    data_venc3 = datetime.fromisoformat(contract_data.get('dataVencimento3'))
+    
+    story.append(Paragraph(f"• Primeira parcela: {data_venc1.strftime('%d/%m/%Y')}", body_style))
+    story.append(Paragraph(f"• Segunda parcela: {data_venc2.strftime('%d/%m/%Y')}", body_style))
+    story.append(Paragraph(f"• Terceira parcela: {data_venc3.strftime('%d/%m/%Y')}", body_style))
+    story.append(Spacer(1, 20))
+    
+    # === CLÁUSULAS ===
+    story.append(PageBreak())
+    story.append(Paragraph("CLÁUSULAS CONTRATUAIS", title_style))
+    story.append(Spacer(1, 20))
+    
+    # Cláusula Primeira
+    story.append(Paragraph("CLÁUSULA PRIMEIRA: OBJETO DO CONTRATO", clausula_style))
+    story.append(Paragraph("""
+    O presente contrato tem por objeto a prestação de serviços técnicos especializados em perícia forense digital, 
+    abrangendo a análise, validação e emissão de parecer técnico sobre as provas digitais apresentadas nos autos. 
+    Os serviços serão conduzidos pela Elite Estratégias em Perícia e Investigação Criminal, utilizando metodologias 
+    científicas reconhecidas e alinhadas aos mais altos padrões técnicos internacionais.
+    """, body_style))
+    story.append(Spacer(1, 12))
+    
+    # Cláusula Segunda
+    story.append(Paragraph("CLÁUSULA SEGUNDA: NATUREZA DA OBRIGAÇÃO", clausula_style))
+    story.append(Paragraph("""
+    As partes contratantes expressamente dispõem que os serviços ora contratados configuram obrigação de meio, 
+    e não de resultado, de forma que a CONTRATADA compromete-se a empregar técnicas adequadas, metodologias científicas 
+    reconhecidas e ferramentas especializadas para a execução dos serviços periciais.
+    """, body_style))
+    story.append(Spacer(1, 12))
+    
+    # Cláusula Terceira
+    story.append(Paragraph("CLÁUSULA TERCEIRA: CONFIDENCIALIDADE E SIGILO PROFISSIONAL", clausula_style))
+    story.append(Paragraph("""
+    A CONTRATADA compromete-se a manter sigilo absoluto sobre todas as informações, documentos, provas digitais e 
+    demais elementos acessados no curso da prestação dos serviços periciais, sendo vedada a divulgação ou 
+    compartilhamento de qualquer dado sem a devida autorização expressa da CONTRATANTE.
+    """, body_style))
+    story.append(Spacer(1, 12))
+    
+    # Cláusula Quarta
+    story.append(Paragraph("CLÁUSULA QUARTA: PENALIDADES POR INADIMPLEMENTO", clausula_style))
+    story.append(Paragraph("""
+    O atraso no pagamento dos honorários ou reembolso de despesas sujeitará a CONTRATANTE à incidência de 
+    correção monetária pelo índice INPC, juros moratórios de 1% (um por cento) ao mês sobre o valor atualizado, 
+    e multa penal de 20% (vinte por cento) sobre o montante devido.
+    """, body_style))
+    story.append(Spacer(1, 12))
+    
+    # Cláusula Quinta
+    story.append(Paragraph("CLÁUSULA QUINTA: RESCISÃO CONTRATUAL", clausula_style))
+    story.append(Paragraph("""
+    O presente contrato será considerado rescindido de pleno direito caso qualquer das partes descumpra suas 
+    obrigações contratuais, sem prejuízo da cobrança dos valores referentes aos serviços já prestados.
+    """, body_style))
+    story.append(Spacer(1, 12))
+    
+    # Cláusula Sexta
+    story.append(Paragraph("CLÁUSULA SEXTA: PROTEÇÃO DE DADOS PESSOAIS (LGPD)", clausula_style))
+    story.append(Paragraph("""
+    A CONTRATADA obriga-se a atuar em conformidade com a Lei Geral de Proteção de Dados Pessoais 
+    (LGPD – Lei nº 13.709/2018), adotando medidas técnicas e administrativas adequadas para proteger os dados 
+    contra acessos não autorizados, perda, destruição ou modificação indevida.
+    """, body_style))
+    story.append(Spacer(1, 12))
+    
+    # Cláusula Sétima
+    story.append(Paragraph("CLÁUSULA SÉTIMA: FORO", clausula_style))
+    story.append(Paragraph("""
+    As partes elegem, de comum acordo, o foro da Comarca de Três Corações/MG para dirimir quaisquer questões 
+    oriundas deste contrato, com a renúncia expressa de qualquer outro foro, por mais privilegiado que seja.
+    """, body_style))
+    story.append(Spacer(1, 30))
+    
+    # === OBSERVAÇÕES ===
+    if contract_data.get('observacoes'):
+        story.append(Paragraph("OBSERVAÇÕES", heading_style))
+        story.append(Paragraph(contract_data.get('observacoes'), body_style))
+        story.append(Spacer(1, 20))
+    
+    # === PRAZO ===
+    if contract_data.get('prazoEstimado'):
+        story.append(Paragraph(f"<b>Prazo Estimado de Conclusão:</b> {contract_data.get('prazoEstimado')}", body_style))
+        story.append(Spacer(1, 30))
+    
+    # === ASSINATURAS ===
+    story.append(PageBreak())
+    story.append(Paragraph(f"Três Corações/MG, {data_assinatura.strftime('%d de %B de %Y')}", body_style))
+    story.append(Spacer(1, 60))
+    
+    # Linha de assinatura Contratante
+    story.append(Paragraph("_" * 60, body_style))
+    story.append(Paragraph(f"<b>{contract_data.get('clienteNome', client.get('name', ''))}</b>", body_style))
+    story.append(Paragraph(f"CPF: {contract_data.get('clienteCPF', client.get('cpf', ''))}", body_style))
+    story.append(Paragraph("CONTRATANTE", body_style))
+    story.append(Spacer(1, 40))
+    
+    # Linha de assinatura Contratada
+    story.append(Paragraph("_" * 60, body_style))
+    story.append(Paragraph("<b>ELITE ESTRATÉGIAS EM PERÍCIA E INVESTIGAÇÃO CRIMINAL LTDA.</b>", body_style))
+    story.append(Paragraph("Dra. Laura Cunha de Lima - Diretora Técnica", body_style))
+    story.append(Paragraph("CONTRATADA", body_style))
+    story.append(Spacer(1, 40))
+    
+    # === FOOTER ===
+    story.append(Spacer(1, 20))
+    story.append(Paragraph("_" * 80, body_style))
+    story.append(Paragraph(
+        "Elite Estratégias em Perícia e Investigação Criminal Ltda. | "
+        "Contato: (35) 99999-9999 | Email: contato@elitepericias.com.br",
+        ParagraphStyle('Footer', parent=body_style, fontSize=8, textColor=colors.grey, alignment=TA_CENTER)
+    ))
+    story.append(Paragraph("© 2025 Todos os direitos reservados", 
+        ParagraphStyle('Copyright', parent=body_style, fontSize=8, textColor=colors.grey, alignment=TA_CENTER)
+    ))
+    
+    # Build PDF
+    doc.build(story)
+    
+    # Get PDF bytes
+    buffer.seek(0)
+    pdf_bytes = buffer.getvalue()
+    buffer.close()
+    
+    # Return as StreamingResponse
+    from fastapi.responses import StreamingResponse
+    return StreamingResponse(
+        io.BytesIO(pdf_bytes),
+        media_type="application/pdf",
+        headers={
+            "Content-Disposition": f"attachment; filename=Contrato_{client.get('name', 'Cliente').replace(' ', '_')}.pdf"
+        }
+    )
+
+def valor_por_extenso(valor):
+    """Convert number to text (simplified version)"""
+    unidades = ['', 'um', 'dois', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove']
+    dezenas = ['', '', 'vinte', 'trinta', 'quarenta', 'cinquenta', 'sessenta', 'setenta', 'oitenta', 'noventa']
+    especiais = ['dez', 'onze', 'doze', 'treze', 'quatorze', 'quinze', 'dezesseis', 'dezessete', 'dezoito', 'dezenove']
+    
+    valor_int = int(valor)
+    centavos = int((valor - valor_int) * 100)
+    
+    if valor_int == 0:
+        return "zero reais"
+    
+    # Simplified for common contract values
+    milhares = valor_int // 1000
+    centenas = (valor_int % 1000) // 100
+    resto = valor_int % 100
+    
+    texto = ""
+    
+    if milhares > 0:
+        if milhares == 1:
+            texto += "mil"
+        else:
+            texto += unidades[milhares] + " mil"
+    
+    if centenas > 0:
+        if texto:
+            texto += " e "
+        centenas_texto = ['', 'cem', 'duzentos', 'trezentos', 'quatrocentos', 'quinhentos', 
+                         'seiscentos', 'setecentos', 'oitocentos', 'novecentos']
+        texto += centenas_texto[centenas]
+    
+    if resto > 0:
+        if texto:
+            texto += " e "
+        if resto < 10:
+            texto += unidades[resto]
+        elif resto < 20:
+            texto += especiais[resto - 10]
+        else:
+            dez = resto // 10
+            un = resto % 10
+            texto += dezenas[dez]
+            if un > 0:
+                texto += " e " + unidades[un]
+    
+    texto += " reais"
+    
+    if centavos > 0:
+        texto += f" e {centavos} centavos"
+    
+    return texto
+
+@super_router.post("/contracts/save-record")
+async def save_contract_record(
+    record_data: dict,
+    current_user: dict = Depends(get_current_user)
+):
+    """Save contract generation record"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    contract_record = {
+        "id": str(uuid.uuid4()),
+        "client_id": record_data.get("clientId"),
+        "contract_data": record_data.get("contractData"),
+        "generated_by": current_user["id"],
+        "generated_at": record_data.get("generatedAt"),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.contracts.insert_one(contract_record)
+    
+    return {"contract_id": contract_record["id"], "message": "Contrato registrado com sucesso"}
+
+@super_router.get("/contracts/list")
+async def list_contracts(current_user: dict = Depends(get_current_user)):
+    """List all generated contracts"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    contracts = await db.contracts.find({}, {"_id": 0}).sort("generated_at", -1).to_list(100)
+    
+    return {"contracts": contracts}
