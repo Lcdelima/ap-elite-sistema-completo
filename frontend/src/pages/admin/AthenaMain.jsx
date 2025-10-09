@@ -21,6 +21,7 @@ import {
   FileText,
   DollarSign,
   BarChart3,
+  TrendingUp,
   Lock,
   Zap
 } from 'lucide-react';
