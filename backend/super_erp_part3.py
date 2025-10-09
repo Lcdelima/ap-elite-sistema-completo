@@ -1501,6 +1501,214 @@ async def generate_legal_document(
         story.append(Paragraph(f"CPF: {form_data.get('compromitenteCPF', '')}", body_style))
         story.append(Paragraph("Assinatura: _________________________________________", body_style))
     
+    elif document_type == 'ata_elite':
+        story.append(Paragraph("ATA DE REUNIÃO TÉCNICO-PERICIAL", title_style))
+        story.append(Spacer(1, 10))
+        story.append(Paragraph("ELITE – ESTRATÉGIAS EM PERÍCIA E INVESTIGAÇÃO CRIMINAL", heading_style))
+        story.append(Paragraph("CNPJ: 55.413.321/0001-00", body_style))
+        story.append(Paragraph("Av. Sete de Setembro, nº 270 – Centro, Três Corações/MG – CEP 37410-155", body_style))
+        story.append(Paragraph("Responsável Técnica: Dra. Laura Cunha de Lima – CEO e Perita Judicial Forense", body_style))
+        story.append(Spacer(1, 20))
+        
+        # INFORMAÇÕES DA REUNIÃO
+        data_reuniao = datetime.fromisoformat(form_data.get('dataReuniao')).strftime('%d/%m/%Y')
+        story.append(Paragraph(f"<b>Data:</b> {data_reuniao}", body_style))
+        story.append(Paragraph(f"<b>Horário:</b> {form_data.get('horarioReuniao', '')} h", body_style))
+        story.append(Paragraph(f"<b>Local:</b> {form_data.get('localReuniao', '')} ({form_data.get('modalidade', '')})", body_style))
+        story.append(Paragraph(f"<b>Projeto/Caso:</b> {form_data.get('projetoCaso', '')}", body_style))
+        story.append(Paragraph(f"<b>Participantes:</b> {form_data.get('participantes', '')}", body_style))
+        story.append(Spacer(1, 20))
+        
+        # 1. OBJETIVO DA REUNIÃO
+        story.append(Paragraph("1. OBJETIVO DA REUNIÃO", heading_style))
+        story.append(Paragraph(form_data.get('objetivoReuniao', ''), body_style))
+        story.append(Spacer(1, 15))
+        
+        # 2. ASSUNTOS DISCUTIDOS
+        story.append(Paragraph("2. ASSUNTOS DISCUTIDOS", heading_style))
+        story.append(Paragraph(form_data.get('assuntosDiscutidos', ''), body_style))
+        story.append(Spacer(1, 15))
+        
+        # 3. DECISÕES TÉCNICAS E ENCAMINHAMENTOS
+        story.append(Paragraph("3. DECISÕES TÉCNICAS E ENCAMINHAMENTOS", heading_style))
+        
+        # Tabela de decisões
+        from reportlab.platypus import Table, TableStyle
+        decisoes_data = [['Deliberação Técnica', 'Responsável', 'Prazo']]
+        
+        if form_data.get('decisao1'):
+            prazo1 = datetime.fromisoformat(form_data.get('prazo1')).strftime('%d/%m/%Y') if form_data.get('prazo1') else ''
+            decisoes_data.append([
+                form_data.get('decisao1', ''),
+                form_data.get('responsavel1', ''),
+                prazo1
+            ])
+        
+        if form_data.get('decisao2'):
+            prazo2 = datetime.fromisoformat(form_data.get('prazo2')).strftime('%d/%m/%Y') if form_data.get('prazo2') else ''
+            decisoes_data.append([
+                form_data.get('decisao2', ''),
+                form_data.get('responsavel2', ''),
+                prazo2
+            ])
+        
+        if form_data.get('decisao3'):
+            prazo3 = datetime.fromisoformat(form_data.get('prazo3')).strftime('%d/%m/%Y') if form_data.get('prazo3') else ''
+            decisoes_data.append([
+                form_data.get('decisao3', ''),
+                form_data.get('responsavel3', ''),
+                prazo3
+            ])
+        
+        decisoes_table = Table(decisoes_data, colWidths=[8*cm, 5*cm, 3*cm])
+        decisoes_table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#1a5490')),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('FONTSIZE', (0, 0), (-1, 0), 10),
+            ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+            ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+            ('GRID', (0, 0), (-1, -1), 1, colors.black),
+            ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+            ('FONTSIZE', (0, 1), (-1, -1), 9),
+        ]))
+        story.append(decisoes_table)
+        story.append(Spacer(1, 15))
+        
+        # 4. REGISTRO DE EVIDÊNCIAS
+        story.append(Paragraph("4. REGISTRO DE EVIDÊNCIAS / DOCUMENTOS ANEXADOS", heading_style))
+        story.append(Paragraph(form_data.get('evidenciasDocumentos', ''), body_style))
+        story.append(Spacer(1, 15))
+        
+        # 5. SIGILO E COMPLIANCE
+        story.append(Paragraph("5. SIGILO E COMPLIANCE", heading_style))
+        story.append(Paragraph("""
+        Todos os dados, informações, evidências e documentos tratados nesta reunião técnico-pericial estão 
+        protegidos por sigilo profissional e confidencialidade técnica, em observância à LGPD (Lei nº 13.709/18), 
+        às normas ISO/IEC 27001, 27037, 27041 e 27042, e aos princípios éticos da perícia forense.
+        """, body_style))
+        story.append(Spacer(1, 15))
+        
+        # 6. ENCERRAMENTO
+        story.append(Paragraph("6. ENCERRAMENTO", heading_style))
+        story.append(Paragraph("Nada mais havendo a tratar, lavrou-se a presente ata.", body_style))
+        story.append(Spacer(1, 30))
+        
+        story.append(Paragraph(f"Três Corações/MG, {data_reuniao}", body_style))
+        story.append(Spacer(1, 40))
+        
+        story.append(Paragraph("_" * 60, body_style))
+        story.append(Paragraph("Dra. Laura Cunha de Lima – CEO e Perita Judicial Forense", body_style))
+        story.append(Spacer(1, 30))
+        story.append(Paragraph("_" * 60, body_style))
+        story.append(Paragraph("Participante / Técnico / Cliente", body_style))
+        
+    elif document_type == 'ata_advocacia':
+        story.append(Paragraph("ATA DE REUNIÃO JURÍDICA", title_style))
+        story.append(Spacer(1, 10))
+        story.append(Paragraph("LAURA CUNHA DE LIMA ADVOCACIA ESPECIALIZADA", heading_style))
+        story.append(Paragraph("Dra. Laura Cunha de Lima – OAB/MG 192.709", body_style))
+        story.append(Spacer(1, 20))
+        
+        # INFORMAÇÕES DA REUNIÃO
+        data_reuniao = datetime.fromisoformat(form_data.get('dataReuniao')).strftime('%d/%m/%Y')
+        story.append(Paragraph(f"<b>Data:</b> {data_reuniao}", body_style))
+        story.append(Paragraph(f"<b>Horário:</b> {form_data.get('horarioReuniao', '')} h", body_style))
+        story.append(Paragraph(f"<b>Local:</b> {form_data.get('localReuniao', '')} ({form_data.get('modalidade', '')})", body_style))
+        story.append(Paragraph(f"<b>Cliente:</b> {client.get('name', '')}", body_style))
+        story.append(Paragraph(f"<b>Processo:</b> {form_data.get('projetoCaso', '')}", body_style))
+        story.append(Paragraph(f"<b>Participantes:</b> {form_data.get('participantes', '')}", body_style))
+        story.append(Spacer(1, 20))
+        
+        # 1. OBJETIVO DA REUNIÃO
+        story.append(Paragraph("1. OBJETIVO DA REUNIÃO", heading_style))
+        story.append(Paragraph(form_data.get('objetivoReuniao', ''), body_style))
+        story.append(Spacer(1, 15))
+        
+        # 2. TEMAS TRATADOS
+        story.append(Paragraph("2. TEMAS TRATADOS", heading_style))
+        story.append(Paragraph(form_data.get('assuntosDiscutidos', ''), body_style))
+        story.append(Spacer(1, 15))
+        
+        # 3. ORIENTAÇÕES E ENCAMINHAMENTOS
+        story.append(Paragraph("3. ORIENTAÇÕES E ENCAMINHAMENTOS", heading_style))
+        
+        # Tabela de encaminhamentos
+        from reportlab.platypus import Table, TableStyle
+        encaminhamentos_data = [['Nº', 'Providência / Encaminhamento', 'Responsável', 'Prazo']]
+        
+        if form_data.get('decisao1'):
+            prazo1 = datetime.fromisoformat(form_data.get('prazo1')).strftime('%d/%m/%Y') if form_data.get('prazo1') else ''
+            encaminhamentos_data.append([
+                '1',
+                form_data.get('decisao1', ''),
+                form_data.get('responsavel1', ''),
+                prazo1
+            ])
+        
+        if form_data.get('decisao2'):
+            prazo2 = datetime.fromisoformat(form_data.get('prazo2')).strftime('%d/%m/%Y') if form_data.get('prazo2') else ''
+            encaminhamentos_data.append([
+                '2',
+                form_data.get('decisao2', ''),
+                form_data.get('responsavel2', ''),
+                prazo2
+            ])
+        
+        if form_data.get('decisao3'):
+            prazo3 = datetime.fromisoformat(form_data.get('prazo3')).strftime('%d/%m/%Y') if form_data.get('prazo3') else ''
+            encaminhamentos_data.append([
+                '3',
+                form_data.get('decisao3', ''),
+                form_data.get('responsavel3', ''),
+                prazo3
+            ])
+        
+        encaminhamentos_table = Table(encaminhamentos_data, colWidths=[1*cm, 7*cm, 5*cm, 3*cm])
+        encaminhamentos_table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#1a5490')),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('FONTSIZE', (0, 0), (-1, 0), 10),
+            ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+            ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+            ('GRID', (0, 0), (-1, -1), 1, colors.black),
+            ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+            ('FONTSIZE', (0, 1), (-1, -1), 9),
+        ]))
+        story.append(encaminhamentos_table)
+        story.append(Spacer(1, 15))
+        
+        # 4. DOCUMENTOS E ANEXOS
+        story.append(Paragraph("4. DOCUMENTOS E ANEXOS", heading_style))
+        story.append(Paragraph(form_data.get('documentosAnexos', ''), body_style))
+        story.append(Spacer(1, 15))
+        
+        # 5. CONFIDENCIALIDADE
+        story.append(Paragraph("5. CONFIDENCIALIDADE", heading_style))
+        story.append(Paragraph("""
+        Todos os assuntos tratados nesta reunião são estritamente confidenciais, regidos pelo sigilo profissional 
+        previsto no art. 25 do Estatuto da OAB, pela LGPD (Lei nº 13.709/18) e pelas cláusulas de confidencialidade 
+        firmadas com o cliente.
+        """, body_style))
+        story.append(Spacer(1, 15))
+        
+        # 6. ENCERRAMENTO
+        story.append(Paragraph("6. ENCERRAMENTO", heading_style))
+        story.append(Paragraph("Nada mais havendo a tratar, lavrou-se a presente ata, que será assinada por todos os presentes.", body_style))
+        story.append(Spacer(1, 30))
+        
+        story.append(Paragraph(f"Belo Horizonte/MG, {data_reuniao}", body_style))
+        story.append(Spacer(1, 40))
+        
+        story.append(Paragraph("_" * 60, body_style))
+        story.append(Paragraph("Dra. Laura Cunha de Lima – OAB/MG 192.709", body_style))
+        story.append(Spacer(1, 30))
+        story.append(Paragraph("_" * 60, body_style))
+        story.append(Paragraph(f"Cliente: {client.get('name', '')}", body_style))
+    
     # Build PDF
     doc.build(story)
     
