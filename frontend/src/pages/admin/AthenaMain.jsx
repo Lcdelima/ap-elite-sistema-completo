@@ -24,7 +24,9 @@ import {
   TrendingUp,
   Lock,
   Zap,
-  ArrowLeft
+  ArrowLeft,
+  Search,
+  Network
 } from 'lucide-react';
 import { toast } from 'sonner';
 
