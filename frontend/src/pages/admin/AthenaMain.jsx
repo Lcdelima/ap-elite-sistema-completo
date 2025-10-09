@@ -247,18 +247,29 @@ const AthenaMain = () => {
               </p>
             </div>
             
-            {metrics && (
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg p-4 text-center">
-                  <p className="text-white text-2xl font-bold">{metrics.total_cases}</p>
-                  <p className="text-blue-100 text-sm">Casos Totais</p>
+            <div className="flex items-center space-x-4">
+              {/* Botão Voltar ao Admin */}
+              <button
+                onClick={() => navigate('/admin/dashboard')}
+                className="bg-white bg-opacity-20 hover:bg-opacity-30 backdrop-blur-sm px-6 py-3 rounded-lg flex items-center space-x-2 transition-all"
+              >
+                <ArrowLeft className="h-5 w-5 text-white" />
+                <span className="text-white font-medium">Voltar ao Painel Admin</span>
+              </button>
+              
+              {metrics && (
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg p-4 text-center">
+                    <p className="text-white text-2xl font-bold">{metrics.total_cases}</p>
+                    <p className="text-blue-100 text-sm">Casos Totais</p>
+                  </div>
+                  <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg p-4 text-center">
+                    <p className="text-white text-2xl font-bold">{metrics.active_cases}</p>
+                    <p className="text-blue-100 text-sm">Casos Ativos</p>
+                  </div>
                 </div>
-                <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg p-4 text-center">
-                  <p className="text-white text-2xl font-bold">{metrics.active_cases}</p>
-                  <p className="text-blue-100 text-sm">Casos Ativos</p>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>
