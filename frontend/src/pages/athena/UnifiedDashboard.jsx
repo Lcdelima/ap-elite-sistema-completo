@@ -315,6 +315,9 @@ const UnifiedDashboard = () => {
             </div>
           </div>
         </div>
+
+        {/* Sistema Híbrido Online/Offline */}
+        <HybridStatus />
       </div>
     </AthenaLayout>
   );
