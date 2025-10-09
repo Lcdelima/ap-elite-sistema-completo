@@ -123,6 +123,8 @@ function AppContent() {
           <Route path="/athena/defensive-investigation" element={<AthenaDefensiveInvestigation />} />
           <Route path="/athena/user-management" element={<AthenaUserManagement />} />
           <Route path="/athena/unified-dashboard" element={<AthenaUnifiedDashboard />} />
+          <Route path="/athena/advanced-investigation" element={<AdvancedInvestigation />} />
+          <Route path="/athena/relationship-mapping" element={<RelationshipMapping />} />
       </Routes>
       <WhatsAppButton />
       <HybridNotifications />
