@@ -651,6 +651,7 @@ app.include_router(storage_router)
 app.include_router(ai_router)
 app.include_router(security_router)
 app.include_router(backup_router)
+app.include_router(hybrid_router)
 
 # Health check
 @app.get("/")
