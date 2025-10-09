@@ -869,6 +869,153 @@ class BackendTester:
             self.log_result("Defensive Investigation Case Creation", False, f"Exception: {str(e)}")
             return False
 
+    # ==================== HYBRID SYSTEM TESTS ====================
+    
+    async def test_hybrid_status(self):
+        """Test GET /api/hybrid/status"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/hybrid/status", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["online_status", "local_data_path", "database_size", "disk_space", "record_counts"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Hybrid Status", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    # Validate disk_space structure
+                    disk_space = data.get("disk_space", {})
+                    disk_keys = ["total", "used", "free", "percent"]
+                    disk_missing = [key for key in disk_keys if key not in disk_space]
+                    
+                    if disk_missing:
+                        self.log_result("Hybrid Status", False, f"Missing disk_space keys: {disk_missing}", data)
+                        return False
+                    
+                    # Validate record_counts structure
+                    record_counts = data.get("record_counts", {})
+                    expected_tables = ["users", "cases", "clients_enhanced", "evidence", "financial_records"]
+                    
+                    online_status = "online" if data.get("online_status") else "offline"
+                    self.log_result("Hybrid Status", True, f"System status: {online_status}, Local records: {sum(record_counts.values())}")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Hybrid Status", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Hybrid Status", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_hybrid_sync(self):
+        """Test POST /api/hybrid/sync"""
+        try:
+            headers = self.get_headers()
+            async with self.session.post(f"{BASE_URL}/hybrid/sync", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["message", "status"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Hybrid Sync", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    if data.get("status") != "running":
+                        self.log_result("Hybrid Sync", False, f"Expected status 'running', got '{data.get('status')}'", data)
+                        return False
+                    
+                    self.log_result("Hybrid Sync", True, f"Sync initiated successfully: {data.get('message')}")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Hybrid Sync", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Hybrid Sync", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_hybrid_backups_list(self):
+        """Test GET /api/hybrid/backups"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/hybrid/backups", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    if "backups" not in data:
+                        self.log_result("Hybrid Backups List", False, "Missing 'backups' key in response", data)
+                        return False
+                    
+                    backups = data.get("backups", [])
+                    if not isinstance(backups, list):
+                        self.log_result("Hybrid Backups List", False, "Backups should be a list", data)
+                        return False
+                    
+                    # Validate backup structure if backups exist
+                    if backups:
+                        backup = backups[0]
+                        backup_keys = ["filename", "path", "size", "created", "modified"]
+                        backup_missing = [key for key in backup_keys if key not in backup]
+                        
+                        if backup_missing:
+                            self.log_result("Hybrid Backups List", False, f"Missing backup keys: {backup_missing}", data)
+                            return False
+                    
+                    self.log_result("Hybrid Backups List", True, f"Successfully retrieved {len(backups)} backup files")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Hybrid Backups List", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Hybrid Backups List", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_hybrid_backup_create(self):
+        """Test POST /api/hybrid/backup"""
+        try:
+            headers = self.get_headers()
+            async with self.session.post(f"{BASE_URL}/hybrid/backup", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["status", "backup_file", "timestamp", "size"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Hybrid Backup Create", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    if data.get("status") != "success":
+                        self.log_result("Hybrid Backup Create", False, f"Expected status 'success', got '{data.get('status')}'", data)
+                        return False
+                    
+                    # Validate backup file info
+                    backup_file = data.get("backup_file", "")
+                    if not backup_file or "ap_elite_backup_" not in backup_file:
+                        self.log_result("Hybrid Backup Create", False, f"Invalid backup file name: {backup_file}", data)
+                        return False
+                    
+                    size = data.get("size", 0)
+                    self.log_result("Hybrid Backup Create", True, f"Backup created successfully: {data.get('timestamp')}, Size: {size} bytes")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Hybrid Backup Create", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Hybrid Backup Create", False, f"Exception: {str(e)}")
+            return False
+
     # ==================== ATHENA SYSTEM TESTS ====================
     
     async def test_athena_processes(self):
