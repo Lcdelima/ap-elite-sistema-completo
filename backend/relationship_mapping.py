@@ -363,13 +363,13 @@ async def analyze_criminal_network_ai(network_data: Dict, relationships: List[Di
         Responda em formato JSON estruturado para relatório policial.
         """
 
-        response = await llm_provider.complete(
-            messages=[{"role": "user", "content": prompt}],
+        response = await llm_chat.achat(
+            messages=[UserMessage(content=prompt)],
             model="gpt-4o",
             max_tokens=2000
         )
 
-        ai_analysis = json.loads(response.choices[0].message.content)
+        ai_analysis = json.loads(response.content)
 
         return {
             "analysis_type": "criminal_network_ai",
