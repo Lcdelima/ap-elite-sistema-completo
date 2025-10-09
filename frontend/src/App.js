@@ -120,11 +120,25 @@ function AppContent() {
           <Route path="/athena/defensive-investigation" element={<AthenaDefensiveInvestigation />} />
           <Route path="/athena/user-management" element={<AthenaUserManagement />} />
           <Route path="/athena/unified-dashboard" element={<AthenaUnifiedDashboard />} />
-        </Routes>
-      </Router>
+      </Routes>
       <WhatsAppButton />
+      <KeyboardShortcutsModal />
       <Toaster position="top-right" richColors />
-    </div>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <ThemeProvider>
+      <TourProvider>
+        <div className="App min-h-screen bg-slate-50 dark:bg-slate-900">
+          <Router>
+            <AppContent />
+          </Router>
+        </div>
+      </TourProvider>
+    </ThemeProvider>
   );
 }
 
