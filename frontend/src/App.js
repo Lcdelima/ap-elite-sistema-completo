@@ -55,6 +55,7 @@ import AthenaEvidenceAnalysis from './pages/athena/EvidenceAnalysis';
 import AthenaDocumentGenerator from './pages/athena/DocumentGenerator';
 import AthenaDefensiveInvestigation from './pages/athena/DefensiveInvestigation';
 import AthenaUserManagement from './pages/athena/UserManagement';
+import AthenaUnifiedDashboard from './pages/athena/UnifiedDashboard';
 
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
