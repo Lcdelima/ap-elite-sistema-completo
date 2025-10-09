@@ -26,7 +26,7 @@ export const useKeyboardShortcuts = () => {
       if (e.ctrlKey || e.metaKey) keys.push('ctrl');
       if (e.shiftKey) keys.push('shift');
       if (e.altKey) keys.push('alt');
-      if (e.key !== 'Control' && e.key !== 'Shift' && e.key !== 'Alt' && e.key !== 'Meta') {
+      if (e.key && e.key !== 'Control' && e.key !== 'Shift' && e.key !== 'Alt' && e.key !== 'Meta') {
         keys.push(e.key.toLowerCase());
       }
       
