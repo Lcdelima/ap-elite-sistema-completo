@@ -118,6 +118,7 @@ const Navigation = ({ showBackButton = false, title = '' }) => {
 
           {/* Contact Info & Mobile menu button */}
           <div className="flex items-center space-x-4">
+            <ThemeToggle />
             <div className="hidden lg:flex items-center space-x-6 text-sm text-slate-300">
               <div className="flex items-center space-x-2">
                 <Phone className="h-4 w-4" />
