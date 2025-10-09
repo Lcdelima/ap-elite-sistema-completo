@@ -50,6 +50,7 @@ import AthenaProcessAnalysis from './pages/athena/ProcessAnalysis';
 import AthenaReports from './pages/athena/Reports';
 import AthenaFinancial from './pages/athena/Financial';
 import AthenaIntelligentDashboards from './pages/athena/IntelligentDashboards';
+import AthenaContractGenerator from './pages/athena/ContractGenerator';
 
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
