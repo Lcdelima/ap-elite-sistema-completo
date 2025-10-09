@@ -225,7 +225,7 @@ const DocumentGenerator = () => {
           </div>
           <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white text-lg px-4 py-2">
             <Sparkles className="h-5 w-5 mr-2" />
-            5 Modelos
+            7 Modelos
           </Badge>
         </div>
 
