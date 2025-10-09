@@ -1728,10 +1728,13 @@ async def generate_legal_document(
         }
     )
 
-        }
-    )
-
+def valor_por_extenso(valor):
+    """Convert numeric value to text (Portuguese)"""
+    # Simplified implementation for demo
+    inteiro = int(valor)
+    centavos = int((valor - inteiro) * 100)
     
+    texto = f"{inteiro} reais"
     if centavos > 0:
         texto += f" e {centavos} centavos"
     
