@@ -82,6 +82,20 @@ const DocumentGenerator = () => {
       subtitle: 'Confidencialidade Advocacia',
       color: 'from-orange-500 to-red-600',
       icon: FileCheck
+    },
+    {
+      id: 'ata_elite',
+      title: 'Ata Elite',
+      subtitle: 'Reunião Técnico-Pericial',
+      color: 'from-teal-500 to-cyan-600',
+      icon: FileText
+    },
+    {
+      id: 'ata_advocacia',
+      title: 'Ata Advocacia',
+      subtitle: 'Reunião Jurídica',
+      color: 'from-indigo-500 to-purple-600',
+      icon: FileCheck
     }
   ];
 
