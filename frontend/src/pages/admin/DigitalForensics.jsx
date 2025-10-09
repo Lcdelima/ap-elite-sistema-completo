@@ -152,9 +152,9 @@ const DigitalForensics = ({ currentUser }) => {
   };
 
   const filteredEvidence = evidence.filter(item => 
-    item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.evidence_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.type.toLowerCase().includes(searchTerm.toLowerCase())
+    item.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.evidence_number?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.type?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const startAnalysis = async (evidenceId, analysisType) => {
