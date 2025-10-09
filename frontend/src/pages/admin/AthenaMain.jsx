@@ -254,6 +254,16 @@ const AthenaMain = () => {
       color: 'from-slate-600 to-gray-800',
       badge: 'OSINT',
       badgeColor: 'bg-blue-600'
+    },
+    {
+      id: 23,
+      title: 'Gerenciamento de Usuários',
+      subtitle: 'Usuários & Permissões',
+      icon: Users,
+      path: '/athena/user-management',
+      color: 'from-purple-600 to-indigo-600',
+      badge: 'ADMIN',
+      badgeColor: 'bg-red-600'
     }
   ];
 
