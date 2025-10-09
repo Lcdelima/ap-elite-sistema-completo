@@ -752,7 +752,20 @@ class BackendTester:
                         self.log_result("ATHENA Financial Summary", False, f"Missing keys: {missing_keys}", data)
                         return False
                     
-                    self.log_result("ATHENA Financial Summary", True, f"Financial summary retrieved - Net: R$ {data.get('net', 0):.2f}")
+                    # Validate period structure
+                    period = data.get("period", {})
+                    if not isinstance(period, dict) or "start" not in period or "end" not in period:
+                        self.log_result("ATHENA Financial Summary", False, "Invalid period structure", data)
+                        return False
+                    
+                    # Check for additional expected keys
+                    additional_keys = ["by_category", "profit_margin"]
+                    for key in additional_keys:
+                        if key not in data:
+                            self.log_result("ATHENA Financial Summary", False, f"Missing additional key: {key}", data)
+                            return False
+                    
+                    self.log_result("ATHENA Financial Summary", True, f"Financial summary retrieved - Net: R$ {data.get('net', 0):.2f}, Period: {period.get('start', '')[:10]} to {period.get('end', '')[:10]}")
                     return True
                 else:
                     error_text = await response.text()
