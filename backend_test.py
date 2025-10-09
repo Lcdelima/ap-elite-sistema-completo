@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Backend API Testing for AP Elite ERP Advanced Features
-Tests all advanced ERP features including analytics, interception analysis, IPED integration, and communications.
+Backend API Testing for AP Elite ATHENA System
+Tests all ATHENA system modules including authentication, processes, financial, ERBs, integrations, and security.
 """
 
 import asyncio
@@ -16,8 +16,8 @@ import io
 # Configuration
 BASE_URL = "https://legaltech-hub-5.preview.emergentagent.com/api"
 TEST_USER = {
-    "email": "laura@apelite.com",
-    "password": "laura2024",
+    "email": "admin@apelite.com",
+    "password": "admin123",
     "role": "administrator"
 }
 
