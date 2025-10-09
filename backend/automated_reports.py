@@ -314,13 +314,13 @@ class ReportGenerator:
             Responda em formato JSON estruturado.
             """
 
-            response = await llm_provider.complete(
-                messages=[{"role": "user", "content": prompt}],
+            response = await llm_chat.achat(
+                messages=[UserMessage(content=prompt)],
                 model="gpt-4o",
                 max_tokens=2000
             )
 
-            return json.loads(response.choices[0].message.content)
+            return json.loads(response.content)
 
         except Exception as e:
             return {
