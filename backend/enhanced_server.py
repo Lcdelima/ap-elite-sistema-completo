@@ -631,6 +631,8 @@ from reports_generator import reports_router
 from email_integration import email_router
 from storage_integration import storage_router
 from ai_document_analysis import ai_router
+from security_features import security_router
+from backup_system import backup_router
 
 # Add all routes to main app
 app.include_router(api_router)
@@ -644,6 +646,8 @@ app.include_router(reports_router)
 app.include_router(email_router)
 app.include_router(storage_router)
 app.include_router(ai_router)
+app.include_router(security_router)
+app.include_router(backup_router)
 
 # Health check
 @app.get("/")
