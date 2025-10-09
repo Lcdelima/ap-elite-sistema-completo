@@ -123,6 +123,7 @@ function AppContent() {
           <Route path="/athena/unified-dashboard" element={<AthenaUnifiedDashboard />} />
       </Routes>
       <WhatsAppButton />
+      <HybridNotifications />
       <KeyboardShortcutsModal />
       <Toaster position="top-right" richColors />
     </div>
