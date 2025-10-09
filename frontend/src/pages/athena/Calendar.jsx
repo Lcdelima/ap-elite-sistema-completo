@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import AthenaLayout from '@/components/AthenaLayout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Calendar as CalendarIcon, Plus, Clock, Users } from 'lucide-react';
-import { toast } from 'sonner';
+import { Calendar as CalendarIcon, Plus, Clock, MapPin, Users, Bell } from 'lucide-react';
+import AthenaLayout from '../../components/AthenaLayout';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const Calendar = () => {
   const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    start_time: '',
-    end_time: '',
-    participants: []
+    date: new Date().toISOString().split('T')[0],
+    time: '',
+    duration: '60',
+    location: '',
+    attendees: '',
+    reminder: '15'
   });
 
   useEffect(() => {
@@ -25,84 +25,246 @@ const Calendar = () => {
 
   const fetchEvents = async () => {
     try {
-      const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-      const token = localStorage.getItem('ap_elite_token');
-      
-      const res = await axios.get(`${BACKEND_URL}/api/athena/calendar/events`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      
-      setEvents(res.data.events);
-      setLoading(false);
+      const token = localStorage.getItem('token');
+      setEvents([]);
     } catch (error) {
       console.error('Error:', error);
-      setEvents([]);
-      setLoading(false);
     }
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newEvent = {
+      ...formData,
+      id: Date.now().toString(),
+      created_at: new Date().toISOString()
+    };
+    setEvents([...events, newEvent]);
+    alert('Evento criado com sucesso!');
+    setShowModal(false);
+    setFormData({
+      title: '', description: '', date: new Date().toISOString().split('T')[0],
+      time: '', duration: '60', location: '', attendees: '', reminder: '15'
+    });
+  };
+
+  const eventsForDate = events.filter(e => e.date === selectedDate);
+
   return (
-    <AthenaLayout title="Calendário Corporativo" subtitle="Agenda e Compromissos">
-      <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-white">Eventos</h2>
-          <Button onClick={() => setShowModal(true)} className="btn-primary">
-            <Plus className="h-4 w-4 mr-2" />
-            Novo Evento
-          </Button>
+    <AthenaLayout>
+      <div className="max-w-7xl mx-auto">
+        <div className="bg-gradient-to-r from-pink-600 to-rose-600 text-white p-6 rounded-lg shadow-lg mb-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <CalendarIcon className="w-12 h-12" />
+              <div>
+                <h1 className="text-3xl font-bold mb-1">Calendário e Agenda</h1>
+                <p className="text-pink-100">Gestão de eventos e compromissos</p>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowModal(true)}
+              className="bg-white text-pink-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 flex items-center gap-2"
+            >
+              <Plus className="w-5 h-5" />
+              Novo Evento
+            </button>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card className="bg-slate-800 border-slate-700">
-            <CardContent className="p-4 text-center">
-              <CalendarIcon className="h-8 w-8 text-cyan-400 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-white">{events.length}</p>
-              <p className="text-slate-400 text-sm">Eventos Agendados</p>
-            </CardContent>
-          </Card>
-          <Card className="bg-slate-800 border-slate-700">
-            <CardContent className="p-4 text-center">
-              <Clock className="h-8 w-8 text-green-400 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-white">0</p>
-              <p className="text-slate-400 text-sm">Hoje</p>
-            </CardContent>
-          </Card>
-          <Card className="bg-slate-800 border-slate-700">
-            <CardContent className="p-4 text-center">
-              <Users className="h-8 w-8 text-purple-400 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-white">0</p>
-              <p className="text-slate-400 text-sm">Participantes</p>
-            </CardContent>
-          </Card>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-lg shadow p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold">Eventos - {new Date(selectedDate).toLocaleDateString('pt-BR')}</h2>
+                <input
+                  type="date"
+                  value={selectedDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                  className="px-3 py-2 border rounded-lg"
+                />
+              </div>
+              
+              {eventsForDate.length === 0 ? (
+                <div className="text-center py-12">
+                  <CalendarIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-600">Nenhum evento para esta data</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {eventsForDate.map((event) => (
+                    <div key={event.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                      <h3 className="font-semibold text-gray-900 text-lg mb-2">{event.title}</h3>
+                      {event.description && (
+                        <p className="text-sm text-gray-600 mb-3">{event.description}</p>
+                      )}
+                      <div className="grid grid-cols-2 gap-3 text-sm text-gray-500">
+                        <div className="flex items-center gap-2">
+                          <Clock className="w-4 h-4" />
+                          <span>{event.time} ({event.duration} min)</span>
+                        </div>
+                        {event.location && (
+                          <div className="flex items-center gap-2">
+                            <MapPin className="w-4 h-4" />
+                            <span>{event.location}</span>
+                          </div>
+                        )}
+                        {event.attendees && (
+                          <div className="flex items-center gap-2">
+                            <Users className="w-4 h-4" />
+                            <span>{event.attendees.split(',').length} participantes</span>
+                          </div>
+                        )}
+                        {event.reminder && (
+                          <div className="flex items-center gap-2">
+                            <Bell className="w-4 h-4" />
+                            <span>Lembrete: {event.reminder} min antes</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-lg shadow p-6">
+              <h3 className="text-lg font-semibold mb-4">Resumo</h3>
+              <div className="space-y-3">
+                <div className="p-4 bg-pink-50 rounded-lg">
+                  <p className="text-sm text-gray-600">Total de Eventos</p>
+                  <p className="text-2xl font-bold text-pink-600">{events.length}</p>
+                </div>
+                <div className="p-4 bg-blue-50 rounded-lg">
+                  <p className="text-sm text-gray-600">Eventos Hoje</p>
+                  <p className="text-2xl font-bold text-blue-600">
+                    {events.filter(e => e.date === new Date().toISOString().split('T')[0]).length}
+                  </p>
+                </div>
+                <div className="p-4 bg-green-50 rounded-lg">
+                  <p className="text-sm text-gray-600">Próximos 7 dias</p>
+                  <p className="text-2xl font-bold text-green-600">
+                    {events.filter(e => {
+                      const eventDate = new Date(e.date);
+                      const today = new Date();
+                      const diff = (eventDate - today) / (1000 * 60 * 60 * 24);
+                      return diff >= 0 && diff <= 7;
+                    }).length}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {events.length === 0 ? (
-          <Card className="bg-slate-800 border-slate-700">
-            <CardContent className="p-12 text-center">
-              <CalendarIcon className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-              <p className="text-slate-300">Nenhum evento agendado</p>
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="space-y-4">
-            {events.map((event) => (
-              <Card key={event.id} className="bg-slate-800 border-slate-700">
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold text-white mb-2">{event.title}</h3>
-                  <p className="text-slate-300 mb-4">{event.description}</p>
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <p className="text-slate-400">Início:</p>
-                      <p className="text-white">{new Date(event.start_time).toLocaleString('pt-BR')}</p>
-                    </div>
-                    <div>
-                      <p className="text-slate-400">Término:</p>
-                      <p className="text-white">{new Date(event.end_time).toLocaleString('pt-BR')}</p>
-                    </div>
+        {showModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+              <h3 className="text-xl font-bold mb-4">Novo Evento</h3>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Título*</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.title}
+                    onChange={(e) => setFormData({...formData, title: e.target.value})}
+                    className="w-full px-3 py-2 border rounded-lg"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Descrição</label>
+                  <textarea
+                    value={formData.description}
+                    onChange={(e) => setFormData({...formData, description: e.target.value})}
+                    className="w-full px-3 py-2 border rounded-lg"
+                    rows="2"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Data*</label>
+                    <input
+                      type="date"
+                      required
+                      value={formData.date}
+                      onChange={(e) => setFormData({...formData, date: e.target.value})}
+                      className="w-full px-3 py-2 border rounded-lg"
+                    />
                   </div>
-                </CardContent>
-              </Card>
-            ))}
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Horário*</label>
+                    <input
+                      type="time"
+                      required
+                      value={formData.time}
+                      onChange={(e) => setFormData({...formData, time: e.target.value})}
+                      className="w-full px-3 py-2 border rounded-lg"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Duração (minutos)</label>
+                  <input
+                    type="number"
+                    value={formData.duration}
+                    onChange={(e) => setFormData({...formData, duration: e.target.value})}
+                    className="w-full px-3 py-2 border rounded-lg"
+                    min="15"
+                    step="15"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Local</label>
+                  <input
+                    type="text"
+                    value={formData.location}
+                    onChange={(e) => setFormData({...formData, location: e.target.value})}
+                    className="w-full px-3 py-2 border rounded-lg"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Participantes (emails separados por vírgula)</label>
+                  <input
+                    type="text"
+                    value={formData.attendees}
+                    onChange={(e) => setFormData({...formData, attendees: e.target.value})}
+                    className="w-full px-3 py-2 border rounded-lg"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Lembrete (minutos antes)</label>
+                  <select
+                    value={formData.reminder}
+                    onChange={(e) => setFormData({...formData, reminder: e.target.value})}
+                    className="w-full px-3 py-2 border rounded-lg"
+                  >
+                    <option value="5">5 minutos</option>
+                    <option value="15">15 minutos</option>
+                    <option value="30">30 minutos</option>
+                    <option value="60">1 hora</option>
+                    <option value="1440">1 dia</option>
+                  </select>
+                </div>
+                <div className="flex gap-2 pt-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowModal(false)}
+                    className="flex-1 px-4 py-2 border rounded-lg hover:bg-gray-50"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex-1 px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700"
+                  >
+                    Criar Evento
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         )}
       </div>
