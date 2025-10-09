@@ -23,7 +23,8 @@ import {
   BarChart3,
   TrendingUp,
   Lock,
-  Zap
+  Zap,
+  ArrowLeft
 } from 'lucide-react';
 import { toast } from 'sonner';
 
