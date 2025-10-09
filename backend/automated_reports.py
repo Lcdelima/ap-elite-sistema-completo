@@ -32,11 +32,11 @@ from io import BytesIO
 import base64
 
 # Import for LLM integration
-from emergentintegrations import LLMProvider
+from emergentintegrations.llm.chat import LlmChat, UserMessage
 
 # Configure Emergent LLM
 EMERGENT_LLM_KEY = os.environ.get('EMERGENT_LLM_KEY', 'sk-emergent-aD33e9977E0D345EfD')
-llm_provider = LLMProvider(api_key=EMERGENT_LLM_KEY)
+llm_chat = LlmChat(api_key=EMERGENT_LLM_KEY)
 
 # Router configuration
 reports_router = APIRouter(prefix="/api/reports")
