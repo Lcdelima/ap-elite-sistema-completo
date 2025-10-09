@@ -36,7 +36,11 @@ from emergentintegrations.llm.chat import LlmChat, UserMessage
 
 # Configure Emergent LLM
 EMERGENT_LLM_KEY = os.environ.get('EMERGENT_LLM_KEY', 'sk-emergent-aD33e9977E0D345EfD')
-llm_chat = LlmChat(api_key=EMERGENT_LLM_KEY)
+llm_chat = LlmChat(
+    api_key=EMERGENT_LLM_KEY,
+    session_id="automated_reports_session",
+    system_message="You are an AI assistant specialized in generating professional criminal investigation reports. Provide formal, detailed analysis suitable for law enforcement documentation."
+)
 
 # Router configuration
 reports_router = APIRouter(prefix="/api/reports")
