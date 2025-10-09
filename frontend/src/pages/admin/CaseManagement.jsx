@@ -100,8 +100,8 @@ const CaseManagement = ({ currentUser }) => {
   };
 
   const filteredCases = cases.filter(case_item => {
-    const matchesSearch = case_item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         case_item.case_number.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = case_item.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         case_item.case_number?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filterStatus === 'all' || case_item.status === filterStatus;
     return matchesSearch && matchesFilter;
   });
