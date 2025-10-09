@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Wifi, WifiOff, Database, HardDrive, Cloud, Sync, Clock, AlertCircle, CheckCircle, Download, Settings, RefreshCw } from 'lucide-react';
+import { Wifi, WifiOff, Database, HardDrive, Cloud, RotateCcw, Clock, AlertCircle, CheckCircle, Download, Settings, RefreshCw } from 'lucide-react';
 
 const HybridStatus = () => {
   const [status, setStatus] = useState(null);
