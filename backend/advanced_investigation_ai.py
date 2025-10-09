@@ -490,13 +490,13 @@ async def analyze_communications(file_path: str, comm_type: str) -> Dict:
                 Responda em formato JSON.
                 """
                 
-                response = await llm_provider.complete(
-                    messages=[{"role": "user", "content": prompt}],
+                response = await llm_chat.achat(
+                    messages=[UserMessage(content=prompt)],
                     model="gpt-4o",
                     max_tokens=1500
                 )
                 
-                analysis_result["ai_insights"] = json.loads(response.choices[0].message.content)
+                analysis_result["ai_insights"] = json.loads(response.content)
 
         except Exception as e:
             analysis_result["error"] = f"Erro na análise: {str(e)}"
