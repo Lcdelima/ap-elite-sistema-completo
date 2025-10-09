@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Menu, X, Phone, Mail, Globe, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import ThemeToggle from './ThemeToggle';
 
 const Navigation = ({ showBackButton = false, title = '' }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
