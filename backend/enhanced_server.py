@@ -625,6 +625,7 @@ import sys
 sys.path.append('/app/backend')
 from super_erp import super_router
 from user_management import user_router
+from athena_enhanced_apis import enhanced_router
 
 # Add all routes to main app
 app.include_router(api_router)
@@ -632,6 +633,7 @@ app.include_router(advanced_router)
 app.include_router(integrations_router)
 app.include_router(super_router)
 app.include_router(user_router)
+app.include_router(enhanced_router)
 
 # Health check
 @app.get("/")
