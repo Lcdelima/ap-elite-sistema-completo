@@ -244,6 +244,16 @@ const AthenaMain = () => {
       color: 'from-indigo-500 to-blue-600',
       badge: 'NOVO',
       badgeColor: 'bg-green-500'
+    },
+    {
+      id: 22,
+      title: 'Investigação Defensiva',
+      subtitle: 'OSINT & Fontes Abertas',
+      icon: Shield,
+      path: '/athena/defensive-investigation',
+      color: 'from-slate-600 to-gray-800',
+      badge: 'OSINT',
+      badgeColor: 'bg-blue-600'
     }
   ];
 
