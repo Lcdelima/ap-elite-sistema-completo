@@ -109,14 +109,14 @@ async def analyze_document_with_ai(file_path: str, content: str) -> Dict:
         Responda em formato JSON estruturado.
         """
 
-        response = await llm_provider.complete(
-            messages=[{"role": "user", "content": prompt}],
+        response = await llm_chat.achat(
+            messages=[UserMessage(content=prompt)],
             model="gpt-4o",
             max_tokens=1500
         )
 
         # Parse AI response
-        ai_result = json.loads(response.choices[0].message.content)
+        ai_result = json.loads(response.content)
         
         return {
             "analysis_type": "document_analysis",
