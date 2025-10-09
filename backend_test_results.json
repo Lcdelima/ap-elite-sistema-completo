@@ -3,182 +3,210 @@
     "test": "Authentication",
     "success": true,
     "message": "Successfully authenticated as laura@apelite.com",
-    "timestamp": "2025-10-09T19:59:11.763473",
+    "timestamp": "2025-10-09T20:31:08.980203",
     "response_data": null
   },
   {
     "test": "User Creation",
     "success": true,
-    "message": "Successfully created user: e3f149b6-5a47-42c4-8a85-0bff8e22525f",
-    "timestamp": "2025-10-09T19:59:11.784509",
+    "message": "Successfully created user: d4df329d-014c-48ec-a909-85ea64b061da",
+    "timestamp": "2025-10-09T20:31:09.037141",
+    "response_data": null
+  },
+  {
+    "test": "Hybrid Status",
+    "success": true,
+    "message": "System status: online, Local records: 0",
+    "timestamp": "2025-10-09T20:31:09.059004",
+    "response_data": null
+  },
+  {
+    "test": "Hybrid Sync",
+    "success": true,
+    "message": "Sync initiated successfully: Sincroniza\u00e7\u00e3o iniciada",
+    "timestamp": "2025-10-09T20:31:09.072110",
+    "response_data": null
+  },
+  {
+    "test": "Hybrid Backups List",
+    "success": true,
+    "message": "Successfully retrieved 0 backup files",
+    "timestamp": "2025-10-09T20:31:09.085042",
+    "response_data": null
+  },
+  {
+    "test": "Hybrid Backup Create",
+    "success": true,
+    "message": "Backup created successfully: 20251009_203109, Size: 61440 bytes",
+    "timestamp": "2025-10-09T20:31:09.135308",
     "response_data": null
   },
   {
     "test": "ATHENA Processes",
     "success": true,
     "message": "Successfully retrieved 0 processes",
-    "timestamp": "2025-10-09T19:59:11.798096",
+    "timestamp": "2025-10-09T20:31:09.151506",
     "response_data": null
   },
   {
     "test": "ATHENA Financial Summary",
     "success": true,
     "message": "Financial summary retrieved - Net: R$ 0.00, Period: 2025-09-09 to 2025-10-09",
-    "timestamp": "2025-10-09T19:59:11.849854",
+    "timestamp": "2025-10-09T20:31:09.166420",
     "response_data": null
   },
   {
     "test": "Defensive Investigation Categories",
     "success": true,
     "message": "Successfully retrieved 10 OSINT categories",
-    "timestamp": "2025-10-09T19:59:11.862768",
+    "timestamp": "2025-10-09T20:31:09.174222",
     "response_data": null
   },
   {
     "test": "Defensive Investigation Cases",
     "success": true,
-    "message": "Successfully retrieved 0 investigation cases",
-    "timestamp": "2025-10-09T19:59:11.874454",
+    "message": "Successfully retrieved 2 investigation cases",
+    "timestamp": "2025-10-09T20:31:09.223458",
     "response_data": null
   },
   {
     "test": "Defensive Investigation Favorites",
     "success": true,
     "message": "Successfully retrieved 0 favorite sources",
-    "timestamp": "2025-10-09T19:59:11.888275",
+    "timestamp": "2025-10-09T20:31:09.232122",
     "response_data": null
   },
   {
     "test": "Defensive Investigation Stats",
     "success": true,
-    "message": "Successfully retrieved stats - Total: 0, Active: 0",
-    "timestamp": "2025-10-09T19:59:11.940605",
+    "message": "Successfully retrieved stats - Total: 2, Active: 2",
+    "timestamp": "2025-10-09T20:31:09.281877",
     "response_data": null
   },
   {
     "test": "Defensive Investigation Case Creation",
-    "success": false,
-    "message": "Failed with status 500",
-    "timestamp": "2025-10-09T19:59:11.976509",
-    "response_data": "Internal Server Error"
+    "success": true,
+    "message": "Successfully created investigation case: 613bfc1f-f603-4612-a7d6-839c145baede",
+    "timestamp": "2025-10-09T20:31:09.292478",
+    "response_data": null
   },
   {
     "test": "Analytics Overview",
     "success": true,
     "message": "Successfully retrieved analytics overview with all required data",
-    "timestamp": "2025-10-09T19:59:12.005311",
+    "timestamp": "2025-10-09T20:31:09.312154",
     "response_data": null
   },
   {
     "test": "Analytics KPIs",
     "success": true,
     "message": "Successfully retrieved KPIs with all required metrics",
-    "timestamp": "2025-10-09T19:59:12.018948",
+    "timestamp": "2025-10-09T20:31:09.366528",
     "response_data": null
   },
   {
     "test": "Interception Upload",
     "success": true,
-    "message": "Successfully uploaded file, analysis_id: 58599c97-9539-49ad-81b4-e3be91c3e7f6",
-    "timestamp": "2025-10-09T19:59:12.083388",
+    "message": "Successfully uploaded file, analysis_id: bef4ae6b-5b57-4770-ac99-8add649e700d",
+    "timestamp": "2025-10-09T20:31:09.378871",
     "response_data": null
   },
   {
     "test": "IPED Create Project",
     "success": true,
-    "message": "Successfully created IPED project: ee62b252-4045-4b1f-99f0-5e168262fbce",
-    "timestamp": "2025-10-09T19:59:12.109383",
+    "message": "Successfully created IPED project: e38fb588-5452-417a-8c56-cc88b4e2913d",
+    "timestamp": "2025-10-09T20:31:09.389349",
     "response_data": null
   },
   {
     "test": "IPED List Projects",
     "success": true,
-    "message": "Successfully retrieved 5 IPED projects",
-    "timestamp": "2025-10-09T19:59:12.118885",
+    "message": "Successfully retrieved 6 IPED projects",
+    "timestamp": "2025-10-09T20:31:09.398712",
     "response_data": null
   },
   {
     "test": "Communications Email",
     "success": true,
-    "message": "Successfully sent email, message_id: c71762d9-3f1d-495f-9d01-669857160000",
-    "timestamp": "2025-10-09T19:59:12.142182",
+    "message": "Successfully sent email, message_id: 8497ec46-4202-4f6f-82e9-db535697243e",
+    "timestamp": "2025-10-09T20:31:09.408760",
     "response_data": null
   },
   {
     "test": "Communications WhatsApp",
     "success": true,
-    "message": "Successfully sent WhatsApp message, message_id: 0d69180e-a829-4f8c-98c7-6eb16f44d9de",
-    "timestamp": "2025-10-09T19:59:12.191649",
+    "message": "Successfully sent WhatsApp message, message_id: 96f41180-0466-4f7d-b66f-59722f99f988",
+    "timestamp": "2025-10-09T20:31:09.418217",
     "response_data": null
   },
   {
     "test": "Communications Video Room",
     "success": true,
-    "message": "Successfully created video room: 22CF758B",
-    "timestamp": "2025-10-09T19:59:12.247604",
+    "message": "Successfully created video room: EB126D76",
+    "timestamp": "2025-10-09T20:31:09.468032",
     "response_data": null
   },
   {
     "test": "Communications Messages",
     "success": true,
-    "message": "Successfully retrieved 10 messages",
-    "timestamp": "2025-10-09T19:59:12.261743",
+    "message": "Successfully retrieved 12 messages",
+    "timestamp": "2025-10-09T20:31:09.477385",
     "response_data": null
   },
   {
     "test": "PDF Report Generation",
     "success": true,
-    "message": "Successfully generated PDF report: case_report_930acd82-3003-4872-8c23-c08b9ca5e541_454426eb-2b0a-4c9f-9575-73d09eb203a6.pdf",
-    "timestamp": "2025-10-09T19:59:12.279350",
+    "message": "Successfully generated PDF report: case_report_930acd82-3003-4872-8c23-c08b9ca5e541_90820ea1-4baa-4523-95c8-9382732ba423.pdf",
+    "timestamp": "2025-10-09T20:31:09.492713",
     "response_data": null
   },
   {
     "test": "Email with Report",
     "success": true,
     "message": "Successfully queued email to: test@apelite.com",
-    "timestamp": "2025-10-09T19:59:12.292095",
+    "timestamp": "2025-10-09T20:31:09.507082",
     "response_data": null
   },
   {
     "test": "Data Export CSV",
     "success": true,
     "message": "Successfully exported CSV data (250 bytes)",
-    "timestamp": "2025-10-09T19:59:12.344109",
+    "timestamp": "2025-10-09T20:31:09.557890",
     "response_data": null
   },
   {
     "test": "Data Export JSON Cases",
     "success": true,
     "message": "Successfully exported JSON cases data (1 cases)",
-    "timestamp": "2025-10-09T19:59:12.354479",
+    "timestamp": "2025-10-09T20:31:09.566810",
     "response_data": null
   },
   {
     "test": "Data Export JSON Analytics",
     "success": true,
     "message": "Successfully exported analytics JSON data",
-    "timestamp": "2025-10-09T19:59:12.364682",
+    "timestamp": "2025-10-09T20:31:09.618862",
     "response_data": null
   },
   {
     "test": "Backup Creation",
     "success": true,
-    "message": "Successfully created backup: backup_20251009_195912_34f22035-8b7d-4a5a-854b-34c471de2df8.json",
-    "timestamp": "2025-10-09T19:59:12.376233",
+    "message": "Successfully created backup: backup_20251009_203109_5119449b-882f-4bd4-a467-678ac1c3a4d1.json",
+    "timestamp": "2025-10-09T20:31:09.638167",
     "response_data": null
   },
   {
     "test": "Audit Logs",
     "success": true,
-    "message": "Successfully retrieved 8 audit logs",
-    "timestamp": "2025-10-09T19:59:12.386496",
+    "message": "Successfully retrieved 10 audit logs",
+    "timestamp": "2025-10-09T20:31:09.648488",
     "response_data": null
   },
   {
     "test": "Activity Summary",
     "success": true,
     "message": "Successfully retrieved activity summary",
-    "timestamp": "2025-10-09T19:59:12.399582",
+    "timestamp": "2025-10-09T20:31:09.659205",
     "response_data": null
   }
 ]
