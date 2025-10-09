@@ -1200,6 +1200,325 @@ async def export_evidence_pdf(
         media_type="application/pdf",
         headers={
             "Content-Disposition": f"attachment; filename=Analise_Evidencias_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
+
+
+# ==================== UNIVERSAL DOCUMENT GENERATOR ====================
+
+@super_router.post("/documents/generate")
+async def generate_legal_document(
+    request_data: dict,
+    current_user: dict = Depends(get_current_user)
+):
+    """Generate legal documents (Procuracao, Termos, Roteiros)"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    client_id = request_data.get("clientId")
+    document_type = request_data.get("documentType")
+    form_data = request_data.get("formData", {})
+    
+    # Get client details
+    client = await db.clients_enhanced.find_one({"id": client_id}, {"_id": 0})
+    if not client:
+        raise HTTPException(status_code=404, detail="Cliente não encontrado")
+    
+    # Create PDF in memory
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(
+        buffer,
+        pagesize=A4,
+        rightMargin=2*cm,
+        leftMargin=2*cm,
+        topMargin=2*cm,
+        bottomMargin=2*cm
+    )
+    
+    story = []
+    styles = getSampleStyleSheet()
+    
+    # Custom styles
+    title_style = ParagraphStyle(
+        'CustomTitle',
+        parent=styles['Heading1'],
+        fontSize=18,
+        textColor=colors.HexColor('#1a5490'),
+        spaceAfter=30,
+        alignment=TA_CENTER,
+        fontName='Helvetica-Bold'
+    )
+    
+    heading_style = ParagraphStyle(
+        'CustomHeading',
+        parent=styles['Heading2'],
+        fontSize=14,
+        textColor=colors.HexColor('#1a5490'),
+        spaceAfter=12,
+        spaceBefore=12,
+        fontName='Helvetica-Bold'
+    )
+    
+    body_style = ParagraphStyle(
+        'CustomBody',
+        parent=styles['BodyText'],
+        fontSize=10,
+        alignment=TA_JUSTIFY,
+        spaceAfter=8,
+        leading=14,
+        fontName='Helvetica'
+    )
+    
+    # Generate document based on type
+    if document_type == 'procuracao':
+        story.append(Paragraph("PROCURAÇÃO", title_style))
+        story.append(Spacer(1, 30))
+        
+        # OUTORGANTE
+        story.append(Paragraph("OUTORGANTE:", heading_style))
+        outorgante_text = f"""
+        <b>{client.get('name', '')}</b>, nacionalidade {form_data.get('nacionalidade', '')}, 
+        estado civil {form_data.get('estadoCivil', '')}, profissão {form_data.get('profissao', '')}, 
+        portador(a) do RG nº {form_data.get('rg', '')}, e do CPF nº {form_data.get('cpf', '')}, 
+        residente e domiciliado(a) à {form_data.get('endereco', '')}, nº {form_data.get('numero', '')}, 
+        bairro {form_data.get('bairro', '')}, cidade {form_data.get('cidade', '')}, 
+        CEP {form_data.get('cep', '')}.
+        """
+        story.append(Paragraph(outorgante_text, body_style))
+        story.append(Spacer(1, 15))
+        
+        # OUTORGADA
+        story.append(Paragraph("OUTORGADA:", heading_style))
+        outorgada_text = """
+        Dra. LAURA CUNHA DE LIMA, advogada inscrita na OAB/MG sob o nº 192.709, 
+        com escritório profissional localizado na Rua Exemplo, nº 123, Bairro Centro, 
+        CEP 37410-000, na cidade de Três Corações/MG, podendo atuar também sob o nome empresarial 
+        "Elite – Estratégias em Perícia e Investigação Criminal", inscrita no CNPJ nº 55.413.321/0001-00, 
+        com sede em Três Corações/MG.
+        """
+        story.append(Paragraph(outorgada_text, body_style))
+        story.append(Spacer(1, 20))
+        
+        # PODERES OUTORGADOS
+        story.append(Paragraph("PODERES OUTORGADOS", heading_style))
+        poderes_text = """
+        Pelo presente instrumento, o(a) outorgante nomeia e constitui sua bastante procuradora a 
+        Dra. Laura Cunha de Lima, a quem confere poderes para, em seu nome, propor, contestar, 
+        acompanhar e praticar todos os atos processuais necessários à defesa de seus direitos e 
+        interesses em processos judiciais e administrativos, inclusive de natureza criminal, com poderes para:
+        """
+        story.append(Paragraph(poderes_text, body_style))
+        story.append(Spacer(1, 10))
+        
+        poderes_list = [
+            "Representar o(a) outorgante em audiências, sustentações orais, oitivas, diligências, inquéritos e demais atos perante autoridades judiciais, policiais ou administrativas;",
+            "Receber intimações, notificações, citações, cartas precatórias e documentos;",
+            "Firmar compromissos, requerer certidões, interpor recursos, substabelecer com ou sem reserva de poderes, requerer perícias, juntar e retirar documentos;",
+            "Atuar como assistente técnica em provas digitais, audiovisuais ou cibernéticas;",
+            "Requerer acesso e análise de mídias, interceptações e laudos periciais, nos termos do art. 159, §§ 3º e 5º do CPP;",
+            "Exercer o poder geral de representação e defesa técnica, inclusive com poderes especiais previstos no art. 105 do CPC, art. 44 do Estatuto da OAB e art. 7º, inciso I, da Lei nº 8.906/94."
+        ]
+        
+        for poder in poderes_list:
+            story.append(Paragraph(f"• {poder}", body_style))
+        
+        story.append(Spacer(1, 20))
+        
+        # CLÁUSULA DE SIGILO
+        story.append(Paragraph("CLÁUSULA DE SIGILO E RESPONSABILIDADE TÉCNICA", heading_style))
+        sigilo_text = """
+        A outorgada obriga-se a manter sigilo profissional e confidencialidade sobre todas as informações, 
+        dados e documentos a que tiver acesso em razão do mandato, observando as normas éticas da OAB e os 
+        princípios da LGPD (Lei nº 13.709/18), bem como as boas práticas previstas nas normas ISO/IEC 27001 
+        e ISO/IEC 27037 sobre segurança da informação e tratamento de evidências digitais.
+        """
+        story.append(Paragraph(sigilo_text, body_style))
+        story.append(Spacer(1, 15))
+        
+        # VIGÊNCIA
+        story.append(Paragraph("VIGÊNCIA", heading_style))
+        story.append(Paragraph("A presente procuração tem validade por prazo indeterminado, podendo ser revogada a qualquer tempo mediante comunicação expressa.", body_style))
+        story.append(Spacer(1, 40))
+        
+        # ASSINATURAS
+        data_hoje = datetime.now().strftime('%d de %B de %Y')
+        story.append(Paragraph(f"{form_data.get('cidade', 'Três Corações')}/MG, {data_hoje}", body_style))
+        story.append(Spacer(1, 60))
+        
+        story.append(Paragraph("_" * 60, body_style))
+        story.append(Paragraph(f"<b>{client.get('name', '')}</b>", body_style))
+        story.append(Paragraph(f"CPF: {form_data.get('cpf', '')}", body_style))
+        story.append(Paragraph("OUTORGANTE", body_style))
+        
+    elif document_type == 'roteiro_aij':
+        story.append(Paragraph("ROTEIRO DE AUDIÊNCIA DE INSTRUÇÃO E JULGAMENTO (AIJ)", title_style))
+        story.append(Spacer(1, 30))
+        
+        # I. IDENTIFICAÇÃO DO PROCESSO
+        story.append(Paragraph("I. IDENTIFICAÇÃO DO PROCESSO", heading_style))
+        story.append(Paragraph(f"<b>Autos nº:</b> {form_data.get('autosNumero', '')}", body_style))
+        story.append(Paragraph(f"<b>Processo:</b> {form_data.get('processo', '')}", body_style))
+        story.append(Paragraph(f"<b>Data da Audiência:</b> {form_data.get('dataAudiencia', '')}", body_style))
+        story.append(Paragraph(f"<b>Juízo:</b> {form_data.get('juizo', '')}", body_style))
+        story.append(Paragraph(f"<b>Comarca:</b> {form_data.get('comarca', '')}", body_style))
+        story.append(Paragraph(f"<b>Defesa Técnica:</b> {form_data.get('defesaTecnica', '')}", body_style))
+        story.append(Paragraph(f"<b>Assistente Técnica:</b> {form_data.get('assistenteTecnica', '')}", body_style))
+        story.append(Spacer(1, 15))
+        
+        # II. IDENTIFICAÇÃO DAS PARTES
+        story.append(Paragraph("II. IDENTIFICAÇÃO DAS PARTES", heading_style))
+        story.append(Paragraph(f"<b>Ministério Público:</b> {form_data.get('ministerioPublico', '')}", body_style))
+        story.append(Paragraph(f"<b>Defensores:</b> {form_data.get('defensores', '')}", body_style))
+        story.append(Paragraph(f"<b>Réus:</b> {form_data.get('reus', '')}", body_style))
+        story.append(Paragraph(f"<b>Vítimas:</b> {form_data.get('vitimas', '')}", body_style))
+        story.append(Paragraph(f"<b>Testemunhas:</b> {form_data.get('testemunhas', '')}", body_style))
+        story.append(Spacer(1, 15))
+        
+        # III. LINHA DE INQUIRIÇÃO
+        story.append(Paragraph("III. LINHA DE INQUIRIÇÃO / AUDIÊNCIA", heading_style))
+        story.append(Paragraph("□ Delegado / Autoridade Policial: ___________", body_style))
+        story.append(Paragraph("□ Investigador(es) / Policiais: ___________", body_style))
+        story.append(Paragraph("□ Vítima(s): ___________", body_style))
+        story.append(Paragraph("□ Testemunha(s) de Acusação: ___________", body_style))
+        story.append(Paragraph("□ Testemunha(s) de Defesa: ___________", body_style))
+        story.append(Paragraph("□ Réu(s): ___________", body_style))
+        story.append(Spacer(1, 15))
+        
+        # IV. ANOTAÇÕES
+        story.append(Paragraph("IV. ANOTAÇÕES DE AUDIÊNCIA", heading_style))
+        story.append(Paragraph("<b>Fatos relevantes ocorridos durante a AIJ:</b>", body_style))
+        story.append(Paragraph("_" * 80, body_style))
+        story.append(Spacer(1, 30))
+        story.append(Paragraph("_" * 80, body_style))
+        story.append(Spacer(1, 15))
+        
+        # V. FUNDAMENTOS JURÍDICOS
+        story.append(Paragraph("V. FUNDAMENTOS JURÍDICOS RELEVANTES", heading_style))
+        fundamentos = [
+            "Ordem de inquirição – art. 400 CPP",
+            "Prerrogativa da defesa ('pela ordem') – art. 7º, X, EAOAB",
+            "Perguntas indeferidas – art. 405 CPP",
+            "Direito ao silêncio – art. 186 CPP / HC 628.224/MG",
+            "Abuso de autoridade – art. 15, I e par. único, Lei 13.869/19",
+            "Reconhecimento pessoal – art. 226 CPP",
+            "Leitura da ata – art. 17, §2º, Res. CNJ 329/2020"
+        ]
+        for fund in fundamentos:
+            story.append(Paragraph(f"• {fund}", body_style))
+        
+    elif document_type == 'termo_elite':
+        story.append(Paragraph("TERMO DE CONFIDENCIALIDADE E SIGILO TÉCNICO-PERICIAL", title_style))
+        story.append(Spacer(1, 20))
+        
+        story.append(Paragraph("ELITE – Estratégias em Perícia e Investigação Criminal Ltda", heading_style))
+        story.append(Paragraph("CNPJ: 55.413.321/0001-00", body_style))
+        story.append(Paragraph("Endereço: Av. Sete de Setembro, nº 270 – Centro, Três Corações/MG – CEP 37410-155", body_style))
+        story.append(Paragraph("Representante Legal: Dra. Laura Cunha de Lima – OAB/MG 192.709", body_style))
+        story.append(Spacer(1, 20))
+        
+        # 1. DO OBJETO
+        story.append(Paragraph("1. DO OBJETO", heading_style))
+        story.append(Paragraph("""
+        O presente Termo tem por finalidade garantir o sigilo técnico, ético e informacional de todas as 
+        atividades desenvolvidas no âmbito da Elite – Estratégias em Perícia e Investigação Criminal Ltda, 
+        abrangendo o acesso, manuseio, tratamento, análise e preservação de dados, mídias, evidências digitais, 
+        laudos, relatórios técnicos e informações sensíveis, em conformidade com o CPP, a LGPD e as normas 
+        ISO/IEC 27001, 27037, 27041 e 27042.
+        """, body_style))
+        story.append(Spacer(1, 15))
+        
+        # 2. DAS OBRIGAÇÕES
+        story.append(Paragraph("2. DAS OBRIGAÇÕES", heading_style))
+        story.append(Paragraph("""
+        O(a) COMPROMITENTE declara-se ciente de que deve manter confidencialidade integral sobre todas as 
+        informações obtidas durante sua atuação, utilizar os dados apenas para a finalidade técnica contratada 
+        e abster-se de divulgar, reproduzir ou compartilhar informações sem autorização formal.
+        """, body_style))
+        story.append(Spacer(1, 15))
+        
+        # 3-5
+        story.append(Paragraph("3. DA RESPONSABILIDADE", heading_style))
+        story.append(Paragraph("O descumprimento deste termo ensejará responsabilidade civil, ética e criminal, conforme arts. 154 e 325 do Código Penal e art. 44 do Estatuto da OAB.", body_style))
+        story.append(Spacer(1, 15))
+        
+        story.append(Paragraph("4. DA VIGÊNCIA", heading_style))
+        story.append(Paragraph("O presente Termo terá vigência por prazo indeterminado, subsistindo mesmo após o encerramento do vínculo profissional ou contratual.", body_style))
+        story.append(Spacer(1, 15))
+        
+        story.append(Paragraph("5. DO FORO", heading_style))
+        story.append(Paragraph("Fica eleito o foro da Comarca de Três Corações/MG para dirimir eventuais controvérsias.", body_style))
+        story.append(Spacer(1, 40))
+        
+        # ASSINATURAS
+        local_data = form_data.get('localData', 'Três Corações/MG')
+        data = datetime.fromisoformat(form_data.get('dataAssinatura')).strftime('%d/%m/%Y')
+        story.append(Paragraph(f"Local e data: {local_data}, {data}", body_style))
+        story.append(Spacer(1, 40))
+        
+        story.append(Paragraph("COMPROMITENTE:", body_style))
+        story.append(Paragraph(f"<b>{form_data.get('compromitenteNome', '')}</b>", body_style))
+        story.append(Paragraph(f"CPF: {form_data.get('compromitenteCPF', '')}", body_style))
+        story.append(Paragraph("Assinatura: _________________________________________", body_style))
+        
+    elif document_type == 'termo_advocacia':
+        story.append(Paragraph("TERMO DE CONFIDENCIALIDADE E SIGILO PROFISSIONAL JURÍDICO", title_style))
+        story.append(Spacer(1, 20))
+        
+        story.append(Paragraph("LAURA CUNHA DE LIMA ADVOCACIA ESPECIALIZADA", heading_style))
+        story.append(Paragraph("CNPJ: [Inserir CNPJ]", body_style))
+        story.append(Paragraph("Endereço: [Inserir Endereço]", body_style))
+        story.append(Paragraph("Representante Legal: Dra. Laura Cunha de Lima – OAB/MG 192.709", body_style))
+        story.append(Spacer(1, 20))
+        
+        # Similar structure to termo_elite
+        story.append(Paragraph("1. DO OBJETO", heading_style))
+        story.append(Paragraph("""
+        O presente Termo tem por objetivo assegurar o sigilo profissional e estratégico das informações 
+        obtidas, produzidas ou compartilhadas no âmbito da Laura Cunha de Lima Advocacia Especializada, 
+        abrangendo dados, peças processuais, relatórios e provas, em conformidade com o Estatuto da OAB, 
+        a LGPD e as normas ISO/IEC 27001 e 27701.
+        """, body_style))
+        story.append(Spacer(1, 15))
+        
+        story.append(Paragraph("2. DAS OBRIGAÇÕES", heading_style))
+        story.append(Paragraph("""
+        O(a) COMPROMITENTE compromete-se a manter sigilo absoluto sobre todas as informações e documentos 
+        relacionados à advocacia, a utilizá-los exclusivamente para fins profissionais e a não divulgá-los 
+        sem autorização expressa.
+        """, body_style))
+        story.append(Spacer(1, 15))
+        
+        story.append(Paragraph("3. DA RESPONSABILIDADE", heading_style))
+        story.append(Paragraph("A violação deste termo implicará responsabilidade ética, civil e penal, conforme previsto no Código Penal, na Lei nº 13.869/19 e no Estatuto da OAB.", body_style))
+        story.append(Spacer(1, 40))
+        
+        # ASSINATURAS
+        local_data = form_data.get('localData', 'Belo Horizonte/MG')
+        data = datetime.fromisoformat(form_data.get('dataAssinatura')).strftime('%d/%m/%Y')
+        story.append(Paragraph(f"Local e data: {local_data}, {data}", body_style))
+        story.append(Spacer(1, 40))
+        
+        story.append(Paragraph("COMPROMITENTE:", body_style))
+        story.append(Paragraph(f"<b>{form_data.get('compromitenteNome', '')}</b>", body_style))
+        story.append(Paragraph(f"CPF: {form_data.get('compromitenteCPF', '')}", body_style))
+        story.append(Paragraph("Assinatura: _________________________________________", body_style))
+    
+    # Build PDF
+    doc.build(story)
+    
+    # Get PDF bytes
+    buffer.seek(0)
+    pdf_bytes = buffer.getvalue()
+    buffer.close()
+    
+    # Return as StreamingResponse
+    from fastapi.responses import StreamingResponse
+    return StreamingResponse(
+        io.BytesIO(pdf_bytes),
+        media_type="application/pdf",
+        headers={
+            "Content-Disposition": f"attachment; filename={document_type}_{client.get('name', 'Cliente').replace(' ', '_')}.pdf"
+        }
+    )
+
         }
     )
 
