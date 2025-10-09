@@ -110,6 +110,7 @@ function App() {
           <Route path="/athena/contracts" element={<AthenaContractGenerator />} />
           <Route path="/athena/evidence-analysis" element={<AthenaEvidenceAnalysis />} />
           <Route path="/athena/documents" element={<AthenaDocumentGenerator />} />
+          <Route path="/athena/defensive-investigation" element={<AthenaDefensiveInvestigation />} />
         </Routes>
       </Router>
       <WhatsAppButton />
