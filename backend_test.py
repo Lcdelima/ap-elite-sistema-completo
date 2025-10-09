@@ -708,6 +708,167 @@ class BackendTester:
             self.log_result("Activity Summary", False, f"Exception: {str(e)}")
             return False
 
+    # ==================== DEFENSIVE INVESTIGATION TESTS ====================
+    
+    async def test_defensive_investigation_categories(self):
+        """Test GET /api/athena/defensive-investigation/categories"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/athena/defensive-investigation/categories", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    if "categories" not in data:
+                        self.log_result("Defensive Investigation Categories", False, "Missing 'categories' key in response", data)
+                        return False
+                    
+                    categories = data.get("categories", {})
+                    if not isinstance(categories, dict):
+                        self.log_result("Defensive Investigation Categories", False, "Categories should be a dictionary", data)
+                        return False
+                    
+                    # Check for expected categories
+                    expected_categories = ["Social Media", "Search Engines", "Public Records", "Technical Analysis"]
+                    found_categories = list(categories.keys())
+                    
+                    self.log_result("Defensive Investigation Categories", True, f"Successfully retrieved {len(found_categories)} OSINT categories")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Defensive Investigation Categories", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Defensive Investigation Categories", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_defensive_investigation_cases(self):
+        """Test GET /api/athena/defensive-investigation/cases"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/athena/defensive-investigation/cases", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    if "cases" not in data:
+                        self.log_result("Defensive Investigation Cases", False, "Missing 'cases' key in response", data)
+                        return False
+                    
+                    cases = data.get("cases", [])
+                    if not isinstance(cases, list):
+                        self.log_result("Defensive Investigation Cases", False, "Cases should be a list", data)
+                        return False
+                    
+                    self.log_result("Defensive Investigation Cases", True, f"Successfully retrieved {len(cases)} investigation cases")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Defensive Investigation Cases", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Defensive Investigation Cases", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_defensive_investigation_favorites(self):
+        """Test GET /api/athena/defensive-investigation/favorites"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/athena/defensive-investigation/favorites", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    if "favorites" not in data:
+                        self.log_result("Defensive Investigation Favorites", False, "Missing 'favorites' key in response", data)
+                        return False
+                    
+                    favorites = data.get("favorites", [])
+                    if not isinstance(favorites, list):
+                        self.log_result("Defensive Investigation Favorites", False, "Favorites should be a list", data)
+                        return False
+                    
+                    self.log_result("Defensive Investigation Favorites", True, f"Successfully retrieved {len(favorites)} favorite sources")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Defensive Investigation Favorites", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Defensive Investigation Favorites", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_defensive_investigation_stats(self):
+        """Test GET /api/athena/defensive-investigation/stats"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/athena/defensive-investigation/stats", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["total_cases", "active_cases", "completed_cases", "recent_cases", "total_categories"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Defensive Investigation Stats", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    # Validate data types
+                    for key in ["total_cases", "active_cases", "completed_cases", "total_categories"]:
+                        if not isinstance(data[key], int):
+                            self.log_result("Defensive Investigation Stats", False, f"{key} should be an integer")
+                            return False
+                    
+                    if not isinstance(data["recent_cases"], list):
+                        self.log_result("Defensive Investigation Stats", False, "recent_cases should be a list")
+                        return False
+                    
+                    self.log_result("Defensive Investigation Stats", True, f"Successfully retrieved stats - Total: {data['total_cases']}, Active: {data['active_cases']}")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Defensive Investigation Stats", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Defensive Investigation Stats", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_defensive_investigation_case_creation(self):
+        """Test POST /api/athena/defensive-investigation/case"""
+        try:
+            case_data = {
+                "title": "Test Investigation Case",
+                "description": "Testing case creation for defensive investigation",
+                "target": "test-target@example.com",
+                "type": "person"
+            }
+            
+            headers = self.get_headers()
+            async with self.session.post(f"{BASE_URL}/athena/defensive-investigation/case", json=case_data, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["message", "case_id", "case"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Defensive Investigation Case Creation", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    case = data.get("case", {})
+                    if not case.get("id") or not case.get("title"):
+                        self.log_result("Defensive Investigation Case Creation", False, "Case missing required fields", data)
+                        return False
+                    
+                    self.log_result("Defensive Investigation Case Creation", True, f"Successfully created investigation case: {data.get('case_id')}")
+                    return data.get("case_id")
+                else:
+                    error_text = await response.text()
+                    self.log_result("Defensive Investigation Case Creation", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Defensive Investigation Case Creation", False, f"Exception: {str(e)}")
+            return False
+
     # ==================== ATHENA SYSTEM TESTS ====================
     
     async def test_athena_processes(self):
