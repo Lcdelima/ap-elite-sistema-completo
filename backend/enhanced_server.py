@@ -636,6 +636,9 @@ from ai_document_analysis import ai_router
 from security_features import security_router
 from backup_system import backup_router
 from hybrid_sync_system import hybrid_router
+from advanced_investigation_ai import investigation_router
+from relationship_mapping import relationships_router
+from automated_reports import reports_router
 
 # Add all routes to main app
 app.include_router(api_router)
