@@ -460,6 +460,262 @@ const DocumentGenerator = () => {
                   </Card>
                 )}
 
+                {(selectedDocType === 'ata_elite' || selectedDocType === 'ata_advocacia') && (
+                  <>
+                    <Card className="bg-slate-800 border-slate-700">
+                      <CardHeader>
+                        <CardTitle className="text-white flex items-center">
+                          <Calendar className="h-5 w-5 mr-2 text-cyan-400" />
+                          Informações da Reunião
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-sm font-medium text-slate-300 mb-2">Data da Reunião</label>
+                            <input
+                              type="date"
+                              value={formData.dataReuniao}
+                              onChange={(e) => setFormData({...formData, dataReuniao: e.target.value})}
+                              className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-slate-300 mb-2">Horário</label>
+                            <input
+                              type="time"
+                              value={formData.horarioReuniao}
+                              onChange={(e) => setFormData({...formData, horarioReuniao: e.target.value})}
+                              className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-slate-300 mb-2">Local</label>
+                            <input
+                              type="text"
+                              value={formData.localReuniao}
+                              onChange={(e) => setFormData({...formData, localReuniao: e.target.value})}
+                              placeholder="Ex: Escritório Elite - Sala 1"
+                              className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-slate-300 mb-2">Modalidade</label>
+                            <select
+                              value={formData.modalidade}
+                              onChange={(e) => setFormData({...formData, modalidade: e.target.value})}
+                              className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+                            >
+                              <option value="presencial">Presencial</option>
+                              <option value="remoto">Remoto/Videoconferência</option>
+                              <option value="hibrido">Híbrido</option>
+                            </select>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <label className="block text-sm font-medium text-slate-300 mb-2">Projeto/Caso/Processo</label>
+                          <input
+                            type="text"
+                            value={formData.projetoCaso}
+                            onChange={(e) => setFormData({...formData, projetoCaso: e.target.value})}
+                            placeholder="Ex: Processo 0001234-56.2024.8.13.0123"
+                            className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="block text-sm font-medium text-slate-300 mb-2">Participantes</label>
+                          <textarea
+                            rows={2}
+                            value={formData.participantes}
+                            onChange={(e) => setFormData({...formData, participantes: e.target.value})}
+                            placeholder="Liste todos os participantes da reunião"
+                            className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+                          />
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="bg-slate-800 border-slate-700">
+                      <CardHeader>
+                        <CardTitle className="text-white flex items-center">
+                          <Edit className="h-5 w-5 mr-2 text-purple-400" />
+                          Conteúdo da Reunião
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div>
+                          <label className="block text-sm font-medium text-slate-300 mb-2">Objetivo da Reunião</label>
+                          <textarea
+                            rows={3}
+                            value={formData.objetivoReuniao}
+                            onChange={(e) => setFormData({...formData, objetivoReuniao: e.target.value})}
+                            placeholder="Descreva o propósito principal da reunião..."
+                            className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="block text-sm font-medium text-slate-300 mb-2">
+                            {selectedDocType === 'ata_elite' ? 'Assuntos Discutidos' : 'Temas Tratados'}
+                          </label>
+                          <textarea
+                            rows={4}
+                            value={formData.assuntosDiscutidos}
+                            onChange={(e) => setFormData({...formData, assuntosDiscutidos: e.target.value})}
+                            placeholder="Registre os tópicos abordados durante a reunião..."
+                            className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+                          />
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="bg-slate-800 border-slate-700">
+                      <CardHeader>
+                        <CardTitle className="text-white flex items-center">
+                          <CheckCircle className="h-5 w-5 mr-2 text-green-400" />
+                          {selectedDocType === 'ata_elite' ? 'Decisões Técnicas e Encaminhamentos' : 'Orientações e Encaminhamentos'}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        {/* Decisão 1 */}
+                        <div className="bg-slate-700 p-4 rounded-lg">
+                          <p className="text-white font-medium mb-3">Encaminhamento 1</p>
+                          <div className="grid grid-cols-3 gap-3">
+                            <div className="col-span-3">
+                              <label className="block text-sm font-medium text-slate-300 mb-2">Decisão/Providência</label>
+                              <input
+                                type="text"
+                                value={formData.decisao1}
+                                onChange={(e) => setFormData({...formData, decisao1: e.target.value})}
+                                placeholder="Descreva a decisão ou providência"
+                                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-lg text-white text-sm focus:outline-none focus:border-cyan-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-slate-300 mb-2">Responsável</label>
+                              <input
+                                type="text"
+                                value={formData.responsavel1}
+                                onChange={(e) => setFormData({...formData, responsavel1: e.target.value})}
+                                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-lg text-white text-sm focus:outline-none focus:border-cyan-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-slate-300 mb-2">Prazo</label>
+                              <input
+                                type="date"
+                                value={formData.prazo1}
+                                onChange={(e) => setFormData({...formData, prazo1: e.target.value})}
+                                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-lg text-white text-sm focus:outline-none focus:border-cyan-500"
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Decisão 2 */}
+                        <div className="bg-slate-700 p-4 rounded-lg">
+                          <p className="text-white font-medium mb-3">Encaminhamento 2</p>
+                          <div className="grid grid-cols-3 gap-3">
+                            <div className="col-span-3">
+                              <label className="block text-sm font-medium text-slate-300 mb-2">Decisão/Providência</label>
+                              <input
+                                type="text"
+                                value={formData.decisao2}
+                                onChange={(e) => setFormData({...formData, decisao2: e.target.value})}
+                                placeholder="Descreva a decisão ou providência (opcional)"
+                                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-lg text-white text-sm focus:outline-none focus:border-cyan-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-slate-300 mb-2">Responsável</label>
+                              <input
+                                type="text"
+                                value={formData.responsavel2}
+                                onChange={(e) => setFormData({...formData, responsavel2: e.target.value})}
+                                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-lg text-white text-sm focus:outline-none focus:border-cyan-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-slate-300 mb-2">Prazo</label>
+                              <input
+                                type="date"
+                                value={formData.prazo2}
+                                onChange={(e) => setFormData({...formData, prazo2: e.target.value})}
+                                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-lg text-white text-sm focus:outline-none focus:border-cyan-500"
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Decisão 3 */}
+                        <div className="bg-slate-700 p-4 rounded-lg">
+                          <p className="text-white font-medium mb-3">Encaminhamento 3</p>
+                          <div className="grid grid-cols-3 gap-3">
+                            <div className="col-span-3">
+                              <label className="block text-sm font-medium text-slate-300 mb-2">Decisão/Providência</label>
+                              <input
+                                type="text"
+                                value={formData.decisao3}
+                                onChange={(e) => setFormData({...formData, decisao3: e.target.value})}
+                                placeholder="Descreva a decisão ou providência (opcional)"
+                                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-lg text-white text-sm focus:outline-none focus:border-cyan-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-slate-300 mb-2">Responsável</label>
+                              <input
+                                type="text"
+                                value={formData.responsavel3}
+                                onChange={(e) => setFormData({...formData, responsavel3: e.target.value})}
+                                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-lg text-white text-sm focus:outline-none focus:border-cyan-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-slate-300 mb-2">Prazo</label>
+                              <input
+                                type="date"
+                                value={formData.prazo3}
+                                onChange={(e) => setFormData({...formData, prazo3: e.target.value})}
+                                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-lg text-white text-sm focus:outline-none focus:border-cyan-500"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="bg-slate-800 border-slate-700">
+                      <CardHeader>
+                        <CardTitle className="text-white flex items-center">
+                          <FileText className="h-5 w-5 mr-2 text-orange-400" />
+                          {selectedDocType === 'ata_elite' ? 'Evidências e Documentos' : 'Documentos e Anexos'}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div>
+                          <label className="block text-sm font-medium text-slate-300 mb-2">
+                            {selectedDocType === 'ata_elite' 
+                              ? 'Registro de Evidências/Documentos Anexados' 
+                              : 'Documentos e Anexos'}
+                          </label>
+                          <textarea
+                            rows={3}
+                            value={selectedDocType === 'ata_elite' ? formData.evidenciasDocumentos : formData.documentosAnexos}
+                            onChange={(e) => setFormData({
+                              ...formData, 
+                              [selectedDocType === 'ata_elite' ? 'evidenciasDocumentos' : 'documentosAnexos']: e.target.value
+                            })}
+                            placeholder="Liste os documentos, mídias, prints, logs, relatórios apresentados..."
+                            className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+                          />
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </>
+                )}
+
                 {(selectedDocType === 'termo_elite' || selectedDocType === 'termo_advocacia') && (
                   <Card className="bg-slate-800 border-slate-700">
                     <CardHeader>
