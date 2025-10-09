@@ -338,7 +338,7 @@ const AthenaMain = () => {
             </div>
           </div>
           <Badge className="bg-white text-green-600 font-bold">
-            Mais Seguro que Signal & WhatsApp
+            Segurança Avançada E2E
           </Badge>
         </div>
       </div>
