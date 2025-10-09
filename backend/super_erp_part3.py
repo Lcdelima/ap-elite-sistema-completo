@@ -1906,6 +1906,9 @@ async def create_investigation_case(case_data: dict, current_user: dict = Depend
     
     await db.investigation_cases.insert_one(case)
     
+    # Remove MongoDB _id field before returning
+    case.pop("_id", None)
+    
     return {"message": "Investigation case created", "case_id": case["id"], "case": case}
 
 
