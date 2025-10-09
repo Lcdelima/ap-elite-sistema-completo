@@ -1674,6 +1674,24 @@ class BackendTester:
         print("\n👤 Testing Authentication and User Management...")
         await self.test_user_creation()
         
+        print("\n🔍 Testing Advanced Investigation System...")
+        await self.test_investigation_create_case()
+        await self.test_investigation_evidence_upload()
+        await self.test_investigation_case_analysis()
+        await self.test_investigation_evidence_analysis()
+        await self.test_investigation_osint_search()
+        
+        print("\n🕸️ Testing Relationship Mapping System...")
+        await self.test_relationships_create_person()
+        await self.test_relationships_create_relationship()
+        await self.test_relationships_create_network()
+        await self.test_relationships_network_analysis()
+        
+        print("\n📊 Testing Automated Reports System...")
+        await self.test_reports_generate()
+        await self.test_reports_templates()
+        await self.test_reports_status()
+        
         print("\n🔄 Testing Hybrid System...")
         await self.test_hybrid_status()
         await self.test_hybrid_sync()
