@@ -68,7 +68,7 @@ function AppContent() {
   useKeyboardShortcuts();
   
   return (
-    <>
+    <div className="App min-h-screen bg-slate-50 dark:bg-slate-900">
       <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/services" element={<Services />} />
