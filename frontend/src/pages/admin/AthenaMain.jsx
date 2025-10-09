@@ -264,6 +264,16 @@ const AthenaMain = () => {
       color: 'from-purple-600 to-indigo-600',
       badge: 'ADMIN',
       badgeColor: 'bg-red-600'
+    },
+    {
+      id: 24,
+      title: 'Dashboard Unificado',
+      subtitle: 'Visão Geral Completa',
+      icon: LayoutDashboard,
+      path: '/athena/unified-dashboard',
+      color: 'from-blue-600 via-purple-600 to-pink-600',
+      badge: 'NOVO',
+      badgeColor: 'bg-gradient-to-r from-blue-500 to-purple-500'
     }
   ];
 
