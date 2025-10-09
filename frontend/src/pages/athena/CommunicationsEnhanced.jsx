@@ -548,7 +548,7 @@ const CommunicationsEnhanced = () => {
               <Lock className="h-6 w-6 text-white" />
               <div>
                 <p className="text-white font-semibold">Criptografia End-to-End Ativa</p>
-                <p className="text-green-100 text-sm">Signal Protocol + AES-256-GCM • Mais seguro que WhatsApp</p>
+                <p className="text-green-100 text-sm">Signal Protocol + AES-256-GCM • Zero-Knowledge</p>
               </div>
             </div>
             <Badge className="bg-white text-green-600 font-bold">Seguro</Badge>
