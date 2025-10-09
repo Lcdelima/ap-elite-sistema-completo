@@ -89,9 +89,10 @@ const DefensiveInvestigation = () => {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
-      setFavorites(data.favorites);
+      setFavorites(data.favorites || []);
     } catch (error) {
       console.error('Error fetching favorites:', error);
+      setFavorites([]);
     }
   };
 
@@ -102,9 +103,10 @@ const DefensiveInvestigation = () => {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
-      setStats(data);
+      setStats(data || {});
     } catch (error) {
       console.error('Error fetching stats:', error);
+      setStats({});
     }
   };
 
