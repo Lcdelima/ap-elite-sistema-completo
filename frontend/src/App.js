@@ -124,7 +124,7 @@ function AppContent() {
       <WhatsAppButton />
       <KeyboardShortcutsModal />
       <Toaster position="top-right" richColors />
-    </>
+    </div>
   );
 }
 
@@ -132,11 +132,9 @@ function App() {
   return (
     <ThemeProvider>
       <TourProvider>
-        <div className="App min-h-screen bg-slate-50 dark:bg-slate-900">
-          <Router>
-            <AppContent />
-          </Router>
-        </div>
+        <Router>
+          <AppContent />
+        </Router>
       </TourProvider>
     </ThemeProvider>
   );
