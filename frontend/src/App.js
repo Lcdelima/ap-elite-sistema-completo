@@ -114,6 +114,7 @@ function App() {
           <Route path="/athena/documents" element={<AthenaDocumentGenerator />} />
           <Route path="/athena/defensive-investigation" element={<AthenaDefensiveInvestigation />} />
           <Route path="/athena/user-management" element={<AthenaUserManagement />} />
+          <Route path="/athena/unified-dashboard" element={<AthenaUnifiedDashboard />} />
         </Routes>
       </Router>
       <WhatsAppButton />
