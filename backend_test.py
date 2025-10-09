@@ -708,9 +708,88 @@ class BackendTester:
             self.log_result("Activity Summary", False, f"Exception: {str(e)}")
             return False
 
+    # ==================== ATHENA SYSTEM TESTS ====================
+    
+    async def test_athena_processes(self):
+        """Test GET /api/athena/processes"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/athena/processes", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    if "processes" not in data:
+                        self.log_result("ATHENA Processes", False, "Missing 'processes' key in response", data)
+                        return False
+                    
+                    processes = data.get("processes", [])
+                    if not isinstance(processes, list):
+                        self.log_result("ATHENA Processes", False, "Processes should be a list", data)
+                        return False
+                    
+                    self.log_result("ATHENA Processes", True, f"Successfully retrieved {len(processes)} processes")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("ATHENA Processes", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("ATHENA Processes", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_athena_financial_summary(self):
+        """Test GET /api/athena/financial/summary"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/athena/financial/summary", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    required_keys = ["income", "expenses", "net", "period"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("ATHENA Financial Summary", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    self.log_result("ATHENA Financial Summary", True, f"Financial summary retrieved - Net: R$ {data.get('net', 0):.2f}")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("ATHENA Financial Summary", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("ATHENA Financial Summary", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_user_creation(self):
+        """Test POST /api/users - User Management"""
+        try:
+            user_data = {
+                "name": "Test User ATHENA",
+                "email": f"testuser_{datetime.now().timestamp()}@apelite.com",
+                "password": "testpass123",
+                "role": "client",
+                "phone": "+5535999887766"
+            }
+            
+            headers = self.get_headers()
+            async with self.session.post(f"{BASE_URL}/users", json=user_data, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    self.log_result("User Creation", True, f"Successfully created user: {data.get('id')}")
+                    return data.get('id')
+                else:
+                    error_text = await response.text()
+                    self.log_result("User Creation", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("User Creation", False, f"Exception: {str(e)}")
+            return False
+
     async def run_all_tests(self):
-        """Run all backend tests"""
-        print("🚀 Starting AP Elite ERP Advanced Features Backend Testing")
+        """Run all ATHENA system backend tests"""
+        print("🚀 Starting AP Elite ATHENA System Backend Testing")
         print("=" * 70)
         
         # Authenticate first
@@ -718,24 +797,25 @@ class BackendTester:
             print("❌ Authentication failed. Cannot proceed with tests.")
             return
         
-        print("\n📊 Testing Analytics APIs...")
+        print("\n👤 Testing Authentication and User Management...")
+        await self.test_user_creation()
+        
+        print("\n📋 Testing Core Modules...")
+        await self.test_athena_processes()
+        await self.test_athena_financial_summary()
+        
+        print("\n🔧 Testing Advanced Features (Legacy)...")
         await self.test_analytics_overview()
         await self.test_analytics_kpis()
-        
-        print("\n🎧 Testing Interception Analysis APIs...")
-        analysis_id = await self.test_interception_upload()
-        
-        print("\n🔍 Testing IPED Integration APIs...")
-        project_id = await self.test_iped_create_project()
+        await self.test_interception_upload()
+        await self.test_iped_create_project()
         await self.test_iped_list_projects()
-        
-        print("\n📱 Testing Communications APIs...")
         await self.test_communications_email()
         await self.test_communications_whatsapp()
         await self.test_communications_video_room()
         await self.test_communications_messages()
         
-        print("\n🔧 Testing Advanced Integrations APIs...")
+        print("\n📊 Testing Advanced Integrations...")
         await self.test_pdf_report_generation()
         await self.test_email_with_report()
         await self.test_data_export_csv()
@@ -747,7 +827,7 @@ class BackendTester:
         
         # Summary
         print("\n" + "=" * 70)
-        print("📋 TEST SUMMARY")
+        print("📋 ATHENA SYSTEM TEST SUMMARY")
         print("=" * 70)
         
         passed = sum(1 for result in self.test_results if result["success"])
@@ -764,7 +844,7 @@ class BackendTester:
                 if not result["success"]:
                     print(f"  - {result['test']}: {result['message']}")
         
-        print("\n✅ All advanced ERP features tested successfully!" if passed == total else "\n⚠️  Some tests failed - check logs above")
+        print("\n✅ ATHENA system tested successfully!" if passed == total else "\n⚠️  Some tests failed - check logs above")
         
         return self.test_results
 
