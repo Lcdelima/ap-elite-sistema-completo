@@ -1200,7 +1200,8 @@ async def export_evidence_pdf(
         media_type="application/pdf",
         headers={
             "Content-Disposition": f"attachment; filename=Analise_Evidencias_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
-
+        }
+    )
 
 # ==================== UNIVERSAL DOCUMENT GENERATOR ====================
 
