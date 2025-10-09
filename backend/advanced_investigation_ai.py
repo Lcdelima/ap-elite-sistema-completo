@@ -143,13 +143,19 @@ async def analyze_image_with_ai(image_path: str) -> Dict:
         rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         pil_image = Image.open(image_path)
 
-        # 1. Face Recognition
-        face_locations = face_recognition.face_locations(rgb_image)
-        face_encodings = face_recognition.face_encodings(rgb_image, face_locations)
-        
-        results["faces_detected"] = len(face_locations)
-        results["face_locations"] = face_locations
-        results["face_encodings"] = [encoding.tolist() for encoding in face_encodings]
+        # 1. Face Detection using OpenCV (Haar cascades)
+        try:
+            face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+            
+            results["faces_detected"] = len(faces)
+            results["face_locations"] = faces.tolist()
+            results["face_encodings"] = f"Detectadas {len(faces)} faces"
+        except Exception as e:
+            results["faces_detected"] = 0
+            results["face_locations"] = []
+            results["face_encodings"] = f"Erro na detecção: {str(e)}"
 
         # 2. OCR Text Extraction
         try:
