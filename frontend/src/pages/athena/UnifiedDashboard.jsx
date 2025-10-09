@@ -5,6 +5,7 @@ import {
   Radio, HardDrive, Shield, Video, Calendar, Bell
 } from 'lucide-react';
 import AthenaLayout from '../../components/AthenaLayout';
+import HybridStatus from '../../components/HybridStatus';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
