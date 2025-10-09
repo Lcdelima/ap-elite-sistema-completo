@@ -384,10 +384,10 @@ const DefensiveInvestigation = () => {
   const renderSources = () => {
     const filteredCategories = Object.entries(categories).filter(([key, cat]) => {
       if (!searchQuery) return true;
-      return cat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-             cat.sources.some(s => 
-               s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-               s.description.toLowerCase().includes(searchQuery.toLowerCase())
+      return cat.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+             cat.sources?.some(s => 
+               s.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+               s.description?.toLowerCase().includes(searchQuery.toLowerCase())
              );
     });
 
