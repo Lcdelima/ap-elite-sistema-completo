@@ -624,12 +624,14 @@ from advanced_integrations import integrations_router
 import sys
 sys.path.append('/app/backend')
 from super_erp import super_router
+from user_management import user_router
 
 # Add all routes to main app
 app.include_router(api_router)
 app.include_router(advanced_router)
 app.include_router(integrations_router)
 app.include_router(super_router)
+app.include_router(user_router)
 
 # Health check
 @app.get("/")
