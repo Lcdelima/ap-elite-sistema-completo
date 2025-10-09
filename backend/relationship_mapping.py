@@ -27,7 +27,11 @@ import os
 
 # Configure Emergent LLM
 EMERGENT_LLM_KEY = os.environ.get('EMERGENT_LLM_KEY', 'sk-emergent-aD33e9977E0D345EfD')
-llm_chat = LlmChat(api_key=EMERGENT_LLM_KEY)
+llm_chat = LlmChat(
+    api_key=EMERGENT_LLM_KEY,
+    session_id="relationship_mapping_session",
+    system_message="You are an AI assistant specialized in criminal network analysis and relationship mapping. Provide strategic insights for law enforcement investigations."
+)
 
 # Router configuration
 relationships_router = APIRouter(prefix="/api/relationships")
