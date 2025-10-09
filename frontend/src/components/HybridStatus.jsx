@@ -117,7 +117,7 @@ const HybridStatus = () => {
                 : 'bg-blue-600 text-white hover:bg-blue-700'
             }`}
           >
-            <Sync className={`w-4 h-4 mr-2 ${syncing || status.sync_running ? 'animate-spin' : ''}`} />
+            <RotateCcw className={`w-4 h-4 mr-2 ${syncing || status.sync_running ? 'animate-spin' : ''}`} />
             {syncing || status.sync_running ? 'Sincronizando...' : 'Sincronizar'}
           </button>
         </div>
