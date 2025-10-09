@@ -628,6 +628,9 @@ from user_management import user_router
 from athena_enhanced_apis import enhanced_router
 from notifications_system import notifications_router
 from reports_generator import reports_router
+from email_integration import email_router
+from storage_integration import storage_router
+from ai_document_analysis import ai_router
 
 # Add all routes to main app
 app.include_router(api_router)
@@ -638,6 +641,9 @@ app.include_router(user_router)
 app.include_router(enhanced_router)
 app.include_router(notifications_router)
 app.include_router(reports_router)
+app.include_router(email_router)
+app.include_router(storage_router)
+app.include_router(ai_router)
 
 # Health check
 @app.get("/")
