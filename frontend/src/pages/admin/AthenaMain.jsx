@@ -224,6 +224,16 @@ const AthenaMain = () => {
       color: 'from-violet-500 to-purple-600',
       badge: 'NOVO',
       badgeColor: 'bg-green-500'
+    },
+    {
+      id: 20,
+      title: 'Análise de Evidências IA',
+      subtitle: 'Relatórios automáticos',
+      icon: FileSearch,
+      path: '/athena/evidence-analysis',
+      color: 'from-pink-500 to-rose-600',
+      badge: 'IA',
+      badgeColor: 'bg-purple-500'
     }
   ];
 
