@@ -1,0 +1,16 @@
+{
+  "analysis_type": "geolocation",
+  "location_info": {
+    "coordinates": {
+      "latitude": -23.5505,
+      "longitude": -46.6333
+    },
+    "address": "An\u00e1lise de localiza\u00e7\u00e3o em desenvolvimento",
+    "nearby_landmarks": [],
+    "area_type": "unknown",
+    "risk_assessment": "medium"
+  },
+  "geo_evidence": [],
+  "confidence": 0.8,
+  "timestamp": "2025-10-09T21:09:13.565361+00:00"
+}

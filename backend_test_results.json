@@ -1,1 +1,310 @@
-null
+[
+  {
+    "test": "Authentication",
+    "success": true,
+    "message": "Successfully authenticated as laura@apelite.com",
+    "timestamp": "2025-10-09T21:09:13.413292",
+    "response_data": null
+  },
+  {
+    "test": "User Creation",
+    "success": true,
+    "message": "Successfully created user: 04996646-e1e7-44e6-a861-727147b2df31",
+    "timestamp": "2025-10-09T21:09:13.433681",
+    "response_data": null
+  },
+  {
+    "test": "Investigation Create Case",
+    "success": true,
+    "message": "Successfully created investigation case: INV-20251009-dcb54958",
+    "timestamp": "2025-10-09T21:09:13.486907",
+    "response_data": null
+  },
+  {
+    "test": "Investigation Evidence Upload",
+    "success": true,
+    "message": "Successfully uploaded evidence: EVD-20251009-392ff050",
+    "timestamp": "2025-10-09T21:09:13.502846",
+    "response_data": null
+  },
+  {
+    "test": "Investigation Case Analysis",
+    "success": true,
+    "message": "Successfully retrieved case analysis with 1 evidence items",
+    "timestamp": "2025-10-09T21:09:13.537980",
+    "response_data": null
+  },
+  {
+    "test": "Investigation Evidence Analysis",
+    "success": false,
+    "message": "Missing evidence or detailed_analysis in response",
+    "timestamp": "2025-10-09T21:09:13.550512",
+    "response_data": {}
+  },
+  {
+    "test": "Investigation OSINT Search - Social Media",
+    "success": true,
+    "message": "Successfully performed social media search for: Jo\u00e3o Silva Santos",
+    "timestamp": "2025-10-09T21:09:13.559820",
+    "response_data": null
+  },
+  {
+    "test": "Investigation OSINT Search - Geolocation",
+    "success": true,
+    "message": "Successfully performed geolocation analysis",
+    "timestamp": "2025-10-09T21:09:13.609863",
+    "response_data": null
+  },
+  {
+    "test": "Investigation OSINT Search - Person Verification",
+    "success": true,
+    "message": "Successfully performed person verification",
+    "timestamp": "2025-10-09T21:09:13.618550",
+    "response_data": null
+  },
+  {
+    "test": "Relationships Create Person",
+    "success": true,
+    "message": "Successfully created person: Carlos Eduardo Silva",
+    "timestamp": "2025-10-09T21:09:13.628777",
+    "response_data": null
+  },
+  {
+    "test": "Relationships Create Relationship",
+    "success": true,
+    "message": "Successfully created criminal relationship",
+    "timestamp": "2025-10-09T21:09:13.636690",
+    "response_data": null
+  },
+  {
+    "test": "Relationships Create Network",
+    "success": true,
+    "message": "Successfully created criminal network: Organiza\u00e7\u00e3o Criminosa Silva",
+    "timestamp": "2025-10-09T21:09:13.689346",
+    "response_data": null
+  },
+  {
+    "test": "Relationships Network Analysis",
+    "success": false,
+    "message": "Failed with status 500",
+    "timestamp": "2025-10-09T21:09:13.972154",
+    "response_data": "{\"detail\":\"404: An\u00e1lise n\u00e3o encontrada\"}"
+  },
+  {
+    "test": "Reports Generate",
+    "success": true,
+    "message": "Successfully initiated report generation, request_id: 1ec93497-62d5-410b-b9d8-1de4a82ae891",
+    "timestamp": "2025-10-09T21:09:13.980951",
+    "response_data": null
+  },
+  {
+    "test": "Reports Templates",
+    "success": true,
+    "message": "Successfully retrieved 4 report templates",
+    "timestamp": "2025-10-09T21:09:14.213818",
+    "response_data": null
+  },
+  {
+    "test": "Reports Status",
+    "success": true,
+    "message": "Successfully retrieved report status: processing",
+    "timestamp": "2025-10-09T21:09:14.220466",
+    "response_data": null
+  },
+  {
+    "test": "Hybrid Status",
+    "success": true,
+    "message": "System status: online, Local records: 0",
+    "timestamp": "2025-10-09T21:09:14.243562",
+    "response_data": null
+  },
+  {
+    "test": "Hybrid Sync",
+    "success": true,
+    "message": "Sync initiated successfully: Sincroniza\u00e7\u00e3o iniciada",
+    "timestamp": "2025-10-09T21:09:14.251030",
+    "response_data": null
+  },
+  {
+    "test": "Hybrid Backups List",
+    "success": true,
+    "message": "Successfully retrieved 1 backup files",
+    "timestamp": "2025-10-09T21:09:14.259787",
+    "response_data": null
+  },
+  {
+    "test": "Hybrid Backup Create",
+    "success": true,
+    "message": "Backup created successfully: 20251009_210914, Size: 61440 bytes",
+    "timestamp": "2025-10-09T21:09:14.311344",
+    "response_data": null
+  },
+  {
+    "test": "ATHENA Processes",
+    "success": true,
+    "message": "Successfully retrieved 0 processes",
+    "timestamp": "2025-10-09T21:09:14.364673",
+    "response_data": null
+  },
+  {
+    "test": "ATHENA Financial Summary",
+    "success": true,
+    "message": "Financial summary retrieved - Net: R$ 0.00, Period: 2025-09-09 to 2025-10-09",
+    "timestamp": "2025-10-09T21:09:14.374518",
+    "response_data": null
+  },
+  {
+    "test": "Defensive Investigation Categories",
+    "success": true,
+    "message": "Successfully retrieved 10 OSINT categories",
+    "timestamp": "2025-10-09T21:09:14.383159",
+    "response_data": null
+  },
+  {
+    "test": "Defensive Investigation Cases",
+    "success": true,
+    "message": "Successfully retrieved 3 investigation cases",
+    "timestamp": "2025-10-09T21:09:14.393284",
+    "response_data": null
+  },
+  {
+    "test": "Defensive Investigation Favorites",
+    "success": true,
+    "message": "Successfully retrieved 0 favorite sources",
+    "timestamp": "2025-10-09T21:09:14.403748",
+    "response_data": null
+  },
+  {
+    "test": "Defensive Investigation Stats",
+    "success": true,
+    "message": "Successfully retrieved stats - Total: 3, Active: 3",
+    "timestamp": "2025-10-09T21:09:14.459875",
+    "response_data": null
+  },
+  {
+    "test": "Defensive Investigation Case Creation",
+    "success": true,
+    "message": "Successfully created investigation case: 4a4f5969-2479-4fc0-b9e5-a02490a5b2f4",
+    "timestamp": "2025-10-09T21:09:14.469410",
+    "response_data": null
+  },
+  {
+    "test": "Analytics Overview",
+    "success": true,
+    "message": "Successfully retrieved analytics overview with all required data",
+    "timestamp": "2025-10-09T21:09:14.489079",
+    "response_data": null
+  },
+  {
+    "test": "Analytics KPIs",
+    "success": true,
+    "message": "Successfully retrieved KPIs with all required metrics",
+    "timestamp": "2025-10-09T21:09:14.538697",
+    "response_data": null
+  },
+  {
+    "test": "Interception Upload",
+    "success": true,
+    "message": "Successfully uploaded file, analysis_id: aa15f735-c876-451b-856f-64f50bef1a96",
+    "timestamp": "2025-10-09T21:09:14.549678",
+    "response_data": null
+  },
+  {
+    "test": "IPED Create Project",
+    "success": true,
+    "message": "Successfully created IPED project: 889c2157-de19-4cdd-80a4-3bd1cb0db552",
+    "timestamp": "2025-10-09T21:09:14.561709",
+    "response_data": null
+  },
+  {
+    "test": "IPED List Projects",
+    "success": true,
+    "message": "Successfully retrieved 7 IPED projects",
+    "timestamp": "2025-10-09T21:09:14.570381",
+    "response_data": null
+  },
+  {
+    "test": "Communications Email",
+    "success": true,
+    "message": "Successfully sent email, message_id: d8b0e1b2-3cfe-490a-b5f0-3dd00c0bc3bb",
+    "timestamp": "2025-10-09T21:09:14.581016",
+    "response_data": null
+  },
+  {
+    "test": "Communications WhatsApp",
+    "success": true,
+    "message": "Successfully sent WhatsApp message, message_id: b6cf9dcd-fe53-4da5-8059-f706d6ee0988",
+    "timestamp": "2025-10-09T21:09:14.591737",
+    "response_data": null
+  },
+  {
+    "test": "Communications Video Room",
+    "success": true,
+    "message": "Successfully created video room: 5CCCBF74",
+    "timestamp": "2025-10-09T21:09:14.600888",
+    "response_data": null
+  },
+  {
+    "test": "Communications Messages",
+    "success": true,
+    "message": "Successfully retrieved 14 messages",
+    "timestamp": "2025-10-09T21:09:14.609054",
+    "response_data": null
+  },
+  {
+    "test": "PDF Report Generation",
+    "success": true,
+    "message": "Successfully generated PDF report: case_report_930acd82-3003-4872-8c23-c08b9ca5e541_5dd42228-eb5b-49ae-97ff-93dd957c2f3d.pdf",
+    "timestamp": "2025-10-09T21:09:14.663821",
+    "response_data": null
+  },
+  {
+    "test": "Email with Report",
+    "success": true,
+    "message": "Successfully queued email to: test@apelite.com",
+    "timestamp": "2025-10-09T21:09:14.678872",
+    "response_data": null
+  },
+  {
+    "test": "Data Export CSV",
+    "success": true,
+    "message": "Successfully exported CSV data (250 bytes)",
+    "timestamp": "2025-10-09T21:09:14.688162",
+    "response_data": null
+  },
+  {
+    "test": "Data Export JSON Cases",
+    "success": true,
+    "message": "Successfully exported JSON cases data (1 cases)",
+    "timestamp": "2025-10-09T21:09:14.695897",
+    "response_data": null
+  },
+  {
+    "test": "Data Export JSON Analytics",
+    "success": true,
+    "message": "Successfully exported analytics JSON data",
+    "timestamp": "2025-10-09T21:09:14.705930",
+    "response_data": null
+  },
+  {
+    "test": "Backup Creation",
+    "success": true,
+    "message": "Successfully created backup: backup_20251009_210914_f88e31ec-869f-445f-b918-985177e817ec.json",
+    "timestamp": "2025-10-09T21:09:14.719130",
+    "response_data": null
+  },
+  {
+    "test": "Audit Logs",
+    "success": true,
+    "message": "Successfully retrieved 12 audit logs",
+    "timestamp": "2025-10-09T21:09:14.728086",
+    "response_data": null
+  },
+  {
+    "test": "Activity Summary",
+    "success": true,
+    "message": "Successfully retrieved activity summary",
+    "timestamp": "2025-10-09T21:09:14.737673",
+    "response_data": null
+  }
+]
