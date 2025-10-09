@@ -345,7 +345,7 @@ const AthenaMain = () => {
                   
                   <div className="mt-4 pt-4 border-t border-white border-opacity-20">
                     <p className="text-white text-opacity-75 text-xs">
-                      Módulo {module.id} de 20
+                      Módulo {module.id} de 21
                     </p>
                   </div>
                 </CardContent>
