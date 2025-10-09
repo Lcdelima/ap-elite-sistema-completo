@@ -256,13 +256,13 @@ async def analyze_patterns_ai(evidence_data: List[Dict]) -> Dict:
         Responda em formato JSON estruturado.
         """
 
-        response = await llm_provider.complete(
-            messages=[{"role": "user", "content": prompt}],
+        response = await llm_chat.achat(
+            messages=[UserMessage(content=prompt)],
             model="gpt-4o",
             max_tokens=2000
         )
 
-        ai_result = json.loads(response.choices[0].message.content)
+        ai_result = json.loads(response.content)
         
         return {
             "analysis_type": "pattern_analysis",
