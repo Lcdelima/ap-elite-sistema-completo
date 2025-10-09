@@ -238,7 +238,7 @@ const CommunicationsEnhanced = () => {
   };
 
   const filteredContacts = contacts.filter(contact =>
-    contact.name.toLowerCase().includes(searchTerm.toLowerCase())
+    contact.name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Chat Window Component (pode ser flutuante)
