@@ -1767,3 +1767,404 @@ async def list_contracts(current_user: dict = Depends(get_current_user)):
     contracts = await db.contracts.find({}, {"_id": 0}).sort("generated_at", -1).to_list(100)
     
     return {"contracts": contracts}
+
+
+# ==================== DEFENSIVE INVESTIGATION AREA ====================
+
+# OSINT Categories based on the document
+OSINT_CATEGORIES = {
+    "monitoramento_geral": {
+        "name": "Monitoramento Geral & Social Media",
+        "sources": [
+            {"name": "Google Alerts", "url": "https://www.google.com.br/alerts", "description": "Monitoramento de palavras-chave"},
+            {"name": "Google Trends BR", "url": "https://trends.google.com.br/trends/?geo=BR", "description": "Tendências de busca"},
+            {"name": "Social Searcher", "url": "https://www.social-searcher.com/", "description": "Busca em redes sociais"},
+            {"name": "TweetDeck", "url": "https://tweetdeck.twitter.com", "description": "Monitoramento Twitter"},
+            {"name": "BuzzSumo", "url": "https://buzzsumo.com/", "description": "Análise de conteúdo"},
+        ]
+    },
+    "governo_br": {
+        "name": "Dados Governamentais Brasil",
+        "sources": [
+            {"name": "Portal Transparência", "url": "https://transparencia.gov.br/", "description": "Transparência do governo federal"},
+            {"name": "Consulta CPF", "url": "https://servicos.receita.fazenda.gov.br/servicos/cpf/consultasituacao/ConsultaPublica.asp", "description": "Situação CPF"},
+            {"name": "Portal e-SIC", "url": "http://www.consultaesic.cgu.gov.br/busca/SitePages/principal.aspx", "description": "Acesso à informação"},
+            {"name": "Cadastro Nacional de Empresas Punidas", "url": "https://www.portaltransparencia.gov.br/sancoes/", "description": "Empresas sancionadas"},
+            {"name": "Viagens Governo", "url": "https://www.portaltransparencia.gov.br/viagens/", "description": "Viagens servidores públicos"},
+        ]
+    },
+    "redes_sociais": {
+        "name": "Redes Sociais",
+        "sources": [
+            {"name": "Facebook", "url": "https://www.facebook.com", "description": "Rede social"},
+            {"name": "Instagram", "url": "https://www.instagram.com", "description": "Rede social"},
+            {"name": "LinkedIn", "url": "https://www.linkedin.com", "description": "Rede profissional"},
+            {"name": "TikTok", "url": "https://www.tiktok.com", "description": "Vídeos curtos"},
+            {"name": "Twitter/X", "url": "https://twitter.com", "description": "Microblog"},
+            {"name": "Telegram Search", "url": "https://telemetr.io/", "description": "Busca no Telegram"},
+        ]
+    },
+    "email_dominio": {
+        "name": "Email & Domínio",
+        "sources": [
+            {"name": "Have I Been Pwned", "url": "https://haveibeenpwned.com/", "description": "Verifica vazamentos"},
+            {"name": "Hunter.io", "url": "https://hunter.io/", "description": "Busca emails"},
+            {"name": "Email Header Analyzer", "url": "https://mxtoolbox.com/EmailHeaders.aspx", "description": "Análise de cabeçalhos"},
+            {"name": "WHOIS Lookup", "url": "https://www.whoisxmlapi.com/", "description": "Informações de domínios"},
+        ]
+    },
+    "vazamentos": {
+        "name": "Dados Vazados & Breaches",
+        "sources": [
+            {"name": "Have I Been Pwned", "url": "https://haveibeenpwned.com/", "description": "Verificação de vazamentos"},
+            {"name": "Dehashed", "url": "https://dehashed.com/", "description": "Busca em vazamentos"},
+            {"name": "IntelX", "url": "https://intelx.io/", "description": "Inteligência de dados"},
+            {"name": "Leak-Lookup", "url": "https://leak-lookup.com/", "description": "Busca em leaks"},
+        ]
+    },
+    "geolocalizacao": {
+        "name": "Geolocalização & Mapas",
+        "sources": [
+            {"name": "Google Maps", "url": "https://www.google.com.br/maps", "description": "Mapas e localização"},
+            {"name": "FlightRadar24", "url": "https://www.flightradar24.com/", "description": "Rastreamento de voos"},
+            {"name": "Marine Traffic", "url": "https://www.marinetraffic.com/", "description": "Rastreamento marítimo"},
+            {"name": "Satellite Imagery", "url": "https://apps.sentinel-hub.com/eo-browser", "description": "Imagens de satélite"},
+        ]
+    },
+    "investigacao_criminal": {
+        "name": "Investigação Criminal",
+        "sources": [
+            {"name": "Antecedentes PF", "url": "https://servicos.dpf.gov.br/antecedentes-criminais/certidao", "description": "Certidão PF"},
+            {"name": "CNJ Justiça Aberta", "url": "https://www.cnj.jus.br/corregedoria/justica_aberta/", "description": "Processos judiciais"},
+            {"name": "BNMP", "url": "https://portalbnmp.cnj.jus.br/", "description": "Mandados de prisão"},
+            {"name": "Protestos SP", "url": "https://protestosp.com.br/", "description": "Consulta protestos"},
+        ]
+    },
+    "empresas": {
+        "name": "Empresas & CNPJ",
+        "sources": [
+            {"name": "Receita Federal CNPJ", "url": "http://servicos.receita.fazenda.gov.br/Servicos/cnpjreva/cnpjreva_solicitacao.asp", "description": "Consulta CNPJ"},
+            {"name": "Escavador", "url": "https://www.escavador.com/", "description": "Busca pessoas e empresas"},
+            {"name": "Consulta Sócio", "url": "http://www.consultasocio.com/", "description": "Sócios de empresas"},
+            {"name": "Casa dos Dados", "url": "https://casadosdados.com.br/", "description": "Dados empresariais"},
+            {"name": "OpenCorporates", "url": "https://opencorporates.com/", "description": "Empresas global"},
+        ]
+    },
+    "tribunais": {
+        "name": "Tribunais & Justiça",
+        "sources": [
+            {"name": "STF", "url": "http://portal.stf.jus.br/", "description": "Supremo Tribunal Federal"},
+            {"name": "STJ", "url": "https://www.stj.jus.br/", "description": "Superior Tribunal de Justiça"},
+            {"name": "TST", "url": "https://www.tst.jus.br/", "description": "Tribunal Superior do Trabalho"},
+            {"name": "TRF1", "url": "https://www.trf1.jus.br/", "description": "Tribunal Regional Federal 1"},
+        ]
+    },
+    "utilidades": {
+        "name": "Utilidades & Ferramentas",
+        "sources": [
+            {"name": "Archive.org", "url": "https://archive.org/", "description": "Arquivo da web"},
+            {"name": "Cached Pages", "url": "https://cachedview.com/", "description": "Páginas em cache"},
+            {"name": "VirusTotal", "url": "https://www.virustotal.com/", "description": "Análise de malware"},
+            {"name": "Maltego", "url": "https://www.maltego.com/", "description": "Análise de relações"},
+        ]
+    }
+}
+
+@super_router.get("/defensive-investigation/categories")
+async def get_osint_categories(current_user: dict = Depends(get_current_user)):
+    """Get all OSINT categories and sources"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    return {"categories": OSINT_CATEGORIES}
+
+
+@super_router.post("/defensive-investigation/case")
+async def create_investigation_case(case_data: dict, current_user: dict = Depends(get_current_user)):
+    """Create a new investigation case"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    case = {
+        "id": str(uuid.uuid4()),
+        "title": case_data.get("title"),
+        "description": case_data.get("description"),
+        "target": case_data.get("target", ""),
+        "type": case_data.get("type", "person"),  # person, company, event
+        "status": "active",
+        "created_by": current_user.get("email"),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "notes": [],
+        "sources_used": [],
+        "findings": []
+    }
+    
+    await db.investigation_cases.insert_one(case)
+    
+    return {"message": "Investigation case created", "case_id": case["id"], "case": case}
+
+
+@super_router.get("/defensive-investigation/cases")
+async def list_investigation_cases(current_user: dict = Depends(get_current_user)):
+    """List all investigation cases"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    cases = await db.investigation_cases.find(
+        {"created_by": current_user.get("email")},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(100)
+    
+    return {"cases": cases}
+
+
+@super_router.get("/defensive-investigation/case/{case_id}")
+async def get_investigation_case(case_id: str, current_user: dict = Depends(get_current_user)):
+    """Get investigation case details"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    case = await db.investigation_cases.find_one({"id": case_id}, {"_id": 0})
+    
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+    
+    return {"case": case}
+
+
+@super_router.put("/defensive-investigation/case/{case_id}")
+async def update_investigation_case(
+    case_id: str,
+    update_data: dict,
+    current_user: dict = Depends(get_current_user)
+):
+    """Update investigation case"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    
+    result = await db.investigation_cases.update_one(
+        {"id": case_id, "created_by": current_user.get("email")},
+        {"$set": update_data}
+    )
+    
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Case not found or no changes made")
+    
+    case = await db.investigation_cases.find_one({"id": case_id}, {"_id": 0})
+    
+    return {"message": "Case updated", "case": case}
+
+
+@super_router.post("/defensive-investigation/case/{case_id}/note")
+async def add_case_note(
+    case_id: str,
+    note_data: dict,
+    current_user: dict = Depends(get_current_user)
+):
+    """Add a note to investigation case"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    note = {
+        "id": str(uuid.uuid4()),
+        "content": note_data.get("content"),
+        "source": note_data.get("source", ""),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "created_by": current_user.get("email")
+    }
+    
+    result = await db.investigation_cases.update_one(
+        {"id": case_id, "created_by": current_user.get("email")},
+        {
+            "$push": {"notes": note},
+            "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}
+        }
+    )
+    
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Case not found")
+    
+    return {"message": "Note added", "note": note}
+
+
+@super_router.post("/defensive-investigation/case/{case_id}/finding")
+async def add_case_finding(
+    case_id: str,
+    finding_data: dict,
+    current_user: dict = Depends(get_current_user)
+):
+    """Add a finding to investigation case"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    finding = {
+        "id": str(uuid.uuid4()),
+        "title": finding_data.get("title"),
+        "description": finding_data.get("description"),
+        "evidence": finding_data.get("evidence", ""),
+        "source_url": finding_data.get("source_url", ""),
+        "category": finding_data.get("category", ""),
+        "relevance": finding_data.get("relevance", "medium"),  # low, medium, high
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "created_by": current_user.get("email")
+    }
+    
+    result = await db.investigation_cases.update_one(
+        {"id": case_id, "created_by": current_user.get("email")},
+        {
+            "$push": {"findings": finding},
+            "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}
+        }
+    )
+    
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Case not found")
+    
+    return {"message": "Finding added", "finding": finding}
+
+
+@super_router.post("/defensive-investigation/case/{case_id}/source-used")
+async def track_source_usage(
+    case_id: str,
+    source_data: dict,
+    current_user: dict = Depends(get_current_user)
+):
+    """Track OSINT source usage in case"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    source_usage = {
+        "source_name": source_data.get("source_name"),
+        "source_url": source_data.get("source_url"),
+        "category": source_data.get("category"),
+        "used_at": datetime.now(timezone.utc).isoformat(),
+        "notes": source_data.get("notes", "")
+    }
+    
+    result = await db.investigation_cases.update_one(
+        {"id": case_id, "created_by": current_user.get("email")},
+        {
+            "$push": {"sources_used": source_usage},
+            "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}
+        }
+    )
+    
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Case not found")
+    
+    return {"message": "Source usage tracked"}
+
+
+@super_router.delete("/defensive-investigation/case/{case_id}")
+async def delete_investigation_case(case_id: str, current_user: dict = Depends(get_current_user)):
+    """Delete investigation case"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    result = await db.investigation_cases.delete_one({
+        "id": case_id,
+        "created_by": current_user.get("email")
+    })
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Case not found")
+    
+    return {"message": "Case deleted successfully"}
+
+
+@super_router.get("/defensive-investigation/favorites")
+async def get_favorite_sources(current_user: dict = Depends(get_current_user)):
+    """Get user's favorite OSINT sources"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    user_prefs = await db.user_preferences.find_one(
+        {"user_email": current_user.get("email")},
+        {"_id": 0}
+    )
+    
+    favorites = user_prefs.get("favorite_osint_sources", []) if user_prefs else []
+    
+    return {"favorites": favorites}
+
+
+@super_router.post("/defensive-investigation/favorites/add")
+async def add_favorite_source(source_data: dict, current_user: dict = Depends(get_current_user)):
+    """Add source to favorites"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    favorite = {
+        "name": source_data.get("name"),
+        "url": source_data.get("url"),
+        "category": source_data.get("category"),
+        "description": source_data.get("description", ""),
+        "added_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.user_preferences.update_one(
+        {"user_email": current_user.get("email")},
+        {
+            "$push": {"favorite_osint_sources": favorite},
+            "$setOnInsert": {
+                "user_email": current_user.get("email"),
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+        },
+        upsert=True
+    )
+    
+    return {"message": "Source added to favorites", "favorite": favorite}
+
+
+@super_router.delete("/defensive-investigation/favorites/remove")
+async def remove_favorite_source(source_url: str, current_user: dict = Depends(get_current_user)):
+    """Remove source from favorites"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    await db.user_preferences.update_one(
+        {"user_email": current_user.get("email")},
+        {"$pull": {"favorite_osint_sources": {"url": source_url}}}
+    )
+    
+    return {"message": "Source removed from favorites"}
+
+
+@super_router.get("/defensive-investigation/stats")
+async def get_investigation_stats(current_user: dict = Depends(get_current_user)):
+    """Get investigation statistics"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    # Count cases by status
+    total_cases = await db.investigation_cases.count_documents({
+        "created_by": current_user.get("email")
+    })
+    
+    active_cases = await db.investigation_cases.count_documents({
+        "created_by": current_user.get("email"),
+        "status": "active"
+    })
+    
+    completed_cases = await db.investigation_cases.count_documents({
+        "created_by": current_user.get("email"),
+        "status": "completed"
+    })
+    
+    # Get recent cases
+    recent_cases = await db.investigation_cases.find(
+        {"created_by": current_user.get("email")},
+        {"_id": 0, "id": 1, "title": 1, "created_at": 1, "status": 1}
+    ).sort("created_at", -1).limit(5).to_list(5)
+    
+    return {
+        "total_cases": total_cases,
+        "active_cases": active_cases,
+        "completed_cases": completed_cases,
+        "recent_cases": recent_cases,
+        "total_categories": len(OSINT_CATEGORIES)
+    }
