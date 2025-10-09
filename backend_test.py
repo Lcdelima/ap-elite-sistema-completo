@@ -1016,6 +1016,559 @@ class BackendTester:
             self.log_result("Hybrid Backup Create", False, f"Exception: {str(e)}")
             return False
 
+    # ==================== ADVANCED INVESTIGATION SYSTEM TESTS ====================
+    
+    async def test_investigation_create_case(self):
+        """Test POST /api/investigation/cases - Create investigation case"""
+        try:
+            case_data = {
+                "title": "Investigação de Fraude Financeira",
+                "description": "Caso de investigação envolvendo transações suspeitas e documentos falsificados",
+                "status": "active",
+                "priority": "high"
+            }
+            
+            headers = self.get_headers()
+            async with self.session.post(f"{BASE_URL}/investigation/cases", json=case_data, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["message", "case"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Investigation Create Case", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    case = data.get("case", {})
+                    case_required_keys = ["id", "case_number", "title", "status", "priority"]
+                    case_missing = [key for key in case_required_keys if key not in case]
+                    
+                    if case_missing:
+                        self.log_result("Investigation Create Case", False, f"Missing case keys: {case_missing}", data)
+                        return False
+                    
+                    self.log_result("Investigation Create Case", True, f"Successfully created investigation case: {case.get('case_number')}")
+                    return case.get("id")
+                else:
+                    error_text = await response.text()
+                    self.log_result("Investigation Create Case", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Investigation Create Case", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_investigation_evidence_upload(self):
+        """Test POST /api/investigation/evidence/upload - Upload evidence"""
+        try:
+            # Create test evidence file
+            test_content = b"Este e um documento de teste para analise forense. Contem informacoes importantes sobre o caso de investigacao criminal."
+            
+            # Prepare form data
+            data = aiohttp.FormData()
+            data.add_field('case_id', 'test-case-investigation-123')
+            data.add_field('evidence_name', 'Documento Suspeito - Teste')
+            data.add_field('evidence_type', 'document')
+            data.add_field('file', test_content, filename='documento_suspeito.txt', content_type='text/plain')
+            
+            headers = {}
+            if self.auth_token:
+                headers["Authorization"] = f"Bearer {self.auth_token}"
+            
+            async with self.session.post(f"{BASE_URL}/investigation/evidence/upload", data=data, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["message", "evidence", "analysis_status"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Investigation Evidence Upload", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    evidence = data.get("evidence", {})
+                    evidence_required_keys = ["id", "evidence_number", "name", "type", "hash_value"]
+                    evidence_missing = [key for key in evidence_required_keys if key not in evidence]
+                    
+                    if evidence_missing:
+                        self.log_result("Investigation Evidence Upload", False, f"Missing evidence keys: {evidence_missing}", data)
+                        return False
+                    
+                    if data.get("analysis_status") != "scheduled":
+                        self.log_result("Investigation Evidence Upload", False, f"Expected analysis_status 'scheduled', got '{data.get('analysis_status')}'", data)
+                        return False
+                    
+                    self.log_result("Investigation Evidence Upload", True, f"Successfully uploaded evidence: {evidence.get('evidence_number')}")
+                    return evidence.get("id")
+                else:
+                    error_text = await response.text()
+                    self.log_result("Investigation Evidence Upload", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Investigation Evidence Upload", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_investigation_case_analysis(self):
+        """Test GET /api/investigation/cases/{case_id}/analysis - Get case analysis"""
+        case_id = "test-case-investigation-123"
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/investigation/cases/{case_id}/analysis", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["case_id", "evidence_count", "evidence", "pattern_analysis"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Investigation Case Analysis", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    if data.get("case_id") != case_id:
+                        self.log_result("Investigation Case Analysis", False, f"Case ID mismatch: expected {case_id}, got {data.get('case_id')}", data)
+                        return False
+                    
+                    pattern_analysis = data.get("pattern_analysis", {})
+                    if "analysis_type" not in pattern_analysis:
+                        self.log_result("Investigation Case Analysis", False, "Missing analysis_type in pattern_analysis", data)
+                        return False
+                    
+                    self.log_result("Investigation Case Analysis", True, f"Successfully retrieved case analysis with {data.get('evidence_count')} evidence items")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Investigation Case Analysis", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Investigation Case Analysis", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_investigation_evidence_analysis(self):
+        """Test GET /api/investigation/evidence/{evidence_id} - Get evidence analysis"""
+        evidence_id = "test-evidence-123"
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/investigation/evidence/{evidence_id}", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Should return evidence and/or detailed_analysis
+                    if "evidence" not in data and "detailed_analysis" not in data:
+                        self.log_result("Investigation Evidence Analysis", False, "Missing evidence or detailed_analysis in response", data)
+                        return False
+                    
+                    self.log_result("Investigation Evidence Analysis", True, "Successfully retrieved evidence analysis")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Investigation Evidence Analysis", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Investigation Evidence Analysis", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_investigation_osint_search(self):
+        """Test POST /api/investigation/osint/search - OSINT search"""
+        try:
+            # Test social media search
+            search_data = {
+                "query": "João Silva Santos",
+                "type": "social_media",
+                "platforms": ["facebook", "instagram", "twitter"]
+            }
+            
+            headers = self.get_headers()
+            async with self.session.post(f"{BASE_URL}/investigation/osint/search", json=search_data, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["search_type", "query", "results"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Investigation OSINT Search - Social Media", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    if data.get("search_type") != "social_media":
+                        self.log_result("Investigation OSINT Search - Social Media", False, f"Expected search_type 'social_media', got '{data.get('search_type')}'", data)
+                        return False
+                    
+                    self.log_result("Investigation OSINT Search - Social Media", True, f"Successfully performed social media search for: {data.get('query')}")
+                else:
+                    error_text = await response.text()
+                    self.log_result("Investigation OSINT Search - Social Media", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Investigation OSINT Search - Social Media", False, f"Exception: {str(e)}")
+            return False
+        
+        # Test geolocation search
+        try:
+            search_data = {
+                "query": "Localização suspeita",
+                "type": "geolocation",
+                "coordinates": [-23.5505, -46.6333]  # São Paulo coordinates
+            }
+            
+            async with self.session.post(f"{BASE_URL}/investigation/osint/search", json=search_data, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    if data.get("analysis_type") != "geolocation":
+                        self.log_result("Investigation OSINT Search - Geolocation", False, f"Expected analysis_type 'geolocation', got '{data.get('analysis_type')}'", data)
+                        return False
+                    
+                    location_info = data.get("location_info", {})
+                    if "coordinates" not in location_info:
+                        self.log_result("Investigation OSINT Search - Geolocation", False, "Missing coordinates in location_info", data)
+                        return False
+                    
+                    self.log_result("Investigation OSINT Search - Geolocation", True, "Successfully performed geolocation analysis")
+                else:
+                    error_text = await response.text()
+                    self.log_result("Investigation OSINT Search - Geolocation", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Investigation OSINT Search - Geolocation", False, f"Exception: {str(e)}")
+            return False
+        
+        # Test person verification
+        try:
+            search_data = {
+                "query": "Verificação de pessoa",
+                "type": "person_verification",
+                "person_data": {
+                    "name": "Maria Silva Santos",
+                    "cpf": "123.456.789-00",
+                    "phone": "+5511999887766"
+                }
+            }
+            
+            async with self.session.post(f"{BASE_URL}/investigation/osint/search", json=search_data, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    if data.get("verification_type") != "personal_data":
+                        self.log_result("Investigation OSINT Search - Person Verification", False, f"Expected verification_type 'personal_data', got '{data.get('verification_type')}'", data)
+                        return False
+                    
+                    results = data.get("results", {})
+                    verification_keys = ["name_verification", "cpf_verification", "phone_verification"]
+                    verification_missing = [key for key in verification_keys if key not in results]
+                    
+                    if verification_missing:
+                        self.log_result("Investigation OSINT Search - Person Verification", False, f"Missing verification keys: {verification_missing}", data)
+                        return False
+                    
+                    self.log_result("Investigation OSINT Search - Person Verification", True, "Successfully performed person verification")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Investigation OSINT Search - Person Verification", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Investigation OSINT Search - Person Verification", False, f"Exception: {str(e)}")
+            return False
+    
+    # ==================== RELATIONSHIP MAPPING TESTS ====================
+    
+    async def test_relationships_create_person(self):
+        """Test POST /api/relationships/persons - Create person"""
+        try:
+            person_data = {
+                "name": "Carlos Eduardo Silva",
+                "cpf": "987.654.321-00",
+                "phone": "+5511888777666",
+                "email": "carlos.silva@email.com",
+                "occupation": "Empresário",
+                "criminal_record": True,
+                "risk_level": "high",
+                "aliases": ["Carlinhos", "CEO Silva"]
+            }
+            
+            headers = self.get_headers()
+            async with self.session.post(f"{BASE_URL}/relationships/persons", json=person_data, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["message", "person"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Relationships Create Person", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    person = data.get("person", {})
+                    person_required_keys = ["id", "name", "risk_level"]
+                    person_missing = [key for key in person_required_keys if key not in person]
+                    
+                    if person_missing:
+                        self.log_result("Relationships Create Person", False, f"Missing person keys: {person_missing}", data)
+                        return False
+                    
+                    self.log_result("Relationships Create Person", True, f"Successfully created person: {person.get('name')}")
+                    return person.get("id")
+                else:
+                    error_text = await response.text()
+                    self.log_result("Relationships Create Person", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Relationships Create Person", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_relationships_create_relationship(self):
+        """Test POST /api/relationships/relationships - Create relationship"""
+        try:
+            relationship_data = {
+                "person1_id": "person-123",
+                "person2_id": "person-456",
+                "relationship_type": "criminal",
+                "strength": 0.8,
+                "frequency": 15,
+                "first_contact": "2024-01-15",
+                "last_contact": "2024-12-20",
+                "evidence_sources": ["interceptacao_telefonica", "vigilancia"]
+            }
+            
+            headers = self.get_headers()
+            async with self.session.post(f"{BASE_URL}/relationships/relationships", json=relationship_data, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["message", "relationship"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Relationships Create Relationship", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    relationship = data.get("relationship", {})
+                    rel_required_keys = ["id", "person1_id", "person2_id", "relationship_type", "strength"]
+                    rel_missing = [key for key in rel_required_keys if key not in relationship]
+                    
+                    if rel_missing:
+                        self.log_result("Relationships Create Relationship", False, f"Missing relationship keys: {rel_missing}", data)
+                        return False
+                    
+                    self.log_result("Relationships Create Relationship", True, f"Successfully created {relationship.get('relationship_type')} relationship")
+                    return relationship.get("id")
+                else:
+                    error_text = await response.text()
+                    self.log_result("Relationships Create Relationship", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Relationships Create Relationship", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_relationships_create_network(self):
+        """Test POST /api/relationships/networks - Create criminal network"""
+        try:
+            network_data = {
+                "name": "Organização Criminosa Silva",
+                "description": "Rede especializada em lavagem de dinheiro e fraudes financeiras",
+                "network_type": "organized_crime",
+                "status": "under_investigation",
+                "members": ["person-123", "person-456", "person-789"],
+                "hierarchy": {
+                    "leader": "person-123",
+                    "lieutenants": ["person-456"],
+                    "operatives": ["person-789"]
+                }
+            }
+            
+            headers = self.get_headers()
+            async with self.session.post(f"{BASE_URL}/relationships/networks", json=network_data, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["message", "network"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Relationships Create Network", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    network = data.get("network", {})
+                    network_required_keys = ["id", "name", "network_type", "status", "members"]
+                    network_missing = [key for key in network_required_keys if key not in network]
+                    
+                    if network_missing:
+                        self.log_result("Relationships Create Network", False, f"Missing network keys: {network_missing}", data)
+                        return False
+                    
+                    self.log_result("Relationships Create Network", True, f"Successfully created criminal network: {network.get('name')}")
+                    return network.get("id")
+                else:
+                    error_text = await response.text()
+                    self.log_result("Relationships Create Network", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Relationships Create Network", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_relationships_network_analysis(self):
+        """Test GET /api/relationships/networks/{network_id}/analysis - Network analysis"""
+        network_id = "test-network-123"
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/relationships/networks/{network_id}/analysis", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["analysis", "visualization_available"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Relationships Network Analysis", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    analysis = data.get("analysis", {})
+                    analysis_required_keys = ["network_id", "centrality_measures", "community_detection", "key_players", "risk_assessment"]
+                    analysis_missing = [key for key in analysis_required_keys if key not in analysis]
+                    
+                    if analysis_missing:
+                        self.log_result("Relationships Network Analysis", False, f"Missing analysis keys: {analysis_missing}", data)
+                        return False
+                    
+                    self.log_result("Relationships Network Analysis", True, f"Successfully retrieved network analysis, visualization available: {data.get('visualization_available')}")
+                    return True
+                elif response.status == 404:
+                    self.log_result("Relationships Network Analysis", True, "Network analysis not found (expected for test network)")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Relationships Network Analysis", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Relationships Network Analysis", False, f"Exception: {str(e)}")
+            return False
+    
+    # ==================== AUTOMATED REPORTS TESTS ====================
+    
+    async def test_reports_generate(self):
+        """Test POST /api/reports/generate - Generate report"""
+        try:
+            report_request = {
+                "template_id": "investigation",
+                "case_id": "test-case-report-123",
+                "title": "Relatório de Investigação Criminal - Teste",
+                "parameters": {
+                    "include_evidence": True,
+                    "include_network": True
+                },
+                "include_charts": True,
+                "include_evidence": True,
+                "format": "pdf"
+            }
+            
+            headers = self.get_headers()
+            async with self.session.post(f"{BASE_URL}/reports/generate", json=report_request, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["message", "request_id", "estimated_time"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Reports Generate", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    request_id = data.get("request_id")
+                    if not request_id:
+                        self.log_result("Reports Generate", False, "Missing request_id in response", data)
+                        return False
+                    
+                    self.log_result("Reports Generate", True, f"Successfully initiated report generation, request_id: {request_id}")
+                    return request_id
+                else:
+                    error_text = await response.text()
+                    self.log_result("Reports Generate", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Reports Generate", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_reports_templates(self):
+        """Test GET /api/reports/templates - List report templates"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/reports/templates", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    if "templates" not in data:
+                        self.log_result("Reports Templates", False, "Missing 'templates' key in response", data)
+                        return False
+                    
+                    templates = data.get("templates", [])
+                    if not isinstance(templates, list):
+                        self.log_result("Reports Templates", False, "Templates should be a list", data)
+                        return False
+                    
+                    # Check for expected templates
+                    expected_templates = ["investigation", "forensic", "osint", "network"]
+                    found_templates = [t.get("id") for t in templates]
+                    
+                    missing_templates = [t for t in expected_templates if t not in found_templates]
+                    if missing_templates:
+                        self.log_result("Reports Templates", False, f"Missing expected templates: {missing_templates}", data)
+                        return False
+                    
+                    self.log_result("Reports Templates", True, f"Successfully retrieved {len(templates)} report templates")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Reports Templates", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Reports Templates", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_reports_status(self):
+        """Test GET /api/reports/status/{request_id} - Check report status"""
+        request_id = "test-request-123"
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/reports/status/{request_id}", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Should have status field
+                    if "status" not in data:
+                        self.log_result("Reports Status", False, "Missing 'status' key in response", data)
+                        return False
+                    
+                    status = data.get("status")
+                    if status not in ["processing", "completed", "failed"]:
+                        self.log_result("Reports Status", False, f"Invalid status value: {status}", data)
+                        return False
+                    
+                    if status == "completed":
+                        # Should have report and download_url
+                        if "report" not in data or "download_url" not in data:
+                            self.log_result("Reports Status", False, "Missing report or download_url for completed status", data)
+                            return False
+                    
+                    self.log_result("Reports Status", True, f"Successfully retrieved report status: {status}")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Reports Status", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Reports Status", False, f"Exception: {str(e)}")
+            return False
+
     # ==================== ATHENA SYSTEM TESTS ====================
     
     async def test_athena_processes(self):
