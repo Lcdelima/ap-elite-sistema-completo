@@ -166,7 +166,7 @@ const ClientsEnhanced = () => {
   };
 
   const getFileIcon = (filename) => {
-    const ext = filename.split('.').pop().toLowerCase();
+    const ext = filename?.split('.').pop()?.toLowerCase() || '';
     if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)) return <Image className="h-5 w-5 text-blue-400" />;
     if (['mp3', 'wav', 'ogg', 'm4a'].includes(ext)) return <FileAudio className="h-5 w-5 text-green-400" />;
     if (['mp4', 'avi', 'mov', 'wmv'].includes(ext)) return <Video className="h-5 w-5 text-purple-400" />;
