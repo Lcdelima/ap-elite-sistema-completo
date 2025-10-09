@@ -213,6 +213,16 @@ const AthenaMain = () => {
       color: 'from-cyan-500 to-blue-600',
       badge: 'IA',
       badgeColor: 'bg-purple-500'
+    },
+    {
+      id: 19,
+      title: 'Gerador de Contratos',
+      subtitle: 'Contratos automáticos',
+      icon: FileText,
+      path: '/athena/contracts',
+      color: 'from-violet-500 to-purple-600',
+      badge: 'NOVO',
+      badgeColor: 'bg-green-500'
     }
   ];
 
