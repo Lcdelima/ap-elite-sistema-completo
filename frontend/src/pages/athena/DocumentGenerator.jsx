@@ -51,7 +51,28 @@ const DocumentGenerator = () => {
     compromitenteCPF: '',
     compromitenteNome: '',
     localData: '',
-    dataAssinatura: new Date().toISOString().split('T')[0]
+    dataAssinatura: new Date().toISOString().split('T')[0],
+    
+    // Atas de Reunião
+    dataReuniao: new Date().toISOString().split('T')[0],
+    horarioReuniao: '14:00',
+    localReuniao: '',
+    modalidade: 'presencial',
+    projetoCaso: '',
+    participantes: '',
+    objetivoReuniao: '',
+    assuntosDiscutidos: '',
+    decisao1: '',
+    responsavel1: '',
+    prazo1: '',
+    decisao2: '',
+    responsavel2: '',
+    prazo2: '',
+    decisao3: '',
+    responsavel3: '',
+    prazo3: '',
+    evidenciasDocumentos: '',
+    documentosAnexos: ''
   });
 
   const documentTypes = [
