@@ -254,7 +254,7 @@ const AthenaMain = () => {
                 </div>
               </div>
               <p className="text-white text-lg">
-                19 Módulos Integrados | Segurança E2E | IA Preditiva
+                20 Módulos Integrados | Segurança E2E | IA Preditiva
               </p>
             </div>
             
