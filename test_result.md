@@ -260,6 +260,18 @@ Implementar sistema ERP completo para AP Elite com funcionalidades avançadas:
         agent: "testing"
         comment: "✅ TESTED: All 8 advanced integration APIs working perfectly - PDF Report Generation, Email with Attachments, Data Export (CSV/JSON), Backup System, Audit Logs with filtering and activity summary. All APIs properly authenticated and returning expected responses."
 
+  - task: "ATHENA Defensive Investigation APIs"
+    implemented: true
+    working: true
+    file: "/app/backend/super_erp_part3.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: All 5 Defensive Investigation APIs working correctly after super_erp_part3.py import fix. GET /api/athena/defensive-investigation/categories returns 10 OSINT categories. GET /api/athena/defensive-investigation/cases returns investigation cases list. GET /api/athena/defensive-investigation/favorites returns user favorite sources. GET /api/athena/defensive-investigation/stats returns comprehensive statistics (total, active, completed cases). POST /api/athena/defensive-investigation/case successfully creates new investigation cases. Authentication with laura@apelite.com/laura2024 working properly. All endpoints return 200 status with proper JSON responses. Fixed ObjectId serialization issue in case creation endpoint."
+
 ## frontend:
   - task: "Chart Components"
     implemented: true
