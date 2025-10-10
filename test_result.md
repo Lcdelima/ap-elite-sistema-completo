@@ -310,6 +310,9 @@ Implementar sistema ERP completo para AP Elite com funcionalidades avançadas:
       - working: true
         agent: "testing"
         comment: "✅ TESTED: POST /api/investigation/osint/search working perfectly for all 3 search types. Social media search (facebook, instagram, twitter platforms) returns structured results with metadata. Geolocation analysis processes coordinates and provides location intelligence with risk assessment. Person verification validates CPF, phone, and personal data with comprehensive verification results and recommendations. All OSINT searches return proper JSON structures with confidence scores and timestamps. Advanced intelligence gathering capabilities fully operational."
+      - working: true
+        agent: "testing"
+        comment: "✅ RE-TESTED: OSINT Advanced Search fully functional. Social media search for 'João Silva Santos' returns structured results with search_type, query, and results fields. Geolocation analysis processes coordinates [-23.5505, -46.6333] and provides location intelligence with analysis_type and location_info. Person verification validates personal data (name, CPF, phone) with comprehensive verification results and recommendations. All 3 OSINT search types working correctly with proper authentication and JSON response structures."
 
   - task: "Sistema de Mapeamento de Relacionamentos"
     implemented: true
