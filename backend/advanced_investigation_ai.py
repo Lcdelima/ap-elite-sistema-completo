@@ -21,7 +21,7 @@ import pytesseract
 from PIL import Image
 import hashlib
 import exifread
-import magic
+# import magic  # Commented out temporarily
 import requests
 from urllib.parse import urlparse
 
