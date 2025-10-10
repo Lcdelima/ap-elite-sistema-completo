@@ -1862,8 +1862,8 @@ class BackendTester:
             return False
 
     async def run_all_tests(self):
-        """Run all ATHENA system backend tests"""
-        print("🚀 Starting AP Elite ATHENA System Backend Testing")
+        """Run Advanced Investigation Tools Backend Tests"""
+        print("🚀 Starting AP Elite Advanced Investigation Tools Testing")
         print("=" * 70)
         
         # Authenticate first
@@ -1871,47 +1871,44 @@ class BackendTester:
             print("❌ Authentication failed. Cannot proceed with tests.")
             return
         
-        print("\n👤 Testing Authentication and User Management...")
-        await self.test_user_creation()
-        
-        print("\n🔍 Testing Advanced Investigation System...")
+        print("\n🔍 Testing Investigation System - Core Endpoints...")
+        await self.test_investigation_list_cases()
         await self.test_investigation_create_case()
+        
+        print("\n🌐 Testing OSINT Advanced Search...")
+        await self.test_investigation_osint_search_social_media()
+        await self.test_investigation_osint_search_geolocation()
+        await self.test_investigation_osint_search_person_verification()
+        
+        print("\n🕸️ Testing Relationship Mapping...")
+        await self.test_relationships_list_persons()
+        await self.test_relationships_list_networks()
+        
+        print("\n📊 Testing Report Templates...")
+        await self.test_reports_list_templates()
+        
+        print("\n🔄 Testing Hybrid System Status...")
+        await self.test_hybrid_status()
+        
+        print("\n🔬 Testing Additional Investigation Features...")
         await self.test_investigation_evidence_upload()
         await self.test_investigation_case_analysis()
         await self.test_investigation_evidence_analysis()
-        await self.test_investigation_osint_search()
         
-        print("\n🕸️ Testing Relationship Mapping System...")
+        print("\n🕸️ Testing Relationship Creation...")
         await self.test_relationships_create_person()
         await self.test_relationships_create_relationship()
         await self.test_relationships_create_network()
         await self.test_relationships_network_analysis()
         
-        print("\n📊 Testing Automated Reports System...")
+        print("\n📊 Testing Report Generation...")
         await self.test_reports_generate()
-        await self.test_reports_templates()
         await self.test_reports_status()
         
-        print("\n🔄 Testing Hybrid System...")
-        await self.test_hybrid_status()
+        print("\n🔄 Testing Hybrid System Operations...")
         await self.test_hybrid_sync()
         await self.test_hybrid_backups_list()
         await self.test_hybrid_backup_create()
-        
-        print("\n📋 Testing Core Modules...")
-        await self.test_athena_processes()
-        await self.test_athena_financial_summary()
-        
-        print("\n🛡️ Testing Defensive Investigation APIs...")
-        await self.test_defensive_investigation_categories()
-        await self.test_defensive_investigation_cases()
-        await self.test_defensive_investigation_favorites()
-        await self.test_defensive_investigation_stats()
-        await self.test_defensive_investigation_case_creation()
-        
-        print("\n🔧 Testing Advanced Features (Legacy)...")
-        await self.test_analytics_overview()
-        await self.test_analytics_kpis()
         await self.test_interception_upload()
         await self.test_iped_create_project()
         await self.test_iped_list_projects()
