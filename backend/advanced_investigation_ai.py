@@ -407,8 +407,9 @@ async def extract_metadata_advanced(file_path: str) -> Dict:
         
         # File type detection
         try:
-            mime_type = magic.from_file(str(file_path), mime=True)
-            metadata["mime_type"] = mime_type
+            # mime_type = magic.from_file(str(file_path), mime=True)
+            # metadata["mime_type"] = mime_type
+            metadata["mime_type"] = "application/octet-stream"  # Default mime type
         except:
             metadata["mime_type"] = "unknown"
         
