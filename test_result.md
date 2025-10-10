@@ -295,6 +295,9 @@ Implementar sistema ERP completo para AP Elite com funcionalidades avançadas:
       - working: true
         agent: "testing"
         comment: "✅ TESTED: All 4 AI analysis endpoints working correctly. POST /api/investigation/cases successfully creates investigation cases with proper case numbering and metadata. POST /api/investigation/evidence/upload handles file uploads with automatic AI analysis scheduling and hash validation. GET /api/investigation/cases/{case_id}/analysis provides comprehensive case analysis with pattern detection using AI. GET /api/investigation/evidence/{evidence_id} returns evidence analysis (minor response structure refinement needed). AI-powered document analysis, image recognition with OCR, and pattern detection all functional. Authentication with laura@apelite.com/laura2024 working properly."
+      - working: true
+        agent: "testing"
+        comment: "✅ RE-TESTED: Advanced Investigation System fully operational. GET /api/investigation/cases successfully lists investigation cases (1 case found). POST /api/investigation/cases creates new cases with proper case numbering (INV-20251010-92e61e01). Evidence upload working with automatic AI analysis scheduling. Case analysis endpoint provides comprehensive analysis with evidence count and pattern detection. Minor: Evidence analysis endpoint needs response structure refinement but core functionality working. All endpoints authenticated and returning proper JSON responses."
 
   - task: "Sistema de Investigação Avançada - OSINT Avançado"
     implemented: true
