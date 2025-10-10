@@ -1018,6 +1018,34 @@ class BackendTester:
 
     # ==================== ADVANCED INVESTIGATION SYSTEM TESTS ====================
     
+    async def test_investigation_list_cases(self):
+        """Test GET /api/investigation/cases - List investigation cases"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/investigation/cases", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    if "cases" not in data:
+                        self.log_result("Investigation List Cases", False, "Missing 'cases' key in response", data)
+                        return False
+                    
+                    cases = data.get("cases", [])
+                    if not isinstance(cases, list):
+                        self.log_result("Investigation List Cases", False, "Cases should be a list", data)
+                        return False
+                    
+                    self.log_result("Investigation List Cases", True, f"Successfully retrieved {len(cases)} investigation cases")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Investigation List Cases", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Investigation List Cases", False, f"Exception: {str(e)}")
+            return False
+    
     async def test_investigation_create_case(self):
         """Test POST /api/investigation/cases - Create investigation case"""
         try:
