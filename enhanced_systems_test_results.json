@@ -1,0 +1,38 @@
+[
+  {
+    "test": "Authentication",
+    "success": true,
+    "message": "Successfully authenticated as laura@apelite.com",
+    "timestamp": "2025-10-14T19:55:04.084793"
+  },
+  {
+    "test": "Document Library Categories",
+    "success": true,
+    "message": "Retrieved 10 categories",
+    "timestamp": "2025-10-14T19:55:04.134314"
+  },
+  {
+    "test": "OSINT Categories",
+    "success": true,
+    "message": "Retrieved 10 categories with 33 sources",
+    "timestamp": "2025-10-14T19:55:04.147741"
+  },
+  {
+    "test": "OSINT Query",
+    "success": true,
+    "message": "Successfully executed query for 'Jo\u00e3o Silva'",
+    "timestamp": "2025-10-14T19:55:54.765385"
+  },
+  {
+    "test": "Template List",
+    "success": true,
+    "message": "Retrieved 6 templates",
+    "timestamp": "2025-10-14T19:55:54.776736"
+  },
+  {
+    "test": "Template Details",
+    "success": true,
+    "message": "Retrieved template 'Roteiro de Audi\u00eancia de Instru\u00e7\u00e3o e Julgamento (AIJ)'",
+    "timestamp": "2025-10-14T19:55:54.826248"
+  }
+]
