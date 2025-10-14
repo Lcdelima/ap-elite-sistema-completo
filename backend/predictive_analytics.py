@@ -74,7 +74,10 @@ Forneça:
     }
     
     # Salvar predição
-    await db.predictions.insert_one(prediction)
+    result = await db.predictions.insert_one(prediction.copy())
+    
+    # Add prediction ID to response
+    prediction['prediction_id'] = str(result.inserted_id)
     
     return prediction
 
