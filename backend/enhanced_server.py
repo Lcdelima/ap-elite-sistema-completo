@@ -687,6 +687,7 @@ app.include_router(fees_router)
 app.include_router(chatbot_router)
 app.include_router(social_router)
 app.include_router(collaboration_router)
+app.include_router(search_router)
 
 # Health check
 @app.get("/")
