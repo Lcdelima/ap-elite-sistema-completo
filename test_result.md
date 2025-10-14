@@ -491,11 +491,13 @@ Implementar sistema ERP completo para AP Elite com funcionalidades avançadas:
 
 ## test_plan:
   current_focus:
-    - "Sistema de Investigação Avançada - Análise com IA"
-    - "Sistema de Investigação Avançada - OSINT Avançado"
-    - "Sistema de Mapeamento de Relacionamentos"
-    - "Sistema de Relatórios Automatizados"
-    - "Sistema Híbrido AP Elite - Online/Offline Sync"
+    - "AI Orchestrator - Multi-Provider System"
+    - "Document Library System"
+    - "OSINT Enhanced System"
+    - "Template Generator System"
+    - "Document Library Frontend"
+    - "OSINT Dashboard Frontend"
+    - "Template Generator Frontend"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
