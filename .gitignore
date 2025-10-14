@@ -118,3 +118,7 @@ investigation_materials/02.zip
 temp_analysis/01.zip
 temp_analysis/02.zip
 temp_analysis/03.zip
+-e 
+# Environment files
+*.env
+*.env.*
