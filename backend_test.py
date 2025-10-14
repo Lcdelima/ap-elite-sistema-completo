@@ -1165,6 +1165,665 @@ class BackendTester:
             self.log_result("Template Generated List", False, f"Exception: {str(e)}")
             return False
 
+    # ==================== NEW 9 MODULES TESTS ====================
+    
+    async def test_ocr_process(self):
+        """Test POST /api/ocr/process - OCR Processing"""
+        try:
+            # Create a test image file
+            test_content = b"fake image content for OCR testing"
+            
+            # Prepare form data
+            data = aiohttp.FormData()
+            data.add_field('file', test_content, filename='test_document.jpg', content_type='image/jpeg')
+            data.add_field('provider', 'google')
+            
+            headers = {}
+            if self.auth_token:
+                headers["Authorization"] = f"Bearer {self.auth_token}"
+            
+            async with self.session.post(f"{BASE_URL}/ocr/process", data=data, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["success", "ocr_id", "text", "provider", "confidence"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("OCR Process", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    if not data.get("success"):
+                        self.log_result("OCR Process", False, "OCR processing failed", data)
+                        return False
+                    
+                    self.log_result("OCR Process", True, f"Successfully processed OCR with provider {data.get('provider')}")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("OCR Process", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("OCR Process", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_ocr_statistics(self):
+        """Test GET /api/ocr/statistics - OCR Statistics"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/ocr/statistics", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["total_processed", "providers", "capabilities"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("OCR Statistics", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    providers = data.get("providers", {})
+                    if not isinstance(providers, dict):
+                        self.log_result("OCR Statistics", False, "Providers should be a dictionary", data)
+                        return False
+                    
+                    self.log_result("OCR Statistics", True, f"OCR stats: {data.get('total_processed')} processed, {len(providers)} providers")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("OCR Statistics", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("OCR Statistics", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_media_transcribe_audio(self):
+        """Test POST /api/media/transcribe-audio - Audio Transcription"""
+        try:
+            # Create a test audio file
+            test_content = b"fake audio content for transcription testing"
+            
+            # Prepare form data
+            data = aiohttp.FormData()
+            data.add_field('file', test_content, filename='test_audio.mp3', content_type='audio/mpeg')
+            data.add_field('language', 'pt-BR')
+            
+            headers = {}
+            if self.auth_token:
+                headers["Authorization"] = f"Bearer {self.auth_token}"
+            
+            async with self.session.post(f"{BASE_URL}/media/transcribe-audio", data=data, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["success", "transcription_id", "transcription", "speakers_detected", "language"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Media Transcribe Audio", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    if not data.get("success"):
+                        self.log_result("Media Transcribe Audio", False, "Audio transcription failed", data)
+                        return False
+                    
+                    self.log_result("Media Transcribe Audio", True, f"Successfully transcribed audio, {data.get('speakers_detected')} speakers detected")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Media Transcribe Audio", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Media Transcribe Audio", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_media_analyze_video(self):
+        """Test POST /api/media/analyze-video - Video Analysis"""
+        try:
+            # Create a test video file
+            test_content = b"fake video content for analysis testing"
+            
+            # Prepare form data
+            data = aiohttp.FormData()
+            data.add_field('file', test_content, filename='test_video.mp4', content_type='video/mp4')
+            
+            headers = {}
+            if self.auth_token:
+                headers["Authorization"] = f"Bearer {self.auth_token}"
+            
+            async with self.session.post(f"{BASE_URL}/media/analyze-video", data=data, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["success", "filename", "faces_detected", "objects_detected"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Media Analyze Video", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    if not data.get("success"):
+                        self.log_result("Media Analyze Video", False, "Video analysis failed", data)
+                        return False
+                    
+                    self.log_result("Media Analyze Video", True, f"Successfully analyzed video, {len(data.get('faces_detected', []))} faces detected")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Media Analyze Video", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Media Analyze Video", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_workflow_create_from_template(self):
+        """Test POST /api/workflows/create-from-template - Create Workflow from Template"""
+        try:
+            params = {
+                "template_key": "criminal_defense",
+                "case_id": "test-case-workflow-123"
+            }
+            
+            headers = self.get_headers()
+            async with self.session.post(f"{BASE_URL}/workflows/create-from-template", params=params, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["success", "workflow_id", "template", "first_stage", "tasks_created"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Workflow Create from Template", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    if not data.get("success"):
+                        self.log_result("Workflow Create from Template", False, "Workflow creation failed", data)
+                        return False
+                    
+                    self.log_result("Workflow Create from Template", True, f"Successfully created workflow: {data.get('template')}")
+                    return data.get("workflow_id")
+                else:
+                    error_text = await response.text()
+                    self.log_result("Workflow Create from Template", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Workflow Create from Template", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_workflow_templates(self):
+        """Test GET /api/workflows/templates - List Workflow Templates"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/workflows/templates", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["templates", "total"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Workflow Templates", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    templates = data.get("templates", {})
+                    if not isinstance(templates, dict):
+                        self.log_result("Workflow Templates", False, "Templates should be a dictionary", data)
+                        return False
+                    
+                    self.log_result("Workflow Templates", True, f"Successfully retrieved {data.get('total')} workflow templates")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Workflow Templates", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Workflow Templates", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_chatbot_create_session(self):
+        """Test POST /api/chatbot/session/create - Create Chat Session"""
+        try:
+            session_data = {
+                "user_id": "test-user-123",
+                "channel": "web"
+            }
+            
+            headers = self.get_headers()
+            async with self.session.post(f"{BASE_URL}/chatbot/session/create", json=session_data, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["success", "session_id", "welcome_message", "features"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Chatbot Create Session", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    if not data.get("success"):
+                        self.log_result("Chatbot Create Session", False, "Session creation failed", data)
+                        return False
+                    
+                    self.log_result("Chatbot Create Session", True, f"Successfully created chat session: {data.get('session_id')}")
+                    return data.get("session_id")
+                else:
+                    error_text = await response.text()
+                    self.log_result("Chatbot Create Session", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Chatbot Create Session", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_chatbot_send_message(self):
+        """Test POST /api/chatbot/message - Send Message to Chatbot"""
+        try:
+            # First create a session
+            session_id = await self.test_chatbot_create_session()
+            if not session_id:
+                self.log_result("Chatbot Send Message", False, "Failed to create session for testing")
+                return False
+            
+            message_data = {
+                "session_id": session_id,
+                "message": "Quais são os horários de atendimento?",
+                "user_id": "test-user-123"
+            }
+            
+            headers = self.get_headers()
+            async with self.session.post(f"{BASE_URL}/chatbot/message", json=message_data, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["success", "response", "intent", "suggestions"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Chatbot Send Message", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    if not data.get("success"):
+                        self.log_result("Chatbot Send Message", False, "Message sending failed", data)
+                        return False
+                    
+                    self.log_result("Chatbot Send Message", True, f"Successfully sent message, intent: {data.get('intent')}")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Chatbot Send Message", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Chatbot Send Message", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_social_listening_create_alert(self):
+        """Test POST /api/social-listening/alerts/create - Create Monitoring Alert"""
+        try:
+            alert_data = {
+                "keywords": ["AP Elite", "investigação criminal"],
+                "platforms": ["Twitter", "Facebook", "Instagram"],
+                "alert_email": "test@apelite.com",
+                "alert_frequency": "realtime"
+            }
+            
+            headers = self.get_headers()
+            async with self.session.post(f"{BASE_URL}/social-listening/alerts/create", json=alert_data, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["success", "alert_id", "keywords", "platforms", "message"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Social Listening Create Alert", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    if not data.get("success"):
+                        self.log_result("Social Listening Create Alert", False, "Alert creation failed", data)
+                        return False
+                    
+                    self.log_result("Social Listening Create Alert", True, f"Successfully created alert for {len(data.get('keywords', []))} keywords")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Social Listening Create Alert", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Social Listening Create Alert", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_social_listening_reputation_analysis(self):
+        """Test POST /api/social-listening/reputation/analyze - Reputation Analysis"""
+        try:
+            reputation_data = {
+                "entity_name": "João Silva Santos",
+                "entity_type": "person",
+                "platforms": ["Twitter", "Facebook", "News"]
+            }
+            
+            headers = self.get_headers()
+            async with self.session.post(f"{BASE_URL}/social-listening/reputation/analyze", json=reputation_data, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["entity_name", "reputation_score", "total_mentions", "sentiment_breakdown", "mentions"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Social Listening Reputation Analysis", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    if data.get("entity_name") != reputation_data["entity_name"]:
+                        self.log_result("Social Listening Reputation Analysis", False, "Entity name mismatch", data)
+                        return False
+                    
+                    self.log_result("Social Listening Reputation Analysis", True, f"Successfully analyzed reputation, score: {data.get('reputation_score')}")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Social Listening Reputation Analysis", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Social Listening Reputation Analysis", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_collaboration_create_document(self):
+        """Test POST /api/collaboration/documents/create - Create Collaborative Document"""
+        try:
+            doc_data = {
+                "title": "Documento de Teste Colaborativo",
+                "content": "Este é um documento de teste para colaboração em tempo real.",
+                "doc_type": "investigation_report",
+                "created_by": "test-user-123"
+            }
+            
+            headers = self.get_headers()
+            async with self.session.post(f"{BASE_URL}/collaboration/documents/create", json=doc_data, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["success", "document_id", "title", "version", "edit_url"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Collaboration Create Document", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    if not data.get("success"):
+                        self.log_result("Collaboration Create Document", False, "Document creation failed", data)
+                        return False
+                    
+                    self.log_result("Collaboration Create Document", True, f"Successfully created document: {data.get('title')}")
+                    return data.get("document_id")
+                else:
+                    error_text = await response.text()
+                    self.log_result("Collaboration Create Document", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Collaboration Create Document", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_collaboration_statistics(self):
+        """Test GET /api/collaboration/statistics - Collaboration Statistics"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/collaboration/statistics", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["total_documents", "total_comments", "pending_approvals", "features"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Collaboration Statistics", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    features = data.get("features", [])
+                    if not isinstance(features, list):
+                        self.log_result("Collaboration Statistics", False, "Features should be a list", data)
+                        return False
+                    
+                    self.log_result("Collaboration Statistics", True, f"Collaboration stats: {data.get('total_documents')} docs, {len(features)} features")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Collaboration Statistics", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Collaboration Statistics", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_predictive_predict_outcome(self):
+        """Test POST /api/predictive/predict-outcome - Predict Case Outcome"""
+        try:
+            prediction_data = {
+                "case_type": "criminal_defense",
+                "evidence_quality": "high",
+                "lawyer_experience": 15,
+                "judge_profile": "conservative"
+            }
+            
+            headers = self.get_headers()
+            async with self.session.post(f"{BASE_URL}/predictive/predict-outcome", json=prediction_data, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["case_type", "success_probability", "confidence_interval", "key_factors", "ai_insights"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Predictive Predict Outcome", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    if data.get("case_type") != prediction_data["case_type"]:
+                        self.log_result("Predictive Predict Outcome", False, "Case type mismatch", data)
+                        return False
+                    
+                    self.log_result("Predictive Predict Outcome", True, f"Successfully predicted outcome: {data.get('success_probability')}% success probability")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Predictive Predict Outcome", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Predictive Predict Outcome", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_predictive_statistics(self):
+        """Test GET /api/predictive/statistics - Predictive Analytics Statistics"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/predictive/statistics", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["total_predictions", "models_available", "algorithms", "features"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Predictive Statistics", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    models = data.get("models_available", [])
+                    if not isinstance(models, list):
+                        self.log_result("Predictive Statistics", False, "Models should be a list", data)
+                        return False
+                    
+                    self.log_result("Predictive Statistics", True, f"Predictive stats: {data.get('total_predictions')} predictions, {len(models)} models")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Predictive Statistics", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Predictive Statistics", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_compliance_register_consent(self):
+        """Test POST /api/compliance/consent/register - Register LGPD Consent"""
+        try:
+            consent_data = {
+                "user_id": "test-user-123",
+                "purpose": "Investigação criminal e análise de evidências",
+                "data_types": ["nome", "cpf", "email", "telefone"],
+                "retention_period": "5 anos"
+            }
+            
+            headers = self.get_headers()
+            async with self.session.post(f"{BASE_URL}/compliance/consent/register", json=consent_data, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["success", "consent_id", "user_id", "status", "message"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Compliance Register Consent", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    if not data.get("success"):
+                        self.log_result("Compliance Register Consent", False, "Consent registration failed", data)
+                        return False
+                    
+                    self.log_result("Compliance Register Consent", True, f"Successfully registered consent: {data.get('consent_id')}")
+                    return data.get("consent_id")
+                else:
+                    error_text = await response.text()
+                    self.log_result("Compliance Register Consent", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Compliance Register Consent", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_compliance_anonymize_data(self):
+        """Test POST /api/compliance/anonymize - Anonymize Personal Data"""
+        try:
+            anonymize_data = {
+                "text": "João Silva, CPF 123.456.789-00, email joao@email.com, telefone (11) 99999-9999",
+                "anonymize_names": True,
+                "anonymize_cpf": True,
+                "anonymize_emails": True,
+                "anonymize_phones": True
+            }
+            
+            headers = self.get_headers()
+            async with self.session.post(f"{BASE_URL}/compliance/anonymize", json=anonymize_data, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["success", "original", "anonymized", "changes_made"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Compliance Anonymize Data", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    if not data.get("success"):
+                        self.log_result("Compliance Anonymize Data", False, "Data anonymization failed", data)
+                        return False
+                    
+                    self.log_result("Compliance Anonymize Data", True, f"Successfully anonymized data, changes made: {data.get('changes_made')}")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Compliance Anonymize Data", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Compliance Anonymize Data", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_automated_reports_templates(self):
+        """Test GET /api/reports/templates - List Report Templates"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/reports/templates", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["templates"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Automated Reports Templates", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    templates = data.get("templates", [])
+                    if not isinstance(templates, list):
+                        self.log_result("Automated Reports Templates", False, "Templates should be a list", data)
+                        return False
+                    
+                    # Should have 4 templates
+                    if len(templates) != 4:
+                        self.log_result("Automated Reports Templates", False, f"Expected 4 templates, got {len(templates)}", data)
+                        return False
+                    
+                    self.log_result("Automated Reports Templates", True, f"Successfully retrieved {len(templates)} report templates")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Automated Reports Templates", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Automated Reports Templates", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_automated_reports_generate(self):
+        """Test POST /api/reports/generate - Generate Automated Report"""
+        try:
+            report_data = {
+                "template_id": "investigation",
+                "case_id": "test-case-123",
+                "title": "Relatório de Teste Automatizado",
+                "parameters": {},
+                "include_charts": True,
+                "include_evidence": True,
+                "format": "pdf"
+            }
+            
+            headers = self.get_headers()
+            async with self.session.post(f"{BASE_URL}/reports/generate", json=report_data, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["message", "request_id", "estimated_time"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Automated Reports Generate", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    request_id = data.get("request_id")
+                    if not request_id:
+                        self.log_result("Automated Reports Generate", False, "No request_id provided", data)
+                        return False
+                    
+                    self.log_result("Automated Reports Generate", True, f"Successfully initiated report generation: {request_id}")
+                    return request_id
+                else:
+                    error_text = await response.text()
+                    self.log_result("Automated Reports Generate", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Automated Reports Generate", False, f"Exception: {str(e)}")
+            return False
+
     # ==================== DEFENSIVE INVESTIGATION TESTS ====================
     
     async def test_defensive_investigation_categories(self):
