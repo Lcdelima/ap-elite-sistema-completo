@@ -469,6 +469,16 @@ const AthenaMain = () => {
       color: 'from-red-600 via-orange-700 to-amber-800',
       badge: 'LGPD',
       badgeColor: 'bg-gradient-to-r from-red-500 to-orange-500'
+    },
+    {
+      id: 43,
+      title: 'Relatórios Automatizados',
+      subtitle: 'Geração Inteligente com IA',
+      icon: FileBarChart,
+      path: '/athena/automated-reports',
+      color: 'from-yellow-600 via-amber-700 to-orange-800',
+      badge: 'AUTO',
+      badgeColor: 'bg-gradient-to-r from-yellow-500 to-amber-500'
     }
   ];
 
