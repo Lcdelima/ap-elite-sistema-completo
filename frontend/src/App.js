@@ -149,6 +149,14 @@ function AppContent() {
           <Route path="/athena/blockchain-custody" element={<BlockchainCustody />} />
           <Route path="/athena/smart-fees" element={<SmartFees />} />
           <Route path="/athena/global-search" element={<GlobalSearch />} />
+          <Route path="/athena/ocr-dashboard" element={<OCRDashboard />} />
+          <Route path="/athena/media-analysis" element={<MediaAnalysis />} />
+          <Route path="/athena/workflow-manager" element={<WorkflowManager />} />
+          <Route path="/athena/chatbot" element={<ChatbotInterface />} />
+          <Route path="/athena/social-monitor" element={<SocialMonitor />} />
+          <Route path="/athena/collaboration" element={<CollaborationHub />} />
+          <Route path="/athena/predictive-analytics" element={<PredictiveAnalytics />} />
+          <Route path="/athena/compliance" element={<ComplianceCenter />} />
       </Routes>
       <WhatsAppButton />
       <HybridNotifications />
