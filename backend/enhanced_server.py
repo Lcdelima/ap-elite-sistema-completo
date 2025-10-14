@@ -653,6 +653,7 @@ from smart_fees import router as fees_router
 from ai_chatbot import router as chatbot_router
 from social_listening import router as social_router
 from collaboration_realtime import router as collaboration_router
+from global_search import router as search_router
 
 # Add all routes to main app
 app.include_router(api_router)
