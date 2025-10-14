@@ -330,6 +330,56 @@ const AthenaMain = () => {
       color: 'from-fuchsia-600 via-purple-700 to-indigo-800',
       badge: '3 AIs',
       badgeColor: 'bg-gradient-to-r from-purple-500 to-pink-500'
+    },
+    {
+      id: 30,
+      title: 'RAG System',
+      subtitle: 'Busca Inteligente em Documentos',
+      icon: Brain,
+      path: '/athena/rag-system',
+      color: 'from-violet-600 via-purple-700 to-fuchsia-800',
+      badge: 'IA',
+      badgeColor: 'bg-gradient-to-r from-violet-500 to-purple-500'
+    },
+    {
+      id: 31,
+      title: 'Dashboard Executivo',
+      subtitle: 'Métricas e KPIs Gerenciais',
+      icon: Activity,
+      path: '/athena/executive-dashboard',
+      color: 'from-cyan-600 via-blue-700 to-indigo-800',
+      badge: 'EXEC',
+      badgeColor: 'bg-gradient-to-r from-cyan-500 to-blue-500'
+    },
+    {
+      id: 32,
+      title: 'Blockchain Custódia',
+      subtitle: 'Cadeia Imutável de Evidências',
+      icon: LinkIcon,
+      path: '/athena/blockchain-custody',
+      color: 'from-emerald-600 via-teal-700 to-cyan-800',
+      badge: 'CHAIN',
+      badgeColor: 'bg-gradient-to-r from-emerald-500 to-teal-500'
+    },
+    {
+      id: 33,
+      title: 'Honorários Inteligentes',
+      subtitle: 'Cálculo + PIX + Previsão',
+      icon: Calculator,
+      path: '/athena/smart-fees',
+      color: 'from-lime-600 via-green-700 to-emerald-800',
+      badge: 'SMART',
+      badgeColor: 'bg-gradient-to-r from-lime-500 to-green-500'
+    },
+    {
+      id: 34,
+      title: 'Busca Global',
+      subtitle: 'Todos os Módulos Simultaneamente',
+      icon: Search,
+      path: '/athena/global-search',
+      color: 'from-slate-600 via-gray-700 to-zinc-800',
+      badge: 'GLOBAL',
+      badgeColor: 'bg-gradient-to-r from-slate-500 to-gray-500'
     }
   ];
 
