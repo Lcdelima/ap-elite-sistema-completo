@@ -128,6 +128,9 @@ function AppContent() {
           <Route path="/athena/unified-dashboard" element={<AthenaUnifiedDashboard />} />
           <Route path="/athena/advanced-investigation" element={<AdvancedInvestigation />} />
           <Route path="/athena/relationship-mapping" element={<RelationshipMapping />} />
+          <Route path="/athena/document-library" element={<DocumentLibrary />} />
+          <Route path="/athena/osint-dashboard" element={<OSINTDashboard />} />
+          <Route path="/athena/template-generator" element={<TemplateGenerator />} />
       </Routes>
       <WhatsAppButton />
       <HybridNotifications />
