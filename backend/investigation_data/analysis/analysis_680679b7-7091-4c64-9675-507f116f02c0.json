@@ -1,0 +1,25 @@
+{
+  "metadata": {
+    "analysis_type": "metadata_extraction",
+    "file_path": "/app/backend/investigation_data/evidence/680679b7-7091-4c64-9675-507f116f02c0.txt",
+    "metadata": {
+      "filename": "680679b7-7091-4c64-9675-507f116f02c0.txt",
+      "size": 120,
+      "created": "2025-10-14T19:47:48.716513",
+      "modified": "2025-10-14T19:47:48.716513",
+      "accessed": "2025-10-14T19:47:48.715513",
+      "mime_type": "application/octet-stream",
+      "hashes": {
+        "md5": "670b83e6f99087095d0942206e434b56",
+        "sha256": "87c0e7c885d8a4fa50bd153462b85a8fb9a0fb8e7ef63a7b6cae8fb6a9c0a74e"
+      }
+    },
+    "timestamp": "2025-10-14T19:47:48.718251+00:00"
+  },
+  "document_analysis": {
+    "analysis_type": "document_analysis",
+    "error": "'LlmChat' object has no attribute 'achat'",
+    "confidence": 0.0,
+    "timestamp": "2025-10-14T19:47:48.718295+00:00"
+  }
+}
