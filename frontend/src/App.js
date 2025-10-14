@@ -62,6 +62,9 @@ import AthenaUserManagement from './pages/athena/UserManagement';
 import AthenaUnifiedDashboard from './pages/athena/UnifiedDashboard';
 import AdvancedInvestigation from './pages/athena/AdvancedInvestigation';
 import RelationshipMapping from './pages/athena/RelationshipMapping';
+import DocumentLibrary from './pages/athena/DocumentLibrary';
+import OSINTDashboard from './pages/athena/OSINTDashboard';
+import TemplateGenerator from './pages/athena/TemplateGenerator';
 
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
