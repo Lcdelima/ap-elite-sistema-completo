@@ -649,3 +649,75 @@ Implementar sistema ERP completo para AP Elite com funcionalidades avançadas:
     needs_retesting: true
     description: "Gerador de documentos jurídicos com 6 templates profissionais, seleção de provedor de IA (GPT-5, Claude Sonnet 4, Gemini 2.5 Pro), preenchimento automático de campos, geração DOCX e download. Integra com template_generator.py backend."
 
+  - task: "OCR Dashboard Frontend"
+    implemented: true
+    working: NA
+    file: "/app/frontend/src/pages/athena/OCRDashboard.jsx"
+    priority: "high"
+    needs_retesting: true
+    description: "Dashboard de OCR avançado para extração de texto de imagens e documentos. Integra com ocr_advanced.py backend."
+
+  - task: "Media Analysis Frontend"
+    implemented: true
+    working: NA
+    file: "/app/frontend/src/pages/athena/MediaAnalysis.jsx"
+    priority: "high"
+    needs_retesting: true
+    description: "Interface de análise de mídia com IA para áudio, vídeo e imagens. Integra com media_analysis.py backend."
+
+  - task: "Workflow Manager Frontend"
+    implemented: true
+    working: NA
+    file: "/app/frontend/src/pages/athena/WorkflowManager.jsx"
+    priority: "high"
+    needs_retesting: true
+    description: "Gerenciador de workflows automatizados para processos. Integra com workflow_automation.py backend."
+
+  - task: "Chatbot Interface Frontend"
+    implemented: true
+    working: NA
+    file: "/app/frontend/src/pages/athena/ChatbotInterface.jsx"
+    priority: "high"
+    needs_retesting: true
+    description: "Interface de chatbot IA para atendimento 24/7. Integra com ai_chatbot.py backend."
+
+  - task: "Social Monitor Frontend"
+    implemented: true
+    working: NA
+    file: "/app/frontend/src/pages/athena/SocialMonitor.jsx"
+    priority: "high"
+    needs_retesting: true
+    description: "Monitoramento de redes sociais e análise de sentimento. Integra com social_listening.py backend."
+
+  - task: "Collaboration Hub Frontend"
+    implemented: true
+    working: NA
+    file: "/app/frontend/src/pages/athena/CollaborationHub.jsx"
+    priority: "high"
+    needs_retesting: true
+    description: "Hub de colaboração em tempo real com WebSocket. Integra com collaboration_realtime.py backend."
+
+  - task: "Predictive Analytics Frontend"
+    implemented: true
+    working: NA
+    file: "/app/frontend/src/pages/athena/PredictiveAnalytics.jsx"
+    priority: "high"
+    needs_retesting: true
+    description: "Analytics preditiva com ML para previsão de resultados. Integra com predictive_analytics.py backend."
+
+  - task: "Compliance Center Frontend"
+    implemented: true
+    working: NA
+    file: "/app/frontend/src/pages/athena/ComplianceCenter.jsx"
+    priority: "high"
+    needs_retesting: true
+    description: "Centro de compliance LGPD e auditoria completa. Integra com compliance_lgpd.py backend."
+
+  - task: "Automated Reports Frontend"
+    implemented: true
+    working: NA
+    file: "/app/frontend/src/pages/athena/AutomatedReports.jsx"
+    priority: "high"
+    needs_retesting: true
+    description: "Interface para geração automatizada de relatórios de investigação com IA. Integra com automated_reports.py backend."
+
