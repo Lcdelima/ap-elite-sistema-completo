@@ -3062,6 +3062,42 @@ class BackendTester:
         await self.test_template_statistics()
         await self.test_template_generated_list()
         
+        print("\n🔍 Testing NEW 9 MODULES - OCR Advanced System...")
+        await self.test_ocr_process()
+        await self.test_ocr_statistics()
+        
+        print("\n🎥 Testing Media Analysis System...")
+        await self.test_media_transcribe_audio()
+        await self.test_media_analyze_video()
+        
+        print("\n⚙️ Testing Workflow Automation...")
+        await self.test_workflow_create_from_template()
+        await self.test_workflow_templates()
+        
+        print("\n🤖 Testing AI Chatbot...")
+        await self.test_chatbot_create_session()
+        await self.test_chatbot_send_message()
+        
+        print("\n📱 Testing Social Listening...")
+        await self.test_social_listening_create_alert()
+        await self.test_social_listening_reputation_analysis()
+        
+        print("\n👥 Testing Real-time Collaboration...")
+        await self.test_collaboration_create_document()
+        await self.test_collaboration_statistics()
+        
+        print("\n📈 Testing Predictive Analytics...")
+        await self.test_predictive_predict_outcome()
+        await self.test_predictive_statistics()
+        
+        print("\n🛡️ Testing Compliance LGPD...")
+        await self.test_compliance_register_consent()
+        await self.test_compliance_anonymize_data()
+        
+        print("\n📊 Testing Automated Reports (Re-verification)...")
+        await self.test_automated_reports_templates()
+        await self.test_automated_reports_generate()
+        
         # Summary
         print("\n" + "=" * 70)
         print("📋 ATHENA SYSTEM TEST SUMMARY")
