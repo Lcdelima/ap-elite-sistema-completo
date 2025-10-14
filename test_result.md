@@ -503,10 +503,6 @@ Implementar sistema ERP completo para AP Elite com funcionalidades avançadas:
 
 ## test_plan:
   current_focus:
-    - "AI Orchestrator - Multi-Provider System"
-    - "Document Library System"
-    - "OSINT Enhanced System"
-    - "Template Generator System"
     - "Document Library Frontend"
     - "OSINT Dashboard Frontend"
     - "Template Generator Frontend"
