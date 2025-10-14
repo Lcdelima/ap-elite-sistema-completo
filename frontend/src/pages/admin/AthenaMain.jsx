@@ -296,6 +296,36 @@ const AthenaMain = () => {
       color: 'from-red-600 via-pink-700 to-purple-800',
       badge: 'REDES',
       badgeColor: 'bg-gradient-to-r from-red-500 to-pink-500'
+    },
+    {
+      id: 27,
+      title: 'Biblioteca de Documentos',
+      subtitle: 'PDFs Técnicos + IA',
+      icon: FileText,
+      path: '/athena/document-library',
+      color: 'from-orange-600 via-red-700 to-pink-800',
+      badge: 'NOVO',
+      badgeColor: 'bg-gradient-to-r from-orange-500 to-red-500'
+    },
+    {
+      id: 28,
+      title: 'OSINT Avançado',
+      subtitle: 'Fontes Abertas Brasileiras',
+      icon: Shield,
+      path: '/athena/osint-dashboard',
+      color: 'from-emerald-600 via-teal-700 to-cyan-800',
+      badge: 'BRASIL',
+      badgeColor: 'bg-gradient-to-r from-green-500 to-blue-500'
+    },
+    {
+      id: 29,
+      title: 'Gerador de Templates',
+      subtitle: 'Docs Jurídicos Multi-IA',
+      icon: FileText,
+      path: '/athena/template-generator',
+      color: 'from-fuchsia-600 via-purple-700 to-indigo-800',
+      badge: '3 AIs',
+      badgeColor: 'bg-gradient-to-r from-purple-500 to-pink-500'
     }
   ];
 
