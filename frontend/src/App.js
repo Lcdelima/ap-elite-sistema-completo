@@ -158,6 +158,7 @@ function AppContent() {
           <Route path="/athena/collaboration" element={<CollaborationHub />} />
           <Route path="/athena/predictive-analytics" element={<PredictiveAnalytics />} />
           <Route path="/athena/compliance" element={<ComplianceCenter />} />
+          <Route path="/athena/automated-reports" element={<AutomatedReports />} />
       </Routes>
       <WhatsAppButton />
       <HybridNotifications />
