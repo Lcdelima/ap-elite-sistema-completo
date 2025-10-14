@@ -661,6 +661,9 @@ app.include_router(hybrid_router)
 app.include_router(investigation_router)
 app.include_router(relationships_router)
 app.include_router(reports_router)
+app.include_router(library_router)
+app.include_router(osint_enhanced_router)
+app.include_router(template_router)
 
 # Health check
 @app.get("/")
