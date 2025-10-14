@@ -30,7 +30,15 @@ import {
   Brain,
   Calculator,
   Link as LinkIcon,
-  Activity
+  Activity,
+  ScanText,
+  Film,
+  Workflow,
+  Bot,
+  Share2,
+  Users2,
+  LineChart,
+  CheckCircle2
 } from 'lucide-react';
 import { toast } from 'sonner';
 
