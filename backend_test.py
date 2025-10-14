@@ -708,6 +708,463 @@ class BackendTester:
             self.log_result("Activity Summary", False, f"Exception: {str(e)}")
             return False
 
+    # ==================== NEW ENHANCED SYSTEMS TESTS ====================
+    
+    async def test_document_library_categories(self):
+        """Test GET /api/library/categories - Document Library Categories"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/library/categories", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["categories", "total"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Document Library Categories", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    categories = data.get("categories", {})
+                    if not isinstance(categories, dict):
+                        self.log_result("Document Library Categories", False, "Categories should be a dictionary", data)
+                        return False
+                    
+                    # Should have 10 categories
+                    if data.get("total") != 10:
+                        self.log_result("Document Library Categories", False, f"Expected 10 categories, got {data.get('total')}", data)
+                        return False
+                    
+                    self.log_result("Document Library Categories", True, f"Successfully retrieved {data.get('total')} document categories")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Document Library Categories", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Document Library Categories", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_document_library_documents(self):
+        """Test GET /api/library/documents - List Documents"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/library/documents", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["documents", "total", "limit", "skip"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Document Library Documents", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    documents = data.get("documents", [])
+                    if not isinstance(documents, list):
+                        self.log_result("Document Library Documents", False, "Documents should be a list", data)
+                        return False
+                    
+                    self.log_result("Document Library Documents", True, f"Successfully retrieved {len(documents)} documents (total: {data.get('total')})")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Document Library Documents", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Document Library Documents", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_document_library_statistics(self):
+        """Test GET /api/library/statistics - Library Statistics"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/library/statistics", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["total_documents", "indexed_documents", "by_category", "total_analyses", "categories_available"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Document Library Statistics", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    # Validate data types
+                    if not isinstance(data.get("by_category"), list):
+                        self.log_result("Document Library Statistics", False, "by_category should be a list")
+                        return False
+                    
+                    if not isinstance(data.get("categories_available"), dict):
+                        self.log_result("Document Library Statistics", False, "categories_available should be a dict")
+                        return False
+                    
+                    self.log_result("Document Library Statistics", True, f"Library stats: {data.get('total_documents')} docs, {data.get('total_analyses')} analyses")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Document Library Statistics", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Document Library Statistics", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_osint_categories(self):
+        """Test GET /api/osint/categories - OSINT Categories"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/osint/categories", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["categories", "total_categories", "total_sources"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("OSINT Categories", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    # Should have 10 categories
+                    if data.get("total_categories") != 10:
+                        self.log_result("OSINT Categories", False, f"Expected 10 categories, got {data.get('total_categories')}", data)
+                        return False
+                    
+                    # Should have 33+ sources
+                    if data.get("total_sources") < 33:
+                        self.log_result("OSINT Categories", False, f"Expected 33+ sources, got {data.get('total_sources')}", data)
+                        return False
+                    
+                    self.log_result("OSINT Categories", True, f"Successfully retrieved {data.get('total_categories')} categories with {data.get('total_sources')} sources")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("OSINT Categories", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("OSINT Categories", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_osint_query(self):
+        """Test POST /api/osint/query - Execute OSINT Query"""
+        try:
+            query_data = {
+                "query": "João Silva",
+                "sources": ["social_media"],
+                "use_ai_analysis": True
+            }
+            
+            headers = self.get_headers()
+            async with self.session.post(f"{BASE_URL}/osint/query", json=query_data, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["query", "categories_searched", "sources", "collected_data", "timestamp"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("OSINT Query", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    if data.get("query") != query_data["query"]:
+                        self.log_result("OSINT Query", False, f"Query mismatch: expected {query_data['query']}, got {data.get('query')}", data)
+                        return False
+                    
+                    # Should have AI analysis if requested
+                    if query_data["use_ai_analysis"] and "ai_analysis" not in data:
+                        self.log_result("OSINT Query", False, "AI analysis was requested but not provided", data)
+                        return False
+                    
+                    self.log_result("OSINT Query", True, f"Successfully executed OSINT query for '{data.get('query')}'")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("OSINT Query", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("OSINT Query", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_osint_analyze_person(self):
+        """Test POST /api/osint/analyze-person - Analyze Person"""
+        try:
+            params = {
+                "name": "João Silva",
+                "cpf": "12345678900"
+            }
+            
+            headers = self.get_headers()
+            async with self.session.post(f"{BASE_URL}/osint/analyze-person", params=params, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["person", "sources_available", "multi_provider_analysis", "timestamp"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("OSINT Analyze Person", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    person = data.get("person", {})
+                    if person.get("nome") != params["name"]:
+                        self.log_result("OSINT Analyze Person", False, f"Name mismatch: expected {params['name']}, got {person.get('nome')}", data)
+                        return False
+                    
+                    # Should have multi-provider analysis
+                    analysis = data.get("multi_provider_analysis", {})
+                    if "results" not in analysis:
+                        self.log_result("OSINT Analyze Person", False, "Missing results in multi_provider_analysis", data)
+                        return False
+                    
+                    self.log_result("OSINT Analyze Person", True, f"Successfully analyzed person '{params['name']}' with multi-AI")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("OSINT Analyze Person", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("OSINT Analyze Person", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_osint_analyze_company(self):
+        """Test POST /api/osint/analyze-company - Analyze Company"""
+        try:
+            params = {
+                "cnpj": "12345678000100"
+            }
+            
+            headers = self.get_headers()
+            async with self.session.post(f"{BASE_URL}/osint/analyze-company", params=params, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["company", "sources", "analysis", "timestamp"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("OSINT Analyze Company", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    company = data.get("company", {})
+                    if company.get("cnpj") != params["cnpj"]:
+                        self.log_result("OSINT Analyze Company", False, f"CNPJ mismatch: expected {params['cnpj']}, got {company.get('cnpj')}", data)
+                        return False
+                    
+                    # Should have analysis
+                    if not data.get("analysis"):
+                        self.log_result("OSINT Analyze Company", False, "Missing analysis content", data)
+                        return False
+                    
+                    self.log_result("OSINT Analyze Company", True, f"Successfully analyzed company CNPJ '{params['cnpj']}'")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("OSINT Analyze Company", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("OSINT Analyze Company", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_osint_history(self):
+        """Test GET /api/osint/history - Query History"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/osint/history", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["queries", "total"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("OSINT History", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    queries = data.get("queries", [])
+                    if not isinstance(queries, list):
+                        self.log_result("OSINT History", False, "Queries should be a list", data)
+                        return False
+                    
+                    self.log_result("OSINT History", True, f"Successfully retrieved {len(queries)} OSINT queries from history")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("OSINT History", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("OSINT History", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_osint_tools(self):
+        """Test GET /api/osint/tools - OSINT Tools"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/osint/tools", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["categories", "total_categories", "total_tools"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("OSINT Tools", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    # Should have 10 categories
+                    if data.get("total_categories") != 10:
+                        self.log_result("OSINT Tools", False, f"Expected 10 categories, got {data.get('total_categories')}", data)
+                        return False
+                    
+                    self.log_result("OSINT Tools", True, f"Successfully retrieved {data.get('total_categories')} tool categories with {data.get('total_tools')} tools")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("OSINT Tools", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("OSINT Tools", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_template_list(self):
+        """Test GET /api/templates/list - Template List"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/templates/list", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["templates", "total", "categories"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Template List", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    # Should have 6 templates
+                    if data.get("total") != 6:
+                        self.log_result("Template List", False, f"Expected 6 templates, got {data.get('total')}", data)
+                        return False
+                    
+                    templates = data.get("templates", [])
+                    if not isinstance(templates, list):
+                        self.log_result("Template List", False, "Templates should be a list", data)
+                        return False
+                    
+                    self.log_result("Template List", True, f"Successfully retrieved {data.get('total')} templates")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Template List", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Template List", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_template_details(self):
+        """Test GET /api/templates/{template_id} - Template Details"""
+        template_ids = ["aij_roteiro", "procuracao"]
+        
+        for template_id in template_ids:
+            try:
+                headers = self.get_headers()
+                async with self.session.get(f"{BASE_URL}/templates/{template_id}", headers=headers) as response:
+                    if response.status == 200:
+                        data = await response.json()
+                        
+                        # Validate response structure
+                        required_keys = ["id", "name", "description", "category", "fields", "structure"]
+                        missing_keys = [key for key in required_keys if key not in data]
+                        
+                        if missing_keys:
+                            self.log_result(f"Template Details ({template_id})", False, f"Missing keys: {missing_keys}", data)
+                            return False
+                        
+                        if data.get("id") != template_id:
+                            self.log_result(f"Template Details ({template_id})", False, f"ID mismatch: expected {template_id}, got {data.get('id')}", data)
+                            return False
+                        
+                        self.log_result(f"Template Details ({template_id})", True, f"Successfully retrieved template '{data.get('name')}'")
+                    else:
+                        error_text = await response.text()
+                        self.log_result(f"Template Details ({template_id})", False, f"Failed with status {response.status}", error_text)
+                        return False
+            except Exception as e:
+                self.log_result(f"Template Details ({template_id})", False, f"Exception: {str(e)}")
+                return False
+        
+        return True
+    
+    async def test_template_statistics(self):
+        """Test GET /api/templates/statistics - Template Statistics"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/templates/statistics", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["total_templates", "total_generated", "total_drafts", "by_template"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Template Statistics", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    # Should have 6 templates
+                    if data.get("total_templates") != 6:
+                        self.log_result("Template Statistics", False, f"Expected 6 templates, got {data.get('total_templates')}", data)
+                        return False
+                    
+                    self.log_result("Template Statistics", True, f"Template stats: {data.get('total_templates')} templates, {data.get('total_generated')} generated")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Template Statistics", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Template Statistics", False, f"Exception: {str(e)}")
+            return False
+    
+    async def test_template_generated_list(self):
+        """Test GET /api/templates/generated/list - Generated Documents List"""
+        try:
+            headers = self.get_headers()
+            async with self.session.get(f"{BASE_URL}/templates/generated/list", headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Validate response structure
+                    required_keys = ["documents", "total"]
+                    missing_keys = [key for key in required_keys if key not in data]
+                    
+                    if missing_keys:
+                        self.log_result("Template Generated List", False, f"Missing keys: {missing_keys}", data)
+                        return False
+                    
+                    documents = data.get("documents", [])
+                    if not isinstance(documents, list):
+                        self.log_result("Template Generated List", False, "Documents should be a list", data)
+                        return False
+                    
+                    self.log_result("Template Generated List", True, f"Successfully retrieved {len(documents)} generated documents")
+                    return True
+                else:
+                    error_text = await response.text()
+                    self.log_result("Template Generated List", False, f"Failed with status {response.status}", error_text)
+                    return False
+        except Exception as e:
+            self.log_result("Template Generated List", False, f"Exception: {str(e)}")
+            return False
+
     # ==================== DEFENSIVE INVESTIGATION TESTS ====================
     
     async def test_defensive_investigation_categories(self):
