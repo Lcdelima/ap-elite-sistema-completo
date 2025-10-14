@@ -12,7 +12,6 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 import tempfile
 import io
-import numpy as np
 
 # Configuration
 BASE_URL = "https://ai-investigator-2.preview.emergentagent.com/api"
