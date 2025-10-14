@@ -2384,6 +2384,25 @@ class BackendTester:
         await self.test_audit_logs()
         await self.test_activity_summary()
         
+        print("\n📚 Testing Document Library System...")
+        await self.test_document_library_categories()
+        await self.test_document_library_documents()
+        await self.test_document_library_statistics()
+        
+        print("\n🔍 Testing OSINT Enhanced System...")
+        await self.test_osint_categories()
+        await self.test_osint_query()
+        await self.test_osint_analyze_person()
+        await self.test_osint_analyze_company()
+        await self.test_osint_history()
+        await self.test_osint_tools()
+        
+        print("\n📄 Testing Template Generator System...")
+        await self.test_template_list()
+        await self.test_template_details()
+        await self.test_template_statistics()
+        await self.test_template_generated_list()
+        
         # Summary
         print("\n" + "=" * 70)
         print("📋 ATHENA SYSTEM TEST SUMMARY")
