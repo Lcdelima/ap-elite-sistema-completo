@@ -38,7 +38,8 @@ import {
   Share2,
   Users2,
   LineChart,
-  CheckCircle2
+  CheckCircle2,
+  FileBarChart
 } from 'lucide-react';
 import { toast } from 'sonner';
 
