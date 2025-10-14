@@ -497,15 +497,21 @@ Implementar sistema ERP completo para AP Elite com funcionalidades avançadas:
 
 ## metadata:
   created_by: "main_agent"
-  version: "2.1"
-  test_sequence: 1
+  version: "2.2"
+  test_sequence: 2
   run_ui: false
 
 ## test_plan:
   current_focus:
-    - "Document Library Frontend"
-    - "OSINT Dashboard Frontend"
-    - "Template Generator Frontend"
+    - "OCR Dashboard Frontend"
+    - "Media Analysis Frontend"
+    - "Workflow Manager Frontend"
+    - "Chatbot Interface Frontend"
+    - "Social Monitor Frontend"
+    - "Collaboration Hub Frontend"
+    - "Predictive Analytics Frontend"
+    - "Compliance Center Frontend"
+    - "Automated Reports Frontend"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
