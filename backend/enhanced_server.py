@@ -639,6 +639,9 @@ from hybrid_sync_system import hybrid_router
 from advanced_investigation_ai import investigation_router
 from relationship_mapping import relationships_router
 from automated_reports import reports_router
+from document_library_system import router as library_router
+from osint_enhanced import router as osint_enhanced_router
+from template_generator import router as template_router
 
 # Add all routes to main app
 app.include_router(api_router)
