@@ -26,7 +26,11 @@ import {
   Zap,
   ArrowLeft,
   Search,
-  Network
+  Network,
+  Brain,
+  Calculator,
+  Link as LinkIcon,
+  Activity
 } from 'lucide-react';
 import { toast } from 'sonner';
 
