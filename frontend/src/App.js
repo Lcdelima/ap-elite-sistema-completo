@@ -65,6 +65,11 @@ import RelationshipMapping from './pages/athena/RelationshipMapping';
 import DocumentLibrary from './pages/athena/DocumentLibrary';
 import OSINTDashboard from './pages/athena/OSINTDashboard';
 import TemplateGenerator from './pages/athena/TemplateGenerator';
+import RAGSystem from './pages/athena/RAGSystem';
+import ExecutiveDashboard from './pages/athena/ExecutiveDashboard';
+import BlockchainCustody from './pages/athena/BlockchainCustody';
+import SmartFees from './pages/athena/SmartFees';
+import GlobalSearch from './pages/athena/GlobalSearch';
 
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
