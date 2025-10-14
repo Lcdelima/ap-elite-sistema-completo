@@ -136,6 +136,11 @@ function AppContent() {
           <Route path="/athena/document-library" element={<DocumentLibrary />} />
           <Route path="/athena/osint-dashboard" element={<OSINTDashboard />} />
           <Route path="/athena/template-generator" element={<TemplateGenerator />} />
+          <Route path="/athena/rag-system" element={<RAGSystem />} />
+          <Route path="/athena/executive-dashboard" element={<ExecutiveDashboard />} />
+          <Route path="/athena/blockchain-custody" element={<BlockchainCustody />} />
+          <Route path="/athena/smart-fees" element={<SmartFees />} />
+          <Route path="/athena/global-search" element={<GlobalSearch />} />
       </Routes>
       <WhatsAppButton />
       <HybridNotifications />
