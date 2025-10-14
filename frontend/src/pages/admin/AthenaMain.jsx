@@ -388,6 +388,86 @@ const AthenaMain = () => {
       color: 'from-slate-600 via-gray-700 to-zinc-800',
       badge: 'GLOBAL',
       badgeColor: 'bg-gradient-to-r from-slate-500 to-gray-500'
+    },
+    {
+      id: 35,
+      title: 'OCR Avançado',
+      subtitle: 'Extração Multi-Modelo de Texto',
+      icon: ScanText,
+      path: '/athena/ocr-dashboard',
+      color: 'from-amber-600 via-orange-700 to-red-800',
+      badge: 'OCR+',
+      badgeColor: 'bg-gradient-to-r from-amber-500 to-orange-500'
+    },
+    {
+      id: 36,
+      title: 'Análise de Mídia',
+      subtitle: 'Áudio, Vídeo e Imagem com IA',
+      icon: Film,
+      path: '/athena/media-analysis',
+      color: 'from-rose-600 via-pink-700 to-fuchsia-800',
+      badge: 'MEDIA',
+      badgeColor: 'bg-gradient-to-r from-rose-500 to-pink-500'
+    },
+    {
+      id: 37,
+      title: 'Automação de Workflows',
+      subtitle: 'Processos Automatizados',
+      icon: Workflow,
+      path: '/athena/workflow-manager',
+      color: 'from-teal-600 via-cyan-700 to-blue-800',
+      badge: 'AUTO',
+      badgeColor: 'bg-gradient-to-r from-teal-500 to-cyan-500'
+    },
+    {
+      id: 38,
+      title: 'Assistente IA',
+      subtitle: 'Chatbot Multi-Contexto',
+      icon: Bot,
+      path: '/athena/chatbot',
+      color: 'from-indigo-600 via-violet-700 to-purple-800',
+      badge: 'BOT',
+      badgeColor: 'bg-gradient-to-r from-indigo-500 to-violet-500'
+    },
+    {
+      id: 39,
+      title: 'Monitoramento Social',
+      subtitle: 'Análise de Redes Sociais',
+      icon: Share2,
+      path: '/athena/social-monitor',
+      color: 'from-blue-600 via-sky-700 to-cyan-800',
+      badge: 'SOCIAL',
+      badgeColor: 'bg-gradient-to-r from-blue-500 to-sky-500'
+    },
+    {
+      id: 40,
+      title: 'Hub de Colaboração',
+      subtitle: 'Real-Time + WebSocket',
+      icon: Users2,
+      path: '/athena/collaboration',
+      color: 'from-green-600 via-emerald-700 to-teal-800',
+      badge: 'LIVE',
+      badgeColor: 'bg-gradient-to-r from-green-500 to-emerald-500'
+    },
+    {
+      id: 41,
+      title: 'Analytics Preditiva',
+      subtitle: 'ML + Previsão de Resultados',
+      icon: LineChart,
+      path: '/athena/predictive-analytics',
+      color: 'from-purple-600 via-fuchsia-700 to-pink-800',
+      badge: 'ML',
+      badgeColor: 'bg-gradient-to-r from-purple-500 to-fuchsia-500'
+    },
+    {
+      id: 42,
+      title: 'Centro de Compliance',
+      subtitle: 'LGPD + Auditoria Completa',
+      icon: CheckCircle2,
+      path: '/athena/compliance',
+      color: 'from-red-600 via-orange-700 to-amber-800',
+      badge: 'LGPD',
+      badgeColor: 'bg-gradient-to-r from-red-500 to-orange-500'
     }
   ];
 
