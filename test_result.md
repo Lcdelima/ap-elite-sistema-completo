@@ -613,3 +613,27 @@ Implementar sistema ERP completo para AP Elite com funcionalidades avançadas:
     needs_retesting: true
     description: "Centro de notificações em tempo real com contador de não lidas"
 
+  - task: "Document Library Frontend"
+    implemented: true
+    working: NA
+    file: "/app/frontend/src/pages/athena/DocumentLibrary.jsx"
+    priority: "high"
+    needs_retesting: true
+    description: "Interface completa para biblioteca de documentos técnicos com upload, busca, categorização, AI analysis, download e estatísticas. Integra com document_library_system.py backend."
+
+  - task: "OSINT Dashboard Frontend"
+    implemented: true
+    working: NA
+    file: "/app/frontend/src/pages/athena/OSINTDashboard.jsx"
+    priority: "high"
+    needs_retesting: true
+    description: "Dashboard OSINT avançado com 10 categorias, busca geral, análise de pessoa (multi-AI), análise de empresa, histórico de consultas e integração com fontes brasileiras. Integra com osint_enhanced.py backend."
+
+  - task: "Template Generator Frontend"
+    implemented: true
+    working: NA
+    file: "/app/frontend/src/pages/athena/TemplateGenerator.jsx"
+    priority: "high"
+    needs_retesting: true
+    description: "Gerador de documentos jurídicos com 6 templates profissionais, seleção de provedor de IA (GPT-5, Claude Sonnet 4, Gemini 2.5 Pro), preenchimento automático de campos, geração DOCX e download. Integra com template_generator.py backend."
+
