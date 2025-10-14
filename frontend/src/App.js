@@ -70,6 +70,14 @@ import ExecutiveDashboard from './pages/athena/ExecutiveDashboard';
 import BlockchainCustody from './pages/athena/BlockchainCustody';
 import SmartFees from './pages/athena/SmartFees';
 import GlobalSearch from './pages/athena/GlobalSearch';
+import OCRDashboard from './pages/athena/OCRDashboard';
+import MediaAnalysis from './pages/athena/MediaAnalysis';
+import WorkflowManager from './pages/athena/WorkflowManager';
+import ChatbotInterface from './pages/athena/ChatbotInterface';
+import SocialMonitor from './pages/athena/SocialMonitor';
+import CollaborationHub from './pages/athena/CollaborationHub';
+import PredictiveAnalytics from './pages/athena/PredictiveAnalytics';
+import ComplianceCenter from './pages/athena/ComplianceCenter';
 
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
