@@ -642,6 +642,17 @@ from automated_reports import reports_router
 from document_library_system import router as library_router
 from osint_enhanced import router as osint_enhanced_router
 from template_generator import router as template_router
+from rag_system import router as rag_router
+from ocr_advanced import router as ocr_router
+from media_analysis import router as media_router
+from blockchain_custody import router as blockchain_router
+from compliance_lgpd import router as compliance_router
+from workflow_automation import router as workflow_router
+from predictive_analytics import router as predictive_router
+from smart_fees import router as fees_router
+from ai_chatbot import router as chatbot_router
+from social_listening import router as social_router
+from collaboration_realtime import router as collaboration_router
 
 # Add all routes to main app
 app.include_router(api_router)
