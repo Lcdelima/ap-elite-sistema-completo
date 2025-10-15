@@ -349,6 +349,52 @@ async def get_financial_summary(
         "profit_margin": round((total_income - total_expenses) / total_income * 100, 2) if total_income > 0 else 0
     }
 
+@super_router.get("/financial/transactions")
+async def list_transactions(
+    period: Optional[str] = "current_month",
+    category: Optional[str] = None,
+    current_user: dict = Depends(get_current_user)
+):
+    """List financial transactions"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    # Calculate date range based on period
+    now = datetime.now(timezone.utc)
+    if period == "current_month":
+        start_date = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        end_date = now
+    elif period == "last_month":
+        last_month = now.replace(day=1) - timedelta(days=1)
+        start_date = last_month.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        end_date = last_month.replace(day=last_month.day, hour=23, minute=59, second=59)
+    elif period == "current_quarter":
+        quarter_month = ((now.month - 1) // 3) * 3 + 1
+        start_date = now.replace(month=quarter_month, day=1, hour=0, minute=0, second=0, microsecond=0)
+        end_date = now
+    elif period == "current_year":
+        start_date = now.replace(month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
+        end_date = now
+    else:
+        start_date = now - timedelta(days=30)
+        end_date = now
+    
+    # Build query
+    query = {
+        "date": {
+            "$gte": start_date.isoformat(),
+            "$lte": end_date.isoformat()
+        }
+    }
+    
+    if category:
+        query["category"] = category
+    
+    # Get transactions
+    transactions = await db.financial_records.find(query, {"_id": 0}).sort("date", -1).to_list(500)
+    
+    return {"transactions": transactions, "total": len(transactions)}
+
 @super_router.get("/financial/invoices")
 async def list_invoices(
     status: Optional[str] = None,
