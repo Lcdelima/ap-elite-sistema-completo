@@ -219,6 +219,7 @@ const Processes = () => {
                       required
                       value={formData.client_name}
                       onChange={(e) => setFormData({...formData, client_name: e.target.value})}
+                      placeholder="Nome do cliente"
                       className="w-full px-3 py-2 border rounded-lg"
                     />
                   </div>
@@ -230,6 +231,7 @@ const Processes = () => {
                     required
                     value={formData.title}
                     onChange={(e) => setFormData({...formData, title: e.target.value})}
+                    placeholder="Ex: Ação de Cobrança, Investigação Criminal..."
                     className="w-full px-3 py-2 border rounded-lg"
                   />
                 </div>
@@ -239,6 +241,7 @@ const Processes = () => {
                     type="text"
                     value={formData.court}
                     onChange={(e) => setFormData({...formData, court: e.target.value})}
+                    placeholder="Ex: 1ª Vara Cível - São Paulo"
                     className="w-full px-3 py-2 border rounded-lg"
                   />
                 </div>
