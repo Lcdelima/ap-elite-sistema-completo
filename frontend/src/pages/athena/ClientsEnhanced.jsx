@@ -697,7 +697,8 @@ const ClientsEnhanced = () => {
                           type="text"
                           value={formData.nationality}
                           onChange={(e) => setFormData({...formData, nationality: e.target.value})}
-                          className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+                          placeholder="Ex: Brasileira"
+                          className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-cyan-500"
                         />
                       </div>
                       <div>
