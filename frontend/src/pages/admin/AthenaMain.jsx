@@ -39,7 +39,8 @@ import {
   Users2,
   LineChart,
   CheckCircle2,
-  FileBarChart
+  FileBarChart,
+  LogOut
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -47,6 +48,13 @@ const AthenaMain = () => {
   const navigate = useNavigate();
   const [metrics, setMetrics] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const handleLogout = () => {
+    localStorage.removeItem('ap_elite_token');
+    localStorage.removeItem('user_data');
+    toast.success('Logout realizado com sucesso!');
+    navigate('/login');
+  };
 
   useEffect(() => {
     fetchMetrics();
