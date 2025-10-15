@@ -315,12 +315,29 @@ async def get_financial_summary(
     expense_result = await db.financial_records.aggregate(expense_pipeline).to_list(1)
     total_expenses = expense_result[0]["total"] if expense_result else 0.0
     
-    # By category
+    # By category - organize by main categories
     category_pipeline = [
         {"$match": {"date": {"$gte": start_date, "$lte": end_date}}},
-        {"$group": {"_id": {"category": "$category", "type": "$type"}, "total": {"$sum": "$amount"}}}
+        {"$group": {
+            "_id": "$category",
+            "income": {"$sum": {"$cond": [{"$eq": ["$type", "income"]}, "$amount", 0]}},
+            "expenses": {"$sum": {"$cond": [{"$eq": ["$type", "expense"]}, "$amount", 0]}}
+        }}
     ]
-    by_category = await db.financial_records.aggregate(category_pipeline).to_list(100)
+    category_results = await db.financial_records.aggregate(category_pipeline).to_list(100)
+    by_category = {cat["_id"]: {"income": cat["income"], "expenses": cat["expenses"]} for cat in category_results}
+    
+    # By subcategory
+    subcategory_pipeline = [
+        {"$match": {"date": {"$gte": start_date, "$lte": end_date}}},
+        {"$group": {
+            "_id": "$subcategory",
+            "income": {"$sum": {"$cond": [{"$eq": ["$type", "income"]}, "$amount", 0]}},
+            "expenses": {"$sum": {"$cond": [{"$eq": ["$type", "expense"]}, "$amount", 0]}}
+        }}
+    ]
+    subcategory_results = await db.financial_records.aggregate(subcategory_pipeline).to_list(200)
+    by_subcategory = {sub["_id"]: {"income": sub["income"], "expenses": sub["expenses"]} for sub in subcategory_results if sub["_id"]}
     
     return {
         "period": {"start": start_date, "end": end_date},
@@ -328,6 +345,7 @@ async def get_financial_summary(
         "expenses": total_expenses,
         "net": total_income - total_expenses,
         "by_category": by_category,
+        "by_subcategory": by_subcategory,
         "profit_margin": round((total_income - total_expenses) / total_income * 100, 2) if total_income > 0 else 0
     }
 
