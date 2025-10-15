@@ -32,10 +32,12 @@ app = FastAPI(
     version="2.0.0"
 )
 
-# CORS
+# CORS - Use environment variable for production security
+# For production: Set ALLOWED_ORIGINS in environment to restrict origins
+allowed_origins = os.environ.get("ALLOWED_ORIGINS", "*").split(",")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins if allowed_origins != ["*"] else ["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
