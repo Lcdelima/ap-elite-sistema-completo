@@ -52,6 +52,15 @@ const AthenaLayout = ({ children, title, subtitle }) => {
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Voltar
               </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleLogout}
+                className="text-white border-white hover:bg-red-500 hover:text-white"
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Sair
+              </Button>
             </div>
           </div>
         </div>
