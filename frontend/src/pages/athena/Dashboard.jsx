@@ -72,7 +72,7 @@ const Dashboard = () => {
               <p className="text-3xl font-bold text-white">{metrics?.total_cases || 0}</p>
               <div className="flex items-center mt-2 text-green-400 text-sm">
                 <TrendingUp className="h-4 w-4 mr-1" />
-                <span>Ativos: {metrics.active_cases}</span>
+                <span>Ativos: {metrics?.active_cases || 0}</span>
               </div>
             </CardContent>
           </Card>
@@ -83,7 +83,7 @@ const Dashboard = () => {
                 <p className="text-slate-400 text-sm">Clientes</p>
                 <Users className="h-5 w-5 text-purple-400" />
               </div>
-              <p className="text-3xl font-bold text-white">{metrics.total_clients}</p>
+              <p className="text-3xl font-bold text-white">{metrics?.total_clients || 0}</p>
             </CardContent>
           </Card>
 
@@ -94,7 +94,7 @@ const Dashboard = () => {
                 <DollarSign className="h-5 w-5 text-green-400" />
               </div>
               <p className="text-3xl font-bold text-white">
-                R$ {(metrics.monthly_revenue / 1000).toFixed(1)}k
+                R$ {((metrics?.monthly_revenue || 0) / 1000).toFixed(1)}k
               </p>
             </CardContent>
           </Card>
@@ -105,7 +105,7 @@ const Dashboard = () => {
                 <p className="text-slate-400 text-sm">Tarefas Pendentes</p>
                 <AlertTriangle className="h-5 w-5 text-yellow-400" />
               </div>
-              <p className="text-3xl font-bold text-white">{metrics.pending_tasks}</p>
+              <p className="text-3xl font-bold text-white">{metrics?.pending_tasks || 0}</p>
             </CardContent>
           </Card>
         </div>
