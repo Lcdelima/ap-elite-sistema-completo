@@ -50,7 +50,7 @@ import AthenaDataExtraction from './pages/athena/DataExtraction';
 import AthenaERBs from './pages/athena/ERBs';
 import AthenaIPED from './pages/athena/IPED';
 import AthenaEvidenceProcessing from './pages/athena/EvidenceProcessing';
-import AthenaProcessAnalysis from './pages/athena/ProcessAnalysis';
+import AthenaProcessAnalysis from './pages/athena/ProcessAnalysisPro';
 import AthenaReports from './pages/athena/Reports';
 import AthenaFinancial from './pages/athena/FinancialManagementEnhanced';
 import AthenaIntelligentDashboards from './pages/athena/IntelligentDashboards';
