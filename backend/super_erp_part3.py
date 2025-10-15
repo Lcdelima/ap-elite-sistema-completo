@@ -252,28 +252,29 @@ async def download_report(filename: str, current_user: dict = Depends(get_curren
 
 @super_router.post("/financial/transaction")
 async def create_financial_transaction(
-    type: str = Form(...),
-    amount: float = Form(...),
-    description: str = Form(...),
-    category: str = Form(...),
-    date: str = Form(...),
-    case_id: Optional[str] = Form(None),
-    client_id: Optional[str] = Form(None),
+    transaction_data: dict,
     current_user: dict = Depends(get_current_user)
 ):
-    """Create financial transaction"""
+    """Create financial transaction with category and subcategory"""
     if not current_user:
         raise HTTPException(status_code=401, detail="Authentication required")
     
+    # Validate required fields
+    required_fields = ["type", "amount", "description", "category", "subcategory", "date"]
+    for field in required_fields:
+        if field not in transaction_data:
+            raise HTTPException(status_code=400, detail=f"Missing required field: {field}")
+    
     transaction = {
         "id": str(uuid.uuid4()),
-        "type": type,
-        "amount": amount,
-        "description": description,
-        "category": category,
-        "date": date,
-        "case_id": case_id,
-        "client_id": client_id,
+        "type": transaction_data["type"],
+        "amount": float(transaction_data["amount"]),
+        "description": transaction_data["description"],
+        "category": transaction_data["category"],
+        "subcategory": transaction_data["subcategory"],
+        "date": transaction_data["date"],
+        "case_id": transaction_data.get("case_id"),
+        "client_id": transaction_data.get("client_id"),
         "created_by": current_user["id"],
         "created_at": datetime.now(timezone.utc).isoformat(),
         "updated_at": datetime.now(timezone.utc).isoformat()
@@ -281,7 +282,7 @@ async def create_financial_transaction(
     
     await db.financial_records.insert_one(transaction)
     
-    return {"transaction_id": transaction["id"], "message": "Transaction created"}
+    return {"transaction_id": transaction["id"], "message": "Transaction created successfully"}
 
 @super_router.get("/financial/summary")
 async def get_financial_summary(
