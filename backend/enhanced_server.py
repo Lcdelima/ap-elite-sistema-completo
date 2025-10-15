@@ -629,7 +629,7 @@ import super_erp_part3
 from user_management import user_router
 from athena_enhanced_apis import enhanced_router
 from notifications_system import notifications_router
-from reports_generator import reports_router
+from reports_generator import reports_router as reports_gen_router
 from email_integration import email_router
 from storage_integration import storage_router
 from ai_document_analysis import ai_router
@@ -638,7 +638,7 @@ from backup_system import backup_router
 from hybrid_sync_system import hybrid_router
 from advanced_investigation_ai import investigation_router
 from relationship_mapping import relationships_router
-from automated_reports import reports_router
+from automated_reports import reports_router as automated_reports_router
 from document_library_system import router as library_router
 from osint_enhanced import router as osint_enhanced_router
 from template_generator import router as template_router
