@@ -48,6 +48,14 @@ const Dashboard = () => {
     );
   }
 
+  if (!metrics) {
+    return (
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+        <div className="text-white text-xl">Erro ao carregar dados</div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-slate-900 p-6">
       <div className="max-w-7xl mx-auto">
@@ -61,7 +69,7 @@ const Dashboard = () => {
                 <p className="text-slate-400 text-sm">Casos Totais</p>
                 <FileText className="h-5 w-5 text-cyan-400" />
               </div>
-              <p className="text-3xl font-bold text-white">{metrics.total_cases}</p>
+              <p className="text-3xl font-bold text-white">{metrics?.total_cases || 0}</p>
               <div className="flex items-center mt-2 text-green-400 text-sm">
                 <TrendingUp className="h-4 w-4 mr-1" />
                 <span>Ativos: {metrics.active_cases}</span>
