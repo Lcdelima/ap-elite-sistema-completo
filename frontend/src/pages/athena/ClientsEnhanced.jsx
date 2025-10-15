@@ -640,7 +640,9 @@ const ClientsEnhanced = () => {
                           required
                           value={formData.cpf}
                           onChange={(e) => setFormData({...formData, cpf: e.target.value})}
-                          className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+                          placeholder="000.000.000-00"
+                          maxLength="14"
+                          className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-cyan-500"
                         />
                       </div>
                       <div>
