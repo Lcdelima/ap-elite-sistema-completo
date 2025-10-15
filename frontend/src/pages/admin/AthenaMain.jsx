@@ -521,6 +521,15 @@ const AthenaMain = () => {
                 <span className="text-white font-medium">Voltar ao Painel Admin</span>
               </button>
               
+              {/* Botão Logout */}
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 bg-opacity-80 hover:bg-opacity-100 backdrop-blur-sm px-6 py-3 rounded-lg flex items-center space-x-2 transition-all"
+              >
+                <LogOut className="h-5 w-5 text-white" />
+                <span className="text-white font-medium">Sair</span>
+              </button>
+              
               {metrics && (
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg p-4 text-center">
