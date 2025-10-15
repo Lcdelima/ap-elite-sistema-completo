@@ -1,10 +1,18 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Home } from 'lucide-react';
+import { ArrowLeft, Home, LogOut } from 'lucide-react';
+import { toast } from 'sonner';
 
 const AthenaLayout = ({ children, title, subtitle }) => {
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('ap_elite_token');
+    localStorage.removeItem('user_data');
+    toast.success('Logout realizado com sucesso!');
+    navigate('/login');
+  };
 
   return (
     <div className="min-h-screen bg-slate-900">
