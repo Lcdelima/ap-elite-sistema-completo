@@ -276,6 +276,7 @@ const Processes = () => {
                   <textarea
                     value={formData.description}
                     onChange={(e) => setFormData({...formData, description: e.target.value})}
+                    placeholder="Descreva os detalhes do processo, partes envolvidas, pedidos principais..."
                     className="w-full px-3 py-2 border rounded-lg"
                     rows="3"
                   />
