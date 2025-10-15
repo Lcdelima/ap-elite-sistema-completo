@@ -503,18 +503,10 @@ Implementar sistema ERP completo para AP Elite com funcionalidades avançadas:
 
 ## test_plan:
   current_focus:
-    - "OCR Dashboard Frontend"
-    - "Media Analysis Frontend"
-    - "Workflow Manager Frontend"
-    - "Chatbot Interface Frontend"
-    - "Social Monitor Frontend"
-    - "Collaboration Hub Frontend"
-    - "Predictive Analytics Frontend"
-    - "Compliance Center Frontend"
-    - "Automated Reports Frontend"
+    - "ALL MODULES - Complete System Testing"
   stuck_tasks: []
-  test_all: false
-  test_priority: "high_first"
+  test_all: true
+  test_priority: "comprehensive"
   backend_testing_complete: true
   backend_success_rate: "100%"
   backend_modules_tested: 9
