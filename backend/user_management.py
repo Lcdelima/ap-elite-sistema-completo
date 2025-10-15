@@ -159,7 +159,9 @@ async def list_users(
     if not current_user:
         raise HTTPException(status_code=401, detail="Authentication required")
     
-    if not check_permission(current_user, "manage_users"):
+    # Check permission - allow admins and super_admins
+    user_role = current_user.get("role", "client")
+    if user_role not in ["administrator", "super_admin", "admin"] and not check_permission(current_user, "manage_users"):
         raise HTTPException(status_code=403, detail="Permission denied")
     
     # Build filter query
