@@ -27,7 +27,7 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
     try:
         token_parts = credentials.credentials.split('_')
         user_id = token_parts[1]
-        user = await db.users.find_one({"id": user_id, "status": "active"}, {"_id": 0, "password": 0})
+        user = await db.users.find_one({"id": user_id, "active": True}, {"_id": 0, "password": 0})
         return user
     except:
         return None
