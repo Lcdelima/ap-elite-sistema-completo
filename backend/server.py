@@ -287,13 +287,13 @@ async def create_user(user_data: UserCreate):
     user_obj.password = "***"
     return user_obj
 
-@api_router.get("/users", response_model=List[User])
+@api_router.get("/users")
 async def get_users():
     users = await db.users.find({"active": True}, {"_id": 0, "password": 0}).to_list(100)
     for user in users:
         if isinstance(user['created_at'], str):
             user['created_at'] = datetime.fromisoformat(user['created_at'])
-    return users
+    return {"users": users, "total": len(users)}
 
 # Case Management
 @api_router.post("/cases", response_model=Case)
