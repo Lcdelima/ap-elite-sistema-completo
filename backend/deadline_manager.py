@@ -3,7 +3,7 @@ AP ELITE - Deadline Manager Backend
 D-3 and D-1 deadline management with double-checking
 """
 
-from fastapi import APIRouter, Depends, HTTPException, Body
+from fastapi import APIRouter, Depends, HTTPException, Body, Header
 from datetime import datetime, timezone, timedelta
 from typing import Optional
 import os
@@ -19,11 +19,19 @@ client = AsyncIOMotorClient(MONGO_URL)
 db = client[DB_NAME]
 
 # Simple auth dependency
-async def get_current_user(authorization: str = None):
+async def get_current_user(authorization: Optional[str] = Header(None)):
     """Simple token validation"""
     if not authorization or not authorization.startswith('Bearer '):
         return None
-    return {"id": "user123", "email": "laura@apelite.com", "role": "administrator"}
+    
+    # Extract token and validate with database
+    token = authorization.replace('Bearer ', '')
+    user = await db.users.find_one({"token": token}, {"_id": 0, "password": 0})
+    
+    if not user:
+        return None
+    
+    return user
 
 def calculate_deadline_status(deadline_str, completed=False):
     """Calculate status based on deadline"""
