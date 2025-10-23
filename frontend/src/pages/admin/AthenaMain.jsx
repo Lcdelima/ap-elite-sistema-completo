@@ -487,6 +487,26 @@ const AthenaMain = () => {
       color: 'from-yellow-600 via-amber-700 to-orange-800',
       badge: 'AUTO',
       badgeColor: 'bg-gradient-to-r from-yellow-500 to-amber-500'
+    },
+    {
+      id: 44,
+      title: 'Dashboard Executivo',
+      subtitle: 'KPIs e Métricas de Gestão',
+      icon: BarChart3,
+      path: '/athena/executive-dashboard',
+      color: 'from-indigo-600 via-blue-700 to-cyan-800',
+      badge: 'EXEC',
+      badgeColor: 'bg-gradient-to-r from-indigo-500 to-blue-500'
+    },
+    {
+      id: 45,
+      title: 'Gestão de Prazos',
+      subtitle: 'Controle D-3 e D-1',
+      icon: Clock,
+      path: '/athena/deadlines',
+      color: 'from-orange-600 via-red-700 to-pink-800',
+      badge: 'D-3/D-1',
+      badgeColor: 'bg-gradient-to-r from-orange-500 to-red-500'
     }
   ];
 
