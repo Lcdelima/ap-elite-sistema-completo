@@ -331,9 +331,9 @@ Implementar sistema ERP completo para AP Elite com funcionalidades avançadas:
 
   - task: "Sistema de Relatórios Automatizados"
     implemented: true
-    working: true
+    working: false
     file: "/app/backend/automated_reports.py"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
     needs_retesting: false
     status_history:
@@ -343,6 +343,78 @@ Implementar sistema ERP completo para AP Elite com funcionalidades avançadas:
       - working: true
         agent: "testing"
         comment: "✅ RE-TESTED: Automated Reports System fully operational. GET /api/reports/templates successfully returns 4 professional templates: investigation, forensic, osint, and network with detailed section descriptions. POST /api/reports/generate initiates background report generation with proper request tracking (request_id: 5511bfa2-aded-412a-8f4f-d6d58baaedf4). GET /api/reports/status tracks report generation progress correctly. All templates include comprehensive sections for law enforcement documentation. AI-powered report generation with ReportLab PDF creation working correctly."
+      - working: false
+        agent: "testing"
+        comment: "❌ COMPREHENSIVE AUDIT: Report Templates endpoint (/api/reports/templates) returning 401 Authentication required error during comprehensive system audit. Authentication token is valid for other endpoints but this specific endpoint has authentication middleware issues. Core report generation functionality may be working but endpoint access is blocked."
+
+  - task: "Executive Dashboard Pro (NEW)"
+    implemented: false
+    working: false
+    file: "/app/backend/enhanced_server.py"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "❌ COMPREHENSIVE AUDIT: Executive Dashboard Pro endpoint (/api/athena/dashboard/executive) not found (404). This NEW priority module appears to not be implemented yet. Endpoint should provide executive-level dashboard with high-level KPIs and strategic insights."
+
+  - task: "Deadline Manager (NEW)"
+    implemented: false
+    working: false
+    file: "/app/backend/enhanced_server.py"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "❌ COMPREHENSIVE AUDIT: Deadline Manager endpoint (/api/athena/deadlines) not found (404). This NEW priority module appears to not be implemented yet. Endpoint should provide deadline management with D-3/D-1 notifications and case deadline tracking."
+
+  - task: "User Management API Fix"
+    implemented: true
+    working: false
+    file: "/app/backend/user_management.py"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ FIXED: User Management API previously fixed - database connection and authentication logic corrected."
+      - working: false
+        agent: "testing"
+        comment: "❌ COMPREHENSIVE AUDIT: User Management List endpoint (/api/users) returning 500 Internal Server Error during comprehensive audit. Previous fix may have been reverted or there's a new issue. Requires investigation of user_management.py database connection and error handling."
+
+  - task: "Workflow Automation System"
+    implemented: true
+    working: false
+    file: "/app/backend/workflow_automation.py"
+    stuck_count: 1
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ PREVIOUS: Workflow Templates API was working in previous tests."
+      - working: false
+        agent: "testing"
+        comment: "❌ COMPREHENSIVE AUDIT: Workflow Templates endpoint (/api/workflow/templates) not found (404). Endpoint routing may be incorrect or module not properly included in enhanced_server.py."
+
+  - task: "Social Listening System"
+    implemented: true
+    working: false
+    file: "/app/backend/social_listening.py"
+    stuck_count: 1
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ PREVIOUS: Social Listening Statistics API was working in previous tests."
+      - working: false
+        agent: "testing"
+        comment: "❌ COMPREHENSIVE AUDIT: Social Listening Statistics endpoint (/api/social/statistics) not found (404). Endpoint routing may be incorrect or module not properly included in enhanced_server.py."
 
   - task: "AI Orchestrator - Multi-Provider System"
     implemented: true
