@@ -3,7 +3,7 @@ AP ELITE - Executive Dashboard Backend
 Comprehensive KPIs and metrics for executive decision making
 """
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Header
 from datetime import datetime, timezone, timedelta
 from typing import Optional
 import os
@@ -18,12 +18,19 @@ client = AsyncIOMotorClient(MONGO_URL)
 db = client[DB_NAME]
 
 # Simple auth dependency (reuse from other modules)
-async def get_current_user(authorization: str = None):
+async def get_current_user(authorization: Optional[str] = Header(None)):
     """Simple token validation"""
     if not authorization or not authorization.startswith('Bearer '):
         return None
-    # For now, return a mock user
-    return {"id": "user123", "email": "laura@apelite.com", "role": "administrator"}
+    
+    # Extract token and validate with database
+    token = authorization.replace('Bearer ', '')
+    user = await db.users.find_one({"token": token}, {"_id": 0, "password": 0})
+    
+    if not user:
+        return None
+    
+    return user
 
 @router.get("/executive")
 async def get_executive_dashboard(
