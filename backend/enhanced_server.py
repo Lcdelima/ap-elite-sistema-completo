@@ -128,20 +128,21 @@ async def create_user(user_data: UserCreate, current_user: dict = Depends(get_cu
     user_obj.password = "***"
     return user_obj
 
-@api_router.get("/users", response_model=List[User])
-async def get_users(current_user: dict = Depends(get_current_user)):
-    if not current_user or current_user.get("role") not in ["administrator", "analyst"]:
-        raise HTTPException(status_code=403, detail="Access denied")
-    
-    users = await db.users.find({"active": True}, {"_id": 0, "password": 0}).to_list(200)
-    
-    for user in users:
-        if isinstance(user.get('created_at'), str):
-            user['created_at'] = datetime.fromisoformat(user['created_at'])
-        if isinstance(user.get('updated_at'), str):
-            user['updated_at'] = datetime.fromisoformat(user['updated_at'])
-    
-    return users
+# Disabled - using user_management.py endpoints instead to avoid conflicts
+# @api_router.get("/users", response_model=List[User])
+# async def get_users(current_user: dict = Depends(get_current_user)):
+#     if not current_user or current_user.get("role") not in ["administrator", "analyst"]:
+#         raise HTTPException(status_code=403, detail="Access denied")
+#     
+#     users = await db.users.find({"active": True}, {"_id": 0, "password": 0}).to_list(200)
+#     
+#     for user in users:
+#         if isinstance(user.get('created_at'), str):
+#             user['created_at'] = datetime.fromisoformat(user['created_at'])
+#         if isinstance(user.get('updated_at'), str):
+#             user['updated_at'] = datetime.fromisoformat(user['updated_at'])
+#     
+#     return users
 
 # ==================== CASE MANAGEMENT ====================
 
