@@ -18,20 +18,21 @@ DB_NAME = os.environ.get("DB_NAME", "test_database")
 client = AsyncIOMotorClient(MONGO_URL)
 db = client[DB_NAME]
 
-# Simple auth dependency (reuse from other modules)
-async def get_current_user(authorization: Optional[str] = Header(None)):
-    """Simple token validation"""
-    if not authorization or not authorization.startswith('Bearer '):
+# Security
+security = HTTPBearer(auto_error=False)
+
+# Authentication dependency (matching working pattern)
+async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    if not credentials:
         return None
     
-    # Extract token and validate with database
-    token = authorization.replace('Bearer ', '')
-    user = await db.users.find_one({"token": token}, {"_id": 0, "password": 0})
-    
-    if not user:
+    try:
+        token_parts = credentials.credentials.split('_')
+        user_id = token_parts[1]
+        user = await db.users.find_one({"id": user_id, "active": True}, {"_id": 0, "password": 0})
+        return user
+    except:
         return None
-    
-    return user
 
 @router.get("/executive")
 async def get_executive_dashboard(
