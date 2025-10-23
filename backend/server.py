@@ -297,42 +297,43 @@ async def create_user(user_data: UserCreate):
 #     return {"users": users, "total": len(users)}
 
 # Case Management
-@api_router.post("/cases", response_model=Case)
-async def create_case(case_data: CaseCreate):
-    case_dict = case_data.model_dump()
-    if case_dict.get('estimated_completion'):
-        case_dict['estimated_completion'] = datetime.fromisoformat(case_dict['estimated_completion'])
-    
-    case_obj = Case(**case_dict)
-    
-    doc = case_obj.model_dump()
-    doc['start_date'] = doc['start_date'].isoformat()
-    doc['created_at'] = doc['created_at'].isoformat()
-    if doc.get('estimated_completion'):
-        doc['estimated_completion'] = doc['estimated_completion'].isoformat()
-    
-    await db.cases.insert_one(doc)
-    return case_obj
+# Disabled - using enhanced_server.py endpoints to avoid conflicts
+# @api_router.post("/cases", response_model=Case)
+# async def create_case(case_data: CaseCreate):
+#     case_dict = case_data.model_dump()
+#     if case_dict.get('estimated_completion'):
+#         case_dict['estimated_completion'] = datetime.fromisoformat(case_dict['estimated_completion'])
+#     
+#     case_obj = Case(**case_dict)
+#     
+#     doc = case_obj.model_dump()
+#     doc['start_date'] = doc['start_date'].isoformat()
+#     doc['created_at'] = doc['created_at'].isoformat()
+#     if doc.get('estimated_completion'):
+#         doc['estimated_completion'] = doc['estimated_completion'].isoformat()
+#     
+#     await db.cases.insert_one(doc)
+#     return case_obj
 
-@api_router.get("/cases", response_model=List[Case])
-async def get_cases():
-    cases = await db.cases.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
-    for case in cases:
-        if isinstance(case['start_date'], str):
-            case['start_date'] = datetime.fromisoformat(case['start_date'])
-        if isinstance(case['created_at'], str):
-            case['created_at'] = datetime.fromisoformat(case['created_at'])
-        if case.get('completion_date') and isinstance(case['completion_date'], str):
-            case['completion_date'] = datetime.fromisoformat(case['completion_date'])
-    return cases
+# @api_router.get("/cases", response_model=List[Case])
+# async def get_cases():
+#     cases = await db.cases.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
+#     for case in cases:
+#         if isinstance(case['start_date'], str):
+#             case['start_date'] = datetime.fromisoformat(case['start_date'])
+#         if isinstance(case['created_at'], str):
+#             case['created_at'] = datetime.fromisoformat(case['created_at'])
+#         if case.get('completion_date') and isinstance(case['completion_date'], str):
+#             case['completion_date'] = datetime.fromisoformat(case['completion_date'])
+#     return cases
 
-@api_router.get("/cases/client/{client_id}", response_model=List[Case])
-async def get_client_cases(client_id: str):
-    cases = await db.cases.find({"client_id": client_id}, {"_id": 0}).sort("created_at", -1).to_list(100)
-    for case in cases:
-        if isinstance(case['start_date'], str):
-            case['start_date'] = datetime.fromisoformat(case['start_date'])
-        if isinstance(case['created_at'], str):
+# @api_router.get("/cases/client/{client_id}", response_model=List[Case])
+# async def get_client_cases(client_id: str):
+#     cases = await db.cases.find({"client_id": client_id}, {"_id": 0}).sort("created_at", -1).to_list(100)
+#     for case in cases:
+#         if isinstance(case['start_date'], str):
+#             case['start_date'] = datetime.fromisoformat(case['start_date'])
+#         if isinstance(case['created_at'], str):
             case['created_at'] = datetime.fromisoformat(case['created_at'])
     return cases
 
