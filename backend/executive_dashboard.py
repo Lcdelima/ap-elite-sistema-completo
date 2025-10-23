@@ -3,7 +3,8 @@ AP ELITE - Executive Dashboard Backend
 Comprehensive KPIs and metrics for executive decision making
 """
 
-from fastapi import APIRouter, Depends, HTTPException, Header
+from fastapi import APIRouter, Depends, HTTPException
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from datetime import datetime, timezone, timedelta
 from typing import Optional
 import os
