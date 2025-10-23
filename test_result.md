@@ -379,7 +379,7 @@ Implementar sistema ERP completo para AP Elite com funcionalidades avançadas:
 
   - task: "User Management API Fix"
     implemented: true
-    working: false
+    working: "NA"
     file: "/app/backend/user_management.py"
     stuck_count: 1
     priority: "high"
@@ -391,6 +391,9 @@ Implementar sistema ERP completo para AP Elite com funcionalidades avançadas:
       - working: false
         agent: "testing"
         comment: "❌ COMPREHENSIVE AUDIT: User Management List endpoint (/api/users) returning 500 Internal Server Error during comprehensive audit. Previous fix may have been reverted or there's a new issue. Requires investigation of user_management.py database connection and error handling."
+      - working: "NA"
+        agent: "main"
+        comment: "✅ FIXED: Added standard /api/users endpoint in addition to /api/users/list. Added proper error handling with try-catch for database operations. Both endpoints now properly check authentication and permissions (requires administrator/super_admin/admin role). Backend restarted successfully. Ready for testing."
 
   - task: "Workflow Automation System"
     implemented: true
