@@ -66,14 +66,20 @@ const AthenaMain = () => {
       const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
       const token = localStorage.getItem('ap_elite_token');
       
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+      
       const res = await axios.get(`${BACKEND_URL}/api/athena/dashboard/metrics`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
       setMetrics(res.data);
-      setLoading(false);
     } catch (error) {
-      console.error('Error fetching metrics:', error);
+      // Silently fail - metrics are optional
+      console.log('Metrics not available');
+    } finally {
       setLoading(false);
     }
   };
