@@ -602,9 +602,11 @@ Implementar sistema ERP completo para AP Elite com funcionalidades avançadas:
 
 ## metadata:
   created_by: "main_agent"
-  version: "3.1"
-  test_sequence: 4
+  version: "3.2"
+  test_sequence: 5
   run_ui: true
+  final_comprehensive_test_complete: true
+  all_critical_endpoints_verified: true
 
 ## test_plan:
   current_focus:
