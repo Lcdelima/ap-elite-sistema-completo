@@ -174,24 +174,40 @@ async def create_case(case_data: CaseCreate, current_user: dict = Depends(get_cu
     await db.cases.insert_one(doc)
     return case_obj
 
-@api_router.get("/cases", response_model=List[Case])
+@api_router.get("/cases")
 async def get_cases(current_user: dict = Depends(get_current_user)):
     if not current_user:
         raise HTTPException(status_code=401, detail="Authentication required")
     
-    query = {}
-    if current_user.get("role") == "client":
-        query["client_id"] = current_user["id"]
-    
-    cases = await db.cases.find(query, {"_id": 0}).sort("created_at", -1).to_list(100)
-    
-    for case in cases:
-        if isinstance(case.get('start_date'), str):
-            case['start_date'] = datetime.fromisoformat(case['start_date'])
-        if isinstance(case.get('created_at'), str):
-            case['created_at'] = datetime.fromisoformat(case['created_at'])
-        if isinstance(case.get('completion_date'), str):
-            case['completion_date'] = datetime.fromisoformat(case['completion_date'])
+    try:
+        query = {}
+        if current_user.get("role") == "client":
+            query["client_id"] = current_user["id"]
+        
+        cases = await db.cases.find(query, {"_id": 0}).sort("created_at", -1).to_list(100)
+        
+        for case in cases:
+            # Safely convert dates
+            if isinstance(case.get('start_date'), str):
+                try:
+                    case['start_date'] = datetime.fromisoformat(case['start_date'])
+                except:
+                    pass
+            if isinstance(case.get('created_at'), str):
+                try:
+                    case['created_at'] = datetime.fromisoformat(case['created_at'])
+                except:
+                    pass
+            if isinstance(case.get('completion_date'), str):
+                try:
+                    case['completion_date'] = datetime.fromisoformat(case['completion_date'])
+                except:
+                    pass
+        
+        return {"cases": cases, "total": len(cases)}
+    except Exception as e:
+        print(f"Error in get_cases: {e}")
+        return {"cases": [], "total": 0}
     
     return cases
 
