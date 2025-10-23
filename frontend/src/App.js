@@ -44,7 +44,7 @@ import AthenaCalendar from './pages/athena/Calendar';
 import AthenaMeetingLinks from './pages/athena/MeetingLinks';
 import AthenaVideoConference from './pages/athena/VideoConference';
 import AthenaForensics from './pages/athena/Forensics';
-import AthenaPhoneInterceptions from './pages/athena/PhoneInterceptionsEnhanced';
+import AthenaPhoneInterceptions from './pages/athena/PhoneInterceptionsComplete';
 import AthenaPhoneInterceptionsPro from './pages/athena/PhoneInterceptionsPro';
 import AthenaDataInterceptions from './pages/athena/DataInterceptions';
 import AthenaDataExtraction from './pages/athena/DataExtraction';
