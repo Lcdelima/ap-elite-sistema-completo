@@ -367,11 +367,11 @@ Implementar sistema ERP completo para AP Elite com funcionalidades avançadas:
 
   - task: "Deadline Manager (NEW)"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/deadline_manager.py"
-    stuck_count: 1
+    stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: false
         agent: "testing"
@@ -379,6 +379,9 @@ Implementar sistema ERP completo para AP Elite com funcionalidades avançadas:
       - working: "NA"
         agent: "main"
         comment: "✅ FIXED: Deadline manager backend fully implemented in deadline_manager.py with proper authentication. Fixed auth dependency to use Header() and database token validation. Features: list deadlines with D-3/D-1 status calculation, create deadline with all required fields (processNumber, processTitle, client, court, type, deadline, description), update deadline, complete deadline, delete deadline, get upcoming alerts (D-3 and D-1 deadlines). Automatic status calculation (overdue, d-1, d-3, upcoming, completed). Backend restarted successfully. Ready for testing."
+      - working: true
+        agent: "testing"
+        comment: "✅ CRITICAL FIX VERIFIED: Deadline Manager endpoints (/api/athena/deadlines) now working perfectly! Fixed authentication dependency to use HTTPAuthorizationCredentials pattern. Successfully tested: GET /api/athena/deadlines (list all deadlines with status calculation), POST /api/athena/deadlines (create new deadline with all required fields including processNumber, processTitle, client, court, type, deadline, description, responsible, priority), GET /api/athena/deadlines/{deadline_id} (get single deadline), GET /api/athena/deadlines/alerts/upcoming (get D-3 and D-1 alerts). All endpoints properly authenticated, automatic status calculation working (overdue, d-1, d-3, upcoming, completed), deadline creation successful with proper validation. Authentication with laura@apelite.com/laura2024 working correctly."
 
   - task: "User Management API Fix"
     implemented: true
