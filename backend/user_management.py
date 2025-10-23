@@ -148,14 +148,14 @@ async def create_user(user_data: dict, current_user: dict = Depends(get_current_
     return {"message": "User created successfully", "user": new_user}
 
 
-@user_router.get("/users/list")
-async def list_users(
+@user_router.get("/users")
+async def get_all_users(
     user_type: Optional[str] = None,
     role: Optional[str] = None,
     status: Optional[str] = None,
     current_user: dict = Depends(get_current_user)
 ):
-    """List all users with filters"""
+    """Get all users with filters"""
     if not current_user:
         raise HTTPException(status_code=401, detail="Authentication required")
     
@@ -173,10 +173,22 @@ async def list_users(
     if status:
         filter_query["status"] = status
     
-    # Get users
-    users = await db.users.find(filter_query, {"_id": 0, "password": 0}).sort("created_at", -1).to_list(500)
-    
-    return {"users": users, "total": len(users)}
+    try:
+        # Get users
+        users = await db.users.find(filter_query, {"_id": 0, "password": 0}).sort("created_at", -1).to_list(500)
+        return {"users": users, "total": len(users)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+
+@user_router.get("/users/list")
+async def list_users(
+    user_type: Optional[str] = None,
+    role: Optional[str] = None,
+    status: Optional[str] = None,
+    current_user: dict = Depends(get_current_user)
+):
+    """List all users with filters (alias for /users)"""
+    return await get_all_users(user_type, role, status, current_user)
 
 
 @user_router.get("/users/{user_id}")
