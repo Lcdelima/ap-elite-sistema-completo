@@ -40,7 +40,8 @@ import {
   LineChart,
   CheckCircle2,
   FileBarChart,
-  LogOut
+  LogOut,
+  Clock
 } from 'lucide-react';
 import { toast } from 'sonner';
 
