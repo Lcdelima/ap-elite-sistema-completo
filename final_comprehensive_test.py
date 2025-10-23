@@ -106,16 +106,34 @@ class FinalComprehensiveTester:
                 if response.status == 200:
                     data = await response.json()
                     
-                    # Validate executive dashboard structure
-                    required_keys = ["financial", "cases", "clients", "deadlines", "interceptions", "documents", "payments", "team"]
-                    missing_keys = [key for key in required_keys if key not in data]
-                    
-                    if missing_keys:
-                        self.log_result("Dashboard Executive", False, f"Missing keys: {missing_keys}", data)
-                        return False
-                    
-                    self.log_result("Dashboard Executive", True, "Successfully retrieved executive dashboard with all KPIs")
-                    return True
+                    # Check if data has kpis structure (actual implementation)
+                    if "kpis" in data:
+                        kpis = data.get("kpis", {})
+                        required_kpi_keys = ["revenue", "cases", "clients", "deadlines", "interceptions", "documents", "payments", "team"]
+                        missing_keys = [key for key in required_kpi_keys if key not in kpis]
+                        
+                        if missing_keys:
+                            self.log_result("Dashboard Executive", False, f"Missing KPI keys: {missing_keys}", data)
+                            return False
+                        
+                        # Also check for trends and alerts
+                        if "trends" not in data or "alerts" not in data:
+                            self.log_result("Dashboard Executive", False, "Missing trends or alerts", data)
+                            return False
+                        
+                        self.log_result("Dashboard Executive", True, "Successfully retrieved executive dashboard with all KPIs, trends, and alerts")
+                        return True
+                    else:
+                        # Fallback to original structure check
+                        required_keys = ["financial", "cases", "clients", "deadlines", "interceptions", "documents", "payments", "team"]
+                        missing_keys = [key for key in required_keys if key not in data]
+                        
+                        if missing_keys:
+                            self.log_result("Dashboard Executive", False, f"Missing keys: {missing_keys}", data)
+                            return False
+                        
+                        self.log_result("Dashboard Executive", True, "Successfully retrieved executive dashboard with all KPIs")
+                        return True
                 else:
                     error_text = await response.text()
                     self.log_result("Dashboard Executive", False, f"Failed with status {response.status}", error_text)
