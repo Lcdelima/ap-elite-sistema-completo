@@ -334,8 +334,8 @@ async def create_user(user_data: UserCreate):
 #         if isinstance(case['start_date'], str):
 #             case['start_date'] = datetime.fromisoformat(case['start_date'])
 #         if isinstance(case['created_at'], str):
-            case['created_at'] = datetime.fromisoformat(case['created_at'])
-    return cases
+#             case['created_at'] = datetime.fromisoformat(case['created_at'])
+#     return cases
 
 @api_router.put("/cases/{case_id}/status")
 async def update_case_status(case_id: str, status: str):
