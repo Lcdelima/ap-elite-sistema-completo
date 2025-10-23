@@ -70,18 +70,20 @@ const AdminDashboard = () => {
       setLoading(true);
       const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
       const API = `${BACKEND_URL}/api`;
+      const token = localStorage.getItem('ap_elite_token');
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
       // Fetch statistics
-      const statsResponse = await axios.get(`${API}/admin/stats`);
+      const statsResponse = await axios.get(`${API}/admin/stats`, { headers });
       
       // Fetch recent appointments
-      const appointmentsResponse = await axios.get(`${API}/appointments`);
+      const appointmentsResponse = await axios.get(`${API}/appointments`, { headers });
       
       // Fetch recent messages  
-      const messagesResponse = await axios.get(`${API}/contact`);
+      const messagesResponse = await axios.get(`${API}/contact`, { headers });
       
       // Fetch recent cases
-      const casesResponse = await axios.get(`${API}/cases`);
+      const casesResponse = await axios.get(`${API}/cases`, { headers });
 
       setDashboardData({
         stats: statsResponse.data,
@@ -91,7 +93,10 @@ const AdminDashboard = () => {
       });
     } catch (error) {
       console.error('Erro ao carregar dados do dashboard:', error);
-      toast.error('Erro ao carregar dados do painel');
+      // Não mostrar erro se for apenas problema de autenticação
+      if (error.response?.status !== 401) {
+        toast.error('Erro ao carregar dados do painel');
+      }
     } finally {
       setLoading(false);
     }
