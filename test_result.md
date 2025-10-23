@@ -578,23 +578,20 @@ Implementar sistema ERP completo para AP Elite com funcionalidades avançadas:
 
 ## metadata:
   created_by: "main_agent"
-  version: "3.0"
-  test_sequence: 3
+  version: "3.1"
+  test_sequence: 4
   run_ui: true
 
 ## test_plan:
   current_focus:
-    - "COMPREHENSIVE AUDIT - All 43+ modules"
-    - "All backend endpoints"
-    - "All frontend pages"
-    - "All forms and inputs"
-    - "Executive Dashboard Pro"
-    - "Deadline Manager"
-    - "Phone Interceptions Enhanced"
-    - "Process Analysis Pro"
+    - "Executive Dashboard Pro - FIXED, needs testing"
+    - "Deadline Manager - FIXED, needs testing"
+    - "User Management API - FIXED, needs testing"
+    - "Verify all 3 critical fixes work correctly"
+    - "Then test remaining modules with issues"
   stuck_tasks: []
-  test_all: true
-  test_priority: "comprehensive_audit"
+  test_all: false
+  test_priority: "fixed_modules_first"
 
 ## agent_communication:
   - agent: "main"
