@@ -3,7 +3,8 @@ AP ELITE - Deadline Manager Backend
 D-3 and D-1 deadline management with double-checking
 """
 
-from fastapi import APIRouter, Depends, HTTPException, Body, Header
+from fastapi import APIRouter, Depends, HTTPException, Body
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from datetime import datetime, timezone, timedelta
 from typing import Optional
 import os
