@@ -659,6 +659,7 @@ from collaboration_realtime import router as collaboration_router
 from global_search import router as search_router
 from executive_dashboard import router as executive_dashboard_router
 from deadline_manager import router as deadline_router
+from phone_interceptions_pro import router as phone_interceptions_router
 
 # Add all routes to main app
 app.include_router(api_router)
@@ -695,6 +696,7 @@ app.include_router(collaboration_router)
 app.include_router(search_router)
 app.include_router(executive_dashboard_router)
 app.include_router(deadline_router)
+app.include_router(phone_interceptions_router)
 
 # Health check
 @app.get("/")
