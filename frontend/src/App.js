@@ -116,6 +116,7 @@ function AppContent() {
           <Route path="/admin/calendar" element={<Calendar />} />
           <Route path="/admin/reports" element={<ReportsExport />} />
           <Route path="/athena" element={<AthenaMain />} />
+          <Route path="/admin/athena" element={<AthenaMain />} />
           
           {/* Athena Module Routes - All 18 Modules */}
           <Route path="/athena/dashboard" element={<AthenaDashboard />} />
