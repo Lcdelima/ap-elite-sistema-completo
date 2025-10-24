@@ -676,6 +676,7 @@ from global_search import router as search_router
 from executive_dashboard import router as executive_dashboard_router
 from deadline_manager import router as deadline_router
 from phone_interceptions_pro import router as phone_interceptions_router
+from juridico_completo import router as juridico_router
 
 # Add all routes to main app
 app.include_router(api_router)
