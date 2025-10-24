@@ -10,7 +10,7 @@ import {
   LineChart, CheckCircle2, FileBarChart, LogOut, Clock, ChevronRight,
   Briefcase, Gavel, ShieldCheck, Building2, FileSpreadsheet, Settings,
   Globe, Target, Eye, AlertTriangle, Hash, Folder, BookOpen, Link as LinkIcon,
-  PhoneCall, Smartphone, MapPin, Menu, X, Home, ArrowLeft
+  PhoneCall, Smartphone, MapPin, Menu, X, Home, ArrowLeft, FileCheck
 } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
