@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import {
   Scale, Plus, Search, Filter, Eye, Edit, Trash2, Download,
   FileText, Calendar, User, Building, MapPin, Phone, Mail,
-  DollarSign, AlertCircle, CheckCircle, Clock, Gavel, Hash
+  DollarSign, AlertCircle, CheckCircle, Clock, Gavel, Hash, Users
 } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
