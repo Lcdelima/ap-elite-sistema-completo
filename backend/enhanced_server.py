@@ -716,6 +716,7 @@ from deadline_manager import router as deadline_router
 from phone_interceptions_pro import router as phone_interceptions_router
 from juridico_completo import router as juridico_router
 from documentos_juridicos import router as documentos_router
+from process_analysis_complete import process_analysis_router
 
 # Add all routes to main app
 app.include_router(api_router)
