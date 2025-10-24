@@ -717,6 +717,9 @@ from phone_interceptions_pro import router as phone_interceptions_router
 from juridico_completo import router as juridico_router
 from documentos_juridicos import router as documentos_router
 from process_analysis_complete import process_analysis_router
+from contracts_complete import contracts_router
+from document_library_complete import library_complete_router
+from automated_reports_complete import reports_complete_router
 
 # Add all routes to main app
 app.include_router(api_router)
