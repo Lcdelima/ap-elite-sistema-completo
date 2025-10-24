@@ -3,13 +3,15 @@ Process Analysis Complete - Backend API
 Sistema avançado de análise processual com IA
 """
 
-from fastapi import APIRouter, HTTPException, Depends, UploadFile, File, Form
+from fastapi import APIRouter, HTTPException, Depends, UploadFile, File, Form, Header
 from typing import List, Optional
 from pydantic import BaseModel, Field
 from datetime import datetime, timezone
 import uuid
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
+import jwt
+from jwt.exceptions import InvalidTokenError
 
 # Router
 process_analysis_router = APIRouter(prefix="/api/athena/process-analysis", tags=["Process Analysis"])
@@ -19,13 +21,25 @@ MONGO_URL = os.environ.get("MONGO_URL", "mongodb://localhost:27017")
 client = AsyncIOMotorClient(MONGO_URL)
 db = client.ap_elite_db
 
+# JWT Secret
+SECRET_KEY = os.environ.get("SECRET_KEY", "ap_elite_secret_key_2024")
+
 # Authentication dependency
-async def get_current_user(token: str = None):
-    """Simple authentication check"""
-    if not token:
-        return None
-    # In production, verify JWT token here
-    return {"id": "user_id", "email": "user@example.com"}
+async def get_current_user(authorization: str = Header(None)):
+    """Get current user from JWT token"""
+    if not authorization:
+        return {"id": "anonymous", "email": "anonymous@apelite.com"}
+    
+    try:
+        # Remove 'Bearer ' prefix if present
+        token = authorization.replace("Bearer ", "")
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        return payload
+    except InvalidTokenError:
+        return {"id": "anonymous", "email": "anonymous@apelite.com"}
+    except Exception as e:
+        print(f"Auth error: {e}")
+        return {"id": "anonymous", "email": "anonymous@apelite.com"}
 
 # Models
 class ProcessAnalysis(BaseModel):
