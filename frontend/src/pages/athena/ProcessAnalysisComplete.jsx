@@ -6,8 +6,8 @@ import {
   StandardCard,
   StandardSearchBar,
   StandardEmptyState
-} from '@/components/StandardModuleLayout';
-import { Badge } from '@/components/ui/badge';
+} from '../../components/StandardModuleLayout';
+import { Badge } from '../../components/ui/badge';
 import {
   FileSearch, Brain, TrendingUp, Scale, Gavel, Building, Hash,
   Calendar, DollarSign, Upload, Plus, Eye, Download, Sparkles,
