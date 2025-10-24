@@ -33,39 +33,39 @@ const StandardModuleLayout = ({
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-      {/* Header */}
-      <header className="bg-gray-900/50 backdrop-blur-md border-b border-gray-700 sticky top-0 z-50">
+      {/* Header - Padrão Unificado */}
+      <header className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-b border-gray-700/50 sticky top-0 z-50 shadow-lg">
         <div className="px-6 py-4">
           <div className="flex items-center justify-between">
-            {/* Left: Back button and Title */}
+            {/* Left: Back button, Icon, Title and Category */}
             <div className="flex items-center gap-4">
               {showBackButton && (
                 <button
                   onClick={handleBack}
-                  className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors group"
+                  className="p-2.5 rounded-lg bg-gray-800/80 hover:bg-gray-700 transition-all group border border-gray-700/50"
                   title="Voltar"
                 >
-                  <ArrowLeft className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
+                  <ArrowLeft className="w-5 h-5 text-cyan-400 group-hover:text-cyan-300 transition-colors" />
                 </button>
               )}
               
               <div className="flex items-center gap-3">
                 {Icon && (
-                  <div className={`p-3 rounded-xl bg-${color}-500/20`}>
-                    <Icon className={`w-6 h-6 text-${color}-400`} />
+                  <div className="p-2.5 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
+                    <Icon className="w-6 h-6 text-cyan-400" />
                   </div>
                 )}
                 <div>
-                  <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+                  <h1 className="text-xl font-bold text-white flex items-center gap-3">
                     {title}
                     {category && (
-                      <Badge className={`bg-${color}-500/20 text-${color}-400 border-${color}-500/30 text-xs`}>
+                      <Badge className="bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-xs px-3 py-1 font-medium">
                         {category}
                       </Badge>
                     )}
                   </h1>
                   {subtitle && (
-                    <p className="text-gray-400 text-sm mt-1">{subtitle}</p>
+                    <p className="text-gray-400 text-sm mt-0.5">{subtitle}</p>
                   )}
                 </div>
               </div>
@@ -79,10 +79,10 @@ const StandardModuleLayout = ({
               
               <button
                 onClick={() => navigate('/admin/athena')}
-                className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors"
+                className="p-2.5 rounded-lg bg-gray-800/80 hover:bg-gray-700 transition-all border border-gray-700/50"
                 title="Página Inicial"
               >
-                <Home className="w-5 h-5 text-gray-400 hover:text-white" />
+                <Home className="w-5 h-5 text-gray-400 hover:text-cyan-400 transition-colors" />
               </button>
             </div>
           </div>
