@@ -71,32 +71,81 @@ const AdminDashboard = () => {
       const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
       const API = `${BACKEND_URL}/api`;
       const token = localStorage.getItem('ap_elite_token');
-      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      
+      if (!token) {
+        toast.error('Token não encontrado');
+        navigate('/login');
+        return;
+      }
+      
+      const headers = { Authorization: `Bearer ${token}` };
 
-      // Fetch statistics
-      const statsResponse = await axios.get(`${API}/admin/stats`, { headers });
+      // Fetch statistics with better error handling
+      let statsData = {
+        totalAppointments: 0,
+        pendingAppointments: 0,
+        totalClients: 0,
+        totalCases: 0,
+        activeCases: 0,
+        totalDocuments: 0,
+        unreadMessages: 0
+      };
+
+      try {
+        const statsResponse = await axios.get(`${API}/admin/stats`, { headers });
+        statsData = { ...statsData, ...statsResponse.data };
+      } catch (error) {
+        console.error('Erro ao carregar estatísticas:', error);
+      }
+
+      // Fetch appointments
+      let appointmentsData = [];
+      try {
+        const appointmentsResponse = await axios.get(`${API}/appointments`, { headers });
+        appointmentsData = Array.isArray(appointmentsResponse.data) 
+          ? appointmentsResponse.data.slice(0, 5)
+          : [];
+      } catch (error) {
+        console.error('Erro ao carregar agendamentos:', error);
+      }
       
-      // Fetch recent appointments
-      const appointmentsResponse = await axios.get(`${API}/appointments`, { headers });
+      // Fetch messages
+      let messagesData = [];
+      try {
+        const messagesResponse = await axios.get(`${API}/contact`, { headers });
+        messagesData = Array.isArray(messagesResponse.data) 
+          ? messagesResponse.data.slice(0, 5)
+          : [];
+      } catch (error) {
+        console.error('Erro ao carregar mensagens:', error);
+      }
       
-      // Fetch recent messages  
-      const messagesResponse = await axios.get(`${API}/contact`, { headers });
-      
-      // Fetch recent cases
-      const casesResponse = await axios.get(`${API}/cases`, { headers });
+      // Fetch cases
+      let casesData = [];
+      try {
+        const casesResponse = await axios.get(`${API}/cases`, { headers });
+        casesData = Array.isArray(casesResponse.data) 
+          ? casesResponse.data.slice(0, 5)
+          : [];
+      } catch (error) {
+        console.error('Erro ao carregar casos:', error);
+      }
 
       setDashboardData({
-        stats: statsResponse.data,
-        recentAppointments: appointmentsResponse.data.slice(0, 5),
-        recentMessages: messagesResponse.data.slice(0, 5),
-        recentCases: casesResponse.data.slice(0, 5)
+        stats: statsData,
+        recentAppointments: appointmentsData,
+        recentMessages: messagesData,
+        recentCases: casesData
       });
+      
+      // Show success message only on first load
+      if (loading) {
+        toast.success('Dados carregados com sucesso');
+      }
+      
     } catch (error) {
       console.error('Erro ao carregar dados do dashboard:', error);
-      // Não mostrar erro se for apenas problema de autenticação
-      if (error.response?.status !== 401) {
-        toast.error('Erro ao carregar dados do painel');
-      }
+      toast.error('Erro ao carregar dados do painel');
     } finally {
       setLoading(false);
     }
