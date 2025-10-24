@@ -82,7 +82,6 @@ import SocialMonitor from './pages/athena/SocialMonitor';
 import CollaborationHub from './pages/athena/CollaborationHub';
 import PredictiveAnalytics from './pages/athena/PredictiveAnalytics';
 import ComplianceCenter from './pages/athena/ComplianceCenter';
-import AutomatedReports from './pages/athena/AutomatedReports';
 
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
