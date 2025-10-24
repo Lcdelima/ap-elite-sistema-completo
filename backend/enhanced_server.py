@@ -601,39 +601,77 @@ async def get_tasks(current_user: dict = Depends(get_current_user)):
 @api_router.get("/admin/stats")
 async def get_admin_stats(current_user: dict = Depends(get_current_user)):
     """Get admin dashboard statistics"""
-    if not current_user:
-        raise HTTPException(status_code=401, detail="Authentication required")
-    
-    stats = {
-        "total_cases": await db.cases.count_documents({}),
-        "active_cases": await db.cases.count_documents({"status": "active"}),
-        "total_clients": await db.users.count_documents({"role": "client"}),
-        "pending_items": await db.evidence.count_documents({"analysis_status": "pending"}),
-        "monthly_revenue": 0.0
-    }
-    
-    # Calculate monthly revenue
-    first_day_of_month = datetime.now(timezone.utc).replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    pipeline = [
-        {
-            "$match": {
-                "type": {"$in": ["income", "fee"]},
-                "date": {"$gte": first_day_of_month.isoformat()}
-            }
-        },
-        {
-            "$group": {
-                "_id": None,
-                "total": {"$sum": "$amount"}
-            }
+    try:
+        if not current_user:
+            raise HTTPException(status_code=401, detail="Authentication required")
+        
+        # Get counts with safe defaults
+        total_cases = await db.cases.count_documents({}) if db.cases else 0
+        active_cases = await db.cases.count_documents({"status": "active"}) if db.cases else 0
+        total_clients = await db.users.count_documents({"role": "client"}) if db.users else 0
+        
+        # Count appointments
+        total_appointments = await db.appointments.count_documents({}) if db.appointments else 0
+        pending_appointments = await db.appointments.count_documents({"status": "pending"}) if db.appointments else 0
+        
+        # Count documents and messages
+        total_documents = await db.documents.count_documents({}) if db.documents else 0
+        unread_messages = await db.messages.count_documents({"read": False}) if db.messages else 0
+        
+        stats = {
+            "totalCases": total_cases,
+            "activeCases": active_cases,
+            "totalClients": total_clients,
+            "totalAppointments": total_appointments,
+            "pendingAppointments": pending_appointments,
+            "totalDocuments": total_documents,
+            "unreadMessages": unread_messages,
+            "monthly_revenue": 0.0
         }
-    ]
-    
-    result = await db.financial_records.aggregate(pipeline).to_list(1)
-    if result:
-        stats["monthly_revenue"] = result[0]["total"]
-    
-    return stats
+        
+        # Calculate monthly revenue safely
+        try:
+            first_day_of_month = datetime.now(timezone.utc).replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+            pipeline = [
+                {
+                    "$match": {
+                        "type": {"$in": ["income", "fee"]},
+                        "date": {"$gte": first_day_of_month.isoformat()}
+                    }
+                },
+                {
+                    "$group": {
+                        "_id": None,
+                        "total": {"$sum": "$amount"}
+                    }
+                }
+            ]
+            
+            if db.financial_records:
+                result = await db.financial_records.aggregate(pipeline).to_list(1)
+                if result:
+                    stats["monthly_revenue"] = result[0]["total"]
+        except Exception as e:
+            print(f"Error calculating revenue: {e}")
+            # Continue without revenue data
+        
+        return stats
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error fetching admin stats: {e}")
+        # Return default stats instead of error
+        return {
+            "totalCases": 0,
+            "activeCases": 0,
+            "totalClients": 0,
+            "totalAppointments": 0,
+            "pendingAppointments": 0,
+            "totalDocuments": 0,
+            "unreadMessages": 0,
+            "monthly_revenue": 0.0
+        }
 
 # Import advanced features
 from advanced_features import advanced_router
