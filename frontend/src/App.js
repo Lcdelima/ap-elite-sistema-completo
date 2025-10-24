@@ -57,7 +57,7 @@ import AthenaFinancial from './pages/athena/FinancialManagementEnhanced';
 import AthenaIntelligentDashboards from './pages/athena/IntelligentDashboards';
 import AthenaContractGenerator from './pages/athena/ContractGenerator';
 import AthenaEvidenceAnalysis from './pages/athena/EvidenceAnalysis';
-import AthenaDocumentGenerator from './pages/athena/DocumentGenerator';
+import AthenaDocumentGenerator from './pages/athena/DocumentGeneratorComplete';
 import AthenaDefensiveInvestigation from './pages/athena/DefensiveInvestigation';
 import AthenaUserManagement from './pages/athena/UserManagement';
 import AthenaUnifiedDashboard from './pages/athena/UnifiedDashboard';
