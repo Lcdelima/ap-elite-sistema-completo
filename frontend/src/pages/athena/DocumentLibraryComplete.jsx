@@ -7,8 +7,8 @@ import {
   StandardSearchBar,
   StandardEmptyState,
   StandardAlert
-} from '@/components/StandardModuleLayout';
-import { Badge } from '@/components/ui/badge';
+} from '../../components/StandardModuleLayout';
+import { Badge } from '../../components/ui/badge';
 import {
   FileText, Upload, Download, Trash2, Brain, Filter, BarChart3,
   Search, Plus, Eye, FolderOpen, Database, CheckCircle, Clock,
