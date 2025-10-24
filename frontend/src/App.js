@@ -147,7 +147,7 @@ function AppContent() {
           <Route path="/athena/unified-dashboard" element={<AthenaUnifiedDashboard />} />
           <Route path="/athena/advanced-investigation" element={<AdvancedInvestigation />} />
           <Route path="/athena/relationship-mapping" element={<RelationshipMapping />} />
-          <Route path="/athena/document-library" element={<DocumentLibrary />} />
+          <Route path="/athena/document-library" element={<DocumentLibraryComplete />} />
           <Route path="/athena/osint-dashboard" element={<OSINTDashboard />} />
           <Route path="/athena/template-generator" element={<TemplateGenerator />} />
           <Route path="/athena/rag-system" element={<RAGSystem />} />
@@ -163,9 +163,8 @@ function AppContent() {
           <Route path="/athena/collaboration" element={<CollaborationHub />} />
           <Route path="/athena/predictive-analytics" element={<PredictiveAnalytics />} />
           <Route path="/athena/compliance" element={<ComplianceCenter />} />
-          <Route path="/athena/executive-dashboard" element={<ExecutiveDashboard />} />
           <Route path="/athena/deadlines" element={<DeadlineManager />} />
-          <Route path="/athena/automated-reports" element={<AutomatedReports />} />
+          <Route path="/athena/automated-reports" element={<AutomatedReportsComplete />} />
       </Routes>
       <WhatsAppButton />
       <HybridNotifications />
