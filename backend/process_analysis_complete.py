@@ -193,9 +193,10 @@ async def create_process_analysis(
         raise HTTPException(status_code=500, detail=f"Erro ao criar análise: {str(e)}")
 
 @process_analysis_router.get("/{analysis_id}")
-async def get_process_analysis(analysis_id: str):
+async def get_process_analysis(analysis_id: str, current_user: dict = Depends(get_current_user)):
     """Get a specific process analysis"""
     try:
+        print(f"[GET] Fetching analysis: {analysis_id}")
         analysis = await db.process_analyses.find_one({"id": analysis_id})
         
         if not analysis:
@@ -209,29 +210,37 @@ async def get_process_analysis(analysis_id: str):
     except HTTPException:
         raise
     except Exception as e:
-        print(f"Error fetching analysis: {e}")
+        print(f"[ERROR] Error fetching analysis: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @process_analysis_router.delete("/{analysis_id}")
-async def delete_process_analysis(analysis_id: str):
+async def delete_process_analysis(analysis_id: str, current_user: dict = Depends(get_current_user)):
     """Delete a process analysis"""
     try:
+        print(f"[DELETE] Removing analysis: {analysis_id}")
         result = await db.process_analyses.delete_one({"id": analysis_id})
         
         if result.deleted_count == 0:
             raise HTTPException(status_code=404, detail="Análise não encontrada")
         
-        return {"message": "Análise removida com sucesso"}
+        print(f"[DELETE] Analysis removed successfully")
+        return {"success": True, "message": "Análise removida com sucesso"}
     
     except HTTPException:
         raise
     except Exception as e:
-        print(f"Error deleting analysis: {e}")
+        print(f"[ERROR] Error deleting analysis: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 async def simulate_ai_analysis(analysis_id: str):
     """Simulate AI analysis completion (async)"""
     try:
+        print(f"[AI] Starting AI analysis for: {analysis_id}")
+        
+        # Simulate processing delay
+        import asyncio
+        await asyncio.sleep(2)
+        
         # In production, this would call actual AI services
         # For now, just update status to completed after a delay
         await db.process_analyses.update_one(
@@ -239,34 +248,49 @@ async def simulate_ai_analysis(analysis_id: str):
             {
                 "$set": {
                     "status": "completed",
-                    "summary": "Análise completa realizada com sucesso. Processo com boa fundamentação legal.",
-                    "successProbability": 78,
+                    "summary": "Análise completa realizada com sucesso. Processo apresenta boa fundamentação legal e jurisprudência favorável. Recomenda-se estratégia proativa com foco em precedentes do STJ.",
+                    "successProbability": 82,
                     "riskLevel": "low",
-                    "estimatedDuration": "8-10 meses",
-                    "jurisprudenceCount": 15
+                    "estimatedDuration": "6-8 meses",
+                    "jurisprudenceCount": 18,
+                    "completed_at": datetime.now(timezone.utc).isoformat()
                 }
             }
         )
+        
+        print(f"[AI] AI analysis completed for: {analysis_id}")
     except Exception as e:
-        print(f"Error in AI analysis simulation: {e}")
+        print(f"[ERROR] Error in AI analysis simulation: {e}")
+        try:
+            await db.process_analyses.update_one(
+                {"id": analysis_id},
+                {"$set": {"status": "error", "error": str(e)}}
+            )
+        except:
+            pass
 
 @process_analysis_router.get("/stats/overview")
-async def get_analysis_stats():
+async def get_analysis_stats(current_user: dict = Depends(get_current_user)):
     """Get statistics for process analyses"""
     try:
+        print(f"[STATS] Fetching statistics")
+        
         total = await db.process_analyses.count_documents({})
         completed = await db.process_analyses.count_documents({"status": "completed"})
         analyzing = await db.process_analyses.count_documents({"status": "analyzing"})
         high_risk = await db.process_analyses.count_documents({"riskLevel": "high"})
         
-        return {
+        stats = {
             "total": total,
             "completed": completed,
             "analyzing": analyzing,
             "highRisk": high_risk
         }
+        
+        print(f"[STATS] Stats: {stats}")
+        return stats
     except Exception as e:
-        print(f"Error fetching stats: {e}")
+        print(f"[ERROR] Error fetching stats: {e}")
         return {
             "total": 0,
             "completed": 0,
