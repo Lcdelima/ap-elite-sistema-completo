@@ -37,7 +37,7 @@ import AthenaMain from './pages/admin/AthenaMainReorganized';
 import AthenaDashboard from './pages/athena/Dashboard';
 import AthenaClients from './pages/athena/Clients';
 import AthenaClientsEnhanced from './pages/athena/ClientsEnhanced';
-import AthenaProcesses from './pages/athena/Processes';
+import AthenaProcesses from './pages/athena/ProcessesStandardized';
 import AthenaCommunications from './pages/athena/Communications';
 import AthenaCommunicationsEnhanced from './pages/athena/CommunicationsEnhanced';
 import AthenaCalendar from './pages/athena/Calendar';
