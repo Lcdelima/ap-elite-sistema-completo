@@ -31,7 +31,7 @@ import FinancialManagement from './pages/admin/FinancialManagement';
 import Communications from './pages/admin/Communications';
 import Calendar from './pages/admin/Calendar';
 import ReportsExport from './pages/admin/ReportsExport';
-import AthenaMain from './pages/admin/AthenaMain';
+import AthenaMain from './pages/admin/AthenaMainReorganized';
 
 // Athena modules
 import AthenaDashboard from './pages/athena/Dashboard';
