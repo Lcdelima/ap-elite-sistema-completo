@@ -73,59 +73,72 @@ class ProcessAnalysis(BaseModel):
 
 # Endpoints
 @process_analysis_router.get("")
-async def get_process_analyses():
+async def get_process_analyses(current_user: dict = Depends(get_current_user)):
     """Get all process analyses"""
     try:
-        analyses = await db.process_analyses.find().to_list(length=100)
+        print(f"[GET] Fetching analyses for user: {current_user.get('email', 'unknown')}")
+        
+        analyses = await db.process_analyses.find().sort("created_at", -1).to_list(length=100)
         
         # Convert MongoDB _id to string and format data
         for analysis in analyses:
             if '_id' in analysis:
                 del analysis['_id']
         
-        return {"analyses": analyses}
+        print(f"[GET] Found {len(analyses)} analyses")
+        return {"analyses": analyses, "total": len(analyses)}
     except Exception as e:
-        print(f"Error fetching analyses: {e}")
-        return {"analyses": []}
+        print(f"[ERROR] Error fetching analyses: {e}")
+        import traceback
+        traceback.print_exc()
+        return {"analyses": [], "total": 0}
 
 @process_analysis_router.post("")
 async def create_process_analysis(
     processNumber: str = Form(...),
     processTitle: str = Form(...),
     court: str = Form(...),
-    vara: str = Form(None),
+    vara: str = Form(""),
     processType: str = Form("civil"),
     status: str = Form("active"),
-    plaintiff: str = Form(None),
-    plaintiffLawyer: str = Form(None),
-    defendant: str = Form(None),
-    defendantLawyer: str = Form(None),
+    plaintiff: str = Form(""),
+    plaintiffLawyer: str = Form(""),
+    defendant: str = Form(""),
+    defendantLawyer: str = Form(""),
     analysisType: str = Form("complete"),
     aiProvider: str = Form("gpt-5"),
-    initialDate: str = Form(None),
-    lastUpdate: str = Form(None),
-    estimatedValue: str = Form(None),
-    subject: str = Form(None),
-    observations: str = Form(None),
-    documents: List[UploadFile] = File(None)
+    initialDate: str = Form(""),
+    lastUpdate: str = Form(""),
+    estimatedValue: str = Form(""),
+    subject: str = Form(""),
+    observations: str = Form(""),
+    documents: Optional[List[UploadFile]] = File(None),
+    current_user: dict = Depends(get_current_user)
 ):
     """Create a new process analysis"""
     try:
+        print(f"[POST] Creating analysis for process: {processNumber}")
+        print(f"[POST] User: {current_user.get('email', 'unknown')}")
+        
         analysis_id = str(uuid.uuid4())
         
         # Handle document uploads
         document_paths = []
-        if documents:
+        if documents and len(documents) > 0:
             upload_dir = "/app/backend/uploads/process_analyses"
             os.makedirs(upload_dir, exist_ok=True)
             
             for doc in documents:
-                if doc:
+                if doc and doc.filename:
+                    print(f"[POST] Uploading file: {doc.filename}")
                     file_path = f"{upload_dir}/{analysis_id}_{doc.filename}"
+                    
+                    content = await doc.read()
                     with open(file_path, "wb") as f:
-                        content = await doc.read()
                         f.write(content)
+                    
                     document_paths.append(file_path)
+                    print(f"[POST] File saved: {file_path}")
         
         # Create analysis object
         analysis = {
@@ -133,42 +146,51 @@ async def create_process_analysis(
             "processNumber": processNumber,
             "processTitle": processTitle,
             "court": court,
-            "vara": vara,
+            "vara": vara or "Não informado",
             "processType": processType,
             "status": "analyzing",
-            "plaintiff": plaintiff,
-            "plaintiffLawyer": plaintiffLawyer,
-            "defendant": defendant,
-            "defendantLawyer": defendantLawyer,
+            "plaintiff": plaintiff or "Não informado",
+            "plaintiffLawyer": plaintiffLawyer or "Não informado",
+            "defendant": defendant or "Não informado",
+            "defendantLawyer": defendantLawyer or "Não informado",
             "analysisType": analysisType,
             "aiProvider": aiProvider,
-            "initialDate": initialDate,
-            "lastUpdate": lastUpdate or datetime.now(timezone.utc).isoformat(),
-            "estimatedValue": estimatedValue,
-            "subject": subject,
-            "observations": observations,
+            "initialDate": initialDate or datetime.now(timezone.utc).isoformat(),
+            "lastUpdate": datetime.now(timezone.utc).isoformat(),
+            "estimatedValue": estimatedValue or "A definir",
+            "subject": subject or "Análise processual",
+            "observations": observations or "",
             "documents": document_paths,
             "created_at": datetime.now(timezone.utc).isoformat(),
+            "created_by": current_user.get('email', 'unknown'),
             # Simulated analysis results (in production, call AI here)
-            "summary": f"Análise processual de {processType} em andamento...",
+            "summary": f"Análise de processo {processType} em andamento. Sistema analisando jurisprudências e documentos...",
             "successProbability": 75,
             "riskLevel": "medium",
-            "estimatedDuration": "6-12m",
+            "estimatedDuration": "8-12m",
             "jurisprudenceCount": 12
         }
         
         # Insert into database
-        await db.process_analyses.insert_one(analysis)
+        result = await db.process_analyses.insert_one(analysis)
+        print(f"[POST] Analysis created with ID: {analysis_id}")
         
-        # Simulate AI processing
-        # In production, this would trigger async AI analysis
-        await simulate_ai_analysis(analysis_id)
+        # Simulate AI processing (async)
+        import asyncio
+        asyncio.create_task(simulate_ai_analysis(analysis_id))
         
-        return {"message": "Análise iniciada com sucesso", "analysis_id": analysis_id}
+        return {
+            "success": True,
+            "message": "Análise iniciada com sucesso",
+            "analysis_id": analysis_id,
+            "data": analysis
+        }
     
     except Exception as e:
-        print(f"Error creating analysis: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        print(f"[ERROR] Error creating analysis: {e}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Erro ao criar análise: {str(e)}")
 
 @process_analysis_router.get("/{analysis_id}")
 async def get_process_analysis(analysis_id: str):
