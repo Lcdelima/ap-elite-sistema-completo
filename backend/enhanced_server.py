@@ -714,6 +714,7 @@ app.include_router(search_router)
 app.include_router(executive_dashboard_router)
 app.include_router(deadline_router)
 app.include_router(phone_interceptions_router)
+app.include_router(juridico_router)
 
 # Health check
 @app.get("/")
