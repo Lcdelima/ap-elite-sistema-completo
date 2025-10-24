@@ -760,6 +760,9 @@ app.include_router(phone_interceptions_router)
 app.include_router(juridico_router)
 app.include_router(documentos_router)
 app.include_router(process_analysis_router)
+app.include_router(contracts_router)
+app.include_router(library_complete_router)
+app.include_router(reports_complete_router)
 
 # Health check
 @app.get("/")
