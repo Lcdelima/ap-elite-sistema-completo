@@ -756,6 +756,7 @@ app.include_router(deadline_router)
 app.include_router(phone_interceptions_router)
 app.include_router(juridico_router)
 app.include_router(documentos_router)
+app.include_router(process_analysis_router)
 
 # Health check
 @app.get("/")
