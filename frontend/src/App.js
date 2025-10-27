@@ -27,6 +27,7 @@ import InterceptionAnalysis from './pages/admin/InterceptionAnalysis';
 import CaseManagement from './pages/admin/CaseManagement';
 import ClientManagement from './pages/admin/ClientManagement';
 import DigitalForensics from './pages/admin/DigitalForensics';
+import DigitalForensicsComplete from './pages/athena/DigitalForensicsComplete';
 import FinancialManagement from './pages/admin/FinancialManagement';
 import Communications from './pages/admin/Communications';
 import Calendar from './pages/admin/Calendar';
