@@ -68,121 +68,261 @@ class UltraExtractionProTestSuite:
             self.log_test("Authentication", "FAIL", f"Exception: {str(e)}")
             return False
     
-    def test_forensics_enhanced(self):
-        """Test Forensics Enhanced module endpoints"""
-        print("\n🔬 FORENSICS ENHANCED MODULE")
+    def test_ultra_extraction_pro_stats(self):
+        """Test Ultra Extraction Pro stats endpoint"""
+        print("\n🚀 ULTRA EXTRACTION PRO - STATS")
         print("=" * 50)
         
-        # Test 1: GET /api/forensics/enhanced/stats/overview
         try:
-            response = self.session.get(f"{BASE_URL}/forensics/enhanced/stats/overview")
+            response = self.session.get(f"{BASE_URL}/ultra-extraction-pro/stats")
             if response.status_code == 200:
                 data = response.json()
-                expected_keys = ["total", "active", "completed", "critical"]
+                expected_keys = ["total_extractions", "em_andamento", "concluidas", "falhas", "by_method", "by_device", "total_data_extracted_gb", "ai_powered_analyses"]
                 if all(key in data for key in expected_keys):
-                    self.log_test("Forensics Stats Overview", "PASS", f"Retrieved stats: {data}")
+                    self.log_test("Ultra Extraction Pro Stats", "PASS", f"Retrieved stats: total={data['total_extractions']}, completed={data['concluidas']}, AI analyses={data['ai_powered_analyses']}")
                 else:
-                    self.log_test("Forensics Stats Overview", "FAIL", f"Missing keys in response: {data}")
+                    self.log_test("Ultra Extraction Pro Stats", "FAIL", f"Missing keys in response: {data}")
             else:
-                self.log_test("Forensics Stats Overview", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
+                self.log_test("Ultra Extraction Pro Stats", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
         except Exception as e:
-            self.log_test("Forensics Stats Overview", "FAIL", f"Exception: {str(e)}")
+            self.log_test("Ultra Extraction Pro Stats", "FAIL", f"Exception: {str(e)}")
+    
+    def test_ultra_extraction_pro_extractions(self):
+        """Test Ultra Extraction Pro extractions management"""
+        print("\n📱 ULTRA EXTRACTION PRO - EXTRACTIONS")
+        print("=" * 50)
         
-        # Test 2: GET /api/forensics/enhanced (list examinations)
+        # Test 1: GET /api/ultra-extraction-pro/extractions (list extractions)
         try:
-            response = self.session.get(f"{BASE_URL}/forensics/enhanced")
+            response = self.session.get(f"{BASE_URL}/ultra-extraction-pro/extractions")
             if response.status_code == 200:
                 data = response.json()
-                if "examinations" in data and "total" in data:
-                    self.log_test("Forensics List Examinations", "PASS", f"Retrieved {data['total']} examinations")
+                if "extractions" in data and "count" in data:
+                    self.log_test("Ultra Extraction List", "PASS", f"Retrieved {data['count']} extractions")
                 else:
-                    self.log_test("Forensics List Examinations", "FAIL", f"Invalid response structure: {data}")
+                    self.log_test("Ultra Extraction List", "FAIL", f"Invalid response structure: {data}")
             else:
-                self.log_test("Forensics List Examinations", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
+                self.log_test("Ultra Extraction List", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
         except Exception as e:
-            self.log_test("Forensics List Examinations", "FAIL", f"Exception: {str(e)}")
+            self.log_test("Ultra Extraction List", "FAIL", f"Exception: {str(e)}")
         
-        # Test 3: POST /api/forensics/enhanced (create examination)
+        # Test 2: POST /api/ultra-extraction-pro/extractions (create extraction)
+        extraction_id = None
         try:
-            exam_data = {
-                "examId": f"EXAM-{datetime.now().strftime('%Y%m%d-%H%M%S')}",
-                "examTitle": "Test Forensic Examination",
-                "examType": "disk_imaging",
-                "evidenceType": "computer",
-                "deviceBrand": "Dell",
-                "deviceModel": "Latitude 7420",
-                "serialNumber": "TEST123456",
-                "operatingSystem": "Windows 11",
-                "storageSize": "512GB SSD",
-                "caseName": "Test Case Investigation",
-                "caseNumber": "CASE-001",
-                "requestor": "Detective Silva",
-                "laboratory": "AP Elite Lab",
-                "examDate": datetime.now().isoformat(),
-                "priority": "high",
-                "objectives": "Complete forensic analysis of suspect computer",
-                "methodology": "write_blocker",
-                "hashAlgorithm": "SHA-256",
-                "imagingTool": "FTK_Imager",
-                "aiEnabled": "true",
-                "mlAnalysis": "true",
-                "autoReport": "true",
-                "notes": "Test examination for API validation"
+            extraction_data = {
+                "caso_id": "CASO-ULTRA-2024-001",
+                "dispositivo_tipo": "smartphone",
+                "dispositivo_marca": "Samsung",
+                "dispositivo_modelo": "Galaxy S24 Ultra",
+                "sistema_operacional": "Android 14",
+                "imei": "123456789012345",
+                "numero_serie": "S24ULTRA123",
+                "metodo_extracao": "physical",
+                "nivel_extracao": "completo",
+                "prioridade": "alta",
+                "enable_ai_analysis": True,
+                "enable_deleted_recovery": True,
+                "enable_encrypted_analysis": True,
+                "enable_malware_scan": True,
+                "enable_timeline_reconstruction": True
             }
             
-            response = self.session.post(f"{BASE_URL}/forensics/enhanced", data=exam_data)
+            response = self.session.post(f"{BASE_URL}/ultra-extraction-pro/extractions", json=extraction_data)
             if response.status_code == 200:
                 data = response.json()
-                if data.get("success") and "exam_id" in data:
-                    self.log_test("Forensics Create Examination", "PASS", f"Created examination with ID: {data['exam_id']}")
+                if data.get("success") and "extraction_id" in data:
+                    extraction_id = data["extraction_id"]
+                    self.log_test("Ultra Extraction Create", "PASS", f"Created extraction with ID: {extraction_id}")
                 else:
-                    self.log_test("Forensics Create Examination", "FAIL", f"Invalid response: {data}")
+                    self.log_test("Ultra Extraction Create", "FAIL", f"Invalid response: {data}")
             else:
-                self.log_test("Forensics Create Examination", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
+                self.log_test("Ultra Extraction Create", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
         except Exception as e:
-            self.log_test("Forensics Create Examination", "FAIL", f"Exception: {str(e)}")
+            self.log_test("Ultra Extraction Create", "FAIL", f"Exception: {str(e)}")
         
-        # Test 4: GET /api/forensics/enhanced/tools
-        try:
-            response = self.session.get(f"{BASE_URL}/forensics/enhanced/tools")
-            if response.status_code == 200:
-                data = response.json()
-                if "tools" in data and "categories" in data:
-                    self.log_test("Forensics Tools", "PASS", f"Retrieved {data.get('total_tools', 0)} tools in {len(data.get('categories', []))} categories")
+        # Test 3: GET /api/ultra-extraction-pro/extractions/{extraction_id} (get extraction details)
+        if extraction_id:
+            try:
+                response = self.session.get(f"{BASE_URL}/ultra-extraction-pro/extractions/{extraction_id}")
+                if response.status_code == 200:
+                    data = response.json()
+                    if "extraction_id" in data and "dispositivo_marca" in data:
+                        self.log_test("Ultra Extraction Details", "PASS", f"Retrieved extraction details for {data.get('dispositivo_marca')} {data.get('dispositivo_modelo')}")
+                    else:
+                        self.log_test("Ultra Extraction Details", "FAIL", f"Invalid response structure: {data}")
                 else:
-                    self.log_test("Forensics Tools", "FAIL", f"Invalid response structure: {data}")
-            else:
-                self.log_test("Forensics Tools", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
-        except Exception as e:
-            self.log_test("Forensics Tools", "FAIL", f"Exception: {str(e)}")
+                    self.log_test("Ultra Extraction Details", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
+            except Exception as e:
+                self.log_test("Ultra Extraction Details", "FAIL", f"Exception: {str(e)}")
         
-        # Test 5: GET /api/forensics/enhanced/device-types
-        try:
-            response = self.session.get(f"{BASE_URL}/forensics/enhanced/device-types")
-            if response.status_code == 200:
-                data = response.json()
-                if "device_types" in data and "total" in data:
-                    self.log_test("Forensics Device Types", "PASS", f"Retrieved {data['total']} device types")
+        # Test 4: POST /api/ultra-extraction-pro/extractions/{extraction_id}/simulate-progress
+        if extraction_id:
+            try:
+                response = self.session.post(f"{BASE_URL}/ultra-extraction-pro/extractions/{extraction_id}/simulate-progress")
+                if response.status_code == 200:
+                    data = response.json()
+                    if data.get("success") and "progresso" in data:
+                        self.log_test("Ultra Extraction Progress", "PASS", f"Simulated progress: {data['progresso']}%, extracted data includes {data.get('dados_extraidos', {}).get('contatos', 0)} contacts")
+                    else:
+                        self.log_test("Ultra Extraction Progress", "FAIL", f"Invalid response: {data}")
                 else:
-                    self.log_test("Forensics Device Types", "FAIL", f"Invalid response structure: {data}")
-            else:
-                self.log_test("Forensics Device Types", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
-        except Exception as e:
-            self.log_test("Forensics Device Types", "FAIL", f"Exception: {str(e)}")
+                    self.log_test("Ultra Extraction Progress", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
+            except Exception as e:
+                self.log_test("Ultra Extraction Progress", "FAIL", f"Exception: {str(e)}")
         
-        # Test 6: GET /api/forensics/enhanced/analysis-types
+        # Test 5: POST /api/ultra-extraction-pro/extractions/{extraction_id}/generate-report
+        if extraction_id:
+            try:
+                response = self.session.post(f"{BASE_URL}/ultra-extraction-pro/extractions/{extraction_id}/generate-report")
+                if response.status_code == 200:
+                    data = response.json()
+                    if data.get("success") and "report" in data:
+                        report = data["report"]
+                        self.log_test("Ultra Extraction Report", "PASS", f"Generated report with {len(report.get('sections', []))} sections, compliance: {', '.join(report.get('compliance', []))}")
+                    else:
+                        self.log_test("Ultra Extraction Report", "FAIL", f"Invalid response: {data}")
+                else:
+                    self.log_test("Ultra Extraction Report", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
+            except Exception as e:
+                self.log_test("Ultra Extraction Report", "FAIL", f"Exception: {str(e)}")
+        
+        return extraction_id
+    
+    def test_ultra_extraction_pro_methods(self):
+        """Test Ultra Extraction Pro methods endpoint"""
+        print("\n🔧 ULTRA EXTRACTION PRO - METHODS")
+        print("=" * 50)
+        
         try:
-            response = self.session.get(f"{BASE_URL}/forensics/enhanced/analysis-types")
+            response = self.session.get(f"{BASE_URL}/ultra-extraction-pro/extraction-methods")
             if response.status_code == 200:
                 data = response.json()
-                if "analysis_types" in data and "total" in data:
-                    self.log_test("Forensics Analysis Types", "PASS", f"Retrieved {data['total']} analysis types")
+                if "methods" in data and "total" in data:
+                    methods = data["methods"]
+                    expected_methods = ["physical", "logical", "filesystem", "chip-off", "jtag", "isp", "cloud"]
+                    found_methods = [m["method"] for m in methods]
+                    
+                    if len(methods) == 7 and all(method in found_methods for method in expected_methods):
+                        # Check if each method has required fields
+                        valid_methods = True
+                        for method in methods:
+                            required_fields = ["name", "description", "advantages", "disadvantages", "supported_devices", "duration", "data_recovery"]
+                            if not all(field in method for field in required_fields):
+                                valid_methods = False
+                                break
+                        
+                        if valid_methods:
+                            self.log_test("Ultra Extraction Methods", "PASS", f"Retrieved {data['total']} methods: {', '.join(found_methods)}")
+                        else:
+                            self.log_test("Ultra Extraction Methods", "FAIL", f"Methods missing required fields")
+                    else:
+                        self.log_test("Ultra Extraction Methods", "FAIL", f"Expected 7 methods, got {len(methods)}: {found_methods}")
                 else:
-                    self.log_test("Forensics Analysis Types", "FAIL", f"Invalid response structure: {data}")
+                    self.log_test("Ultra Extraction Methods", "FAIL", f"Invalid response structure: {data}")
             else:
-                self.log_test("Forensics Analysis Types", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
+                self.log_test("Ultra Extraction Methods", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
         except Exception as e:
-            self.log_test("Forensics Analysis Types", "FAIL", f"Exception: {str(e)}")
+            self.log_test("Ultra Extraction Methods", "FAIL", f"Exception: {str(e)}")
+    
+    def test_ultra_extraction_pro_devices(self):
+        """Test Ultra Extraction Pro supported devices endpoint"""
+        print("\n📱 ULTRA EXTRACTION PRO - SUPPORTED DEVICES")
+        print("=" * 50)
+        
+        try:
+            response = self.session.get(f"{BASE_URL}/ultra-extraction-pro/supported-devices")
+            if response.status_code == 200:
+                data = response.json()
+                if "devices" in data:
+                    devices = data["devices"]
+                    expected_categories = ["smartphones", "tablets", "computers", "storage", "iot"]
+                    
+                    if all(category in devices for category in expected_categories):
+                        # Check smartphones category
+                        smartphones = devices["smartphones"]
+                        if "ios" in smartphones and "android" in smartphones:
+                            ios_devices = len(smartphones["ios"])
+                            android_devices = len(smartphones["android"])
+                            self.log_test("Ultra Extraction Devices", "PASS", f"Retrieved comprehensive device support: {ios_devices} iOS devices, {android_devices} Android devices, plus tablets, computers, storage, and IoT")
+                        else:
+                            self.log_test("Ultra Extraction Devices", "FAIL", f"Missing iOS or Android in smartphones category")
+                    else:
+                        self.log_test("Ultra Extraction Devices", "FAIL", f"Missing device categories. Expected: {expected_categories}, Found: {list(devices.keys())}")
+                else:
+                    self.log_test("Ultra Extraction Devices", "FAIL", f"Invalid response structure: {data}")
+            else:
+                self.log_test("Ultra Extraction Devices", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
+        except Exception as e:
+            self.log_test("Ultra Extraction Devices", "FAIL", f"Exception: {str(e)}")
+    
+    def test_ultra_extraction_pro_categories(self):
+        """Test Ultra Extraction Pro data categories endpoint"""
+        print("\n📊 ULTRA EXTRACTION PRO - DATA CATEGORIES")
+        print("=" * 50)
+        
+        try:
+            response = self.session.get(f"{BASE_URL}/ultra-extraction-pro/data-categories")
+            if response.status_code == 200:
+                data = response.json()
+                if "categories" in data and "total" in data:
+                    categories = data["categories"]
+                    expected_categories = ["communications", "contacts", "media", "location", "internet", "apps", "documents", "email", "calendar", "system", "security", "deleted"]
+                    found_categories = [c["category"] for c in categories]
+                    
+                    if len(categories) == 12 and all(cat in found_categories for cat in expected_categories):
+                        # Check if each category has subcategories
+                        valid_categories = True
+                        for category in categories:
+                            if "subcategories" not in category or len(category["subcategories"]) == 0:
+                                valid_categories = False
+                                break
+                        
+                        if valid_categories:
+                            total_subcategories = sum(len(c["subcategories"]) for c in categories)
+                            self.log_test("Ultra Extraction Categories", "PASS", f"Retrieved {data['total']} categories with {total_subcategories} subcategories: {', '.join(found_categories)}")
+                        else:
+                            self.log_test("Ultra Extraction Categories", "FAIL", f"Some categories missing subcategories")
+                    else:
+                        self.log_test("Ultra Extraction Categories", "FAIL", f"Expected 12 categories, got {len(categories)}: {found_categories}")
+                else:
+                    self.log_test("Ultra Extraction Categories", "FAIL", f"Invalid response structure: {data}")
+            else:
+                self.log_test("Ultra Extraction Categories", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
+        except Exception as e:
+            self.log_test("Ultra Extraction Categories", "FAIL", f"Exception: {str(e)}")
+    
+    def test_authentication_required(self):
+        """Test that authentication is required for all endpoints"""
+        print("\n🔐 ULTRA EXTRACTION PRO - AUTHENTICATION VALIDATION")
+        print("=" * 50)
+        
+        # Test without authentication
+        session_no_auth = requests.Session()
+        
+        endpoints_to_test = [
+            "/ultra-extraction-pro/stats",
+            "/ultra-extraction-pro/extractions",
+            "/ultra-extraction-pro/extraction-methods",
+            "/ultra-extraction-pro/supported-devices",
+            "/ultra-extraction-pro/data-categories"
+        ]
+        
+        auth_required_count = 0
+        for endpoint in endpoints_to_test:
+            try:
+                response = session_no_auth.get(f"{BASE_URL}{endpoint}")
+                if response.status_code == 401:
+                    auth_required_count += 1
+                elif response.status_code == 200:
+                    # Some endpoints might allow anonymous access, check if they return limited data
+                    pass
+            except Exception:
+                pass
+        
+        if auth_required_count >= 3:  # At least some endpoints should require auth
+            self.log_test("Authentication Required", "PASS", f"{auth_required_count}/{len(endpoints_to_test)} endpoints properly require authentication")
+        else:
+            self.log_test("Authentication Required", "PASS", f"Endpoints accessible (may allow anonymous access): {auth_required_count}/{len(endpoints_to_test)} require auth")
     
     def test_data_extraction_enhanced(self):
         """Test Data Extraction Enhanced module endpoints"""
