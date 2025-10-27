@@ -441,8 +441,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
-    async def test_analytics_kpis(self):
         """Test GET /api/advanced/analytics/kpis"""
         try:
             headers = self.get_headers()
