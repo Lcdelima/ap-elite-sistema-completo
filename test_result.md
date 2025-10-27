@@ -704,7 +704,7 @@ Implementar sistema ERP completo para AP Elite com funcionalidades avançadas:
 
 ## test_plan:
   current_focus:
-    - "Premium Features - Perícia Digital Pro and Interceptações Telemáticas Pro"
+    - "Ultra Extraction Pro - Revolutionary Data Extraction Module"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
