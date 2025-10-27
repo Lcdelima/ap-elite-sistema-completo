@@ -1010,3 +1010,40 @@ Implementar sistema ERP completo para AP Elite com funcionalidades avançadas:
         agent: "testing"
         comment: "✅ UPDATED: User Management API issue has been RESOLVED. Fixed database connection and authentication logic in user_management.py. All 31 endpoints now working correctly (100% success rate). AP Elite ATHENA system is fully operational with no critical issues remaining."
 
+
+  - task: "Forensics Enhanced Module - Perícia Digital Profissional"
+    implemented: true
+    working: NA
+    file: "/app/frontend/src/pages/athena/ForensicsEnhanced.jsx, /app/backend/forensics_enhanced.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: NA
+        agent: "main"
+        comment: "✅ MÓDULO IMPLEMENTADO: ForensicsEnhanced.jsx criado com interface profissional usando StandardModuleLayout. Backend forensics_enhanced.py já existente com APIs completas. Adicionada rota /athena/forensics-enhanced no App.js e router integrado no enhanced_server.py. Módulo inclui: stats, lista de análises, criação de análise forense, ferramentas forenses, cadeia de custódia, tipos de dispositivos, tipos de análise. Pronto para testes."
+
+  - task: "Revisão Completa Módulos Perícia e Investigação"
+    implemented: false
+    working: NA
+    file: "Multiple files"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: NA
+        agent: "main"
+        comment: "🔍 AUDITORIA EM ANDAMENTO: Identificados 10+ módulos de Perícia e Investigação que precisam revisão e padronização: 1) Forensics.jsx (antigo, sem StandardModuleLayout), 2) DataExtraction.jsx (sem padronização), 3) EvidenceProcessing.jsx (backend mockado), 4) DefensiveInvestigation.jsx (sem padronização), 5) AdvancedInvestigation.jsx (verificar se substituído por *Complete), 6) RelationshipMapping.jsx, 7) EvidenceAnalysis.jsx, 8) ERBs.jsx. Objetivo: Atualizar todos para usar StandardModuleLayout, criar/completar backends, garantir funcionalidades robustas."
+
+## test_plan:
+  current_focus:
+    - "Forensics Enhanced Module - testar backend API e frontend"
+    - "Revisar e corrigir módulos de Perícia e Investigação (Forensics, DataExtraction, EvidenceProcessing, DefensiveInvestigation, etc.)"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+## agent_communication:
+  - agent: "main"
+    message: "🔧 CORREÇÃO MÓDULOS PERÍCIA E INVESTIGAÇÃO: Usuário reportou que 'vários módulos internos não estão funcionando e estão inacabados e com a tela azul' na seção Perícia e Investigação. AÇÕES REALIZADAS: 1) Adicionado ForensicsEnhanced.jsx ao App.js com rota /athena/forensics-enhanced, 2) Integrado forensics_enhanced_router no enhanced_server.py (backend já existia), 3) Identificados 10+ módulos antigos que precisam atualização: Forensics.jsx, DataExtraction.jsx, EvidenceProcessing.jsx, DefensiveInvestigation.jsx, AdvancedInvestigation.jsx, RelationshipMapping.jsx, EvidenceAnalysis.jsx, ERBs.jsx. PRÓXIMOS PASSOS: Testar ForensicsEnhanced backend e frontend, depois atualizar sistematicamente cada módulo antigo para usar StandardModuleLayout e ter backends completos. Pronto para testes do ForensicsEnhanced."
+
