@@ -22,7 +22,7 @@ AUTH_EMAIL = "laura@apelite.com"
 AUTH_PASSWORD = "laura2024"
 AUTH_ROLE = "administrator"
 
-class ForensicsTestSuite:
+class UltraExtractionProTestSuite:
     def __init__(self):
         self.session = requests.Session()
         self.token = None
