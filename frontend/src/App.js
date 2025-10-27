@@ -33,6 +33,8 @@ import PericiaDigitalPro from './pages/athena/PericiaDigitalPro';
 import InterceptacoesTelematicasPro from './pages/athena/InterceptacoesTelematicasPro';
 import UltraExtractionPro from './pages/athena/UltraExtractionPro';
 import PasswordRecoveryElite from './pages/athena/PasswordRecoveryElite';
+import DataRecoveryUltimate from './pages/athena/DataRecoveryUltimate';
+import USBForensicsPro from './pages/athena/USBForensicsPro';
 import FinancialManagement from './pages/admin/FinancialManagement';
 import Communications from './pages/admin/Communications';
 import Calendar from './pages/admin/Calendar';
