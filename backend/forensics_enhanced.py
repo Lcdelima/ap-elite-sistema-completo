@@ -185,6 +185,10 @@ async def create_examination(
         await db.forensics_enhanced.insert_one(examination)
         print(f"[POST] Examination created with ID: {exam_id}")
         
+        # Remove MongoDB _id field for JSON serialization
+        if '_id' in examination:
+            del examination['_id']
+        
         # Start async processing
         if examination["aiEnabled"] or examination["mlAnalysis"]:
             import asyncio
