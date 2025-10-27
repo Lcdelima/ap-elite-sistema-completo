@@ -441,7 +441,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-        """Test GET /api/advanced/analytics/kpis"""
         try:
             headers = self.get_headers()
             async with self.session.get(f"{BASE_URL}/advanced/analytics/kpis", headers=headers) as response:
