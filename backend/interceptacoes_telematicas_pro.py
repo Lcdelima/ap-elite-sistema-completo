@@ -405,7 +405,7 @@ async def get_equipamentos(authorization: str = Header(None)):
             "tipo": "software",
             "status": "ativo",
             "funcao": "Extração e análise de dados interceptados",
-            "formatos_suportados": 100+
+            "formatos_suportados": "100+"
         }
     ]
     
