@@ -403,3 +403,286 @@ async def get_examination_stats(current_user: dict = Depends(get_current_user)):
             "completed": 0,
             "critical": 0
         }
+
+
+@forensics_enhanced_router.get("/tools")
+async def get_forensic_tools(user: dict = Depends(get_current_user)):
+    """Get list of available forensic tools by category"""
+    try:
+        tools = {
+            "hardware": [
+                {"name": "Write Blocker", "description": "Proteção contra gravação durante aquisição", "status": "available"},
+                {"name": "Duplicador Forense", "description": "Cópia bit-a-bit de dispositivos", "status": "available"},
+                {"name": "Faraday Bag", "description": "Bloqueio de sinais para preservação", "status": "available"}
+            ],
+            "software": [
+                {"name": "Autopsy", "description": "Análise forense digital open source", "status": "available"},
+                {"name": "FTK Imager", "description": "Aquisição e criação de imagens forenses", "status": "available"},
+                {"name": "EnCase", "description": "Suite completa de investigação forense", "status": "available"},
+                {"name": "X-Ways Forensics", "description": "Análise avançada de dados", "status": "available"},
+                {"name": "Sleuth Kit", "description": "Análise de sistemas de arquivos", "status": "available"}
+            ],
+            "mobile": [
+                {"name": "Cellebrite UFED", "description": "Extração forense de dispositivos móveis", "status": "available"},
+                {"name": "Oxygen Forensics", "description": "Análise completa de dispositivos móveis", "status": "available"},
+                {"name": "MOBILedit Forensic", "description": "Extração e análise de dados mobile", "status": "available"},
+                {"name": "XRY", "description": "Extração de dados de celulares", "status": "available"}
+            ],
+            "network": [
+                {"name": "Wireshark", "description": "Análise de tráfego de rede", "status": "available"},
+                {"name": "NetworkMiner", "description": "Análise forense de rede", "status": "available"},
+                {"name": "tcpdump", "description": "Captura de pacotes de rede", "status": "available"},
+                {"name": "Volatility", "description": "Análise de memória RAM", "status": "available"}
+            ],
+            "cloud": [
+                {"name": "Magnet AXIOM", "description": "Análise de evidências em nuvem", "status": "available"},
+                {"name": "Belkasoft Evidence Center", "description": "Aquisição de dados de nuvem", "status": "available"},
+                {"name": "Cloud Extractor", "description": "Extração de dados de serviços em nuvem", "status": "available"}
+            ],
+            "recovery": [
+                {"name": "PhotoRec", "description": "Recuperação de arquivos deletados", "status": "available"},
+                {"name": "TestDisk", "description": "Recuperação de partições", "status": "available"},
+                {"name": "Recuva", "description": "Recuperação de dados", "status": "available"}
+            ],
+            "analysis": [
+                {"name": "Hex Editor", "description": "Análise em nível de bytes", "status": "available"},
+                {"name": "Strings", "description": "Extração de strings de arquivos", "status": "available"},
+                {"name": "Binwalk", "description": "Análise de firmware", "status": "available"}
+            ]
+        }
+        
+        return {
+            "success": True,
+            "categories": list(tools.keys()),
+            "tools": tools,
+            "total_tools": sum(len(category_tools) for category_tools in tools.values())
+        }
+    except Exception as e:
+        print(f"[ERROR] Error fetching tools: {e}")
+        raise HTTPException(status_code=500, detail=f"Erro ao buscar ferramentas: {str(e)}")
+
+@forensics_enhanced_router.get("/device-types")
+async def get_device_types(user: dict = Depends(get_current_user)):
+    """Get list of supported device types for forensic analysis"""
+    try:
+        device_types = [
+            {
+                "type": "smartphone",
+                "name": "Smartphone",
+                "description": "Celulares Android e iOS",
+                "tools": ["UFED", "Oxygen", "MOBILedit", "XRY"],
+                "typical_duration": "4-8 horas",
+                "complexity": "medium"
+            },
+            {
+                "type": "computer",
+                "name": "Computador",
+                "description": "Desktops e notebooks",
+                "tools": ["FTK Imager", "EnCase", "Autopsy", "X-Ways"],
+                "typical_duration": "6-12 horas",
+                "complexity": "medium"
+            },
+            {
+                "type": "hdd",
+                "name": "HD/SSD",
+                "description": "Discos rígidos e SSDs",
+                "tools": ["FTK Imager", "dd", "EnCase", "X-Ways"],
+                "typical_duration": "4-8 horas",
+                "complexity": "low"
+            },
+            {
+                "type": "usb",
+                "name": "Pen Drive/USB",
+                "description": "Dispositivos de armazenamento USB",
+                "tools": ["FTK Imager", "Autopsy", "PhotoRec"],
+                "typical_duration": "2-4 horas",
+                "complexity": "low"
+            },
+            {
+                "type": "memory_card",
+                "name": "Cartão de Memória",
+                "description": "SD Cards, microSD, etc",
+                "tools": ["FTK Imager", "PhotoRec", "Autopsy"],
+                "typical_duration": "2-4 horas",
+                "complexity": "low"
+            },
+            {
+                "type": "tablet",
+                "name": "Tablet",
+                "description": "Tablets Android e iOS",
+                "tools": ["UFED", "Oxygen", "MOBILedit"],
+                "typical_duration": "4-6 horas",
+                "complexity": "medium"
+            },
+            {
+                "type": "iot",
+                "name": "Dispositivo IoT",
+                "description": "Dispositivos Internet das Coisas",
+                "tools": ["Custom Scripts", "Wireshark", "Binwalk"],
+                "typical_duration": "8-16 horas",
+                "complexity": "high"
+            },
+            {
+                "type": "cloud",
+                "name": "Armazenamento em Nuvem",
+                "description": "Google Drive, Dropbox, OneDrive, etc",
+                "tools": ["Magnet AXIOM", "Belkasoft", "Cloud Extractor"],
+                "typical_duration": "4-8 horas",
+                "complexity": "medium"
+            },
+            {
+                "type": "server",
+                "name": "Servidor",
+                "description": "Servidores físicos ou virtuais",
+                "tools": ["EnCase", "X-Ways", "FTK", "Volatility"],
+                "typical_duration": "12-24 horas",
+                "complexity": "high"
+            },
+            {
+                "type": "router",
+                "name": "Router/Switch",
+                "description": "Equipamentos de rede",
+                "tools": ["Wireshark", "tcpdump", "Custom Scripts"],
+                "typical_duration": "4-8 horas",
+                "complexity": "medium"
+            }
+        ]
+        
+        return {
+            "success": True,
+            "device_types": device_types,
+            "total": len(device_types)
+        }
+    except Exception as e:
+        print(f"[ERROR] Error fetching device types: {e}")
+        raise HTTPException(status_code=500, detail=f"Erro ao buscar tipos de dispositivos: {str(e)}")
+
+@forensics_enhanced_router.get("/analysis-types")
+async def get_analysis_types(user: dict = Depends(get_current_user)):
+    """Get list of available analysis types"""
+    try:
+        analysis_types = [
+            {
+                "type": "data_recovery",
+                "name": "Recuperação de Dados",
+                "description": "Recuperação de arquivos deletados e dados perdidos",
+                "duration": "2-4 horas",
+                "difficulty": "medium",
+                "tools": ["PhotoRec", "TestDisk", "Recuva", "FTK"],
+                "outputs": ["Arquivos recuperados", "Relatório de recuperação", "Hash de evidências"]
+            },
+            {
+                "type": "timeline_analysis",
+                "name": "Análise de Linha do Tempo",
+                "description": "Reconstrução cronológica de eventos no sistema",
+                "duration": "3-6 horas",
+                "difficulty": "medium",
+                "tools": ["Autopsy", "Sleuth Kit", "log2timeline"],
+                "outputs": ["Timeline completa", "Eventos críticos", "Relatório temporal"]
+            },
+            {
+                "type": "malware_analysis",
+                "name": "Análise de Malware",
+                "description": "Identificação e análise de software malicioso",
+                "duration": "4-8 horas",
+                "difficulty": "high",
+                "tools": ["VirusTotal", "Cuckoo Sandbox", "IDA Pro", "Ghidra"],
+                "outputs": ["Relatório de malware", "IOCs", "Comportamento malicioso"]
+            },
+            {
+                "type": "network_analysis",
+                "name": "Análise de Rede",
+                "description": "Análise de tráfego e comunicações de rede",
+                "duration": "2-4 horas",
+                "difficulty": "medium",
+                "tools": ["Wireshark", "NetworkMiner", "tcpdump"],
+                "outputs": ["Conexões identificadas", "Protocolos usados", "Dados transferidos"]
+            },
+            {
+                "type": "memory_analysis",
+                "name": "Análise de Memória",
+                "description": "Análise forense de dump de memória RAM",
+                "duration": "3-5 horas",
+                "difficulty": "high",
+                "tools": ["Volatility", "Rekall", "WinDbg"],
+                "outputs": ["Processos ativos", "Conexões de rede", "Artefatos em memória"]
+            },
+            {
+                "type": "mobile_analysis",
+                "name": "Análise Mobile",
+                "description": "Extração e análise completa de dispositivos móveis",
+                "duration": "4-6 horas",
+                "difficulty": "medium",
+                "tools": ["UFED", "Oxygen", "MOBILedit", "XRY"],
+                "outputs": ["Dados extraídos", "Mensagens", "Contatos", "Localização", "Apps"]
+            },
+            {
+                "type": "cloud_analysis",
+                "name": "Análise de Nuvem",
+                "description": "Aquisição e análise de dados armazenados em nuvem",
+                "duration": "2-4 horas",
+                "difficulty": "medium",
+                "tools": ["Magnet AXIOM", "Belkasoft", "Cloud Extractor"],
+                "outputs": ["Arquivos em nuvem", "Metadados", "Histórico de acesso"]
+            },
+            {
+                "type": "email_analysis",
+                "name": "Análise de E-mail",
+                "description": "Análise de comunicações por e-mail",
+                "duration": "2-3 horas",
+                "difficulty": "low",
+                "tools": ["Aid4Mail", "MailXaminer", "Kernel"],
+                "outputs": ["E-mails recuperados", "Anexos", "Headers completos", "Timeline"]
+            },
+            {
+                "type": "database_analysis",
+                "name": "Análise de Banco de Dados",
+                "description": "Extração e análise de bancos de dados",
+                "duration": "4-6 horas",
+                "difficulty": "high",
+                "tools": ["DB Browser", "SQL queries", "Custom scripts"],
+                "outputs": ["Registros extraídos", "Estrutura do BD", "Logs de transação"]
+            },
+            {
+                "type": "steganography_detection",
+                "name": "Detecção de Esteganografia",
+                "description": "Identificação de dados ocultos em arquivos",
+                "duration": "3-5 horas",
+                "difficulty": "high",
+                "tools": ["StegDetect", "OpenStego", "Steghide"],
+                "outputs": ["Arquivos com dados ocultos", "Conteúdo extraído", "Método usado"]
+            },
+            {
+                "type": "registry_analysis",
+                "name": "Análise de Registro Windows",
+                "description": "Análise do registro do sistema Windows",
+                "duration": "2-4 horas",
+                "difficulty": "medium",
+                "tools": ["Registry Explorer", "RegRipper", "Registry Viewer"],
+                "outputs": ["Chaves modificadas", "Programas instalados", "Atividade do usuário"]
+            },
+            {
+                "type": "browser_forensics",
+                "name": "Forense de Navegador",
+                "description": "Análise de histórico e dados de navegadores",
+                "duration": "2-3 horas",
+                "difficulty": "low",
+                "tools": ["Browser History Viewer", "IEF", "Magnet AXIOM"],
+                "outputs": ["Histórico de navegação", "Downloads", "Cookies", "Senhas"]
+            }
+        ]
+        
+        return {
+            "success": True,
+            "analysis_types": analysis_types,
+            "total": len(analysis_types),
+            "categories": {
+                "low_difficulty": len([a for a in analysis_types if a["difficulty"] == "low"]),
+                "medium_difficulty": len([a for a in analysis_types if a["difficulty"] == "medium"]),
+                "high_difficulty": len([a for a in analysis_types if a["difficulty"] == "high"])
+            }
+        }
+    except Exception as e:
+        print(f"[ERROR] Error fetching analysis types: {e}")
+        raise HTTPException(status_code=500, detail=f"Erro ao buscar tipos de análise: {str(e)}")
+
