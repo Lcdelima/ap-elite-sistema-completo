@@ -399,7 +399,7 @@ const UltraExtractionPro = () => {
                   )}
                   {extraction.timeline_reconstruction_enabled && (
                     <span className="bg-yellow-100 text-yellow-800 text-xs px-3 py-1 rounded-full font-semibold flex items-center space-x-1">
-                      <Timeline className="w-3 h-3" />
+                      <Activity className="w-3 h-3" />
                       <span>Timeline</span>
                     </span>
                   )}
