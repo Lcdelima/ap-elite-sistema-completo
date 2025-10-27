@@ -729,6 +729,9 @@ from pericia_digital_pro import router as pericia_digital_router
 from interceptacoes_telematicas_pro import router as interceptacoes_telematicas_router
 from cloud_forensics_ai import router as cloud_forensics_router
 from ultra_extraction_pro import router as ultra_extraction_router
+from password_recovery_elite import router as password_recovery_router
+from data_recovery_ultimate import router as data_recovery_router
+from usb_forensics_pro import router as usb_forensics_router
 
 # Add all routes to main app
 app.include_router(api_router)
