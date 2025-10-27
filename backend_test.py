@@ -426,25 +426,21 @@ class ForensicsTestSuite:
         passed, failed, total = self.generate_summary()
         
         return failed == 0
-                    
-                    # Check charts data
-                    charts = data.get("charts", {})
-                    chart_keys = ["cases_by_status", "cases_timeline", "financial_timeline", "evidence_by_type"]
-                    chart_missing = [key for key in chart_keys if key not in charts]
-                    
-                    if chart_missing:
-                        self.log_result("Analytics Overview", False, f"Missing chart keys: {chart_missing}", data)
-                        return False
-                    
-                    self.log_result("Analytics Overview", True, "Successfully retrieved analytics overview with all required data")
-                    return True
-                else:
-                    error_text = await response.text()
-                    self.log_result("Analytics Overview", False, f"Failed with status {response.status}", error_text)
-                    return False
-        except Exception as e:
-            self.log_result("Analytics Overview", False, f"Exception: {str(e)}")
-            return False
+
+def main():
+    """Main test execution"""
+    tester = ForensicsTestSuite()
+    success = tester.run_all_tests()
+    
+    if success:
+        print("\n🎉 ALL TESTS PASSED!")
+        sys.exit(0)
+    else:
+        print("\n💥 SOME TESTS FAILED!")
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()
     
     async def test_analytics_kpis(self):
         """Test GET /api/advanced/analytics/kpis"""
