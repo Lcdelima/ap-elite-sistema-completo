@@ -126,3 +126,8 @@ temp_analysis/03.zip
 # Environment files
 *.env
 *.env.*
+-e 
+# Environment files
+*.env
+*.env.*
+frontend/node_modules/.cache/default-development/11.pack

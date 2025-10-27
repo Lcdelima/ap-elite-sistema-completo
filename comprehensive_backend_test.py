@@ -14,7 +14,7 @@ import tempfile
 import io
 
 # Configuration
-BASE_URL = "https://lawtech-suite.preview.emergentagent.com/api"
+BASE_URL = "https://forensic-repairfix.preview.emergentagent.com/api"
 TEST_USER = {
     "email": "laura@apelite.com",
     "password": "laura2024",
