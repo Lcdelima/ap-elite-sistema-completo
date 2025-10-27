@@ -768,6 +768,7 @@ app.include_router(library_complete_router)
 app.include_router(reports_complete_router)
 app.include_router(investigation_complete_router)
 app.include_router(forensics_router)
+app.include_router(forensics_enhanced_router)
 
 # Health check
 @app.get("/")
