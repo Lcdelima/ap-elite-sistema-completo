@@ -324,206 +324,6 @@ class UltraExtractionProTestSuite:
         else:
             self.log_test("Authentication Required", "PASS", f"Endpoints accessible (may allow anonymous access): {auth_required_count}/{len(endpoints_to_test)} require auth")
     
-    def test_data_extraction_enhanced(self):
-        """Test Data Extraction Enhanced module endpoints"""
-        print("\n📱 DATA EXTRACTION ENHANCED MODULE")
-        print("=" * 50)
-        
-        # Test 1: GET /api/data-extraction/stats
-        try:
-            response = self.session.get(f"{BASE_URL}/data-extraction/stats")
-            if response.status_code == 200:
-                data = response.json()
-                expected_keys = ["total", "in_progress", "completed", "failed"]
-                if all(key in data for key in expected_keys):
-                    self.log_test("Data Extraction Stats", "PASS", f"Retrieved stats: {data}")
-                else:
-                    self.log_test("Data Extraction Stats", "FAIL", f"Missing keys in response: {data}")
-            else:
-                self.log_test("Data Extraction Stats", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
-        except Exception as e:
-            self.log_test("Data Extraction Stats", "FAIL", f"Exception: {str(e)}")
-        
-        # Test 2: GET /api/data-extraction/extractions
-        try:
-            response = self.session.get(f"{BASE_URL}/data-extraction/extractions")
-            if response.status_code == 200:
-                data = response.json()
-                if "extractions" in data and "count" in data:
-                    self.log_test("Data Extraction List", "PASS", f"Retrieved {data['count']} extractions")
-                else:
-                    self.log_test("Data Extraction List", "FAIL", f"Invalid response structure: {data}")
-            else:
-                self.log_test("Data Extraction List", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
-        except Exception as e:
-            self.log_test("Data Extraction List", "FAIL", f"Exception: {str(e)}")
-        
-        # Test 3: POST /api/data-extraction/extractions (create extraction)
-        try:
-            extraction_data = {
-                "device_type": "smartphone",
-                "device_model": "Galaxy S21",
-                "device_brand": "Samsung",
-                "case_id": "CASE-001",
-                "extraction_tool": "Cellebrite UFED",
-                "extraction_method": "logical",
-                "priority": "high"
-            }
-            
-            response = self.session.post(f"{BASE_URL}/data-extraction/extractions", json=extraction_data)
-            if response.status_code == 200:
-                data = response.json()
-                if data.get("success") and "extraction_id" in data:
-                    self.log_test("Data Extraction Create", "PASS", f"Created extraction with ID: {data['extraction_id']}")
-                else:
-                    self.log_test("Data Extraction Create", "FAIL", f"Invalid response: {data}")
-            else:
-                self.log_test("Data Extraction Create", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
-        except Exception as e:
-            self.log_test("Data Extraction Create", "FAIL", f"Exception: {str(e)}")
-        
-        # Test 4: GET /api/data-extraction/tools
-        try:
-            response = self.session.get(f"{BASE_URL}/data-extraction/tools")
-            if response.status_code == 200:
-                data = response.json()
-                if "tools" in data and "total" in data:
-                    self.log_test("Data Extraction Tools", "PASS", f"Retrieved {data['total']} extraction tools")
-                else:
-                    self.log_test("Data Extraction Tools", "FAIL", f"Invalid response structure: {data}")
-            else:
-                self.log_test("Data Extraction Tools", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
-        except Exception as e:
-            self.log_test("Data Extraction Tools", "FAIL", f"Exception: {str(e)}")
-        
-        # Test 5: GET /api/data-extraction/device-types
-        try:
-            response = self.session.get(f"{BASE_URL}/data-extraction/device-types")
-            if response.status_code == 200:
-                data = response.json()
-                if "device_types" in data and "total" in data:
-                    self.log_test("Data Extraction Device Types", "PASS", f"Retrieved {data['total']} device types")
-                else:
-                    self.log_test("Data Extraction Device Types", "FAIL", f"Invalid response structure: {data}")
-            else:
-                self.log_test("Data Extraction Device Types", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
-        except Exception as e:
-            self.log_test("Data Extraction Device Types", "FAIL", f"Exception: {str(e)}")
-        
-        # Test 6: GET /api/data-extraction/extraction-methods
-        try:
-            response = self.session.get(f"{BASE_URL}/data-extraction/extraction-methods")
-            if response.status_code == 200:
-                data = response.json()
-                if "methods" in data and "total" in data:
-                    self.log_test("Data Extraction Methods", "PASS", f"Retrieved {data['total']} extraction methods")
-                else:
-                    self.log_test("Data Extraction Methods", "FAIL", f"Invalid response structure: {data}")
-            else:
-                self.log_test("Data Extraction Methods", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
-        except Exception as e:
-            self.log_test("Data Extraction Methods", "FAIL", f"Exception: {str(e)}")
-    
-    def test_evidence_processing_enhanced(self):
-        """Test Evidence Processing Enhanced module endpoints"""
-        print("\n🗂️ EVIDENCE PROCESSING ENHANCED MODULE")
-        print("=" * 50)
-        
-        # Test 1: GET /api/evidence/stats
-        try:
-            response = self.session.get(f"{BASE_URL}/evidence/stats")
-            if response.status_code == 200:
-                data = response.json()
-                expected_keys = ["total", "pending", "processing", "completed", "failed"]
-                if all(key in data for key in expected_keys):
-                    self.log_test("Evidence Processing Stats", "PASS", f"Retrieved stats: {data}")
-                else:
-                    self.log_test("Evidence Processing Stats", "FAIL", f"Missing keys in response: {data}")
-            else:
-                self.log_test("Evidence Processing Stats", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
-        except Exception as e:
-            self.log_test("Evidence Processing Stats", "FAIL", f"Exception: {str(e)}")
-        
-        # Test 2: GET /api/evidence/evidence
-        try:
-            response = self.session.get(f"{BASE_URL}/evidence/evidence")
-            if response.status_code == 200:
-                data = response.json()
-                if "evidence" in data and "count" in data:
-                    self.log_test("Evidence Processing List", "PASS", f"Retrieved {data['count']} evidence items")
-                else:
-                    self.log_test("Evidence Processing List", "FAIL", f"Invalid response structure: {data}")
-            else:
-                self.log_test("Evidence Processing List", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
-        except Exception as e:
-            self.log_test("Evidence Processing List", "FAIL", f"Exception: {str(e)}")
-        
-        # Test 3: POST /api/evidence/evidence (create evidence)
-        try:
-            evidence_data = {
-                "evidence_name": "Test Evidence",
-                "evidence_type": "digital_image",
-                "case_id": "CASE-001",
-                "source": "Police seizure",
-                "description": "Test evidence for API validation",
-                "priority": "high",
-                "hash_algorithm": "SHA-256"
-            }
-            
-            response = self.session.post(f"{BASE_URL}/evidence/evidence", json=evidence_data)
-            if response.status_code == 200:
-                data = response.json()
-                if data.get("success") and "evidence_id" in data:
-                    self.log_test("Evidence Processing Create", "PASS", f"Created evidence with ID: {data['evidence_id']}")
-                else:
-                    self.log_test("Evidence Processing Create", "FAIL", f"Invalid response: {data}")
-            else:
-                self.log_test("Evidence Processing Create", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
-        except Exception as e:
-            self.log_test("Evidence Processing Create", "FAIL", f"Exception: {str(e)}")
-        
-        # Test 4: GET /api/evidence/evidence-types
-        try:
-            response = self.session.get(f"{BASE_URL}/evidence/evidence-types")
-            if response.status_code == 200:
-                data = response.json()
-                if "evidence_types" in data and "total" in data:
-                    self.log_test("Evidence Types", "PASS", f"Retrieved {data['total']} evidence types")
-                else:
-                    self.log_test("Evidence Types", "FAIL", f"Invalid response structure: {data}")
-            else:
-                self.log_test("Evidence Types", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
-        except Exception as e:
-            self.log_test("Evidence Types", "FAIL", f"Exception: {str(e)}")
-        
-        # Test 5: GET /api/evidence/processing-workflows
-        try:
-            response = self.session.get(f"{BASE_URL}/evidence/processing-workflows")
-            if response.status_code == 200:
-                data = response.json()
-                if "workflows" in data and "total" in data:
-                    self.log_test("Evidence Processing Workflows", "PASS", f"Retrieved {data['total']} workflows")
-                else:
-                    self.log_test("Evidence Processing Workflows", "FAIL", f"Invalid response structure: {data}")
-            else:
-                self.log_test("Evidence Processing Workflows", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
-        except Exception as e:
-            self.log_test("Evidence Processing Workflows", "FAIL", f"Exception: {str(e)}")
-        
-        # Test 6: GET /api/evidence/hash-algorithms
-        try:
-            response = self.session.get(f"{BASE_URL}/evidence/hash-algorithms")
-            if response.status_code == 200:
-                data = response.json()
-                if "algorithms" in data and "total" in data:
-                    self.log_test("Evidence Hash Algorithms", "PASS", f"Retrieved {data['total']} hash algorithms")
-                else:
-                    self.log_test("Evidence Hash Algorithms", "FAIL", f"Invalid response structure: {data}")
-            else:
-                self.log_test("Evidence Hash Algorithms", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
-        except Exception as e:
-            self.log_test("Evidence Hash Algorithms", "FAIL", f"Exception: {str(e)}")
-    
     def generate_summary(self):
         """Generate test summary"""
         print("\n📊 TEST SUMMARY")
@@ -548,7 +348,7 @@ class UltraExtractionProTestSuite:
     
     def run_all_tests(self):
         """Run all test suites"""
-        print("🧪 FORENSICS & INVESTIGATION ENHANCED MODULES - BACKEND API TESTING")
+        print("🧪 ULTRA EXTRACTION PRO MODULE - BACKEND API TESTING")
         print("=" * 80)
         print(f"Backend URL: {BASE_URL}")
         print(f"Authentication: {AUTH_EMAIL} / {AUTH_ROLE}")
@@ -560,9 +360,12 @@ class UltraExtractionProTestSuite:
             return False
         
         # Run all test suites
-        self.test_forensics_enhanced()
-        self.test_data_extraction_enhanced()
-        self.test_evidence_processing_enhanced()
+        self.test_ultra_extraction_pro_stats()
+        self.test_ultra_extraction_pro_extractions()
+        self.test_ultra_extraction_pro_methods()
+        self.test_ultra_extraction_pro_devices()
+        self.test_ultra_extraction_pro_categories()
+        self.test_authentication_required()
         
         # Generate summary
         passed, failed, total = self.generate_summary()
@@ -571,7 +374,7 @@ class UltraExtractionProTestSuite:
 
 def main():
     """Main test execution"""
-    tester = ForensicsTestSuite()
+    tester = UltraExtractionProTestSuite()
     success = tester.run_all_tests()
     
     if success:
