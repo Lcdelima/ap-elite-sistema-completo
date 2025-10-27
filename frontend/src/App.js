@@ -63,7 +63,7 @@ import AutomatedReportsComplete from './pages/athena/AutomatedReportsComplete';
 import AthenaDefensiveInvestigation from './pages/athena/DefensiveInvestigation';
 import AthenaUserManagement from './pages/athena/UserManagement';
 import AthenaUnifiedDashboard from './pages/athena/UnifiedDashboard';
-import AdvancedInvestigation from './pages/athena/AdvancedInvestigation';
+import AdvancedInvestigation from './pages/athena/AdvancedInvestigationComplete';
 import RelationshipMapping from './pages/athena/RelationshipMapping';
 import DocumentLibrary from './pages/athena/DocumentLibrary';
 import OSINTDashboard from './pages/athena/OSINTDashboard';
