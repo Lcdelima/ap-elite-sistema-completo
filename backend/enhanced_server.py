@@ -780,6 +780,7 @@ app.include_router(evidence_processing_router)
 app.include_router(pericia_digital_router)
 app.include_router(interceptacoes_telematicas_router)
 app.include_router(cloud_forensics_router)
+app.include_router(ultra_extraction_router)
 
 # Health check
 @app.get("/")
