@@ -207,204 +207,6 @@ async def create_examination(
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Erro ao criar exame: {str(e)}")
 
-@forensics_enhanced_router.get("/{exam_id}")
-async def get_examination(exam_id: str, current_user: dict = Depends(get_current_user)):
-    """Get a specific examination"""
-    try:
-        print(f"[GET] Fetching examination: {exam_id}")
-        examination = await db.forensics_enhanced.find_one({"id": exam_id})
-        
-        if not examination:
-            raise HTTPException(status_code=404, detail="Exame não encontrado")
-        
-        if '_id' in examination:
-            del examination['_id']
-        
-        return examination
-    
-    except HTTPException:
-        raise
-    except Exception as e:
-        print(f"[ERROR] Error fetching examination: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-@forensics_enhanced_router.delete("/{exam_id}")
-async def delete_examination(exam_id: str, current_user: dict = Depends(get_current_user)):
-    """Delete an examination"""
-    try:
-        print(f"[DELETE] Removing examination: {exam_id}")
-        result = await db.forensics_enhanced.delete_one({"id": exam_id})
-        
-        if result.deleted_count == 0:
-            raise HTTPException(status_code=404, detail="Exame não encontrado")
-        
-        print(f"[DELETE] Examination removed successfully")
-        return {"success": True, "message": "Exame removido com sucesso"}
-    
-    except HTTPException:
-        raise
-    except Exception as e:
-        print(f"[ERROR] Error deleting examination: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-async def process_examination(exam_id: str):
-    """Process examination with AI and ML (async)"""
-    try:
-        print(f"[AI/ML] Starting enhanced analysis for: {exam_id}")
-        
-        import asyncio
-        
-        # Stage 1: Imaging (20%)
-        await asyncio.sleep(2)
-        await db.forensics_enhanced.update_one(
-            {"id": exam_id},
-            {"$set": {"status": "imaging", "progress": 20}}
-        )
-        
-        # Stage 2: Analysis (50%)
-        await asyncio.sleep(2)
-        await db.forensics_enhanced.update_one(
-            {"id": exam_id},
-            {"$set": {"status": "analyzing", "progress": 50}}
-        )
-        
-        # Stage 3: ML Processing (75%)
-        await asyncio.sleep(2)
-        ml_insights = [
-            {
-                "type": "pattern_detection",
-                "title": "Padrão de Acesso Suspeito Detectado",
-                "description": "ML identificou padrão anômalo de acesso a arquivos durante madrugada",
-                "confidence": 0.91,
-                "severity": "high"
-            },
-            {
-                "type": "anomaly",
-                "title": "Comportamento Anômalo em Processos",
-                "description": "Processos executados fora do padrão habitual do usuário",
-                "confidence": 0.87,
-                "severity": "medium"
-            }
-        ]
-        
-        await db.forensics_enhanced.update_one(
-            {"id": exam_id},
-            {
-                "$set": {
-                    "progress": 75,
-                    "ml_insights": ml_insights
-                }
-            }
-        )
-        
-        # Stage 4: AI Analysis (100%)
-        await asyncio.sleep(1)
-        ai_analysis = [
-            {
-                "type": "file_recovery",
-                "title": "Recuperação de Arquivos Deletados",
-                "description": "IA recuperou e catalogou 234 arquivos deletados relevantes",
-                "details": "Incluindo 87 documentos, 142 imagens e 5 vídeos",
-                "confidence": 0.95
-            },
-            {
-                "type": "timeline",
-                "title": "Linha do Tempo Reconstruída",
-                "description": "IA reconstruiu linha do tempo completa dos últimos 60 dias",
-                "details": "1.247 eventos catalogados com precisão temporal",
-                "confidence": 0.93
-            },
-            {
-                "type": "correlation",
-                "title": "Correlações Identificadas",
-                "description": "IA encontrou 23 correlações entre arquivos e atividades",
-                "details": "Padrões de comportamento e relacionamentos entre dados",
-                "confidence": 0.88
-            },
-            {
-                "type": "network",
-                "title": "Análise de Comunicações",
-                "description": "IA analisou tráfego de rede e conexões",
-                "details": "15 conexões suspeitas identificadas",
-                "confidence": 0.90
-            }
-        ]
-        
-        findings = [
-            {
-                "category": "System",
-                "title": "Sistema Operacional Analisado",
-                "description": f"Análise completa de logs e artefatos do sistema",
-                "timestamp": datetime.now(timezone.utc).isoformat()
-            },
-            {
-                "category": "Registry",
-                "title": "Registro do Windows",
-                "description": "67 modificações relevantes encontradas",
-                "timestamp": datetime.now(timezone.utc).isoformat()
-            },
-            {
-                "category": "Browser",
-                "title": "Histórico de Navegação",
-                "description": "3.428 URLs analisadas nos últimos 90 dias",
-                "timestamp": datetime.now(timezone.utc).isoformat()
-            }
-        ]
-        
-        await db.forensics_enhanced.update_one(
-            {"id": exam_id},
-            {
-                "$set": {
-                    "status": "completed",
-                    "progress": 100,
-                    "ai_analysis": ai_analysis,
-                    "findings": findings,
-                    "completed_at": datetime.now(timezone.utc).isoformat()
-                }
-            }
-        )
-        
-        print(f"[AI/ML] Enhanced analysis completed for: {exam_id}")
-    except Exception as e:
-        print(f"[ERROR] Error in enhanced processing: {e}")
-        try:
-            await db.forensics_enhanced.update_one(
-                {"id": exam_id},
-                {"$set": {"status": "error", "error": str(e)}}
-            )
-        except:
-            pass
-
-@forensics_enhanced_router.get("/stats/overview")
-async def get_examination_stats(current_user: dict = Depends(get_current_user)):
-    """Get examination statistics"""
-    try:
-        print(f"[STATS] Fetching statistics")
-        
-        total = await db.forensics_enhanced.count_documents({})
-        active = await db.forensics_enhanced.count_documents({"status": {"$in": ["imaging", "analyzing", "processing"]}})
-        completed = await db.forensics_enhanced.count_documents({"status": "completed"})
-        critical = await db.forensics_enhanced.count_documents({"priority": "critical"})
-        
-        stats = {
-            "total": total,
-            "active": active,
-            "completed": completed,
-            "critical": critical
-        }
-        
-        print(f"[STATS] Stats: {stats}")
-        return stats
-    except Exception as e:
-        print(f"[ERROR] Error fetching stats: {e}")
-        return {
-            "total": 0,
-            "active": 0,
-            "completed": 0,
-            "critical": 0
-        }
-
-
 @forensics_enhanced_router.get("/tools")
 async def get_forensic_tools(user: dict = Depends(get_current_user)):
     """Get list of available forensic tools by category"""
@@ -685,4 +487,202 @@ async def get_analysis_types(user: dict = Depends(get_current_user)):
     except Exception as e:
         print(f"[ERROR] Error fetching analysis types: {e}")
         raise HTTPException(status_code=500, detail=f"Erro ao buscar tipos de análise: {str(e)}")
+
+@forensics_enhanced_router.get("/{exam_id}")
+async def get_examination(exam_id: str, current_user: dict = Depends(get_current_user)):
+    """Get a specific examination"""
+    try:
+        print(f"[GET] Fetching examination: {exam_id}")
+        examination = await db.forensics_enhanced.find_one({"id": exam_id})
+        
+        if not examination:
+            raise HTTPException(status_code=404, detail="Exame não encontrado")
+        
+        if '_id' in examination:
+            del examination['_id']
+        
+        return examination
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"[ERROR] Error fetching examination: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@forensics_enhanced_router.delete("/{exam_id}")
+async def delete_examination(exam_id: str, current_user: dict = Depends(get_current_user)):
+    """Delete an examination"""
+    try:
+        print(f"[DELETE] Removing examination: {exam_id}")
+        result = await db.forensics_enhanced.delete_one({"id": exam_id})
+        
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="Exame não encontrado")
+        
+        print(f"[DELETE] Examination removed successfully")
+        return {"success": True, "message": "Exame removido com sucesso"}
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"[ERROR] Error deleting examination: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+async def process_examination(exam_id: str):
+    """Process examination with AI and ML (async)"""
+    try:
+        print(f"[AI/ML] Starting enhanced analysis for: {exam_id}")
+        
+        import asyncio
+        
+        # Stage 1: Imaging (20%)
+        await asyncio.sleep(2)
+        await db.forensics_enhanced.update_one(
+            {"id": exam_id},
+            {"$set": {"status": "imaging", "progress": 20}}
+        )
+        
+        # Stage 2: Analysis (50%)
+        await asyncio.sleep(2)
+        await db.forensics_enhanced.update_one(
+            {"id": exam_id},
+            {"$set": {"status": "analyzing", "progress": 50}}
+        )
+        
+        # Stage 3: ML Processing (75%)
+        await asyncio.sleep(2)
+        ml_insights = [
+            {
+                "type": "pattern_detection",
+                "title": "Padrão de Acesso Suspeito Detectado",
+                "description": "ML identificou padrão anômalo de acesso a arquivos durante madrugada",
+                "confidence": 0.91,
+                "severity": "high"
+            },
+            {
+                "type": "anomaly",
+                "title": "Comportamento Anômalo em Processos",
+                "description": "Processos executados fora do padrão habitual do usuário",
+                "confidence": 0.87,
+                "severity": "medium"
+            }
+        ]
+        
+        await db.forensics_enhanced.update_one(
+            {"id": exam_id},
+            {
+                "$set": {
+                    "progress": 75,
+                    "ml_insights": ml_insights
+                }
+            }
+        )
+        
+        # Stage 4: AI Analysis (100%)
+        await asyncio.sleep(1)
+        ai_analysis = [
+            {
+                "type": "file_recovery",
+                "title": "Recuperação de Arquivos Deletados",
+                "description": "IA recuperou e catalogou 234 arquivos deletados relevantes",
+                "details": "Incluindo 87 documentos, 142 imagens e 5 vídeos",
+                "confidence": 0.95
+            },
+            {
+                "type": "timeline",
+                "title": "Linha do Tempo Reconstruída",
+                "description": "IA reconstruiu linha do tempo completa dos últimos 60 dias",
+                "details": "1.247 eventos catalogados com precisão temporal",
+                "confidence": 0.93
+            },
+            {
+                "type": "correlation",
+                "title": "Correlações Identificadas",
+                "description": "IA encontrou 23 correlações entre arquivos e atividades",
+                "details": "Padrões de comportamento e relacionamentos entre dados",
+                "confidence": 0.88
+            },
+            {
+                "type": "network",
+                "title": "Análise de Comunicações",
+                "description": "IA analisou tráfego de rede e conexões",
+                "details": "15 conexões suspeitas identificadas",
+                "confidence": 0.90
+            }
+        ]
+        
+        findings = [
+            {
+                "category": "System",
+                "title": "Sistema Operacional Analisado",
+                "description": f"Análise completa de logs e artefatos do sistema",
+                "timestamp": datetime.now(timezone.utc).isoformat()
+            },
+            {
+                "category": "Registry",
+                "title": "Registro do Windows",
+                "description": "67 modificações relevantes encontradas",
+                "timestamp": datetime.now(timezone.utc).isoformat()
+            },
+            {
+                "category": "Browser",
+                "title": "Histórico de Navegação",
+                "description": "3.428 URLs analisadas nos últimos 90 dias",
+                "timestamp": datetime.now(timezone.utc).isoformat()
+            }
+        ]
+        
+        await db.forensics_enhanced.update_one(
+            {"id": exam_id},
+            {
+                "$set": {
+                    "status": "completed",
+                    "progress": 100,
+                    "ai_analysis": ai_analysis,
+                    "findings": findings,
+                    "completed_at": datetime.now(timezone.utc).isoformat()
+                }
+            }
+        )
+        
+        print(f"[AI/ML] Enhanced analysis completed for: {exam_id}")
+    except Exception as e:
+        print(f"[ERROR] Error in enhanced processing: {e}")
+        try:
+            await db.forensics_enhanced.update_one(
+                {"id": exam_id},
+                {"$set": {"status": "error", "error": str(e)}}
+            )
+        except:
+            pass
+
+@forensics_enhanced_router.get("/stats/overview")
+async def get_examination_stats(current_user: dict = Depends(get_current_user)):
+    """Get examination statistics"""
+    try:
+        print(f"[STATS] Fetching statistics")
+        
+        total = await db.forensics_enhanced.count_documents({})
+        active = await db.forensics_enhanced.count_documents({"status": {"$in": ["imaging", "analyzing", "processing"]}})
+        completed = await db.forensics_enhanced.count_documents({"status": "completed"})
+        critical = await db.forensics_enhanced.count_documents({"priority": "critical"})
+        
+        stats = {
+            "total": total,
+            "active": active,
+            "completed": completed,
+            "critical": critical
+        }
+        
+        print(f"[STATS] Stats: {stats}")
+        return stats
+    except Exception as e:
+        print(f"[ERROR] Error fetching stats: {e}")
+        return {
+            "total": 0,
+            "active": 0,
+            "completed": 0,
+            "critical": 0
+        }
+
 
