@@ -509,6 +509,42 @@ Implementar sistema ERP completo para AP Elite com funcionalidades avançadas:
         agent: "testing"
         comment: "✅ TESTED: Template Generator System fully operational with 6 professional legal templates. GET /api/templates/list returns exactly 6 templates as expected (aij_roteiro, procuracao, termo_confidencialidade, ata_reuniao, relatorio_investigacao, analise_provas). GET /api/templates/{template_id} successfully retrieves template details for 'aij_roteiro' and 'procuracao' with complete structure including fields and sections. GET /api/templates/statistics returns proper template usage statistics. GET /api/templates/generated/list returns generated documents list. All endpoints authenticated and returning correct JSON responses. AI-powered document generation system ready for production use."
 
+  - task: "Forensics Enhanced - Complete System"
+    implemented: true
+    working: false
+    file: "/app/backend/forensics_enhanced.py"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "❌ PARTIAL SUCCESS: Forensics Enhanced module has mixed results (21.1% success rate). ✅ WORKING: GET /api/forensics/enhanced/stats/overview (retrieved stats: total=2, active=0, completed=2, critical=0), GET /api/forensics/enhanced (retrieved 2 examinations), POST /api/forensics/enhanced (successfully created examination with ID). ❌ FAILING: GET /api/forensics/enhanced/tools, GET /api/forensics/enhanced/device-types, GET /api/forensics/enhanced/analysis-types all return 404 with 'Exame não encontrado' error. ROOT CAUSE: Route ordering issue - the generic /{exam_id} route is intercepting specific routes like /tools, /device-types, /analysis-types because FastAPI matches path parameters before static routes. SOLUTION NEEDED: Reorder routes in forensics_enhanced.py to place specific routes (/tools, /device-types, /analysis-types, /stats/overview) before the generic /{exam_id} route."
+
+  - task: "Data Extraction Enhanced - Complete System"
+    implemented: true
+    working: false
+    file: "/app/backend/data_extraction_enhanced.py"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "❌ AUTHENTICATION FAILURE: All Data Extraction Enhanced endpoints return 401 'Token inválido' errors. ROOT CAUSE: Authentication mismatch - this module uses verify_token() function that expects the token to be stored in database users collection with 'token' field, but our authentication system returns JWT tokens that are not stored in database. The module looks for user = await db.users.find_one({'token': token}) but JWT tokens are not persisted. SOLUTION NEEDED: Either modify the authentication method to match the JWT system used by other modules, or update the JWT authentication to store tokens in database."
+
+  - task: "Evidence Processing Enhanced - Complete System"
+    implemented: true
+    working: false
+    file: "/app/backend/evidence_processing_enhanced.py"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "❌ AUTHENTICATION FAILURE: All Evidence Processing Enhanced endpoints return 401 'Token inválido' errors. ROOT CAUSE: Same authentication mismatch as Data Extraction module - this module uses verify_token() function that expects the token to be stored in database users collection with 'token' field, but our authentication system returns JWT tokens that are not stored in database. The module looks for user = await db.users.find_one({'token': token}) but JWT tokens are not persisted. SOLUTION NEEDED: Either modify the authentication method to match the JWT system used by other modules, or update the JWT authentication to store tokens in database."
+
 ## frontend:
   - task: "Chart Components"
     implemented: true
