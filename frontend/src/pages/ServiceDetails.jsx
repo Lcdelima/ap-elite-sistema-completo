@@ -3,8 +3,8 @@ import { useParams } from 'react-router-dom';
 import { Shield, Search, FileText, Users, Eye, Scale, CheckCircle, ArrowRight } from 'lucide-react';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Button } from '../components/ui/button';
 import { Link } from 'react-router-dom';
 
 const ServiceDetails = () => {

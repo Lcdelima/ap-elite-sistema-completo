@@ -2,7 +2,7 @@ import React from 'react';
 import { Award, BookOpen, Shield, Users, CheckCircle, Star } from 'lucide-react';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent } from '../components/ui/card';
 
 const About = () => {
   const qualifications = [
