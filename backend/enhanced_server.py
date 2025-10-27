@@ -728,6 +728,7 @@ from evidence_processing_enhanced import router as evidence_processing_router
 from pericia_digital_pro import router as pericia_digital_router
 from interceptacoes_telematicas_pro import router as interceptacoes_telematicas_router
 from cloud_forensics_ai import router as cloud_forensics_router
+from ultra_extraction_pro import router as ultra_extraction_router
 
 # Add all routes to main app
 app.include_router(api_router)
