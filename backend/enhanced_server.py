@@ -721,6 +721,7 @@ from contracts_complete import contracts_router
 from document_library_complete import library_complete_router
 from automated_reports_complete import reports_complete_router
 from advanced_investigation_complete import investigation_complete_router
+from digital_forensics_complete import forensics_router
 
 # Add all routes to main app
 app.include_router(api_router)
