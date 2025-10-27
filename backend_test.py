@@ -1,25 +1,24 @@
 #!/usr/bin/env python3
 """
-Backend API Testing for AP Elite ATHENA System
-Tests all ATHENA system modules including authentication, processes, financial, ERBs, integrations, and security.
+Backend Testing for Forensics and Investigation Enhanced Modules
+Testing the newly created backend APIs for:
+1. Forensics Enhanced - Complete Testing
+2. Data Extraction Enhanced - Complete Testing  
+3. Evidence Processing Enhanced - Complete Testing
+
+Authentication: laura@apelite.com / laura2024
 """
 
-import asyncio
-import aiohttp
+import requests
 import json
-import os
-from datetime import datetime, timezone, timedelta
-from pathlib import Path
-import tempfile
-import io
+import sys
+from datetime import datetime
 
 # Configuration
 BASE_URL = "https://forensic-repairfix.preview.emergentagent.com/api"
-TEST_USER = {
-    "email": "laura@apelite.com",
-    "password": "laura2024",
-    "role": "administrator"
-}
+AUTH_EMAIL = "laura@apelite.com"
+AUTH_PASSWORD = "laura2024"
+AUTH_ROLE = "administrator"
 
 class BackendTester:
     def __init__(self):
