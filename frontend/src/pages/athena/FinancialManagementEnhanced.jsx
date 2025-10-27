@@ -5,8 +5,8 @@ import {
   Filter, Eye, Edit, Trash2, ChevronDown
 } from 'lucide-react';
 import AthenaLayout from '../../components/AthenaLayout';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '../../components/ui/card';
+import { Badge } from '../../components/ui/badge';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 

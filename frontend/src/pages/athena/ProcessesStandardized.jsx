@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import StandardModuleLayout, { ActionButton, StandardCard, StandardTable, StandardEmptyState } from '@/components/StandardModuleLayout';
-import { FormInput, FormTextarea, FormSelect, FormGrid, FormSection, FormActions, FormAlert } from '@/components/FormComponents';
-import { Badge } from '@/components/ui/badge';
+import StandardModuleLayout, { ActionButton, StandardCard, StandardTable, StandardEmptyState } from '../../components/StandardModuleLayout';
+import { FormInput, FormTextarea, FormSelect, FormGrid, FormSection, FormActions, FormAlert } from '../../components/FormComponents';
+import { Badge } from '../../components/ui/badge';
 import {
   Scale, Plus, Search, Filter, Eye, Edit, Trash2, Download,
   FileText, Calendar, User, Building, MapPin, Phone, Mail,

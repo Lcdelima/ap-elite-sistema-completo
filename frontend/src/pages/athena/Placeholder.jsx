@@ -1,7 +1,7 @@
 import React from 'react';
-import AthenaLayout from '@/components/AthenaLayout';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import AthenaLayout from '../../components/AthenaLayout';
+import { Card, CardContent } from '../../components/ui/card';
+import { Badge } from '../../components/ui/badge';
 import { Zap, CheckCircle } from 'lucide-react';
 
 const Placeholder = ({ title, subtitle, icon: Icon }) => {

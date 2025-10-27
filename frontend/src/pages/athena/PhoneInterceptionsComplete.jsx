@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import AthenaLayout from '@/components/AthenaLayout';
+import { Card, CardContent, CardHeader } from '../../components/ui/card';
+import { Badge } from '../../components/ui/badge';
+import AthenaLayout from '../../components/AthenaLayout';
 import {
   Phone, PhoneIncoming, PhoneOutgoing, PhoneMissed, PhoneCall, Search, Filter,
   Calendar, Plus, Edit, Trash2, Eye, Download, FileText, AlertCircle,

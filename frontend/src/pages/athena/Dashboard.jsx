@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { ChartLine, ChartBar, ChartPie, COLORS } from '@/components/ui/chart';
+import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
+import { Badge } from '../../components/ui/badge';
+import { ChartLine, ChartBar, ChartPie, COLORS } from '../../components/ui/chart';
 import {
   Users,
   FileText,

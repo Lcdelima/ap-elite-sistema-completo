@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import AthenaLayout from '@/components/AthenaLayout';
+import { Card, CardContent } from '../../components/ui/card';
+import { Badge } from '../../components/ui/badge';
+import AthenaLayout from '../../components/AthenaLayout';
 import {
   BarChart3, TrendingUp, TrendingDown, DollarSign, Users, Briefcase,
   AlertCircle, CheckCircle, Clock, FileText, Phone, Mail, Calendar,

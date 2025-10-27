@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import AthenaLayout from '@/components/AthenaLayout';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import AthenaLayout from '../../components/AthenaLayout';
+import { Card, CardContent } from '../../components/ui/card';
+import { Badge } from '../../components/ui/badge';
 import { Radio, Wifi, Activity } from 'lucide-react';
 
 const Interceptions = () => {
