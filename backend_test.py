@@ -10,7 +10,7 @@ import os
 from datetime import datetime
 
 # Get backend URL from environment
-BACKEND_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://elite-detective-1.preview.emergentagent.com')
+BACKEND_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://forensic-hub-5.preview.emergentagent.com')
 BASE_URL = f"{BACKEND_URL}/api"
 
 def test_cisai_health_check():

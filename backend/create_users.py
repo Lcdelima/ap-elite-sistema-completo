@@ -73,7 +73,7 @@ async def create_default_users():
     print(f"   Email: {client_user['email']}")
     print(f"   Senha: {client_user['password']}")
     print("")
-    print("🌐 Acesse: https://elite-detective-1.preview.emergentagent.com/login")
+    print("🌐 Acesse: https://forensic-hub-5.preview.emergentagent.com/login")
     
 async def main():
     await create_default_users()

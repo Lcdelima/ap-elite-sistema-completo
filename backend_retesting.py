@@ -7,7 +7,7 @@ import requests
 import json
 
 # Backend URL from environment
-BACKEND_URL = "https://elite-detective-1.preview.emergentagent.com"
+BACKEND_URL = "https://forensic-hub-5.preview.emergentagent.com"
 
 def test_workflow_automation():
     """Test Workflow Automation System endpoint"""
