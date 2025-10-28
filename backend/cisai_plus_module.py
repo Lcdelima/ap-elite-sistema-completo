@@ -459,7 +459,7 @@ async def health_check():
     return {
         "status": "operational",
         "module": "CISAI+",
-        "version": "1.0.0",
+        "version": "1.1.0",
         "features": [
             "GeoIntel Forense",
             "IP Intelligence",
@@ -468,6 +468,8 @@ async def health_check():
         ],
         "integrations": {
             "opencellid": "active",
+            "wigle": "active",
+            "abuseipdb": "active",
             "sentinel_hub": "configured",
             "osint_sources": "available"
         }
