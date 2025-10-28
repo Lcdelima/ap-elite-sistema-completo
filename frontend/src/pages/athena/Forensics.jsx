@@ -138,56 +138,100 @@ const Forensics = () => {
 
         {showModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg p-6 w-full max-w-md">
-              <h3 className="text-xl font-bold mb-4">Nova Análise Forense</h3>
+            <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+              <h3 className="text-xl font-bold mb-4 text-gray-900">Nova Análise Forense</h3>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium mb-1">Título*</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Título da Análise*</label>
                   <input
                     type="text"
                     required
                     value={formData.title}
                     onChange={(e) => setFormData({...formData, title: e.target.value})}
-                    className="w-full px-3 py-2 border rounded-lg"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    placeholder="Ex: Análise de Disco HD Samsung 500GB"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Tipo de Análise*</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Tipo de Análise*</label>
                   <select
                     value={formData.type}
                     onChange={(e) => setFormData({...formData, type: e.target.value})}
-                    className="w-full px-3 py-2 border rounded-lg"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                   >
-                    {analysisTypes.map(type => (
-                      <option key={type} value={type}>
-                        {type.toUpperCase()}
-                      </option>
-                    ))}
+                    <option value="hardware">HARDWARE - Dispositivos físicos</option>
+                    <option value="software">SOFTWARE - Aplicações e logs</option>
+                    <option value="network">NETWORK - Tráfego de rede</option>
+                    <option value="mobile">MOBILE - Smartphones e tablets</option>
+                    <option value="cloud">CLOUD - Armazenamento em nuvem</option>
+                    <option value="memory">MEMORY - Análise de memória RAM</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Descrição do Dispositivo*</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Descrição do Dispositivo/Evidência*</label>
                   <textarea
                     required
                     value={formData.device_description}
                     onChange={(e) => setFormData({...formData, device_description: e.target.value})}
-                    className="w-full px-3 py-2 border rounded-lg"
-                    rows="2"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    rows="3"
+                    placeholder="Descreva o dispositivo ou evidência a ser analisada..."
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Prioridade</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">ID do Caso (Opcional)</label>
+                  <input
+                    type="text"
+                    value={formData.case_id}
+                    onChange={(e) => setFormData({...formData, case_id: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    placeholder="Ex: CASO-2025-0001"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Prioridade</label>
                   <select
                     value={formData.priority}
                     onChange={(e) => setFormData({...formData, priority: e.target.value})}
-                    className="w-full px-3 py-2 border rounded-lg"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                   >
-                    {priorities.map(p => (
-                      <option key={p} value={p}>{p.toUpperCase()}</option>
-                    ))}
+                    <option value="low">BAIXA - Análise de rotina</option>
+                    <option value="medium">MÉDIA - Análise padrão</option>
+                    <option value="high">ALTA - Análise prioritária</option>
+                    <option value="urgent">URGENTE - Análise imediata</option>
                   </select>
                 </div>
                 <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Observações Adicionais</label>
+                  <textarea
+                    value={formData.notes}
+                    onChange={(e) => setFormData({...formData, notes: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    rows="2"
+                    placeholder="Informações relevantes sobre a análise..."
+                  />
+                </div>
+                <div className="flex gap-2 pt-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowModal(false)}
+                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium text-gray-700"
+                    disabled={loading}
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 font-medium disabled:opacity-50"
+                    disabled={loading}
+                  >
+                    {loading ? 'Criando...' : 'Criar Análise'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
                   <label className="block text-sm font-medium mb-1">ID do Caso</label>
                   <input
                     type="text"
