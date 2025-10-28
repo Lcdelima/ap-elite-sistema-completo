@@ -78,9 +78,32 @@ const DataExtraction = () => {
     >
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div className="bg-white p-6 rounded-lg shadow">
-          <p className="text-sm text-gray-600">Total de Itens</p>
-          <p className="text-3xl font-bold text-gray-900">{items.length}</p>
+        <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-lg shadow-lg text-white">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm opacity-90">Total</p>
+              <p className="text-3xl font-bold mt-1">{items.length}</p>
+            </div>
+            <HardDrive size={40} className="opacity-80" />
+          </div>
+        </div>
+        <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-lg shadow-lg text-white">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm opacity-90">Concluídas</p>
+              <p className="text-3xl font-bold mt-1">{items.filter(i => i.status === 'completed').length}</p>
+            </div>
+            <CheckCircle size={40} className="opacity-80" />
+          </div>
+        </div>
+        <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-6 rounded-lg shadow-lg text-white">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm opacity-90">Em Andamento</p>
+              <p className="text-3xl font-bold mt-1">{items.filter(i => i.status === 'in_progress').length}</p>
+            </div>
+            <AlertTriangle size={40} className="opacity-80" />
+          </div>
         </div>
       </div>
 
