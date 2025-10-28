@@ -13,8 +13,11 @@ import re
 import json
 
 from motor.motor_asyncio import AsyncIOMotorClient
-from emergentintegrations import Anthropic as EmergentClaude
+from emergentintegrations.llm.chat import LlmChat, UserMessage
+from dotenv import load_dotenv
 import os
+
+load_dotenv()
 
 router = APIRouter(prefix="/api/analysis", tags=["Análise de Processos"])
 
@@ -24,7 +27,7 @@ client = AsyncIOMotorClient(MONGO_URL)
 db = client.ap_elite_db
 
 # IA - Emergent LLM
-EMERGENT_KEY = "sk-emergent-8956b8181D8C59f613"
+EMERGENT_KEY = os.environ.get("EMERGENT_LLM_KEY", "sk-emergent-8956b8181D8C59f613")
 
 # ============================================================================
 # MODELOS
