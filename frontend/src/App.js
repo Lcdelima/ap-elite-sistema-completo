@@ -160,6 +160,9 @@ function AppContent() {
           <Route path="/athena/password-recovery-elite" element={<PasswordRecoveryElite />} />
           <Route path="/athena/data-recovery-ultimate" element={<DataRecoveryUltimate />} />
           <Route path="/athena/usb-forensics-pro" element={<USBForensicsPro />} />
+          <Route path="/athena/playbook-system" element={<PlaybookSystem />} />
+          <Route path="/athena/playbook-run/:runId" element={<PlaybookRun />} />
+
           <Route path="/athena/data-extraction" element={<AthenaDataExtraction />} />
           <Route path="/athena/data-extraction-enhanced" element={<DataExtractionEnhanced />} />
           <Route path="/athena/evidence-processing" element={<AthenaEvidenceProcessing />} />
