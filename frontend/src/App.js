@@ -204,6 +204,7 @@ function AppContent() {
           <Route path="/athena/automated-reports" element={<AutomatedReportsComplete />} />
           
           {/* CISAI Routes */}
+          <Route path="/admin/cisai" element={<CISAIPlusMain />} />
           <Route path="/admin/cisai/behavioral" element={<BehavioralForensics />} />
           <Route path="/admin/cisai/command" element={<ForensicCommand />} />
           <Route path="/admin/cisai/cyberintel" element={<CyberIntelFusion />} />
