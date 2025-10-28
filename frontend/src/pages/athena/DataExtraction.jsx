@@ -11,7 +11,14 @@ const DataExtraction = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    deviceName: '',
+    deviceModel: '',
+    deviceType: '',
+    serialNumber: '',
+    extractionMethod: '',
+    operatingSystem: ''
+  });
 
   useEffect(() => {
     fetchItems();
