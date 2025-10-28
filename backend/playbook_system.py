@@ -180,6 +180,75 @@ async def listar_playbooks(
         "playbooks": playbooks
     }
 
+# ============================================================================
+# ENDPOINTS - STATS E TEMPLATES (ANTES DA ROTA GENÉRICA)
+# ============================================================================
+
+@router.get("/stats")
+async def estatisticas_playbooks():
+    """Estatísticas gerais"""
+    total_playbooks = await db.playbooks.count_documents({})
+    ativos = await db.playbooks.count_documents({"status": "ativo"})
+    
+    total_runs = await db.playbook_runs.count_documents({})
+    runs_andamento = await db.playbook_runs.count_documents({"status": "em_andamento"})
+    runs_concluidos = await db.playbook_runs.count_documents({"status": "concluido"})
+    runs_bloqueados = await db.playbook_runs.count_documents({"status": "bloqueado"})
+    
+    # Média de progresso
+    runs = await db.playbook_runs.find({}).to_list(1000)
+    progresso_medio = sum([r.get("progresso", 0) for r in runs]) / len(runs) if runs else 0
+    
+    # Por tipo
+    por_tipo = {}
+    for tipo in ["JURIDICO", "PERICIA", "ADMIN", "OSINT", "GEO"]:
+        count = await db.playbooks.count_documents({"tipo": tipo})
+        por_tipo[tipo] = count
+    
+    return {
+        "success": True,
+        "playbooks": {
+            "total": total_playbooks,
+            "ativos": ativos,
+            "por_tipo": por_tipo
+        },
+        "execucoes": {
+            "total": total_runs,
+            "em_andamento": runs_andamento,
+            "concluidos": runs_concluidos,
+            "bloqueados": runs_bloqueados,
+            "progresso_medio": round(progresso_medio, 1)
+        }
+    }
+
+@router.get("/templates")
+async def listar_templates():
+    """Lista templates disponíveis"""
+    templates = [
+        {
+            "id": "ra_assistente_tecnico",
+            "titulo": "RA - Habilitação Assistente Técnico",
+            "tipo": "JURIDICO",
+            "categoria": "Resposta à Acusação",
+            "placeholders": ["{{processo}}", "{{comarca}}", "{{vara}}", "{{cliente}}", "{{oab_adv}}"],
+            "base_legal": "CPP art. 159, §§ 3º e 5º"
+        },
+        {
+            "id": "ata_custodia_ato1",
+            "titulo": "Ata de Custódia - Ato 1 (Recebimento)",
+            "tipo": "PERICIA",
+            "categoria": "Cadeia de Custódia",
+            "placeholders": ["{{dispositivo}}", "{{imei}}", "{{lacre}}", "{{hash}}", "{{data_coleta}}", "{{local}}", "{{perita}}"],
+            "base_legal": "ISO/IEC 27037"
+        }
+    ]
+    
+    return {
+        "success": True,
+        "count": len(templates),
+        "templates": templates
+    }
+
 @router.get("/{playbook_id}")
 async def obter_playbook(playbook_id: str):
     """Obtém detalhes completos do playbook"""
