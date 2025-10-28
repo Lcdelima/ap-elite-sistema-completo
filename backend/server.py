@@ -513,6 +513,15 @@ try:
     app.include_router(playbook_router)
     logger.info("📋 PLAYBOOK SYSTEM loaded successfully")
 except ImportError as e:
+
+# Process Analysis System - Análise de Processos com IA
+try:
+    from process_analysis_system import router as analysis_router
+    app.include_router(analysis_router)
+    logger.info("⚖️ PROCESS ANALYSIS SYSTEM loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ Process Analysis System not available: {e}")
+
     logger.error(f"⚠️ Playbook System not available: {e}")
 
 
