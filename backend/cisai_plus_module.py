@@ -141,7 +141,7 @@ def estimate_cell_accuracy(ta, environment="urban"):
     return base_radius
 
 def ip_intelligence_lookup(ip_address):
-    """Consulta informações de IP usando APIs gratuitas"""
+    """Consulta informações de IP usando APIs gratuitas e AbuseIPDB"""
     try:
         # Validar IP
         ip_obj = ipaddress.ip_address(ip_address)
@@ -157,6 +157,42 @@ def ip_intelligence_lookup(ip_address):
         # Se for IP privado, não consultar APIs externas
         if ip_obj.is_private:
             return {**result, "note": "IP privado - sem dados públicos"}
+        
+        # Consultar AbuseIPDB primeiro
+        try:
+            abuse_headers = {
+                "Key": ABUSEIPDB_API_KEY,
+                "Accept": "application/json"
+            }
+            abuse_params = {
+                "ipAddress": ip_address,
+                "maxAgeInDays": 90,
+                "verbose": ""
+            }
+            abuse_response = requests.get(
+                f"{ABUSEIPDB_API_URL}/check",
+                headers=abuse_headers,
+                params=abuse_params,
+                timeout=10
+            )
+            
+            if abuse_response.status_code == 200:
+                abuse_data = abuse_response.json().get("data", {})
+                result["abuseipdb"] = {
+                    "abuse_confidence_score": abuse_data.get("abuseConfidenceScore", 0),
+                    "usage_type": abuse_data.get("usageType"),
+                    "isp": abuse_data.get("isp"),
+                    "domain": abuse_data.get("domain"),
+                    "total_reports": abuse_data.get("totalReports", 0),
+                    "num_distinct_users": abuse_data.get("numDistinctUsers", 0),
+                    "last_reported_at": abuse_data.get("lastReportedAt"),
+                    "is_whitelisted": abuse_data.get("isWhitelisted", False),
+                    "country_code": abuse_data.get("countryCode")
+                }
+                logger.info(f"AbuseIPDB lookup successful for {ip_address}")
+        except Exception as e:
+            logger.error(f"AbuseIPDB API error: {str(e)}")
+            result["abuseipdb"] = {"error": str(e)}
         
         # Consultar ip-api.com (API gratuita)
         try:
@@ -218,10 +254,13 @@ def ip_intelligence_lookup(ip_address):
         if result.get("ptr") and "tor" in result["ptr"].lower():
             is_tor = True
         
+        # Calcular risk score com dados AbuseIPDB
+        abuse_score = result.get("abuseipdb", {}).get("abuse_confidence_score", 0)
+        
         result["security"] = {
             "is_vpn": is_vpn,
             "is_tor": is_tor,
-            "risk_score": calculate_ip_risk_score(result)
+            "risk_score": calculate_ip_risk_score(result, abuse_score)
         }
         
         return result
@@ -232,20 +271,76 @@ def ip_intelligence_lookup(ip_address):
         logger.error(f"IP intelligence error: {str(e)}")
         raise HTTPException(status_code=500, detail="Erro ao processar IP")
 
-def calculate_ip_risk_score(ip_data):
-    """Calcula score de risco para IP (0-100)"""
+def calculate_ip_risk_score(ip_data, abuse_score=0):
+    """Calcula score de risco para IP (0-100) incluindo AbuseIPDB"""
     risk = 0
     
-    if ip_data.get("flags", {}).get("is_proxy"):
-        risk += 30
-    if ip_data.get("flags", {}).get("is_hosting"):
-        risk += 20
-    if ip_data.get("security", {}).get("is_vpn"):
-        risk += 25
-    if ip_data.get("security", {}).get("is_tor"):
-        risk += 40
+    # Score de abuso do AbuseIPDB (peso maior)
+    risk += abuse_score * 0.6  # 60% do peso
     
-    return min(risk, 100)
+    if ip_data.get("flags", {}).get("is_proxy"):
+        risk += 15
+    if ip_data.get("flags", {}).get("is_hosting"):
+        risk += 10
+    if ip_data.get("security", {}).get("is_vpn"):
+        risk += 15
+    if ip_data.get("security", {}).get("is_tor"):
+        risk += 20
+    
+    return min(int(risk), 100)
+
+def wigle_bssid_lookup(bssid):
+    """Consulta Wigle API para localização de BSSID"""
+    try:
+        headers = {
+            "Authorization": f"Basic {WIGLE_API_NAME}:{WIGLE_API_TOKEN}"
+        }
+        
+        # Encode credentials in base64
+        import base64
+        credentials = f"{WIGLE_API_NAME}:{WIGLE_API_TOKEN}"
+        encoded_credentials = base64.b64encode(credentials.encode()).decode()
+        
+        headers = {
+            "Authorization": f"Basic {encoded_credentials}",
+            "Accept": "application/json"
+        }
+        
+        params = {
+            "netid": bssid.upper()
+        }
+        
+        response = requests.get(WIGLE_API_URL, headers=headers, params=params, timeout=10)
+        
+        if response.status_code == 200:
+            data = response.json()
+            
+            if data.get("success") and data.get("totalResults", 0) > 0:
+                results = data.get("results", [])
+                if results:
+                    first_result = results[0]
+                    return {
+                        "bssid": bssid,
+                        "ssid": first_result.get("ssid"),
+                        "lat": float(first_result.get("trilat", 0)),
+                        "lon": float(first_result.get("trilong", 0)),
+                        "first_seen": first_result.get("firsttime"),
+                        "last_seen": first_result.get("lasttime"),
+                        "channel": first_result.get("channel"),
+                        "encryption": first_result.get("encryption"),
+                        "vendor": first_result.get("name"),
+                        "total_results": data.get("totalResults"),
+                        "source": "wigle"
+                    }
+            
+            return {"error": "BSSID não encontrado no Wigle", "bssid": bssid}
+        else:
+            logger.error(f"Wigle API error: {response.status_code} - {response.text}")
+            return {"error": f"Erro Wigle API: {response.status_code}", "bssid": bssid}
+            
+    except Exception as e:
+        logger.error(f"Wigle lookup error: {str(e)}")
+        return {"error": str(e), "bssid": bssid}
 
 def detect_gps_spoofing(fixes):
     """Detecta spoofing de GPS baseado em velocidades impossíveis"""
