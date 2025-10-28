@@ -1,0 +1,30 @@
+{
+  "verification_type": "personal_data",
+  "input_data": {
+    "name": "Maria Silva Santos",
+    "cpf": "123.456.789-00",
+    "phone": "+5511987654321"
+  },
+  "results": {
+    "name_verification": {
+      "status": "pending",
+      "confidence": 0.0
+    },
+    "cpf_verification": {
+      "status": "pending",
+      "confidence": 0.0
+    },
+    "phone_verification": {
+      "status": "pending",
+      "confidence": 0.0
+    },
+    "cross_references": [],
+    "risk_indicators": [],
+    "recommendations": [
+      "Verificar dados em bases oficiais",
+      "Confirmar identidade atrav\u00e9s de documentos",
+      "Investigar conex\u00f5es familiares"
+    ]
+  },
+  "timestamp": "2025-10-23T18:53:57.611852+00:00"
+}

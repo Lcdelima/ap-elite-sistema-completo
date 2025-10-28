@@ -1,0 +1,931 @@
+{
+  "backup_id": "901827f9-959c-4504-ab19-5d4921dbf36f",
+  "timestamp": "2025-10-14T19:50:43.910048+00:00",
+  "collections": {
+    "users": [
+      {
+        "id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "name": "Dra. Laura Cunha de Lima",
+        "email": "laura@apelite.com",
+        "password": "laura2024",
+        "role": "administrator",
+        "phone": "(11) 9 1646-8611",
+        "cpf": "000.000.000-00",
+        "address": "R Paraguai, 454 - Jardim America, Tres Coracoes - MG",
+        "created_at": "2025-10-08T16:09:17.427379+00:00",
+        "last_login": "2025-10-14T19:50:42.723273+00:00",
+        "active": true
+      },
+      {
+        "id": "86740768-0ed0-4aa0-8bfe-9d12f42ad4ea",
+        "name": "Cliente Teste",
+        "email": "cliente@apelite.com",
+        "password": "cliente2024",
+        "role": "client",
+        "phone": "(11) 99999-9999",
+        "cpf": "111.111.111-11",
+        "address": "Endere\u00e7o do Cliente",
+        "created_at": "2025-10-08T16:09:17.443298+00:00",
+        "last_login": null,
+        "active": true
+      },
+      {
+        "id": "ebec3948-6eef-48bf-9956-e228462bb9bf",
+        "created_at": "2025-10-09T19:36:58.202766+00:00",
+        "updated_at": "2025-10-09T19:36:58.202769+00:00",
+        "name": "Test User ATHENA",
+        "email": "testuser_1760038618.196242@apelite.com",
+        "password": "testpass123",
+        "role": "client",
+        "phone": "+5535999887766",
+        "cpf": null,
+        "address": null,
+        "department": null,
+        "permissions": [],
+        "last_login": null,
+        "active": true,
+        "profile_image": null
+      },
+      {
+        "id": "e3f149b6-5a47-42c4-8a85-0bff8e22525f",
+        "created_at": "2025-10-09T19:59:11.773724+00:00",
+        "updated_at": "2025-10-09T19:59:11.773727+00:00",
+        "name": "Test User ATHENA",
+        "email": "testuser_1760039951.763518@apelite.com",
+        "password": "testpass123",
+        "role": "client",
+        "phone": "+5535999887766",
+        "cpf": null,
+        "address": null,
+        "department": null,
+        "permissions": [],
+        "last_login": null,
+        "active": true,
+        "profile_image": null
+      },
+      {
+        "id": "d4df329d-014c-48ec-a909-85ea64b061da",
+        "created_at": "2025-10-09T20:31:08.986374+00:00",
+        "updated_at": "2025-10-09T20:31:08.986378+00:00",
+        "name": "Test User ATHENA",
+        "email": "testuser_1760041868.98025@apelite.com",
+        "password": "testpass123",
+        "role": "client",
+        "phone": "+5535999887766",
+        "cpf": null,
+        "address": null,
+        "department": null,
+        "permissions": [],
+        "last_login": null,
+        "active": true,
+        "profile_image": null
+      },
+      {
+        "id": "04996646-e1e7-44e6-a861-727147b2df31",
+        "created_at": "2025-10-09T21:09:13.424790+00:00",
+        "updated_at": "2025-10-09T21:09:13.424794+00:00",
+        "name": "Test User ATHENA",
+        "email": "testuser_1760044153.413334@apelite.com",
+        "password": "testpass123",
+        "role": "client",
+        "phone": "+5535999887766",
+        "cpf": null,
+        "address": null,
+        "department": null,
+        "permissions": [],
+        "last_login": null,
+        "active": true,
+        "profile_image": null
+      }
+    ],
+    "cases": [
+      {
+        "id": "930acd82-3003-4872-8c23-c08b9ca5e541",
+        "client_id": "86740768-0ed0-4aa0-8bfe-9d12f42ad4ea",
+        "title": "Per\u00edcia Digital - Recupera\u00e7\u00e3o de Dados",
+        "service_type": "Per\u00edcia Digital",
+        "description": "An\u00e1lise forense de dispositivo m\u00f3vel para recupera\u00e7\u00e3o de mensagens deletadas.",
+        "status": "active",
+        "priority": "normal",
+        "start_date": "2025-10-03T16:09:24.905662+00:00",
+        "completion_date": null,
+        "estimated_completion": "2025-10-18T16:09:24.905673+00:00",
+        "assigned_to": "Dra. Laura Cunha de Lima",
+        "fee": 2500.0,
+        "notes": "Cliente solicitou an\u00e1lise urgente devido a processo judicial.",
+        "created_at": "2025-10-03T16:09:24.905676+00:00"
+      }
+    ],
+    "evidence": [],
+    "financial_records": [],
+    "meetings": [
+      {
+        "id": "1905f0f0-da03-4e6a-8f8a-26054b26fbe4",
+        "organizer_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "title": "Test Video Conference",
+        "start_time": "2025-10-08T18:22:02+00:00",
+        "end_time": "2025-10-08T19:22:02+00:00",
+        "participants": [
+          "participant1@example.com",
+          "participant2@example.com"
+        ],
+        "case_id": "test-case-video-123",
+        "meeting_type": "video",
+        "platform": "jitsi",
+        "meeting_link": "https://meet.jit.si/apelite-4FE28E9D",
+        "meeting_id": "4FE28E9D",
+        "password": "71310D",
+        "status": "scheduled",
+        "created_at": "2025-10-08T17:22:02.901264+00:00",
+        "updated_at": "2025-10-08T17:22:02.901267+00:00"
+      },
+      {
+        "id": "de863199-e3b7-4b54-ab2f-c9a9ea1950d7",
+        "organizer_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "title": "Test Video Conference",
+        "start_time": "2025-10-08T18:42:54+00:00",
+        "end_time": "2025-10-08T19:42:54+00:00",
+        "participants": [
+          "participant1@example.com",
+          "participant2@example.com"
+        ],
+        "case_id": "test-case-video-123",
+        "meeting_type": "video",
+        "platform": "jitsi",
+        "meeting_link": "https://meet.jit.si/apelite-FAA43E9D",
+        "meeting_id": "FAA43E9D",
+        "password": "4B9C30",
+        "status": "scheduled",
+        "created_at": "2025-10-08T17:42:54.378863+00:00",
+        "updated_at": "2025-10-08T17:42:54.378866+00:00"
+      },
+      {
+        "id": "f7167add-b19b-415d-b8dc-f8287d63a5dd",
+        "organizer_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "title": "Test Video Conference",
+        "start_time": "2025-10-09T20:36:58+00:00",
+        "end_time": "2025-10-09T21:36:58+00:00",
+        "participants": [
+          "participant1@example.com",
+          "participant2@example.com"
+        ],
+        "case_id": "test-case-video-123",
+        "meeting_type": "video",
+        "platform": "jitsi",
+        "meeting_link": "https://meet.jit.si/apelite-648DC976",
+        "meeting_id": "648DC976",
+        "password": "0B3BE9",
+        "status": "scheduled",
+        "created_at": "2025-10-09T19:36:58.511820+00:00",
+        "updated_at": "2025-10-09T19:36:58.511824+00:00"
+      },
+      {
+        "id": "3e70dcd0-dfc9-4642-82c4-5f7e11b43b71",
+        "organizer_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "title": "Test Video Conference",
+        "start_time": "2025-10-09T20:59:12+00:00",
+        "end_time": "2025-10-09T21:59:12+00:00",
+        "participants": [
+          "participant1@example.com",
+          "participant2@example.com"
+        ],
+        "case_id": "test-case-video-123",
+        "meeting_type": "video",
+        "platform": "jitsi",
+        "meeting_link": "https://meet.jit.si/apelite-22CF758B",
+        "meeting_id": "22CF758B",
+        "password": "649009",
+        "status": "scheduled",
+        "created_at": "2025-10-09T19:59:12.197105+00:00",
+        "updated_at": "2025-10-09T19:59:12.197109+00:00"
+      },
+      {
+        "id": "a5173fff-8b11-444e-9464-191441e55fa5",
+        "organizer_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "title": "Test Video Conference",
+        "start_time": "2025-10-09T21:31:09+00:00",
+        "end_time": "2025-10-09T22:31:09+00:00",
+        "participants": [
+          "participant1@example.com",
+          "participant2@example.com"
+        ],
+        "case_id": "test-case-video-123",
+        "meeting_type": "video",
+        "platform": "jitsi",
+        "meeting_link": "https://meet.jit.si/apelite-EB126D76",
+        "meeting_id": "EB126D76",
+        "password": "B14B45",
+        "status": "scheduled",
+        "created_at": "2025-10-09T20:31:09.423793+00:00",
+        "updated_at": "2025-10-09T20:31:09.423797+00:00"
+      },
+      {
+        "id": "94f53694-5ecb-4dd5-8263-347b1751e02d",
+        "organizer_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "title": "Test Video Conference",
+        "start_time": "2025-10-09T22:09:14+00:00",
+        "end_time": "2025-10-09T23:09:14+00:00",
+        "participants": [
+          "participant1@example.com",
+          "participant2@example.com"
+        ],
+        "case_id": "test-case-video-123",
+        "meeting_type": "video",
+        "platform": "jitsi",
+        "meeting_link": "https://meet.jit.si/apelite-5CCCBF74",
+        "meeting_id": "5CCCBF74",
+        "password": "C143DD",
+        "status": "scheduled",
+        "created_at": "2025-10-09T21:09:14.597148+00:00",
+        "updated_at": "2025-10-09T21:09:14.597152+00:00"
+      },
+      {
+        "id": "8fb509a9-849d-4562-9f24-89691815f459",
+        "organizer_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "title": "Test Video Conference",
+        "start_time": "2025-10-10T16:02:14+00:00",
+        "end_time": "2025-10-10T17:02:14+00:00",
+        "participants": [
+          "participant1@example.com",
+          "participant2@example.com"
+        ],
+        "case_id": "test-case-video-123",
+        "meeting_type": "video",
+        "platform": "jitsi",
+        "meeting_link": "https://meet.jit.si/apelite-3B0A1497",
+        "meeting_id": "3B0A1497",
+        "password": "E7AA90",
+        "status": "scheduled",
+        "created_at": "2025-10-10T15:02:14.427201+00:00",
+        "updated_at": "2025-10-10T15:02:14.427204+00:00"
+      },
+      {
+        "id": "ca2e4301-b083-4d82-a2c5-2ff6ce65172c",
+        "organizer_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "title": "Test Video Conference",
+        "start_time": "2025-10-14T20:47:49+00:00",
+        "end_time": "2025-10-14T21:47:49+00:00",
+        "participants": [
+          "participant1@example.com",
+          "participant2@example.com"
+        ],
+        "case_id": "test-case-video-123",
+        "meeting_type": "video",
+        "platform": "jitsi",
+        "meeting_link": "https://meet.jit.si/apelite-8C60DDD8",
+        "meeting_id": "8C60DDD8",
+        "password": "DB56E9",
+        "status": "scheduled",
+        "created_at": "2025-10-14T19:47:49.576776+00:00",
+        "updated_at": "2025-10-14T19:47:49.576780+00:00"
+      },
+      {
+        "id": "224edb89-b5ee-4a5b-a883-9710ab7a0f89",
+        "organizer_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "title": "Test Video Conference",
+        "start_time": "2025-10-14T20:50:43+00:00",
+        "end_time": "2025-10-14T21:50:43+00:00",
+        "participants": [
+          "participant1@example.com",
+          "participant2@example.com"
+        ],
+        "case_id": "test-case-video-123",
+        "meeting_type": "video",
+        "platform": "jitsi",
+        "meeting_link": "https://meet.jit.si/apelite-408188C5",
+        "meeting_id": "408188C5",
+        "password": "6397D2",
+        "status": "scheduled",
+        "created_at": "2025-10-14T19:50:43.730516+00:00",
+        "updated_at": "2025-10-14T19:50:43.730519+00:00"
+      }
+    ],
+    "messages": [
+      {
+        "id": "32c5ab63-2194-4560-87f1-75f443337642",
+        "sender_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "recipient_ids": [
+          "test@example.com"
+        ],
+        "case_id": "test-case-email-123",
+        "subject": "Test Email from ERP System",
+        "content": "This is a test email sent from the AP Elite ERP system.",
+        "message_type": "email",
+        "status": "sent",
+        "created_at": "2025-10-08T17:21:44.689391+00:00",
+        "updated_at": "2025-10-08T17:21:44.689399+00:00"
+      },
+      {
+        "id": "4401ee10-2903-4cc4-a944-2b2e3b5a3c43",
+        "sender_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "recipient_ids": [
+          "+5511999887766"
+        ],
+        "case_id": "test-case-whatsapp-123",
+        "subject": "WhatsApp Message",
+        "content": "Test WhatsApp message from AP Elite ERP system.",
+        "message_type": "whatsapp",
+        "status": "sent",
+        "created_at": "2025-10-08T17:21:44.711260+00:00",
+        "updated_at": "2025-10-08T17:21:44.711268+00:00"
+      },
+      {
+        "id": "4bb4067f-2109-4c98-825c-031511496173",
+        "sender_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "recipient_ids": [
+          "test@example.com"
+        ],
+        "case_id": "test-case-email-123",
+        "subject": "Test Email from ERP System",
+        "content": "This is a test email sent from the AP Elite ERP system.",
+        "message_type": "email",
+        "status": "sent",
+        "created_at": "2025-10-08T17:22:02.845757+00:00",
+        "updated_at": "2025-10-08T17:22:02.845766+00:00"
+      },
+      {
+        "id": "f45eca38-a837-4493-aed1-b9d212daafc5",
+        "sender_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "recipient_ids": [
+          "+5511999887766"
+        ],
+        "case_id": "test-case-whatsapp-123",
+        "subject": "WhatsApp Message",
+        "content": "Test WhatsApp message from AP Elite ERP system.",
+        "message_type": "whatsapp",
+        "status": "sent",
+        "created_at": "2025-10-08T17:22:02.894221+00:00",
+        "updated_at": "2025-10-08T17:22:02.894234+00:00"
+      },
+      {
+        "id": "dc78398a-0b0f-49fe-b1b6-981b2371e977",
+        "sender_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "recipient_ids": [
+          "test@example.com"
+        ],
+        "case_id": "test-case-email-123",
+        "subject": "Test Email from ERP System",
+        "content": "This is a test email sent from the AP Elite ERP system.",
+        "message_type": "email",
+        "status": "sent",
+        "created_at": "2025-10-08T17:42:54.355650+00:00",
+        "updated_at": "2025-10-08T17:42:54.355660+00:00"
+      },
+      {
+        "id": "e4a20034-361d-456e-a9ed-5a3417ec5f2d",
+        "sender_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "recipient_ids": [
+          "+5511999887766"
+        ],
+        "case_id": "test-case-whatsapp-123",
+        "subject": "WhatsApp Message",
+        "content": "Test WhatsApp message from AP Elite ERP system.",
+        "message_type": "whatsapp",
+        "status": "sent",
+        "created_at": "2025-10-08T17:42:54.366317+00:00",
+        "updated_at": "2025-10-08T17:42:54.366328+00:00"
+      },
+      {
+        "id": "b773fe43-9edc-43f9-b8ca-e3d0ff0c1127",
+        "sender_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "recipient_ids": [
+          "test@example.com"
+        ],
+        "case_id": "test-case-email-123",
+        "subject": "Test Email from ERP System",
+        "content": "This is a test email sent from the AP Elite ERP system.",
+        "message_type": "email",
+        "status": "sent",
+        "created_at": "2025-10-09T19:36:58.445972+00:00",
+        "updated_at": "2025-10-09T19:36:58.445982+00:00"
+      },
+      {
+        "id": "16514a69-4495-4f47-802e-b864c354fbb4",
+        "sender_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "recipient_ids": [
+          "+5511999887766"
+        ],
+        "case_id": "test-case-whatsapp-123",
+        "subject": "WhatsApp Message",
+        "content": "Test WhatsApp message from AP Elite ERP system.",
+        "message_type": "whatsapp",
+        "status": "sent",
+        "created_at": "2025-10-09T19:36:58.460956+00:00",
+        "updated_at": "2025-10-09T19:36:58.460965+00:00"
+      },
+      {
+        "id": "c71762d9-3f1d-495f-9d01-669857160000",
+        "sender_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "recipient_ids": [
+          "test@example.com"
+        ],
+        "case_id": "test-case-email-123",
+        "subject": "Test Email from ERP System",
+        "content": "This is a test email sent from the AP Elite ERP system.",
+        "message_type": "email",
+        "status": "sent",
+        "created_at": "2025-10-09T19:59:12.124735+00:00",
+        "updated_at": "2025-10-09T19:59:12.124745+00:00"
+      },
+      {
+        "id": "0d69180e-a829-4f8c-98c7-6eb16f44d9de",
+        "sender_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "recipient_ids": [
+          "+5511999887766"
+        ],
+        "case_id": "test-case-whatsapp-123",
+        "subject": "WhatsApp Message",
+        "content": "Test WhatsApp message from AP Elite ERP system.",
+        "message_type": "whatsapp",
+        "status": "sent",
+        "created_at": "2025-10-09T19:59:12.147745+00:00",
+        "updated_at": "2025-10-09T19:59:12.147754+00:00"
+      },
+      {
+        "id": "8497ec46-4202-4f6f-82e9-db535697243e",
+        "sender_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "recipient_ids": [
+          "test@example.com"
+        ],
+        "case_id": "test-case-email-123",
+        "subject": "Test Email from ERP System",
+        "content": "This is a test email sent from the AP Elite ERP system.",
+        "message_type": "email",
+        "status": "sent",
+        "created_at": "2025-10-09T20:31:09.404869+00:00",
+        "updated_at": "2025-10-09T20:31:09.404881+00:00"
+      },
+      {
+        "id": "96f41180-0466-4f7d-b66f-59722f99f988",
+        "sender_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "recipient_ids": [
+          "+5511999887766"
+        ],
+        "case_id": "test-case-whatsapp-123",
+        "subject": "WhatsApp Message",
+        "content": "Test WhatsApp message from AP Elite ERP system.",
+        "message_type": "whatsapp",
+        "status": "sent",
+        "created_at": "2025-10-09T20:31:09.414758+00:00",
+        "updated_at": "2025-10-09T20:31:09.414767+00:00"
+      },
+      {
+        "id": "d8b0e1b2-3cfe-490a-b5f0-3dd00c0bc3bb",
+        "sender_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "recipient_ids": [
+          "test@example.com"
+        ],
+        "case_id": "test-case-email-123",
+        "subject": "Test Email from ERP System",
+        "content": "This is a test email sent from the AP Elite ERP system.",
+        "message_type": "email",
+        "status": "sent",
+        "created_at": "2025-10-09T21:09:14.576883+00:00",
+        "updated_at": "2025-10-09T21:09:14.576895+00:00"
+      },
+      {
+        "id": "b6cf9dcd-fe53-4da5-8059-f706d6ee0988",
+        "sender_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "recipient_ids": [
+          "+5511999887766"
+        ],
+        "case_id": "test-case-whatsapp-123",
+        "subject": "WhatsApp Message",
+        "content": "Test WhatsApp message from AP Elite ERP system.",
+        "message_type": "whatsapp",
+        "status": "sent",
+        "created_at": "2025-10-09T21:09:14.587785+00:00",
+        "updated_at": "2025-10-09T21:09:14.587795+00:00"
+      },
+      {
+        "id": "74f88949-1810-48a9-ba7f-5fb545b93a79",
+        "sender_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "recipient_ids": [
+          "test@example.com"
+        ],
+        "case_id": "test-case-email-123",
+        "subject": "Test Email from ERP System",
+        "content": "This is a test email sent from the AP Elite ERP system.",
+        "message_type": "email",
+        "status": "sent",
+        "created_at": "2025-10-10T15:02:14.359856+00:00",
+        "updated_at": "2025-10-10T15:02:14.359864+00:00"
+      },
+      {
+        "id": "179e7f01-c6cc-4b93-985f-659e258986e4",
+        "sender_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "recipient_ids": [
+          "+5511999887766"
+        ],
+        "case_id": "test-case-whatsapp-123",
+        "subject": "WhatsApp Message",
+        "content": "Test WhatsApp message from AP Elite ERP system.",
+        "message_type": "whatsapp",
+        "status": "sent",
+        "created_at": "2025-10-10T15:02:14.415724+00:00",
+        "updated_at": "2025-10-10T15:02:14.415733+00:00"
+      },
+      {
+        "id": "01081e40-31a9-4bff-887f-896ffc51061e",
+        "sender_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "recipient_ids": [
+          "test@example.com"
+        ],
+        "case_id": "test-case-email-123",
+        "subject": "Test Email from ERP System",
+        "content": "This is a test email sent from the AP Elite ERP system.",
+        "message_type": "email",
+        "status": "sent",
+        "created_at": "2025-10-14T19:47:49.514745+00:00",
+        "updated_at": "2025-10-14T19:47:49.514753+00:00"
+      },
+      {
+        "id": "33033744-3f9e-4b07-b9f0-4114a24b83e6",
+        "sender_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "recipient_ids": [
+          "+5511999887766"
+        ],
+        "case_id": "test-case-whatsapp-123",
+        "subject": "WhatsApp Message",
+        "content": "Test WhatsApp message from AP Elite ERP system.",
+        "message_type": "whatsapp",
+        "status": "sent",
+        "created_at": "2025-10-14T19:47:49.568757+00:00",
+        "updated_at": "2025-10-14T19:47:49.568766+00:00"
+      },
+      {
+        "id": "84c51e8a-3d1b-4de4-be3e-fc5bd120ba99",
+        "sender_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "recipient_ids": [
+          "test@example.com"
+        ],
+        "case_id": "test-case-email-123",
+        "subject": "Test Email from ERP System",
+        "content": "This is a test email sent from the AP Elite ERP system.",
+        "message_type": "email",
+        "status": "sent",
+        "created_at": "2025-10-14T19:50:43.676166+00:00",
+        "updated_at": "2025-10-14T19:50:43.676175+00:00"
+      },
+      {
+        "id": "491151d9-380a-4100-943d-8cb5c6309888",
+        "sender_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "recipient_ids": [
+          "+5511999887766"
+        ],
+        "case_id": "test-case-whatsapp-123",
+        "subject": "WhatsApp Message",
+        "content": "Test WhatsApp message from AP Elite ERP system.",
+        "message_type": "whatsapp",
+        "status": "sent",
+        "created_at": "2025-10-14T19:50:43.682495+00:00",
+        "updated_at": "2025-10-14T19:50:43.682503+00:00"
+      }
+    ],
+    "tasks": [],
+    "iped_projects": [
+      {
+        "case_id": "test-case-789",
+        "project_name": "Test IPED Project",
+        "evidence_ids": [
+          "evidence-1",
+          "evidence-2"
+        ],
+        "analyst_id": "test-analyst-123",
+        "id": "7545f606-c73c-4b7f-a4c5-6ae6b2b1689e",
+        "project_path": "/app/backend/iped_projects/7545f606-c73c-4b7f-a4c5-6ae6b2b1689e",
+        "status": "created",
+        "progress": 0.0,
+        "created_at": "2025-10-08T17:21:44.657469+00:00",
+        "updated_at": "2025-10-08T17:21:44.657488+00:00",
+        "iped_version": "4.1.4",
+        "categories": {},
+        "bookmarks": []
+      },
+      {
+        "case_id": "test-case-789",
+        "project_name": "Test IPED Project",
+        "evidence_ids": [
+          "evidence-1",
+          "evidence-2"
+        ],
+        "analyst_id": "test-analyst-123",
+        "id": "c8233544-d604-4d93-b7b1-a905a5104923",
+        "project_path": "/app/backend/iped_projects/c8233544-d604-4d93-b7b1-a905a5104923",
+        "status": "created",
+        "progress": 0.0,
+        "created_at": "2025-10-08T17:22:02.832516+00:00",
+        "updated_at": "2025-10-08T17:22:02.832525+00:00",
+        "iped_version": "4.1.4",
+        "categories": {},
+        "bookmarks": []
+      },
+      {
+        "case_id": "test-case-789",
+        "project_name": "Test IPED Project",
+        "evidence_ids": [
+          "evidence-1",
+          "evidence-2"
+        ],
+        "analyst_id": "test-analyst-123",
+        "id": "89469eb9-5366-4865-884a-7fb007d9b20e",
+        "project_path": "/app/backend/iped_projects/89469eb9-5366-4865-884a-7fb007d9b20e",
+        "status": "created",
+        "progress": 0.0,
+        "created_at": "2025-10-08T17:42:54.298912+00:00",
+        "updated_at": "2025-10-08T17:42:54.298922+00:00",
+        "iped_version": "4.1.4",
+        "categories": {},
+        "bookmarks": []
+      },
+      {
+        "case_id": "test-case-789",
+        "project_name": "Test IPED Project",
+        "evidence_ids": [
+          "evidence-1",
+          "evidence-2"
+        ],
+        "analyst_id": "test-analyst-123",
+        "id": "960783d9-26de-433d-b1b1-6e892da29724",
+        "project_path": "/app/backend/iped_projects/960783d9-26de-433d-b1b1-6e892da29724",
+        "status": "created",
+        "progress": 0.0,
+        "created_at": "2025-10-09T19:36:58.377855+00:00",
+        "updated_at": "2025-10-09T19:36:58.377865+00:00",
+        "iped_version": "4.1.4",
+        "categories": {},
+        "bookmarks": []
+      },
+      {
+        "case_id": "test-case-789",
+        "project_name": "Test IPED Project",
+        "evidence_ids": [
+          "evidence-1",
+          "evidence-2"
+        ],
+        "analyst_id": "test-analyst-123",
+        "id": "ee62b252-4045-4b1f-99f0-5e168262fbce",
+        "project_path": "/app/backend/iped_projects/ee62b252-4045-4b1f-99f0-5e168262fbce",
+        "status": "created",
+        "progress": 0.0,
+        "created_at": "2025-10-09T19:59:12.092186+00:00",
+        "updated_at": "2025-10-09T19:59:12.092197+00:00",
+        "iped_version": "4.1.4",
+        "categories": {},
+        "bookmarks": []
+      },
+      {
+        "case_id": "test-case-789",
+        "project_name": "Test IPED Project",
+        "evidence_ids": [
+          "evidence-1",
+          "evidence-2"
+        ],
+        "analyst_id": "test-analyst-123",
+        "id": "e38fb588-5452-417a-8c56-cc88b4e2913d",
+        "project_path": "/app/backend/iped_projects/e38fb588-5452-417a-8c56-cc88b4e2913d",
+        "status": "created",
+        "progress": 0.0,
+        "created_at": "2025-10-09T20:31:09.385397+00:00",
+        "updated_at": "2025-10-09T20:31:09.385407+00:00",
+        "iped_version": "4.1.4",
+        "categories": {},
+        "bookmarks": []
+      },
+      {
+        "case_id": "test-case-789",
+        "project_name": "Test IPED Project",
+        "evidence_ids": [
+          "evidence-1",
+          "evidence-2"
+        ],
+        "analyst_id": "test-analyst-123",
+        "id": "889c2157-de19-4cdd-80a4-3bd1cb0db552",
+        "project_path": "/app/backend/iped_projects/889c2157-de19-4cdd-80a4-3bd1cb0db552",
+        "status": "created",
+        "progress": 0.0,
+        "created_at": "2025-10-09T21:09:14.557860+00:00",
+        "updated_at": "2025-10-09T21:09:14.557873+00:00",
+        "iped_version": "4.1.4",
+        "categories": {},
+        "bookmarks": []
+      },
+      {
+        "case_id": "test-case-789",
+        "project_name": "Test IPED Project",
+        "evidence_ids": [
+          "evidence-1",
+          "evidence-2"
+        ],
+        "analyst_id": "test-analyst-123",
+        "id": "3d8cd82a-7417-4da9-a94f-e67734c690fc",
+        "project_path": "/app/backend/iped_projects/3d8cd82a-7417-4da9-a94f-e67734c690fc",
+        "status": "created",
+        "progress": 0.0,
+        "created_at": "2025-10-10T15:02:14.297078+00:00",
+        "updated_at": "2025-10-10T15:02:14.297087+00:00",
+        "iped_version": "4.1.4",
+        "categories": {},
+        "bookmarks": []
+      },
+      {
+        "case_id": "test-case-789",
+        "project_name": "Test IPED Project",
+        "evidence_ids": [
+          "evidence-1",
+          "evidence-2"
+        ],
+        "analyst_id": "test-analyst-123",
+        "id": "9ddace16-5270-4fbd-b865-c92e7c2b051e",
+        "project_path": "/app/backend/iped_projects/9ddace16-5270-4fbd-b865-c92e7c2b051e",
+        "status": "created",
+        "progress": 0.0,
+        "created_at": "2025-10-14T19:47:49.492627+00:00",
+        "updated_at": "2025-10-14T19:47:49.492637+00:00",
+        "iped_version": "4.1.4",
+        "categories": {},
+        "bookmarks": []
+      },
+      {
+        "case_id": "test-case-789",
+        "project_name": "Test IPED Project",
+        "evidence_ids": [
+          "evidence-1",
+          "evidence-2"
+        ],
+        "analyst_id": "test-analyst-123",
+        "id": "9fd732cb-ddde-44cc-9737-9d1d098e9d12",
+        "project_path": "/app/backend/iped_projects/9fd732cb-ddde-44cc-9737-9d1d098e9d12",
+        "status": "created",
+        "progress": 0.0,
+        "created_at": "2025-10-14T19:50:43.664730+00:00",
+        "updated_at": "2025-10-14T19:50:43.664739+00:00",
+        "iped_version": "4.1.4",
+        "categories": {},
+        "bookmarks": []
+      }
+    ],
+    "interception_analysis": [
+      {
+        "id": "03d614d5-c236-4bab-9317-0243f9944de4",
+        "case_id": "test-case-123",
+        "evidence_id": "test-evidence-456",
+        "analysis_type": "phone",
+        "source_data": "/app/backend/uploads/492ef12f-c9cd-48a7-aa6c-0356f7b96a67.mp3",
+        "file_name": "test_audio.mp3",
+        "file_size": 30,
+        "file_hash": "e55d14a25664d0a35d74ef5200e8141b7727da9da998bcf12954f067034904a2",
+        "status": "pending",
+        "progress": 0.0,
+        "analyst_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "analysis_date": "2025-10-08T17:21:44.634718+00:00",
+        "created_at": "2025-10-08T17:21:44.634727+00:00",
+        "updated_at": "2025-10-08T17:21:44.634729+00:00"
+      },
+      {
+        "id": "6a3aeb62-d150-40ff-890e-3c324a3a8885",
+        "case_id": "test-case-123",
+        "evidence_id": "test-evidence-456",
+        "analysis_type": "phone",
+        "source_data": "/app/backend/uploads/7f0edf34-fbab-46ee-b31c-08df681698f6.mp3",
+        "file_name": "test_audio.mp3",
+        "file_size": 30,
+        "file_hash": "e55d14a25664d0a35d74ef5200e8141b7727da9da998bcf12954f067034904a2",
+        "status": "pending",
+        "progress": 0.0,
+        "analyst_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "analysis_date": "2025-10-08T17:22:02.821291+00:00",
+        "created_at": "2025-10-08T17:22:02.821298+00:00",
+        "updated_at": "2025-10-08T17:22:02.821299+00:00"
+      },
+      {
+        "id": "2e8233c7-dd58-4e57-9f36-b294392a9ea6",
+        "case_id": "test-case-123",
+        "evidence_id": "test-evidence-456",
+        "analysis_type": "phone",
+        "source_data": "/app/backend/uploads/d845608e-8304-41a4-a546-8440b5553556.mp3",
+        "file_name": "test_audio.mp3",
+        "file_size": 30,
+        "file_hash": "e55d14a25664d0a35d74ef5200e8141b7727da9da998bcf12954f067034904a2",
+        "status": "pending",
+        "progress": 0.0,
+        "analyst_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "analysis_date": "2025-10-08T17:42:54.244744+00:00",
+        "created_at": "2025-10-08T17:42:54.244753+00:00",
+        "updated_at": "2025-10-08T17:42:54.244755+00:00"
+      },
+      {
+        "id": "8d1ab8aa-22a4-49df-abab-eb3fe82ece18",
+        "case_id": "test-case-123",
+        "evidence_id": "test-evidence-456",
+        "analysis_type": "phone",
+        "source_data": "/app/backend/uploads/8e4fae19-2cbe-49db-b31b-7b0dc8918da0.mp3",
+        "file_name": "test_audio.mp3",
+        "file_size": 30,
+        "file_hash": "e55d14a25664d0a35d74ef5200e8141b7727da9da998bcf12954f067034904a2",
+        "status": "pending",
+        "progress": 0.0,
+        "analyst_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "analysis_date": "2025-10-09T19:36:58.364351+00:00",
+        "created_at": "2025-10-09T19:36:58.364360+00:00",
+        "updated_at": "2025-10-09T19:36:58.364362+00:00"
+      },
+      {
+        "id": "58599c97-9539-49ad-81b4-e3be91c3e7f6",
+        "case_id": "test-case-123",
+        "evidence_id": "test-evidence-456",
+        "analysis_type": "phone",
+        "source_data": "/app/backend/uploads/1b26d4bf-f621-4bfe-a393-4d061809d444.mp3",
+        "file_name": "test_audio.mp3",
+        "file_size": 30,
+        "file_hash": "e55d14a25664d0a35d74ef5200e8141b7727da9da998bcf12954f067034904a2",
+        "status": "pending",
+        "progress": 0.0,
+        "analyst_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "analysis_date": "2025-10-09T19:59:12.031501+00:00",
+        "created_at": "2025-10-09T19:59:12.031513+00:00",
+        "updated_at": "2025-10-09T19:59:12.031515+00:00"
+      },
+      {
+        "id": "bef4ae6b-5b57-4770-ac99-8add649e700d",
+        "case_id": "test-case-123",
+        "evidence_id": "test-evidence-456",
+        "analysis_type": "phone",
+        "source_data": "/app/backend/uploads/a8ebe02a-a3cf-41a4-9a39-6acae480012a.mp3",
+        "file_name": "test_audio.mp3",
+        "file_size": 30,
+        "file_hash": "e55d14a25664d0a35d74ef5200e8141b7727da9da998bcf12954f067034904a2",
+        "status": "pending",
+        "progress": 0.0,
+        "analyst_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "analysis_date": "2025-10-09T20:31:09.373696+00:00",
+        "created_at": "2025-10-09T20:31:09.373706+00:00",
+        "updated_at": "2025-10-09T20:31:09.373708+00:00"
+      },
+      {
+        "id": "aa15f735-c876-451b-856f-64f50bef1a96",
+        "case_id": "test-case-123",
+        "evidence_id": "test-evidence-456",
+        "analysis_type": "phone",
+        "source_data": "/app/backend/uploads/cf098b3d-1ef8-4b33-bbb9-a2cc4eefa9fb.mp3",
+        "file_name": "test_audio.mp3",
+        "file_size": 30,
+        "file_hash": "e55d14a25664d0a35d74ef5200e8141b7727da9da998bcf12954f067034904a2",
+        "status": "pending",
+        "progress": 0.0,
+        "analyst_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "analysis_date": "2025-10-09T21:09:14.546134+00:00",
+        "created_at": "2025-10-09T21:09:14.546144+00:00",
+        "updated_at": "2025-10-09T21:09:14.546145+00:00"
+      },
+      {
+        "id": "e914dfd6-9069-46fe-b4cd-f0282f96facb",
+        "case_id": "test-case-123",
+        "evidence_id": "test-evidence-456",
+        "analysis_type": "phone",
+        "source_data": "/app/backend/uploads/803c6293-0157-4057-a518-0c051a109e54.mp3",
+        "file_name": "test_audio.mp3",
+        "file_size": 30,
+        "file_hash": "e55d14a25664d0a35d74ef5200e8141b7727da9da998bcf12954f067034904a2",
+        "status": "pending",
+        "progress": 0.0,
+        "analyst_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "analysis_date": "2025-10-10T15:02:14.284246+00:00",
+        "created_at": "2025-10-10T15:02:14.284255+00:00",
+        "updated_at": "2025-10-10T15:02:14.284257+00:00"
+      },
+      {
+        "id": "e50f1de9-24cc-4839-bd22-4f2b64a88eec",
+        "case_id": "test-case-123",
+        "evidence_id": "test-evidence-456",
+        "analysis_type": "phone",
+        "source_data": "/app/backend/uploads/a8a4249a-9525-4e71-93dc-3693a1bda406.mp3",
+        "file_name": "test_audio.mp3",
+        "file_size": 30,
+        "file_hash": "e55d14a25664d0a35d74ef5200e8141b7727da9da998bcf12954f067034904a2",
+        "status": "pending",
+        "progress": 0.0,
+        "analyst_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "analysis_date": "2025-10-14T19:47:49.436458+00:00",
+        "created_at": "2025-10-14T19:47:49.436467+00:00",
+        "updated_at": "2025-10-14T19:47:49.436469+00:00"
+      },
+      {
+        "id": "8e434ffb-7e4a-4b21-b94c-9ad63f25b5a6",
+        "case_id": "test-case-123",
+        "evidence_id": "test-evidence-456",
+        "analysis_type": "phone",
+        "source_data": "/app/backend/uploads/314b192e-3ecb-4ffc-bc3e-5a6e4e1bc4aa.mp3",
+        "file_name": "test_audio.mp3",
+        "file_size": 30,
+        "file_hash": "e55d14a25664d0a35d74ef5200e8141b7727da9da998bcf12954f067034904a2",
+        "status": "pending",
+        "progress": 0.0,
+        "analyst_id": "a160ea71-ab76-4ef5-b85e-9cc862aa85fd",
+        "analysis_date": "2025-10-14T19:50:43.617565+00:00",
+        "created_at": "2025-10-14T19:50:43.617574+00:00",
+        "updated_at": "2025-10-14T19:50:43.617576+00:00"
+      }
+    ]
+  }
+}

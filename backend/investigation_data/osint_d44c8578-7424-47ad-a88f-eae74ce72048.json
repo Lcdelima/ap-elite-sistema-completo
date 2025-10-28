@@ -1,0 +1,35 @@
+{
+  "search_type": "social_media",
+  "query": "Jo\u00e3o Silva Santos",
+  "results": {
+    "facebook": {
+      "profiles_found": [],
+      "posts": [],
+      "metadata": {
+        "search_query": "Jo\u00e3o Silva Santos",
+        "timestamp": "2025-10-14T19:50:42.791108+00:00",
+        "status": "simulated_search"
+      }
+    },
+    "instagram": {
+      "profiles_found": [],
+      "posts": [],
+      "metadata": {
+        "search_query": "Jo\u00e3o Silva Santos",
+        "timestamp": "2025-10-14T19:50:42.791119+00:00",
+        "status": "simulated_search"
+      }
+    },
+    "twitter": {
+      "profiles_found": [],
+      "posts": [],
+      "metadata": {
+        "search_query": "Jo\u00e3o Silva Santos",
+        "timestamp": "2025-10-14T19:50:42.791122+00:00",
+        "status": "simulated_search"
+      }
+    }
+  },
+  "confidence": 0.7,
+  "timestamp": "2025-10-14T19:50:42.791125+00:00"
+}

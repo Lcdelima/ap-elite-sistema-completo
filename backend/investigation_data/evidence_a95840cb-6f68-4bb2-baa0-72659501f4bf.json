@@ -1,0 +1,37 @@
+{
+  "id": "a95840cb-6f68-4bb2-baa0-72659501f4bf",
+  "case_id": "test-case-investigation-123",
+  "evidence_number": "EVD-20251015-a95840cb",
+  "name": "Documento Suspeito - Teste",
+  "type": "document",
+  "file_path": "/app/backend/investigation_data/evidence/a95840cb-6f68-4bb2-baa0-72659501f4bf.txt",
+  "hash_value": "87c0e7c885d8a4fa50bd153462b85a8fb9a0fb8e7ef63a7b6cae8fb6a9c0a74e",
+  "size": 120,
+  "created_at": "2025-10-15T13:02:39.920410+00:00",
+  "ai_analysis": {
+    "metadata": {
+      "analysis_type": "metadata_extraction",
+      "file_path": "/app/backend/investigation_data/evidence/a95840cb-6f68-4bb2-baa0-72659501f4bf.txt",
+      "metadata": {
+        "filename": "a95840cb-6f68-4bb2-baa0-72659501f4bf.txt",
+        "size": 120,
+        "created": "2025-10-15T13:02:39.918551",
+        "modified": "2025-10-15T13:02:39.918551",
+        "accessed": "2025-10-15T13:02:39.918551",
+        "mime_type": "application/octet-stream",
+        "hashes": {
+          "md5": "670b83e6f99087095d0942206e434b56",
+          "sha256": "87c0e7c885d8a4fa50bd153462b85a8fb9a0fb8e7ef63a7b6cae8fb6a9c0a74e"
+        }
+      },
+      "timestamp": "2025-10-15T13:02:39.921220+00:00"
+    },
+    "document_analysis": {
+      "analysis_type": "document_analysis",
+      "error": "'LlmChat' object has no attribute 'achat'",
+      "confidence": 0.0,
+      "timestamp": "2025-10-15T13:02:39.921264+00:00"
+    }
+  },
+  "metadata": {}
+}
