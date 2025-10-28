@@ -97,6 +97,10 @@ import ComplianceCenter from './pages/athena/ComplianceCenter';
 // CISAI Pages
 import BehavioralForensics from './pages/cisai/BehavioralForensics';
 import ForensicCommand from './pages/cisai/ForensicCommand';
+import CyberIntelFusion from './pages/cisai/CyberIntelFusion';
+import TrialScience from './pages/cisai/TrialScience';
+import SocialSentinel from './pages/cisai/SocialSentinel';
+import MobileForensics from './pages/cisai/MobileForensics';
 
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
