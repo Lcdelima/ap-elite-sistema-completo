@@ -10,6 +10,9 @@ from typing import List, Optional
 import uuid
 from datetime import datetime, timezone
 
+# Import CISAI+ Module
+from cisai_plus_module import router as cisai_router
+
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
