@@ -241,10 +241,17 @@ const AthenaMainReorganized = () => {
     
     return (
       <Card 
-        className="bg-gray-800 border-gray-700 hover:border-cyan-500 transition-all duration-300 cursor-pointer group hover:shadow-lg hover:shadow-cyan-500/20 hover:-translate-y-1"
+        className={`bg-gray-800 border-gray-700 hover:border-cyan-500 transition-all duration-300 cursor-pointer group hover:shadow-lg hover:shadow-cyan-500/20 hover:-translate-y-1 ${
+          module.highlight ? 'ring-2 ring-cyan-500 ring-opacity-50' : ''
+        }`}
         onClick={() => navigate(module.route)}
       >
         <CardContent className="p-5">
+          {module.highlight && (
+            <Badge className="mb-2 bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
+              🆕 Novo
+            </Badge>
+          )}
           <div className="flex items-start gap-4">
             <div className={`p-3 rounded-xl bg-${categoryColor}-500/20 group-hover:bg-${categoryColor}-500/30 transition-all`}>
               <ModuleIcon className={`w-7 h-7 text-${categoryColor}-400 group-hover:scale-110 transition-transform`} />
