@@ -172,6 +172,9 @@ function AppContent() {
           <Route path="/athena/advanced-investigation" element={<AdvancedInvestigation />} />
           <Route path="/athena/relationship-mapping" element={<RelationshipMapping />} />
           <Route path="/athena/document-library" element={<DocumentLibraryComplete />} />
+          <Route path="/athena/contract-generator" element={<AthenaContractGenerator />} />
+          <Route path="/athena/document-generator" element={<AthenaDocumentGenerator />} />
+          <Route path="/athena/reports-export" element={<AthenaReports />} />
           <Route path="/athena/osint-dashboard" element={<OSINTDashboard />} />
           <Route path="/athena/template-generator" element={<TemplateGenerator />} />
           <Route path="/athena/rag-system" element={<RAGSystem />} />
