@@ -505,6 +505,7 @@ try:
     app.include_router(forensic_iso_router)
     logger.info("🔬 FORENSIC DIGITAL ISO/IEC 27037 MODULE loaded successfully")
 except ImportError as e:
+    logger.error(f"⚠️ Forensic Digital ISO Module not available: {e}")
 
 # Playbook System - Gestão de Playbooks Forenses
 try:
@@ -513,8 +514,6 @@ try:
     logger.info("📋 PLAYBOOK SYSTEM loaded successfully")
 except ImportError as e:
     logger.error(f"⚠️ Playbook System not available: {e}")
-
-    logger.error(f"⚠️ Forensic Digital ISO Module not available: {e}")
 
 
 # Include the router in the main app
