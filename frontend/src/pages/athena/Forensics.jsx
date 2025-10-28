@@ -252,8 +252,7 @@ const Forensics = () => {
             </div>
           </div>
         )}
-      </div>
-    </AthenaLayout>
+    </UniversalModuleLayout>
   );
 };
 
