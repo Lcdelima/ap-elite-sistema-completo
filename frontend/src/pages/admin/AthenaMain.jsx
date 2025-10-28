@@ -1,0 +1,669 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { Card, CardContent } from '../../components/ui/card';
+import { Badge } from '../../components/ui/badge';
+import {
+  LayoutDashboard,
+  Users,
+  Scale,
+  MessageSquare,
+  Calendar,
+  Link2,
+  Video,
+  Shield,
+  Radio,
+  Wifi,
+  Database,
+  HardDrive,
+  FileSearch,
+  Layers,
+  FileText,
+  DollarSign,
+  BarChart3,
+  TrendingUp,
+  Lock,
+  Zap,
+  ArrowLeft,
+  Search,
+  Network,
+  Brain,
+  Calculator,
+  Link as LinkIcon,
+  Activity,
+  ScanText,
+  Film,
+  Workflow,
+  Bot,
+  Share2,
+  Users2,
+  LineChart,
+  CheckCircle2,
+  FileBarChart,
+  LogOut,
+  Clock
+} from 'lucide-react';
+import { toast } from 'sonner';
+
+const AthenaMain = () => {
+  const navigate = useNavigate();
+  const [metrics, setMetrics] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const handleLogout = () => {
+    localStorage.removeItem('ap_elite_token');
+    localStorage.removeItem('user_data');
+    toast.success('Logout realizado com sucesso!');
+    navigate('/login');
+  };
+
+  useEffect(() => {
+    fetchMetrics();
+  }, []);
+
+  const fetchMetrics = async () => {
+    try {
+      const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+      const token = localStorage.getItem('ap_elite_token');
+      
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+      
+      const res = await axios.get(`${BACKEND_URL}/api/athena/dashboard/metrics`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      setMetrics(res.data);
+    } catch (error) {
+      // Silently fail - metrics are optional
+      console.log('Metrics not available');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const modules = [
+    {
+      id: 1,
+      title: 'Dashboard Principal',
+      subtitle: 'Visão geral completa',
+      icon: LayoutDashboard,
+      path: '/athena/dashboard',
+      color: 'from-cyan-500 to-blue-600',
+      badge: 'Métricas',
+      badgeColor: 'bg-cyan-500'
+    },
+    {
+      id: 2,
+      title: 'Gestão de Clientes',
+      subtitle: 'CRM Completo',
+      icon: Users,
+      path: '/athena/clients',
+      color: 'from-purple-500 to-pink-600'
+    },
+    {
+      id: 3,
+      title: 'Gestão de Processos',
+      subtitle: 'Processos Jurídicos',
+      icon: Scale,
+      path: '/athena/processes',
+      color: 'from-green-500 to-teal-600'
+    },
+    {
+      id: 4,
+      title: 'Comunicação Corporativa',
+      subtitle: 'Chat E2E Seguro',
+      icon: MessageSquare,
+      path: '/athena/communications',
+      color: 'from-yellow-500 to-orange-600',
+      badge: 'E2E',
+      badgeColor: 'bg-green-500'
+    },
+    {
+      id: 5,
+      title: 'Calendário Corporativo',
+      subtitle: 'Agenda e compromissos',
+      icon: Calendar,
+      path: '/athena/calendar',
+      color: 'from-red-500 to-pink-600'
+    },
+    {
+      id: 6,
+      title: 'Gerador de Links',
+      subtitle: 'Links de reunião',
+      icon: Link2,
+      path: '/athena/meeting-links',
+      color: 'from-indigo-500 to-purple-600'
+    },
+    {
+      id: 7,
+      title: 'Videoconferência',
+      subtitle: 'Jitsi Meet E2E',
+      icon: Video,
+      path: '/athena/video',
+      color: 'from-blue-500 to-cyan-600',
+      badge: 'Jitsi',
+      badgeColor: 'bg-blue-500'
+    },
+    {
+      id: 8,
+      title: 'Perícia Digital',
+      subtitle: 'Análise forense',
+      icon: Shield,
+      path: '/athena/forensics',
+      color: 'from-slate-500 to-gray-600'
+    },
+    {
+      id: 9,
+      title: 'Interceptações Telefônicas',
+      subtitle: 'Análise de chamadas',
+      icon: Radio,
+      path: '/athena/phone-interceptions',
+      color: 'from-orange-500 to-red-600',
+      badge: 'IA',
+      badgeColor: 'bg-purple-500'
+    },
+    {
+      id: 10,
+      title: 'Interceptações Telemáticas',
+      subtitle: 'Análise de dados',
+      icon: Wifi,
+      path: '/athena/data-interceptions',
+      color: 'from-teal-500 to-green-600',
+      badge: 'IA',
+      badgeColor: 'bg-purple-500'
+    },
+    {
+      id: 11,
+      title: 'Extração de Dados',
+      subtitle: 'Cellebrite, UFED',
+      icon: Database,
+      path: '/athena/data-extraction',
+      color: 'from-pink-500 to-rose-600'
+    },
+    {
+      id: 12,
+      title: 'ERBs',
+      subtitle: 'Estações Rádio Base',
+      icon: HardDrive,
+      path: '/athena/erbs',
+      color: 'from-amber-500 to-yellow-600',
+      badge: 'Maps',
+      badgeColor: 'bg-green-500'
+    },
+    {
+      id: 13,
+      title: 'IPED',
+      subtitle: 'Indexação forense',
+      icon: FileSearch,
+      path: '/athena/iped',
+      color: 'from-lime-500 to-green-600'
+    },
+    {
+      id: 14,
+      title: 'Processamento de Evidências',
+      subtitle: 'Chain of custody',
+      icon: Layers,
+      path: '/athena/evidence-processing',
+      color: 'from-emerald-500 to-teal-600'
+    },
+    {
+      id: 15,
+      title: 'Análise Processual',
+      subtitle: 'IA Preditiva',
+      icon: FileText,
+      path: '/athena/process-analysis',
+      color: 'from-violet-500 to-purple-600',
+      badge: 'IA',
+      badgeColor: 'bg-purple-500'
+    },
+    {
+      id: 16,
+      title: 'Relatórios Avançados',
+      subtitle: 'PDF com gráficos',
+      icon: FileText,
+      path: '/athena/reports',
+      color: 'from-fuchsia-500 to-pink-600'
+    },
+    {
+      id: 17,
+      title: 'Gestão Financeira',
+      subtitle: 'Controle completo',
+      icon: DollarSign,
+      path: '/athena/financial',
+      color: 'from-green-500 to-emerald-600'
+    },
+    {
+      id: 18,
+      title: 'Dashboards Inteligentes',
+      subtitle: 'Analytics IA',
+      icon: BarChart3,
+      path: '/athena/intelligent-dashboards',
+      color: 'from-cyan-500 to-blue-600',
+      badge: 'IA',
+      badgeColor: 'bg-purple-500'
+    },
+    {
+      id: 19,
+      title: 'Gerador de Contratos',
+      subtitle: 'Contratos automáticos',
+      icon: FileText,
+      path: '/athena/contracts',
+      color: 'from-violet-500 to-purple-600',
+      badge: 'NOVO',
+      badgeColor: 'bg-green-500'
+    },
+    {
+      id: 20,
+      title: 'Análise de Evidências IA',
+      subtitle: 'Relatórios automáticos',
+      icon: FileSearch,
+      path: '/athena/evidence-analysis',
+      color: 'from-pink-500 to-rose-600',
+      badge: 'IA',
+      badgeColor: 'bg-purple-500'
+    },
+    {
+      id: 21,
+      title: 'Gerador de Documentos',
+      subtitle: 'Procurações e Termos',
+      icon: FileText,
+      path: '/athena/documents',
+      color: 'from-indigo-500 to-blue-600',
+      badge: 'NOVO',
+      badgeColor: 'bg-green-500'
+    },
+    {
+      id: 22,
+      title: 'Investigação Defensiva',
+      subtitle: 'OSINT & Fontes Abertas',
+      icon: Shield,
+      path: '/athena/defensive-investigation',
+      color: 'from-slate-600 to-gray-800',
+      badge: 'OSINT',
+      badgeColor: 'bg-blue-600'
+    },
+    {
+      id: 23,
+      title: 'Gerenciamento de Usuários',
+      subtitle: 'Usuários & Permissões',
+      icon: Users,
+      path: '/athena/user-management',
+      color: 'from-purple-600 to-indigo-600',
+      badge: 'ADMIN',
+      badgeColor: 'bg-red-600'
+    },
+    {
+      id: 24,
+      title: 'Dashboard Unificado',
+      subtitle: 'Visão Geral Completa',
+      icon: LayoutDashboard,
+      path: '/athena/unified-dashboard',
+      color: 'from-blue-600 via-purple-600 to-pink-600',
+      badge: 'NOVO',
+      badgeColor: 'bg-gradient-to-r from-blue-500 to-purple-500'
+    },
+    {
+      id: 25,
+      title: 'Investigação Avançada',
+      subtitle: 'IA + OSINT + Forense Digital',
+      icon: Search,
+      path: '/athena/advanced-investigation',
+      color: 'from-indigo-600 via-purple-700 to-blue-800',
+      badge: 'IA TOTAL',
+      badgeColor: 'bg-gradient-to-r from-purple-600 to-indigo-600'
+    },
+    {
+      id: 26,
+      title: 'Mapeamento de Redes',
+      subtitle: 'Análise Criminal + Centralidade',
+      icon: Network,
+      path: '/athena/relationship-mapping',
+      color: 'from-red-600 via-pink-700 to-purple-800',
+      badge: 'REDES',
+      badgeColor: 'bg-gradient-to-r from-red-500 to-pink-500'
+    },
+    {
+      id: 27,
+      title: 'Biblioteca de Documentos',
+      subtitle: 'PDFs Técnicos + IA',
+      icon: FileText,
+      path: '/athena/document-library',
+      color: 'from-orange-600 via-red-700 to-pink-800',
+      badge: 'NOVO',
+      badgeColor: 'bg-gradient-to-r from-orange-500 to-red-500'
+    },
+    {
+      id: 28,
+      title: 'OSINT Avançado',
+      subtitle: 'Fontes Abertas Brasileiras',
+      icon: Shield,
+      path: '/athena/osint-dashboard',
+      color: 'from-emerald-600 via-teal-700 to-cyan-800',
+      badge: 'BRASIL',
+      badgeColor: 'bg-gradient-to-r from-green-500 to-blue-500'
+    },
+    {
+      id: 29,
+      title: 'Gerador de Templates',
+      subtitle: 'Docs Jurídicos Multi-IA',
+      icon: FileText,
+      path: '/athena/template-generator',
+      color: 'from-fuchsia-600 via-purple-700 to-indigo-800',
+      badge: '3 AIs',
+      badgeColor: 'bg-gradient-to-r from-purple-500 to-pink-500'
+    },
+    {
+      id: 30,
+      title: 'RAG System',
+      subtitle: 'Busca Inteligente em Documentos',
+      icon: Brain,
+      path: '/athena/rag-system',
+      color: 'from-violet-600 via-purple-700 to-fuchsia-800',
+      badge: 'IA',
+      badgeColor: 'bg-gradient-to-r from-violet-500 to-purple-500'
+    },
+    {
+      id: 31,
+      title: 'Dashboard Executivo',
+      subtitle: 'Métricas e KPIs Gerenciais',
+      icon: Activity,
+      path: '/athena/executive-dashboard',
+      color: 'from-cyan-600 via-blue-700 to-indigo-800',
+      badge: 'EXEC',
+      badgeColor: 'bg-gradient-to-r from-cyan-500 to-blue-500'
+    },
+    {
+      id: 32,
+      title: 'Blockchain Custódia',
+      subtitle: 'Cadeia Imutável de Evidências',
+      icon: LinkIcon,
+      path: '/athena/blockchain-custody',
+      color: 'from-emerald-600 via-teal-700 to-cyan-800',
+      badge: 'CHAIN',
+      badgeColor: 'bg-gradient-to-r from-emerald-500 to-teal-500'
+    },
+    {
+      id: 33,
+      title: 'Honorários Inteligentes',
+      subtitle: 'Cálculo + PIX + Previsão',
+      icon: Calculator,
+      path: '/athena/smart-fees',
+      color: 'from-lime-600 via-green-700 to-emerald-800',
+      badge: 'SMART',
+      badgeColor: 'bg-gradient-to-r from-lime-500 to-green-500'
+    },
+    {
+      id: 34,
+      title: 'Busca Global',
+      subtitle: 'Todos os Módulos Simultaneamente',
+      icon: Search,
+      path: '/athena/global-search',
+      color: 'from-slate-600 via-gray-700 to-zinc-800',
+      badge: 'GLOBAL',
+      badgeColor: 'bg-gradient-to-r from-slate-500 to-gray-500'
+    },
+    {
+      id: 35,
+      title: 'OCR Avançado',
+      subtitle: 'Extração Multi-Modelo de Texto',
+      icon: ScanText,
+      path: '/athena/ocr-dashboard',
+      color: 'from-amber-600 via-orange-700 to-red-800',
+      badge: 'OCR+',
+      badgeColor: 'bg-gradient-to-r from-amber-500 to-orange-500'
+    },
+    {
+      id: 36,
+      title: 'Análise de Mídia',
+      subtitle: 'Áudio, Vídeo e Imagem com IA',
+      icon: Film,
+      path: '/athena/media-analysis',
+      color: 'from-rose-600 via-pink-700 to-fuchsia-800',
+      badge: 'MEDIA',
+      badgeColor: 'bg-gradient-to-r from-rose-500 to-pink-500'
+    },
+    {
+      id: 37,
+      title: 'Automação de Workflows',
+      subtitle: 'Processos Automatizados',
+      icon: Workflow,
+      path: '/athena/workflow-manager',
+      color: 'from-teal-600 via-cyan-700 to-blue-800',
+      badge: 'AUTO',
+      badgeColor: 'bg-gradient-to-r from-teal-500 to-cyan-500'
+    },
+    {
+      id: 38,
+      title: 'Assistente IA',
+      subtitle: 'Chatbot Multi-Contexto',
+      icon: Bot,
+      path: '/athena/chatbot',
+      color: 'from-indigo-600 via-violet-700 to-purple-800',
+      badge: 'BOT',
+      badgeColor: 'bg-gradient-to-r from-indigo-500 to-violet-500'
+    },
+    {
+      id: 39,
+      title: 'Monitoramento Social',
+      subtitle: 'Análise de Redes Sociais',
+      icon: Share2,
+      path: '/athena/social-monitor',
+      color: 'from-blue-600 via-sky-700 to-cyan-800',
+      badge: 'SOCIAL',
+      badgeColor: 'bg-gradient-to-r from-blue-500 to-sky-500'
+    },
+    {
+      id: 40,
+      title: 'Hub de Colaboração',
+      subtitle: 'Real-Time + WebSocket',
+      icon: Users2,
+      path: '/athena/collaboration',
+      color: 'from-green-600 via-emerald-700 to-teal-800',
+      badge: 'LIVE',
+      badgeColor: 'bg-gradient-to-r from-green-500 to-emerald-500'
+    },
+    {
+      id: 41,
+      title: 'Analytics Preditiva',
+      subtitle: 'ML + Previsão de Resultados',
+      icon: LineChart,
+      path: '/athena/predictive-analytics',
+      color: 'from-purple-600 via-fuchsia-700 to-pink-800',
+      badge: 'ML',
+      badgeColor: 'bg-gradient-to-r from-purple-500 to-fuchsia-500'
+    },
+    {
+      id: 42,
+      title: 'Centro de Compliance',
+      subtitle: 'LGPD + Auditoria Completa',
+      icon: CheckCircle2,
+      path: '/athena/compliance',
+      color: 'from-red-600 via-orange-700 to-amber-800',
+      badge: 'LGPD',
+      badgeColor: 'bg-gradient-to-r from-red-500 to-orange-500'
+    },
+    {
+      id: 43,
+      title: 'Relatórios Automatizados',
+      subtitle: 'Geração Inteligente com IA',
+      icon: FileBarChart,
+      path: '/athena/automated-reports',
+      color: 'from-yellow-600 via-amber-700 to-orange-800',
+      badge: 'AUTO',
+      badgeColor: 'bg-gradient-to-r from-yellow-500 to-amber-500'
+    },
+    {
+      id: 44,
+      title: 'Dashboard Executivo',
+      subtitle: 'KPIs e Métricas de Gestão',
+      icon: BarChart3,
+      path: '/athena/executive-dashboard',
+      color: 'from-indigo-600 via-blue-700 to-cyan-800',
+      badge: 'EXEC',
+      badgeColor: 'bg-gradient-to-r from-indigo-500 to-blue-500'
+    },
+    {
+      id: 45,
+      title: 'Gestão de Prazos',
+      subtitle: 'Controle D-3 e D-1',
+      icon: Clock,
+      path: '/athena/deadlines',
+      color: 'from-orange-600 via-red-700 to-pink-800',
+      badge: 'D-3/D-1',
+      badgeColor: 'bg-gradient-to-r from-orange-500 to-red-500'
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 p-8 mb-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center space-x-3 mb-2">
+                <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
+                  <Zap className="h-7 w-7 text-cyan-500" />
+                </div>
+                <div>
+                  <h1 className="text-4xl font-bold text-white">Elite Athena</h1>
+                  <p className="text-blue-100">Sistema Jurídico Completo</p>
+                </div>
+              </div>
+              <p className="text-white text-lg">
+                21 Módulos Integrados | Segurança E2E | IA Preditiva
+              </p>
+            </div>
+            
+            <div className="flex items-center space-x-4">
+              {/* Botão Voltar ao Admin */}
+              <button
+                onClick={() => navigate('/admin/dashboard')}
+                className="bg-white bg-opacity-20 hover:bg-opacity-30 backdrop-blur-sm px-6 py-3 rounded-lg flex items-center space-x-2 transition-all"
+              >
+                <ArrowLeft className="h-5 w-5 text-white" />
+                <span className="text-white font-medium">Voltar ao Painel Admin</span>
+              </button>
+              
+              {/* Botão Logout */}
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 bg-opacity-80 hover:bg-opacity-100 backdrop-blur-sm px-6 py-3 rounded-lg flex items-center space-x-2 transition-all"
+              >
+                <LogOut className="h-5 w-5 text-white" />
+                <span className="text-white font-medium">Sair</span>
+              </button>
+              
+              {metrics && (
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg p-4 text-center">
+                    <p className="text-white text-2xl font-bold">{metrics.total_cases}</p>
+                    <p className="text-blue-100 text-sm">Casos Totais</p>
+                  </div>
+                  <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg p-4 text-center">
+                    <p className="text-white text-2xl font-bold">{metrics.active_cases}</p>
+                    <p className="text-blue-100 text-sm">Casos Ativos</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Security Features Banner */}
+      <div className="max-w-7xl mx-auto px-4 mb-8">
+        <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg p-4 flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <Lock className="h-8 w-8 text-white" />
+            <div>
+              <p className="text-white font-semibold">Segurança Militar</p>
+              <p className="text-green-100 text-sm">
+                Criptografia E2E • AES-256-GCM • Zero-Knowledge • PFS
+              </p>
+            </div>
+          </div>
+          <Badge className="bg-white text-green-600 font-bold">
+            Segurança Avançada E2E
+          </Badge>
+        </div>
+      </div>
+
+      {/* Modules Grid */}
+      <div className="max-w-7xl mx-auto px-4 pb-12">
+        <h2 className="text-2xl font-bold text-white mb-6">Módulos do Sistema</h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {modules.map((module) => {
+            const Icon = module.icon;
+            return (
+              <Card
+                key={module.id}
+                className={`bg-gradient-to-br ${module.color} border-0 cursor-pointer hover:scale-105 transition-transform duration-200 group`}
+                onClick={() => navigate(module.path)}
+              >
+                <CardContent className="p-6">
+                  <div className="flex items-start justify-between mb-3">
+                    <Icon className="h-8 w-8 text-white" />
+                    {module.badge && (
+                      <Badge className={`${module.badgeColor} text-white text-xs`}>
+                        {module.badge}
+                      </Badge>
+                    )}
+                  </div>
+                  
+                  <h3 className="text-white font-bold text-lg mb-1 group-hover:underline">
+                    {module.title}
+                  </h3>
+                  <p className="text-white text-opacity-90 text-sm">
+                    {module.subtitle}
+                  </p>
+                  
+                  <div className="mt-4 pt-4 border-t border-white border-opacity-20">
+                    <p className="text-white text-opacity-75 text-xs">
+                      Módulo {module.id} de 21
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Footer Info */}
+      <div className="max-w-7xl mx-auto px-4 pb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+          <Card className="bg-slate-800 border-slate-700">
+            <CardContent className="p-4">
+              <Lock className="h-6 w-6 text-green-400 mx-auto mb-2" />
+              <p className="text-white font-semibold">Criptografia E2E</p>
+              <p className="text-slate-400 text-sm">Signal Protocol + AES-256</p>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-slate-800 border-slate-700">
+            <CardContent className="p-4">
+              <Zap className="h-6 w-6 text-purple-400 mx-auto mb-2" />
+              <p className="text-white font-semibold">IA Preditiva</p>
+              <p className="text-slate-400 text-sm">Machine Learning Avançado</p>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-slate-800 border-slate-700">
+            <CardContent className="p-4">
+              <Database className="h-6 w-6 text-cyan-400 mx-auto mb-2" />
+              <p className="text-white font-semibold">Cloud Híbrida</p>
+              <p className="text-slate-400 text-sm">Google • Azure • AWS</p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AthenaMain;
