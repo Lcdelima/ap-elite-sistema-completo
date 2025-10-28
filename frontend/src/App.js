@@ -37,6 +37,8 @@ import DataRecoveryUltimate from './pages/athena/DataRecoveryUltimate';
 import USBForensicsPro from './pages/athena/USBForensicsPro';
 import PlaybookSystem from './pages/athena/PlaybookSystem';
 import PlaybookRun from './pages/athena/PlaybookRun';
+import ProcessAnalysisSystem from './pages/athena/ProcessAnalysisSystem';
+
 
 import FinancialManagement from './pages/admin/FinancialManagement';
 import Communications from './pages/admin/Communications';
