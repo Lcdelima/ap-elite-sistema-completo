@@ -456,6 +456,22 @@ try:
 except ImportError as e:
     logger.error(f"⚠️ Advanced integrations not available: {e}")
 
+# Import Oxygen-style advanced configuration
+try:
+    from oxygen_advanced_config import router as oxygen_config_router
+    app.include_router(oxygen_config_router)
+    logger.info("✅ Oxygen Advanced Config loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ Oxygen Advanced Config not available: {e}")
+
+# Import Oxygen-style password management
+try:
+    from oxygen_password_management import router as oxygen_password_router
+    app.include_router(oxygen_password_router)
+    logger.info("✅ Oxygen Password Management loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ Oxygen Password Management not available: {e}")
+
 # Include the router in the main app
 app.include_router(api_router)
 
