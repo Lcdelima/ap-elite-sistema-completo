@@ -46,6 +46,8 @@ import InterceptacoesTelematicas from './pages/forensics/InterceptacoesTelematic
 import ExtracaoDados from './pages/forensics/ExtracaoDados';
 import AnaliseERBs from './pages/forensics/AnaliseERBs';
 import IPEDIntegration from './pages/forensics/IPEDIntegration';
+import ForenseAprimorada from './pages/forensics/ForenseAprimorada';
+
 import CadeiaCustodia from './pages/forensics/CadeiaCustodia';
 
 
