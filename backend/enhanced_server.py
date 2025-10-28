@@ -734,6 +734,7 @@ from data_recovery_ultimate import router as data_recovery_router
 from usb_forensics_pro import router as usb_forensics_router
 from browser_database_forensics import router as browser_db_forensics_router
 from interceptacao_elite_pro import router as interceptacao_elite_router
+from extracao_dados_elite import router as extracao_dados_elite_router
 
 # Add all routes to main app
 app.include_router(api_router)
