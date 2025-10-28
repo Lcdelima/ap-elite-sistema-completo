@@ -47,11 +47,12 @@ async def get_current_user(authorization: str = Header(None)):
 
 def get_cipher():
     """Gera cipher para criptografia"""
-    kdf = PBKDF2(
+    kdf = PBKDF2HMAC(
         algorithm=hashes.SHA256(),
         length=32,
         salt=b'ap_elite_salt_2024',
         iterations=100000,
+        backend=default_backend()
     )
     key = base64.urlsafe_b64encode(kdf.derive(MASTER_KEY.encode()))
     return Fernet(key)
