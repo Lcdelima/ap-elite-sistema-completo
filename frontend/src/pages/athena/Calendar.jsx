@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Plus, AlertTriangle, CheckCircle } from 'lucide-react';
+import { CalendarDays as IconComponent, Plus, AlertTriangle, CheckCircle } from 'lucide-react';
 import UniversalModuleLayout from '../../components/UniversalModuleLayout';
 import axios from 'axios';
 import { toast } from 'sonner';
@@ -58,7 +58,7 @@ const Calendar = () => {
     <UniversalModuleLayout
       title="Calendário"
       subtitle="Sistema integrado de gestão"
-      icon={Calendar}
+      icon={IconComponent}
       headerAction={
         <button
           onClick={() => setShowModal(true)}
