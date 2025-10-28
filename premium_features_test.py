@@ -10,7 +10,7 @@ import os
 from datetime import datetime
 
 # Configuration
-BACKEND_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://digital-sleuth-9.preview.emergentagent.com')
+BACKEND_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://elite-detective-1.preview.emergentagent.com')
 API_BASE = f"{BACKEND_URL}/api"
 
 # Authentication credentials
