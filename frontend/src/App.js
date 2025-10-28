@@ -174,6 +174,13 @@ function AppContent() {
           <Route path="/athena/data-recovery-ultimate" element={<DataRecoveryUltimate />} />
           <Route path="/juridico/gestao-processos" element={<GestaoProcessos />} />
           <Route path="/juridico/biblioteca" element={<BibliotecaDocumentos />} />
+          <Route path="/forensics/pericia-ultra" element={<PericiaDigitalUltra />} />
+          <Route path="/forensics/interceptacoes" element={<InterceptacoesTelematicas />} />
+          <Route path="/forensics/extracao" element={<ExtracaoDados />} />
+          <Route path="/forensics/erbs" element={<AnaliseERBs />} />
+          <Route path="/forensics/iped" element={<IPEDIntegration />} />
+          <Route path="/forensics/custody" element={<CadeiaCustodia />} />
+
           <Route path="/juridico/contratos" element={<GeradorContratos />} />
 
           <Route path="/athena/usb-forensics-pro" element={<USBForensicsPro />} />
