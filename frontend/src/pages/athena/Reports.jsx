@@ -9,6 +9,8 @@ import { toast } from 'sonner';
 
 const Reports = () => {
   const [generating, setGenerating] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const generateReport = async (type) => {
     setGenerating(true);

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Microscope, Plus, Search, Download, AlertCircle, CheckCircle, Clock, FileText, Shield, Cpu, Hash, Activity } from 'lucide-react';
 import StandardModuleLayout from '../../components/StandardModuleLayout';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
@@ -76,13 +78,13 @@ const PericiaDigitalPro = () => {
       });
 
       if (response.ok) {
-        alert('Perícia criada com sucesso!');
+        toast.success("Perícia criada com sucesso!");
         setShowModal(false);
         fetchData();
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Erro ao criar perícia');
+      toast.success("Erro ao criar perícia");
     }
   };
 
@@ -95,7 +97,7 @@ const PericiaDigitalPro = () => {
       });
 
       if (response.ok) {
-        alert('Extração de dados iniciada com sucesso!');
+        toast.success("Extração de dados iniciada com sucesso!");
         fetchData();
       }
     } catch (error) {
@@ -112,7 +114,7 @@ const PericiaDigitalPro = () => {
       });
 
       if (response.ok) {
-        alert('Relatório pericial gerado com sucesso!');
+        toast.success("Relatório pericial gerado com sucesso!");
         fetchData();
       }
     } catch (error) {

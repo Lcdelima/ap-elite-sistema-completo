@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TrendingUp, Users, DollarSign, FileText, Activity, Target, Award, Clock } from 'lucide-react';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const ExecutiveDashboard = () => {
   const [metrics, setMetrics] = useState(null);

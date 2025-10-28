@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, Lock, FileCheck, UserCheck, AlertCircle, Check } from 'lucide-react';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const ComplianceCenter = () => {
   const [text, setText] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [anonymized, setAnonymized] = useState('');
   const [stats, setStats] = useState(null);
   const [userId, setUserId] = useState('');
@@ -64,7 +68,7 @@ const ComplianceCenter = () => {
       });
 
       if (response.ok) {
-        alert('✅ Consentimento registrado conforme LGPD!');
+        toast.success("✅ Consentimento registrado conforme LGPD!");
         setUserId('');
         setPurpose('');
         setDataTypes([]);

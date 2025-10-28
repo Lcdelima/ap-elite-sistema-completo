@@ -14,6 +14,8 @@ import { toast } from 'sonner';
 const DocumentGenerator = () => {
   const navigate = useNavigate();
   const [clients, setClients] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [selectedClient, setSelectedClient] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDocType, setSelectedDocType] = useState('');

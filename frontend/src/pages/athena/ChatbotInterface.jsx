@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MessageSquare, Send, Bot, User, History, Sparkles } from 'lucide-react';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const ChatbotInterface = () => {
   const [sessionId, setSessionId] = useState(null);

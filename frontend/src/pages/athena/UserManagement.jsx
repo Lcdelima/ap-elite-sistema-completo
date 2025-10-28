@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Users, Plus, Edit, Trash2, Key, Shield, Search, Filter } from 'lucide-react';
 import AthenaLayout from '../../components/AthenaLayout';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [roles, setRoles] = useState({});
   const [stats, setStats] = useState({});
   const [activeTab, setActiveTab] = useState('all'); // all, employees, clients
@@ -111,7 +115,7 @@ const UserManagement = () => {
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Erro ao salvar usuário');
+      toast.success("Erro ao salvar usuário");
     }
   };
 
@@ -141,7 +145,7 @@ const UserManagement = () => {
       });
 
       if (response.ok) {
-        alert('Usuário desativado com sucesso!');
+        toast.success("Usuário desativado com sucesso!");
         fetchUsers();
         fetchStats();
       }
@@ -166,7 +170,7 @@ const UserManagement = () => {
       });
 
       if (response.ok) {
-        alert('Senha redefinida com sucesso!');
+        toast.success("Senha redefinida com sucesso!");
       }
     } catch (error) {
       console.error('Error resetting password:', error);

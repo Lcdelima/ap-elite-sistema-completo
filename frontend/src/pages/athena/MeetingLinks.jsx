@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Link as LinkIcon, Plus, Copy, ExternalLink, Video, Trash2, Edit } from 'lucide-react';
 import AthenaLayout from '../../components/AthenaLayout';
+import axios from 'axios';
+import { toast } from 'sonner';
+
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const MeetingLinks = () => {
   const [links, setLinks] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
@@ -52,14 +59,14 @@ const MeetingLinks = () => {
     };
     const updatedLinks = [newLink, ...links];
     saveLinks(updatedLinks);
-    alert('Link criado com sucesso!');
+    toast.success("Link criado com sucesso!");
     setShowModal(false);
     setFormData({ title: '', description: '', platform: 'jitsi', recurring: false });
   };
 
   const copyLink = (link) => {
     navigator.clipboard.writeText(link);
-    alert('Link copiado!');
+    toast.success("Link copiado!");
   };
 
   const deleteLink = (id) => {

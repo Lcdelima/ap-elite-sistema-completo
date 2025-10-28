@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { HardDrive, Plus, Search, Download, AlertCircle, CheckCircle, Clock, Cpu, Smartphone, Server, FileText } from 'lucide-react';
 import StandardModuleLayout from '../../components/StandardModuleLayout';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
@@ -82,7 +84,7 @@ const DataExtractionEnhanced = () => {
       });
 
       if (response.ok) {
-        alert('Extração criada com sucesso!');
+        toast.success("Extração criada com sucesso!");
         setShowModal(false);
         setFormData({
           device_type: 'smartphone',
@@ -100,7 +102,7 @@ const DataExtractionEnhanced = () => {
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Erro ao criar extração');
+      toast.success("Erro ao criar extração");
     }
   };
 

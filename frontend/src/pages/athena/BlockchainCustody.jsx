@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, Link, CheckCircle, FileText, Download, AlertTriangle } from 'lucide-react';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const BlockchainCustody = () => {
   const [chain, setChain] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [stats, setStats] = useState(null);
   const [evidenceId, setEvidenceId] = useState('');
   const [action, setAction] = useState('');
@@ -55,7 +59,7 @@ const BlockchainCustody = () => {
       });
 
       if (response.ok) {
-        alert('⛓️ Evidência registrada na blockchain com sucesso!');
+        toast.success("⛓️ Evidência registrada na blockchain com sucesso!");
         setEvidenceId('');
         setAction('');
         loadChain();
@@ -73,7 +77,7 @@ const BlockchainCustody = () => {
       const data = await response.json();
       
       if (data.valid) {
-        alert('✅ Blockchain íntegra! Todos os blocos estão válidos.');
+        toast.success("✅ Blockchain íntegra! Todos os blocos estão válidos.");
       } else {
         alert('⚠️ Falha de integridade detectada no bloco ' + data.tampered_block);
       }

@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar as CalendarIcon, Plus, Clock, MapPin, Users, Bell } from 'lucide-react';
 import AthenaLayout from '../../components/AthenaLayout';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const Calendar = () => {
   const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [formData, setFormData] = useState({
@@ -40,7 +44,7 @@ const Calendar = () => {
       created_at: new Date().toISOString()
     };
     setEvents([...events, newEvent]);
-    alert('Evento criado com sucesso!');
+    toast.success("Evento criado com sucesso!");
     setShowModal(false);
     setFormData({
       title: '', description: '', date: new Date().toISOString().split('T')[0],

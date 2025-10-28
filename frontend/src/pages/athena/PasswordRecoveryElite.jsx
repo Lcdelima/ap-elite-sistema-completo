@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Key, Plus, Search, Download, AlertCircle, CheckCircle, Clock, Shield, Zap, Lock, Cpu, Activity, Hash, TrendingUp } from 'lucide-react';
 import StandardModuleLayout from '../../components/StandardModuleLayout';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
@@ -77,13 +79,13 @@ const PasswordRecoveryElite = () => {
       });
 
       if (response.ok) {
-        alert('🔓 Recuperação de senha iniciada!');
+        toast.success("🔓 Recuperação de senha iniciada!");
         setShowModal(false);
         fetchData();
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Erro ao iniciar recuperação');
+      toast.success("Erro ao iniciar recuperação");
     }
   };
 

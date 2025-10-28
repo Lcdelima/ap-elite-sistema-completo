@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Radio, MapPin, Plus, Search, Filter, Download, Eye } from 'lucide-react';
 import AthenaLayout from '../../components/AthenaLayout';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const ERBs = () => {
   const [erbs, setErbs] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [stats, setStats] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -62,7 +66,7 @@ const ERBs = () => {
       });
 
       if (response.ok) {
-        alert('ERB adicionada com sucesso!');
+        toast.success("ERB adicionada com sucesso!");
         setShowModal(false);
         setFormData({
           erb_id: '', operator: 'VIVO', latitude: '', longitude: '',
@@ -72,7 +76,7 @@ const ERBs = () => {
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Erro ao adicionar ERB');
+      toast.success("Erro ao adicionar ERB");
     }
   };
 

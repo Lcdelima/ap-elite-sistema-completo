@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Bell, TrendingUp, Users, AlertCircle, Activity, Eye } from 'lucide-react';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const SocialMonitor = () => {
   const [entityName, setEntityName] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [entityType, setEntityType] = useState('person');
   const [result, setResult] = useState(null);
   const [analyzing, setAnalyzing] = useState(false);

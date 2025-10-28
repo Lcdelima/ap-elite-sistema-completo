@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Briefcase, Plus, Search, Filter, Eye, FileText, Calendar, User } from 'lucide-react';
 import AthenaLayout from '../../components/AthenaLayout';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const Processes = () => {
   const [processes, setProcesses] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -41,7 +45,7 @@ const Processes = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    alert('Processo criado! (Backend em desenvolvimento)');
+    toast.success("Processo criado! (Backend em desenvolvimento)");
     setShowModal(false);
   };
 

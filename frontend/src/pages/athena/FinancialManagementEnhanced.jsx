@@ -7,6 +7,8 @@ import {
 import AthenaLayout from '../../components/AthenaLayout';
 import { Card, CardContent } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
@@ -140,7 +142,7 @@ const FinancialManagementEnhanced = () => {
       });
 
       if (response.ok) {
-        alert('Transação criada com sucesso!');
+        toast.success("Transação criada com sucesso!");
         setShowModal(false);
         setFormData({
           type: 'income',
@@ -155,11 +157,11 @@ const FinancialManagementEnhanced = () => {
         fetchSummary();
         fetchTransactions();
       } else {
-        alert('Erro ao criar transação');
+        toast.success("Erro ao criar transação");
       }
     } catch (error) {
       console.error('Error creating transaction:', error);
-      alert('Erro ao criar transação');
+      toast.success("Erro ao criar transação");
     }
   };
 

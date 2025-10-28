@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Radio, Plus, Search, MapPin, Phone, MessageSquare, Activity, Play, Pause, Download, Eye, Globe, AlertTriangle } from 'lucide-react';
 import StandardModuleLayout from '../../components/StandardModuleLayout';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
@@ -77,13 +79,13 @@ const InterceptacoesTelematicasPro = () => {
       });
 
       if (response.ok) {
-        alert('Interceptação iniciada com sucesso! Captura em tempo real ATIVADA.');
+        toast.success("Interceptação iniciada com sucesso! Captura em tempo real ATIVADA.");
         setShowModal(false);
         fetchData();
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Erro ao iniciar interceptação');
+      toast.success("Erro ao iniciar interceptação");
     }
   };
 
@@ -132,7 +134,7 @@ const InterceptacoesTelematicasPro = () => {
       });
 
       if (response.ok) {
-        alert('Interceptação parada com sucesso!');
+        toast.success("Interceptação parada com sucesso!");
         fetchData();
       }
     } catch (error) {

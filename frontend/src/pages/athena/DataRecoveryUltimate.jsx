@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { HardDrive, Plus, Search, Download, AlertCircle, CheckCircle, Clock, FileText, Activity, Database, Cpu, Layers, Zap } from 'lucide-react';
 import StandardModuleLayout from '../../components/StandardModuleLayout';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
@@ -75,13 +77,13 @@ const DataRecoveryUltimate = () => {
       });
 
       if (response.ok) {
-        alert('🔄 Scan de recuperação iniciado!');
+        toast.success("🔄 Scan de recuperação iniciado!");
         setShowModal(false);
         fetchData();
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Erro ao iniciar recuperação');
+      toast.success("Erro ao iniciar recuperação");
     }
   };
 

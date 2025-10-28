@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { HardDrive, Upload, Download, Search, CheckCircle, Clock, Database } from 'lucide-react';
 import AthenaLayout from '../../components/AthenaLayout';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const DataExtraction = () => {
   const [extractions, setExtractions] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [stats, setStats] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
@@ -60,7 +64,7 @@ const DataExtraction = () => {
       });
 
       if (response.ok) {
-        alert('Extração criada com sucesso!');
+        toast.success("Extração criada com sucesso!");
         setShowModal(false);
         setFormData({
           device_type: 'smartphone', device_model: '', imei: '',
