@@ -151,7 +151,6 @@ function AppContent() {
           <Route path="/athena/video" element={<AthenaVideoConference />} />
           <Route path="/athena/forensics" element={<AthenaForensics />} />
           <Route path="/athena/forensics-enhanced" element={<ForensicsEnhanced />} />
-          <Route path="/athena/live-cameras" element={<LiveCameraMonitoring />} />
           <Route path="/athena/pericia-digital-pro" element={<PericiaDigitalPro />} />
           <Route path="/athena/interceptacoes-telematicas-pro" element={<InterceptacoesTelematicasPro />} />
           <Route path="/athena/ultra-extraction-pro" element={<UltraExtractionPro />} />
