@@ -1,28 +1,19 @@
 #!/usr/bin/env python3
 """
-Backend Testing for Ultra Extraction Pro Module
-Testing the revolutionary Ultra Extraction Pro backend APIs:
-1. Ultra Extraction Pro Stats
-2. Ultra Extraction Pro Extractions Management
-3. Ultra Extraction Pro Methods and Devices
-4. Ultra Extraction Pro Data Categories
-5. Ultra Extraction Pro Report Generation
-
-Authentication: laura@apelite.com / laura2024
+CISAI+ v1.1.0 Integration Testing
+Testing new integrations: AbuseIPDB, Wigle, and enhanced IP Intelligence
 """
 
 import requests
 import json
-import sys
+import os
 from datetime import datetime
 
-# Configuration
-BASE_URL = "https://elite-detective-1.preview.emergentagent.com/api"
-AUTH_EMAIL = "laura@apelite.com"
-AUTH_PASSWORD = "laura2024"
-AUTH_ROLE = "administrator"
+# Get backend URL from environment
+BACKEND_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://elite-detective-1.preview.emergentagent.com')
+BASE_URL = f"{BACKEND_URL}/api"
 
-class UltraExtractionProTestSuite:
+class CISAIPlusTestSuite:
     def __init__(self):
         self.session = requests.Session()
         self.token = None
