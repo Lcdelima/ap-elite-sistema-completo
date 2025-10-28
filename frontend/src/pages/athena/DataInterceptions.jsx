@@ -1,226 +1,133 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Plus } from 'lucide-react';
-import UniversalModuleLayout from '../../components/UniversalModuleLayout';
+import { Network, Plus, ChevronLeft, Upload, Brain, Database, CheckCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'sonner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const DataInterceptions = () => {
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [formData, setFormData] = useState({
-    title: '',
-    type: '',
-    category: '',
-    priority: '',
-    date: '',
-    description: ''
-  });
+  const navigate = useNavigate();
+  const [interceptacoes, setInterceptacoes] = useState([]);
+  const [stats, setStats] = useState(null);
+  const [showWizard, setShowWizard] = useState(false);
+  const [formData, setFormData] = useState({ titulo: '', tipo: 'telematica', numero_processo: '', base_legal: '', provedor: '' });
+  const [arquivos, setArquivos] = useState([]);
 
   useEffect(() => {
-    fetchItems();
+    fetchInterceptacoes();
+    fetchStats();
   }, []);
 
-  const fetchItems = async () => {
+  const fetchInterceptacoes = async () => {
     try {
-      setLoading(true);
-      setError(null);
-      const response = await axios.get(`${BACKEND_URL}/api/athena/datainterceptions/list`);
-      setItems(response.data.data || []);
+      const response = await axios.get(`${BACKEND_URL}/api/interceptacoes/`);
+      setInterceptacoes(response.data.interceptacoes || []);
     } catch (error) {
-      console.error('Erro ao carregar dados:', error);
-      setError('Erro ao carregar dados');
-      toast.error('Erro ao carregar dados');
-    } finally {
-      setLoading(false);
+      toast.error('Erro');
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    
+  const fetchStats = async () => {
     try {
-      await axios.post(`${BACKEND_URL}/api/athena/datainterceptions/create`, {
-        collection: 'datainterceptions',
-        data: formData
-      });
-      
-      toast.success('Item criado com sucesso!');
-      setShowModal(false);
-      setFormData({});
-      fetchItems();
+      const response = await axios.get(`${BACKEND_URL}/api/interceptacoes/stats`);
+      setStats(response.data);
     } catch (error) {
-      console.error('Erro ao criar item:', error);
-      toast.error('Erro ao criar item');
-    } finally {
-      setLoading(false);
+      console.error('Erro');
     }
   };
 
   return (
-    <UniversalModuleLayout
-      title="Data Interceptions"
-      subtitle="Sistema integrado de gestão"
-      icon={FileText}
-      headerAction={
-        <button
-          onClick={() => setShowModal(true)}
-          className="bg-white text-teal-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-        >
-          Novo Item
-        </button>
-      }
-    >
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div className="bg-white p-6 rounded-lg shadow">
-          <p className="text-sm text-gray-600">Total de Itens</p>
-          <p className="text-3xl font-bold text-gray-900">{items.length}</p>
+    <div className="min-h-screen bg-gray-900">
+      <div className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white p-6 shadow-lg">
+        <div className="max-w-7xl mx-auto">
+          <button onClick={() => navigate(-1)} className="flex items-center gap-2 mb-4"><ChevronLeft size={20} />Voltar</button>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Network size={40} />
+              <div>
+                <h1 className="text-3xl font-bold">Intercepções de Dados</h1>
+                <p className="text-cyan-100">Telemática, Rede, E-mails, Logs, Mensagerias - CISAI 4.0</p>
+              </div>
+            </div>
+            <button onClick={() => setShowWizard(true)} className="bg-white text-cyan-600 px-6 py-3 rounded-xl font-semibold hover:bg-cyan-50 flex items-center gap-2">
+              <Plus size={20} />Nova Intercepção
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Content */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Lista de Itens</h2>
-        
-        {loading ? (
-          <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto"></div>
-            <p className="text-gray-600 mt-4">Carregando...</p>
-          </div>
-        ) : error ? (
-          <div className="text-center py-12">
-            <p className="text-red-600">{error}</p>
-            <button
-              onClick={fetchItems}
-              className="mt-4 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
-            >
-              Tentar Novamente
-            </button>
-          </div>
-        ) : items.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-gray-600">Nenhum item encontrado</p>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {items.map((item) => (
-              <div key={item.id} className="border border-gray-200 rounded-lg p-4">
-                <p className="font-semibold">Item {item.id}</p>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Modal */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h3 className="text-xl font-bold mb-4">Novo Item</h3>
-            <form onSubmit={handleSubmit} className="space-y-4">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Título*</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.title}
-                    onChange={(e) => setFormData({...formData, title: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
-                    placeholder="Digite o título..."
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Tipo*</label>
-                  <select
-                    required
-                    value={formData.type}
-                    onChange={(e) => setFormData({...formData, type: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
-                  >
-                    <option value="">Selecione o tipo...</option>
-                    <option value="tipo1">Tipo 1</option>
-                    <option value="tipo2">Tipo 2</option>
-                    <option value="tipo3">Tipo 3</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Categoria*</label>
-                  <select
-                    required
-                    value={formData.category}
-                    onChange={(e) => setFormData({...formData, category: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
-                  >
-                    <option value="">Selecione...</option>
-                    <option value="alta">Alta Prioridade</option>
-                    <option value="media">Média Prioridade</option>
-                    <option value="baixa">Baixa Prioridade</option>
-                  </select>
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Data</label>
-                  <input
-                    type="date"
-                    value={formData.date}
-                    onChange={(e) => setFormData({...formData, date: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Descrição</label>
-                <textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  rows="3"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
-                  placeholder="Descreva os detalhes..."
-                />
-              </div>
-                            <div className="flex gap-2 pt-4 border-t">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowModal(false);
-                    setFormData({
-                      title: '',
-                      type: '',
-                      category: '',
-                      priority: '',
-                      date: '',
-                      description: ''
-                    });
-                  }}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 font-semibold text-gray-700"
-                  disabled={loading}
-                >
-                  Cancelar
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50 font-semibold"
-                  disabled={loading}
-                >
-                  {loading ? 'Criando...' : 'Criar Item'}
-                </button>
-              </div>
-            </form>
+      {stats && (
+        <div className="max-w-7xl mx-auto px-6 py-6">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-gradient-to-br from-cyan-500 to-cyan-600 p-6 rounded-xl shadow-lg text-white">
+              <p className="text-sm opacity-90">Total</p>
+              <p className="text-3xl font-bold mt-1">{stats.total || 0}</p>
+            </div>
+            <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-xl shadow-lg text-white">
+              <p className="text-sm opacity-90">Ativas</p>
+              <p className="text-3xl font-bold mt-1">{stats.ativas || 0}</p>
+            </div>
           </div>
         </div>
       )}
-    </UniversalModuleLayout>
+
+      <div className="max-w-7xl mx-auto px-6 pb-6">
+        <div className="bg-gray-800 rounded-xl shadow-xl p-6">
+          <h2 className="text-2xl font-bold text-white mb-4">Intercepções de Dados</h2>
+          <div className="text-center py-12">
+            <Database size={64} className="mx-auto text-gray-600 mb-4" />
+            <p className="text-gray-400">Nenhuma intercepção de dados</p>
+          </div>
+        </div>
+      </div>
+
+      {showWizard && (
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-800 rounded-xl w-full max-w-3xl">
+            <div className="bg-gradient-to-r from-cyan-600 to-blue-600 p-6 rounded-t-xl">
+              <h2 className="text-2xl font-bold text-white">Nova Intercepção de Dados</h2>
+              <p className="text-cyan-100 text-sm mt-1">Lei 9.296/96 - Telemática, Rede, Cloud</p>
+            </div>
+            <div className="p-6 space-y-4">
+              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
+                <p className="text-yellow-400 text-sm font-semibold">⚠️ Base Legal Obrigatória</p>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div><label className="block text-sm font-semibold text-gray-300 mb-2">Título*</label><input type="text" required value={formData.titulo} onChange={(e) => setFormData({...formData, titulo: e.target.value})} className="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg" placeholder="Ex: Intercepção WhatsApp - Caso 001" /></div>
+                <div><label className="block text-sm font-semibold text-gray-300 mb-2">Tipo*</label><select value={formData.tipo} onChange={(e) => setFormData({...formData, tipo: e.target.value})} className="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg"><option value="telematica">Telemática</option><option value="rede">Rede</option><option value="email">E-mail</option><option value="mensageria">Mensageria</option><option value="nuvem">Nuvem</option></select></div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div><label className="block text-sm font-semibold text-gray-300 mb-2">Número Processo*</label><input type="text" required value={formData.numero_processo} onChange={(e) => setFormData({...formData, numero_processo: e.target.value})} className="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg" /></div>
+                <div><label className="block text-sm font-semibold text-gray-300 mb-2">Base Legal*</label><select required value={formData.base_legal} onChange={(e) => setFormData({...formData, base_legal: e.target.value})} className="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg"><option value="">Selecione...</option><option value="ordem_judicial">Ordem Judicial</option><option value="consentimento">Consentimento</option></select></div>
+              </div>
+              <div className="border-2 border-dashed border-cyan-500/50 rounded-xl p-6 bg-cyan-500/5">
+                <Database size={40} className="mx-auto text-cyan-400 mb-3" />
+                <p className="text-white font-semibold text-center mb-2">Upload de Dados</p>
+                <p className="text-gray-400 text-sm text-center mb-4">PCAP, HAR, LOG, EML, PST, CSV, JSON, ZIP - Até 4TB+</p>
+                <input type="file" multiple onChange={(e) => setArquivos(Array.from(e.target.files))} className="hidden" id="data-up" />
+                <label htmlFor="data-up" className="block w-full px-6 py-3 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 text-center cursor-pointer font-semibold">Selecionar Arquivos</label>
+              </div>
+              <div className="bg-gray-700 rounded-lg p-4">
+                <h4 className="font-semibold text-white mb-3 flex items-center gap-2"><Brain size={18} className="text-cyan-400" />Recursos Automáticos</h4>
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div className="flex items-center gap-2 text-gray-300"><CheckCircle size={14} className="text-green-400" />Hash SHA-256/SHA-512</div>
+                  <div className="flex items-center gap-2 text-gray-300"><CheckCircle size={14} className="text-green-400" />Parsing automático</div>
+                  <div className="flex items-center gap-2 text-gray-300"><CheckCircle size={14} className="text-green-400" />IA Network Intel</div>
+                  <div className="flex items-center gap-2 text-gray-300"><CheckCircle size={14} className="text-green-400" />Grafo de comunicações</div>
+                  <div className="flex items-center gap-2 text-gray-300"><CheckCircle size={14} className="text-green-400" />SpoofGuard IP</div>
+                  <div className="flex items-center gap-2 text-gray-300"><CheckCircle size={14} className="text-green-400" />Export multi-formato</div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-gray-700 px-6 py-4 flex justify-between rounded-b-xl">
+              <button onClick={() => setShowWizard(false)} className="px-6 py-2 border border-gray-600 text-gray-300 rounded-lg">Cancelar</button>
+              <button onClick={handleSubmit} className="px-6 py-2 bg-cyan-600 text-white rounded-lg font-semibold">Criar</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
