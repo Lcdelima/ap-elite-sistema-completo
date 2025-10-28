@@ -543,6 +543,15 @@ try:
     
     logger.info("⚖️ SISTEMA JURÍDICO COMPLETO (7/9 módulos) loaded successfully")
 except ImportError as e:
+
+# Upload System Universal
+try:
+    from upload_system import router as upload_router
+    app.include_router(upload_router)
+    logger.info("📤 UPLOAD SYSTEM loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ Upload System not available: {e}")
+
     logger.error(f"⚠️ Sistema Jurídico not available: {e}")
 
 
