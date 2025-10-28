@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Users, FileText, MessageCircle, CheckSquare, Clock, Plus } from 'lucide-react';
-import axios from 'axios';
-import { toast } from 'sonner';
 
 const CollaborationHub = () => {
   const [documents, setDocuments] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [selectedDoc, setSelectedDoc] = useState(null);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
@@ -45,7 +41,7 @@ const CollaborationHub = () => {
       });
 
       if (response.ok) {
-        toast.success("Documento criado!");
+        alert('Documento criado!');
         setTitle('');
         setContent('');
       }

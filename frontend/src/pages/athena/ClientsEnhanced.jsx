@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import UniversalModuleLayout from '../../components/UniversalModuleLayout';
+import AthenaLayout from '../../components/AthenaLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { Badge } from '../../components/ui/badge';
@@ -176,11 +176,7 @@ const ClientsEnhanced = () => {
 
   if (viewMode === 'detail' && selectedClient) {
     return (
-      <UniversalModuleLayout
-      title="Clients Enhanced"
-      subtitle="Sistema integrado"
-      icon={FileText}
-    >
+      <AthenaLayout>
         <div className="p-6 space-y-6">
           {/* Header */}
           <div className="flex items-center justify-between">
@@ -511,16 +507,12 @@ const ClientsEnhanced = () => {
             </div>
           )}
         </div>
-      </UniversalModuleLayout>
+      </AthenaLayout>
     );
   }
 
   return (
-    <UniversalModuleLayout
-      title="Clients Enhanced"
-      subtitle="Sistema integrado"
-      icon={FileText}
-    >
+    <AthenaLayout>
       <div className="p-6 space-y-6">
         {/* Header */}
         <div className="flex justify-between items-center">
@@ -940,7 +932,7 @@ const ClientsEnhanced = () => {
           </div>
         )}
       </div>
-    </UniversalModuleLayout>
+    </AthenaLayout>
   );
 };
 

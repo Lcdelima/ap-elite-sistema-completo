@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { HardDrive, Upload, Download, Search, CheckCircle, Clock, Database } from 'lucide-react';
-import UniversalModuleLayout from '../../components/UniversalModuleLayout';
+import AthenaLayout from '../../components/AthenaLayout';
 import axios from 'axios';
 import { toast } from 'sonner';
 
@@ -78,11 +78,7 @@ const DataExtraction = () => {
   };
 
   return (
-    <UniversalModuleLayout
-      title="Data Extraction"
-      subtitle="Sistema integrado"
-      icon={FileText}
-    >
+    <AthenaLayout>
       <div className="max-w-7xl mx-auto">
         <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-6 rounded-lg shadow-lg mb-6">
           <div className="flex items-center justify-between">
@@ -270,7 +266,7 @@ const DataExtraction = () => {
           </div>
         )}
       </div>
-    </UniversalModuleLayout>
+    </AthenaLayout>
   );
 };
 

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Search, BookOpen, Brain, History, Upload, TrendingUp } from 'lucide-react';
-import axios from 'axios';
-import { toast } from 'sonner';
 
 const RAGSystem = () => {
   const [query, setQuery] = useState('');
@@ -70,7 +68,7 @@ const RAGSystem = () => {
       await fetch(`${backendUrl}/api/rag/batch-index-library?limit=10`, {
         method: 'POST'
       });
-      toast.success("Indexação iniciada! Os documentos serão processados em segundo plano.");
+      alert('Indexação iniciada! Os documentos serão processados em segundo plano.');
       loadStats();
     } catch (error) {
       console.error('Erro ao indexar:', error);

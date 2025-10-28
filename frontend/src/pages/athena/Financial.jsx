@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DollarSign, TrendingUp, TrendingDown, Plus, PieChart, FileText, Calendar, Filter, Download } from 'lucide-react';
-import UniversalModuleLayout from '../../components/UniversalModuleLayout';
-import axios from 'axios';
-import { toast } from 'sonner';
+import AthenaLayout from '../../components/AthenaLayout';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
@@ -98,7 +96,7 @@ const FinancialManagement = () => {
       });
 
       if (response.ok) {
-        toast.success("Transação criada com sucesso!");
+        alert('Transação criada com sucesso!');
         setShowModal(false);
         setFormData({
           type: 'income',
@@ -112,11 +110,11 @@ const FinancialManagement = () => {
         fetchSummary();
         fetchTransactions();
       } else {
-        toast.success("Erro ao criar transação");
+        alert('Erro ao criar transação');
       }
     } catch (error) {
       console.error('Error creating transaction:', error);
-      toast.success("Erro ao criar transação");
+      alert('Erro ao criar transação');
     }
   };
 
@@ -266,11 +264,7 @@ const FinancialManagement = () => {
   );
 
   return (
-    <UniversalModuleLayout
-      title="Financial"
-      subtitle="Sistema integrado"
-      icon={FileText}
-    >
+    <AthenaLayout>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white p-6 rounded-lg shadow-lg mb-6">
@@ -414,7 +408,7 @@ const FinancialManagement = () => {
           </div>
         )}
       </div>
-    </UniversalModuleLayout>
+    </AthenaLayout>
   );
 };
 

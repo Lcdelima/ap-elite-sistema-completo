@@ -5,9 +5,7 @@ import {
   Network, Eye, Shield, Database, Map, TrendingUp,
   Camera, Phone, Mail, Globe, Calendar, User
 } from 'lucide-react';
-import UniversalModuleLayout from '../../components/UniversalModuleLayout';
-import axios from 'axios';
-import { toast } from 'sonner';
+import AthenaLayout from '../../components/AthenaLayout';
 
 const AdvancedInvestigation = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -492,11 +490,7 @@ const AdvancedInvestigation = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   return (
-    <UniversalModuleLayout
-      title="Advanced Investigation"
-      subtitle="Sistema integrado"
-      icon={FileText}
-    >
+    <AthenaLayout>
       <div className="space-y-6">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-900 via-purple-900 to-indigo-900 rounded-lg p-6 text-white">
@@ -570,7 +564,7 @@ const AdvancedInvestigation = () => {
           </div>
         )}
       </div>
-    </UniversalModuleLayout>
+    </AthenaLayout>
   );
 };
 

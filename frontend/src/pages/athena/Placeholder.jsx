@@ -1,13 +1,8 @@
 import React from 'react';
-import UniversalModuleLayout from '../../components/UniversalModuleLayout';
+import AthenaLayout from '../../components/AthenaLayout';
 import { Card, CardContent } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
-import { Zap, CheckCircle , FileText} from 'lucide-react';
-import axios from 'axios';
-import { toast } from 'sonner';
-
-
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
+import { Zap, CheckCircle } from 'lucide-react';
 
 const Placeholder = ({ title, subtitle, icon: Icon }) => {
   return (
@@ -32,7 +27,7 @@ const Placeholder = ({ title, subtitle, icon: Icon }) => {
           </CardContent>
         </Card>
       </div>
-    </UniversalModuleLayout>
+    </AthenaLayout>
   );
 };
 

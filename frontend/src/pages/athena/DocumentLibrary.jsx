@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FileText, Upload, Search, Download, Trash2, Eye, Brain, Filter, BarChart3 } from 'lucide-react';
-import axios from 'axios';
-import { toast } from 'sonner';
 
 const DocumentLibrary = () => {
   const [documents, setDocuments] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [categories, setCategories] = useState({});
   const [selectedCategory, setSelectedCategory] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -72,7 +68,7 @@ const DocumentLibrary = () => {
       });
 
       if (response.ok) {
-        toast.success("Documento enviado com sucesso!");
+        alert('Documento enviado com sucesso!');
         setUploadFile(null);
         loadDocuments();
         loadStats();
@@ -82,7 +78,7 @@ const DocumentLibrary = () => {
       }
     } catch (error) {
       console.error('Erro no upload:', error);
-      toast.success("Erro ao enviar documento");
+      alert('Erro ao enviar documento');
     }
   };
 
@@ -100,7 +96,7 @@ const DocumentLibrary = () => {
 
       if (response.ok) {
         const data = await response.json();
-        toast.success("Análise concluída! Verifique os detalhes do documento.");
+        alert('Análise concluída! Verifique os detalhes do documento.');
         loadDocuments();
       }
     } catch (error) {
@@ -123,7 +119,7 @@ const DocumentLibrary = () => {
       });
 
       if (response.ok) {
-        toast.success("Documento removido com sucesso!");
+        alert('Documento removido com sucesso!');
         loadDocuments();
         loadStats();
       }

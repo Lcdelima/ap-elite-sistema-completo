@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link as LinkIcon, Plus, Copy, ExternalLink, Video, Trash2, Edit } from 'lucide-react';
-import UniversalModuleLayout from '../../components/UniversalModuleLayout';
+import AthenaLayout from '../../components/AthenaLayout';
 import axios from 'axios';
 import { toast } from 'sonner';
 
@@ -77,11 +77,7 @@ const MeetingLinks = () => {
   };
 
   return (
-    <UniversalModuleLayout
-      title="Meeting Links"
-      subtitle="Sistema integrado"
-      icon={FileText}
-    >
+    <AthenaLayout>
       <div className="max-w-7xl mx-auto">
         <div className="bg-gradient-to-r from-violet-600 to-purple-600 text-white p-6 rounded-lg shadow-lg mb-6">
           <div className="flex items-center justify-between">
@@ -264,7 +260,7 @@ const MeetingLinks = () => {
           </div>
         )}
       </div>
-    </UniversalModuleLayout>
+    </AthenaLayout>
   );
 };
 

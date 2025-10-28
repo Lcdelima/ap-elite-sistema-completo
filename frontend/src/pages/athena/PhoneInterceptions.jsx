@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
-import UniversalModuleLayout from '../../components/UniversalModuleLayout';
+import AthenaLayout from '../../components/AthenaLayout';
 import {
   Radio,
   Upload,
@@ -82,11 +82,7 @@ const PhoneInterceptions = () => {
   };
 
   return (
-    <UniversalModuleLayout
-      title="Phone Interceptions"
-      subtitle="Sistema integrado"
-      icon={FileText}
-    >
+    <AthenaLayout>
       <div className="p-6 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -310,7 +306,7 @@ const PhoneInterceptions = () => {
           </CardContent>
         </Card>
       </div>
-    </UniversalModuleLayout>
+    </AthenaLayout>
   );
 };
 

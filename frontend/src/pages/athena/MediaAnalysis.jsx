@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Music, Video, Upload, FileAudio, Play, Download, Mic, Film } from 'lucide-react';
-import axios from 'axios';
-import { toast } from 'sonner';
 
 const MediaAnalysis = () => {
   const [file, setFile] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [processing, setProcessing] = useState(false);
   const [result, setResult] = useState(null);
   const [transcriptions, setTranscriptions] = useState([]);

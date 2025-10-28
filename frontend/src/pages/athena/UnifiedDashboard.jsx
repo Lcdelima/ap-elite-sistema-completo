@@ -4,7 +4,7 @@ import {
   TrendingUp, AlertCircle, CheckCircle, Clock, Activity,
   Radio, HardDrive, Shield, Video, Calendar, Bell
 } from 'lucide-react';
-import UniversalModuleLayout from '../../components/UniversalModuleLayout';
+import AthenaLayout from '../../components/AthenaLayout';
 import HybridStatus from '../../components/HybridStatus';
 import axios from 'axios';
 import { toast } from 'sonner';
@@ -116,24 +116,16 @@ const UnifiedDashboard = () => {
 
   if (loading) {
     return (
-      <UniversalModuleLayout
-      title="Unified Dashboard"
-      subtitle="Sistema integrado"
-      icon={FileText}
-    >
+      <AthenaLayout>
         <div className="flex items-center justify-center h-96">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600"></div>
         </div>
-      </UniversalModuleLayout>
+      </AthenaLayout>
     );
   }
 
   return (
-    <UniversalModuleLayout
-      title="Unified Dashboard"
-      subtitle="Sistema integrado"
-      icon={FileText}
-    >
+    <AthenaLayout>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white p-8 rounded-lg shadow-lg mb-6">
@@ -329,7 +321,7 @@ const UnifiedDashboard = () => {
         {/* Sistema Híbrido Online/Offline */}
         <HybridStatus />
       </div>
-    </UniversalModuleLayout>
+    </AthenaLayout>
   );
 };
 

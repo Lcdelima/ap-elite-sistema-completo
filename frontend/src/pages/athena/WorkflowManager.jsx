@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Workflow, Plus, Play, CheckCircle, Clock, TrendingUp, List } from 'lucide-react';
-import axios from 'axios';
-import { toast } from 'sonner';
 
 const WorkflowManager = () => {
   const [workflows, setWorkflows] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [templates, setTemplates] = useState({});
   const [stats, setStats] = useState(null);
   const [selectedTemplate, setSelectedTemplate] = useState('');
@@ -48,7 +44,7 @@ const WorkflowManager = () => {
       });
 
       if (response.ok) {
-        toast.success("✅ Workflow criado com sucesso!");
+        alert('✅ Workflow criado com sucesso!');
         setCaseId('');
         setSelectedTemplate('');
         loadStats();

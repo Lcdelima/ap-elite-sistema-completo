@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Radio, MapPin, Plus, Search, Filter, Download, Eye } from 'lucide-react';
-import UniversalModuleLayout from '../../components/UniversalModuleLayout';
+import AthenaLayout from '../../components/AthenaLayout';
 import axios from 'axios';
 import { toast } from 'sonner';
 
@@ -87,11 +87,7 @@ const ERBs = () => {
   );
 
   return (
-    <UniversalModuleLayout
-      title="E R Bs"
-      subtitle="Sistema integrado"
-      icon={FileText}
-    >
+    <AthenaLayout>
       <div className="max-w-7xl mx-auto">
         <div className="bg-gradient-to-r from-orange-600 to-red-600 text-white p-6 rounded-lg shadow-lg mb-6">
           <div className="flex items-center justify-between">
@@ -321,7 +317,7 @@ const ERBs = () => {
           </div>
         )}
       </div>
-    </UniversalModuleLayout>
+    </AthenaLayout>
   );
 };
 

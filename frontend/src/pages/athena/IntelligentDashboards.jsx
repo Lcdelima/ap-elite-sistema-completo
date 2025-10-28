@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import UniversalModuleLayout from '../../components/UniversalModuleLayout';
+import AthenaLayout from '../../components/AthenaLayout';
 import { Card, CardContent } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
-import { BarChart3, Brain, TrendingUp, AlertCircle, Activity, Map , FileText} from 'lucide-react';
+import { BarChart3, Brain, TrendingUp, AlertCircle, Activity, Map } from 'lucide-react';
 import { toast } from 'sonner';
 
 const IntelligentDashboards = () => {
@@ -160,7 +160,7 @@ const IntelligentDashboards = () => {
           </>
         )}
       </div>
-    </UniversalModuleLayout>
+    </AthenaLayout>
   );
 };
 

@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Video, Plus, Calendar, Users, Link as LinkIcon, Copy, ExternalLink } from 'lucide-react';
-import UniversalModuleLayout from '../../components/UniversalModuleLayout';
-import axios from 'axios';
-import { toast } from 'sonner';
+import AthenaLayout from '../../components/AthenaLayout';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const VideoConference = () => {
   const [meetings, setMeetings] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
@@ -57,15 +53,11 @@ const VideoConference = () => {
 
   const copyLink = (link) => {
     navigator.clipboard.writeText(link);
-    toast.success("Link copiado para área de transferência!");
+    alert('Link copiado para área de transferência!');
   };
 
   return (
-    <UniversalModuleLayout
-      title="Video Conference"
-      subtitle="Sistema integrado"
-      icon={FileText}
-    >
+    <AthenaLayout>
       <div className="max-w-7xl mx-auto">
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 rounded-lg shadow-lg mb-6">
           <div className="flex items-center justify-between">
@@ -253,7 +245,7 @@ const VideoConference = () => {
           </div>
         )}
       </div>
-    </UniversalModuleLayout>
+    </AthenaLayout>
   );
 };
 

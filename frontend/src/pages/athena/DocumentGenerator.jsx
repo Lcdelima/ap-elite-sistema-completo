@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import UniversalModuleLayout from '../../components/UniversalModuleLayout';
+import AthenaLayout from '../../components/AthenaLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { Badge } from '../../components/ui/badge';
@@ -217,11 +217,7 @@ const DocumentGenerator = () => {
   );
 
   return (
-    <UniversalModuleLayout
-      title="Document Generator"
-      subtitle="Sistema integrado"
-      icon={FileText}
-    >
+    <AthenaLayout>
       <div className="p-6 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -796,7 +792,7 @@ const DocumentGenerator = () => {
           </div>
         </div>
       </div>
-    </UniversalModuleLayout>
+    </AthenaLayout>
   );
 };
 

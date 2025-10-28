@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Upload, FileText, Eye, Download, CheckCircle, AlertTriangle, Image, Scan } from 'lucide-react';
-import axios from 'axios';
-import { toast } from 'sonner';
 
 const OCRDashboard = () => {
   const [file, setFile] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [processing, setProcessing] = useState(false);
   const [result, setResult] = useState(null);
   const [results, setResults] = useState([]);
@@ -67,7 +63,7 @@ const OCRDashboard = () => {
       loadStats();
     } catch (error) {
       console.error('Erro no OCR:', error);
-      toast.success("Erro ao processar documento");
+      alert('Erro ao processar documento');
     } finally {
       setProcessing(false);
     }

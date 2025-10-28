@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Filter, Clock, Zap, FileText, Users, Briefcase, Database } from 'lucide-react';
-import axios from 'axios';
-import { toast } from 'sonner';
 
 const GlobalSearch = () => {
   const [query, setQuery] = useState('');
