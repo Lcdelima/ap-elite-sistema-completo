@@ -3,7 +3,7 @@ Relatórios Automatizados
 Agendador, Envio E-mail, Logs de Execução
 """
 
-from fastapi import APIRouter, BackgroundTasks
+from fastapi import APIRouter, BackgroundTasks, HTTPException
 from pydantic import BaseModel
 from typing import Optional, Dict
 from datetime import datetime
