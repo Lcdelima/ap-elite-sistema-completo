@@ -27,8 +27,17 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/cisai", tags=["CISAI+"])
 
 # Configurações
-OPENCELLID_TOKEN = "pk.8af9548f3db205e782c0f801c89b13a5"
+OPENCELLID_TOKEN = os.environ.get("OPENCELLID_TOKEN", "pk.8af9548f3db205e782c0f801c89b13a5")
 OPENCELLID_API_URL = "https://opencellid.org/cell/get"
+
+# Wigle API
+WIGLE_API_NAME = os.environ.get("WIGLE_API_NAME", "AID56a4ee26f4863c9b4294ea8dd46ae464")
+WIGLE_API_TOKEN = os.environ.get("WIGLE_API_TOKEN", "b33413ff9f980b546420d1f4385a9bc8")
+WIGLE_API_URL = "https://api.wigle.net/api/v2/network/search"
+
+# AbuseIPDB API
+ABUSEIPDB_API_KEY = os.environ.get("ABUSEIPDB_API_KEY", "775dedec262fb746785dabbd99a49ea738ca978f4fc0cf5aaf074bd95f89256635804ad705efd8e0")
+ABUSEIPDB_API_URL = "https://api.abuseipdb.com/api/v2"
 
 # ==================== MODELS ====================
 
