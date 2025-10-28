@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CheckCircle, Plus, AlertTriangle, CheckCircle } from 'lucide-react';
+import { CheckCircle, Plus, AlertTriangle } from 'lucide-react';
 import UniversalModuleLayout from '../../components/UniversalModuleLayout';
 import axios from 'axios';
 import { toast } from 'sonner';
