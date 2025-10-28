@@ -339,14 +339,16 @@ Retorne JSON:
     
     try:
         # Usa Claude via Emergent
-        client_ai = EmergentClaude(api_key=EMERGENT_KEY)
-        response = client_ai.chat.completions.create(
-            model="claude-sonnet-4-20250514",
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.3
-        )
+        chat = LlmChat(
+            api_key=EMERGENT_KEY,
+            session_id=f"prescricao_{analysis_id}",
+            system_message="Você é um perito em Direito Penal brasileiro especializado em prescrição."
+        ).with_model("anthropic", "claude-4-sonnet-20250514")
         
-        resultado_text = response.choices[0].message.content
+        user_msg = UserMessage(text=prompt)
+        response = await chat.send_message(user_msg)
+        
+        resultado_text = response
         
         # Extrai JSON da resposta
         try:
