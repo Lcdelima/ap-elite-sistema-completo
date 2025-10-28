@@ -81,6 +81,27 @@ const CISAIPlusMain = () => {
     }
   };
 
+  const handleWiFiLookup = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/cisai/wifi/lookup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(wifiForm)
+      });
+      
+      if (!response.ok) throw new Error('Erro ao consultar BSSID');
+      
+      const data = await response.json();
+      setResult(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSpoofDetection = async () => {
     setLoading(true);
     setError(null);
