@@ -38,6 +38,10 @@ import USBForensicsPro from './pages/athena/USBForensicsPro';
 import PlaybookSystem from './pages/athena/PlaybookSystem';
 import PlaybookRun from './pages/athena/PlaybookRun';
 import ProcessAnalysisSystem from './pages/athena/ProcessAnalysisSystem';
+import GestaoProcessos from './pages/juridico/GestaoProcessos';
+import BibliotecaDocumentos from './pages/juridico/BibliotecaDocumentos';
+import GeradorContratos from './pages/juridico/GeradorContratos';
+
 
 
 import FinancialManagement from './pages/admin/FinancialManagement';
