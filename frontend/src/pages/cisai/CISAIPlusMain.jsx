@@ -581,6 +581,97 @@ const CISAIPlusMain = () => {
                   </div>
                 )}
 
+                {/* WiFi Intel Result */}
+                {activeTab === 'wifiintel' && result.bssid && (
+                  <div className="space-y-3">
+                    {result.error ? (
+                      <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
+                        <div className="flex items-center space-x-2 text-yellow-400">
+                          <AlertTriangle className="w-5 h-5" />
+                          <span>{result.error}</span>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
+                          <div className="flex items-center space-x-2 text-green-400 mb-2">
+                            <CheckCircle className="w-5 h-5" />
+                            <span className="font-semibold">BSSID Encontrado no Wigle</span>
+                          </div>
+                          <p className="text-white text-lg font-mono">{result.bssid}</p>
+                          <p className="text-gray-400 text-sm">SSID: {result.ssid || 'N/A'}</p>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
+                            <p className="text-xs text-gray-400">Coordenadas</p>
+                            <p className="text-white font-semibold text-sm">
+                              {result.lat?.toFixed(6)}, {result.lon?.toFixed(6)}
+                            </p>
+                          </div>
+                          <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
+                            <p className="text-xs text-gray-400">Canal</p>
+                            <p className="text-white font-semibold">{result.channel || 'N/A'}</p>
+                          </div>
+                          <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3">
+                            <p className="text-xs text-gray-400">Criptografia</p>
+                            <p className="text-white font-semibold text-sm">{result.encryption || 'N/A'}</p>
+                          </div>
+                          <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3">
+                            <p className="text-xs text-gray-400">Fabricante</p>
+                            <p className="text-white font-semibold text-sm">{result.vendor || 'N/A'}</p>
+                          </div>
+                        </div>
+
+                        {result.first_seen && (
+                          <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-3">
+                            <p className="text-xs text-gray-400 mb-1">Timeline</p>
+                            <p className="text-sm text-white">
+                              Primeira detecção: {new Date(result.first_seen).toLocaleString('pt-BR')}
+                            </p>
+                            <p className="text-sm text-white">
+                              Última detecção: {new Date(result.last_seen).toLocaleString('pt-BR')}
+                            </p>
+                          </div>
+                        )}
+
+                        {result.lat && result.lon && (
+                          <div className="h-64 rounded-lg overflow-hidden border border-cyan-500/30">
+                            <MapContainer
+                              center={[result.lat, result.lon]}
+                              zoom={15}
+                              style={{ height: '100%', width: '100%' }}
+                            >
+                              <TileLayer
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                              />
+                              <Marker position={[result.lat, result.lon]}>
+                                <Popup>
+                                  {result.ssid}<br />
+                                  BSSID: {result.bssid}
+                                </Popup>
+                              </Marker>
+                              <Circle
+                                center={[result.lat, result.lon]}
+                                radius={50}
+                                pathOptions={{ color: 'cyan', fillColor: 'cyan', fillOpacity: 0.2 }}
+                              />
+                            </MapContainer>
+                          </div>
+                        )}
+
+                        {result.total_results && (
+                          <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
+                            <p className="text-sm text-gray-300">
+                              Total de registros no Wigle: <span className="text-white font-semibold">{result.total_results}</span>
+                            </p>
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+                )}
+
                 {/* Spoof Detection Result */}
                 {activeTab === 'antiforense' && result.score !== undefined && (
                   <div>
