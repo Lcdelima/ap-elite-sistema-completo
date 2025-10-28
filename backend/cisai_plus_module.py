@@ -294,12 +294,7 @@ def calculate_ip_risk_score(ip_data, abuse_score=0):
 def wigle_bssid_lookup(bssid):
     """Consulta Wigle API para localização de BSSID"""
     try:
-        headers = {
-            "Authorization": f"Basic {WIGLE_API_NAME}:{WIGLE_API_TOKEN}"
-        }
-        
         # Encode credentials in base64
-        import base64
         credentials = f"{WIGLE_API_NAME}:{WIGLE_API_TOKEN}"
         encoded_credentials = base64.b64encode(credentials.encode()).decode()
         
@@ -312,7 +307,10 @@ def wigle_bssid_lookup(bssid):
             "netid": bssid.upper()
         }
         
+        logger.info(f"Wigle API request for BSSID: {bssid}")
         response = requests.get(WIGLE_API_URL, headers=headers, params=params, timeout=10)
+        
+        logger.info(f"Wigle API response status: {response.status_code}")
         
         if response.status_code == 200:
             data = response.json()
@@ -332,17 +330,40 @@ def wigle_bssid_lookup(bssid):
                         "encryption": first_result.get("encryption"),
                         "vendor": first_result.get("name"),
                         "total_results": data.get("totalResults"),
-                        "source": "wigle"
+                        "source": "wigle",
+                        "status": "success"
                     }
             
-            return {"error": "BSSID não encontrado no Wigle", "bssid": bssid}
+            return {
+                "error": "BSSID não encontrado no Wigle", 
+                "bssid": bssid,
+                "status": "not_found",
+                "note": "Este BSSID não está registrado no banco de dados do Wigle"
+            }
+        elif response.status_code == 412:
+            logger.warning(f"Wigle API 412: Precondition Failed - Possível limite de taxa ou conta não verificada")
+            return {
+                "error": "Wigle API: Limite de requisições ou conta não verificada", 
+                "bssid": bssid,
+                "status": "rate_limit",
+                "note": "A API Wigle pode ter limitações de taxa. Aguarde alguns minutos e tente novamente."
+            }
         else:
             logger.error(f"Wigle API error: {response.status_code} - {response.text}")
-            return {"error": f"Erro Wigle API: {response.status_code}", "bssid": bssid}
+            return {
+                "error": f"Erro Wigle API: {response.status_code}", 
+                "bssid": bssid,
+                "status": "error",
+                "details": response.text[:200]
+            }
             
     except Exception as e:
         logger.error(f"Wigle lookup error: {str(e)}")
-        return {"error": str(e), "bssid": bssid}
+        return {
+            "error": str(e), 
+            "bssid": bssid,
+            "status": "exception"
+        }
 
 def detect_gps_spoofing(fixes):
     """Detecta spoofing de GPS baseado em velocidades impossíveis"""
