@@ -572,6 +572,10 @@ try:
     app.include_router(custody_router)
     app.include_router(evidencias_ia_router)
     app.include_router(health_router)
+    from forense_aprimorada import router as forense_aprimorada_router
+    app.include_router(forense_aprimorada_router)
+    logger.info("🔬 FORENSE APRIMORADA (Athena CISAI 3.0) loaded")
+
     
     logger.info("🔬 CISAI-FORENSE 3.0 (7 módulos core) loaded successfully")
 except ImportError as e:
