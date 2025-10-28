@@ -427,31 +427,85 @@ const ProcessAnalysisSystem = () => {
                 <div className="space-y-4">
                   <h3 className="text-xl font-bold mb-4">Provas & Síntese</h3>
                   
-                  <div className="border-2 border-dashed border-blue-300 rounded-lg p-8 text-center bg-blue-50">
+                  <div className="border-2 border-dashed border-blue-300 rounded-lg p-8 bg-blue-50">
                     <Upload size={48} className="mx-auto text-blue-600 mb-3" />
-                    <p className="text-blue-900 font-semibold mb-2">Upload de Documentos</p>
-                    <p className="text-sm text-blue-700 mb-4">Sentença, Denúncia, RA, Mídias - Com OCR + Hash automático</p>
-                    <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    <p className="text-blue-900 font-semibold mb-2 text-center">Upload de Documentos</p>
+                    <p className="text-sm text-blue-700 mb-4 text-center">Sentença, Denúncia, RA, Mídias - Com OCR + Hash automático</p>
+                    
+                    <input
+                      type="file"
+                      multiple
+                      onChange={handleFileSelect}
+                      className="hidden"
+                      id="file-upload"
+                      accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                    />
+                    
+                    <label
+                      htmlFor="file-upload"
+                      className="block w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-center cursor-pointer font-semibold"
+                    >
                       Selecionar Arquivos
-                    </button>
+                    </label>
                   </div>
+
+                  {/* Lista de arquivos selecionados */}
+                  {selectedFiles.length > 0 && (
+                    <div className="bg-white border border-gray-200 rounded-lg p-4">
+                      <h4 className="font-semibold text-gray-900 mb-3">📎 Arquivos Selecionados ({selectedFiles.length})</h4>
+                      <div className="space-y-2">
+                        {selectedFiles.map((file, index) => (
+                          <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <div className="flex items-center gap-3">
+                              <FileText size={20} className="text-blue-600" />
+                              <div>
+                                <p className="text-sm font-semibold">{file.name}</p>
+                                <p className="text-xs text-gray-500">{(file.size / 1024).toFixed(1)} KB</p>
+                              </div>
+                            </div>
+                            <button
+                              onClick={() => removeFile(index)}
+                              className="text-red-600 hover:bg-red-50 p-2 rounded"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
                   <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
                     <h4 className="font-semibold text-purple-900 mb-3">🤖 Ferramentas IA Disponíveis</h4>
+                    <p className="text-sm text-purple-700 mb-3">
+                      Após criar a análise e fazer upload dos documentos, você poderá executar:
+                    </p>
                     <div className="grid grid-cols-2 gap-3">
-                      <button className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm flex items-center justify-center gap-2">
+                      <div className="px-4 py-2 bg-purple-100 text-purple-800 rounded-lg text-sm flex items-center justify-center gap-2">
                         <Brain size={16} />Detectar Prescrição (CP 109/115)
-                      </button>
-                      <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm flex items-center justify-center gap-2">
-                        <FileText size={16} />Checar Cadeia de Custódia (CPP 158-A/F)
-                      </button>
+                      </div>
+                      <div className="px-4 py-2 bg-blue-100 text-blue-800 rounded-lg text-sm flex items-center justify-center gap-2">
+                        <FileText size={16} />Checar Cadeia (CPP 158-A/F)
+                      </div>
+                      <div className="px-4 py-2 bg-green-100 text-green-800 rounded-lg text-sm flex items-center justify-center gap-2">
+                        <Brain size={16} />Análise de Dosimetria
+                      </div>
+                      <div className="px-4 py-2 bg-orange-100 text-orange-800 rounded-lg text-sm flex items-center justify-center gap-2">
+                        <FileText size={16} />Resumo Executivo
+                      </div>
                     </div>
                   </div>
 
-                  <div>
-                    <p className="text-sm text-gray-600">
-                      📄 Documentos serão processados com OCR automático e indexados para busca
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <p className="text-sm text-blue-800">
+                      <strong>ℹ️ Processamento Automático:</strong>
                     </p>
+                    <ul className="text-sm text-blue-700 mt-2 space-y-1 ml-4">
+                      <li>✓ Cálculo de hash SHA-256 e SHA-512</li>
+                      <li>✓ OCR automático para PDFs e imagens</li>
+                      <li>✓ Indexação para busca semântica</li>
+                      <li>✓ Extração de datas e marcos processuais</li>
+                    </ul>
                   </div>
                 </div>
               )}
