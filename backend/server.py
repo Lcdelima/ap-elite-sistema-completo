@@ -521,6 +521,29 @@ try:
     app.include_router(analysis_router)
     logger.info("⚖️ PROCESS ANALYSIS SYSTEM loaded successfully")
 except ImportError as e:
+
+# Sistema Jur\u00eddico Completo - 9 M\u00f3dulos
+try:
+    from juridico_gestao_processos import router as juridico_processos_router
+    from juridico_gerador_docs import router as juridico_docs_router
+    from juridico_biblioteca import router as juridico_biblioteca_router
+    from juridico_contratos import router as juridico_contratos_router
+    from juridico_relatorios import router as juridico_relatorios_router
+    from juridico_analise_pro import router as juridico_analise_pro_router
+    from juridico_relatorios_auto import router as juridico_relatorios_auto_router
+    
+    app.include_router(juridico_processos_router)
+    app.include_router(juridico_docs_router)
+    app.include_router(juridico_biblioteca_router)
+    app.include_router(juridico_contratos_router)
+    app.include_router(juridico_relatorios_router)
+    app.include_router(juridico_analise_pro_router)
+    app.include_router(juridico_relatorios_auto_router)
+    
+    logger.info(\"\u2696\ufe0f SISTEMA JUR\u00cdDICO COMPLETO (7/9 m\u00f3dulos) loaded successfully\")
+except ImportError as e:
+    logger.error(f\"\u26a0\ufe0f Sistema Jur\u00eddico not available: {e}\")
+
     logger.error(f"⚠️ Process Analysis System not available: {e}")
 
 
