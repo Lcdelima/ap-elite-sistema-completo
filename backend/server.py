@@ -474,11 +474,11 @@ except ImportError as e:
 
 # Import Jurídico Module
 try:
-    from juridico_module import router as juridico_router
+    from juridico_completo_v2 import router as juridico_router
     app.include_router(juridico_router)
-    logger.info("✅ Jurídico Module loaded successfully")
+    logger.info("✅ Jurídico Module V2 loaded successfully")
 except ImportError as e:
-    logger.error(f"⚠️ Jurídico Module not available: {e}")
+    logger.error(f"⚠️ Jurídico Module V2 not available: {e}")
 
 # Include the router in the main app
 app.include_router(api_router)
