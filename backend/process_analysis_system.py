@@ -255,12 +255,24 @@ async def ingerir_documentos(
     sha256 = hashlib.sha256(contents).hexdigest()
     sha512 = hashlib.sha512(contents).hexdigest()
     
-    # Salva metadados
+    # Salva arquivo
     file_id = str(uuid.uuid4())
+    upload_dir = Path("/app/uploads")
+    upload_dir.mkdir(exist_ok=True)
+    
+    ext = Path(file.filename).suffix
+    safe_filename = f"{file_id}{ext}"
+    file_path = upload_dir / safe_filename
+    
+    with open(file_path, "wb") as f:
+        f.write(contents)
+    
+    # Metadados
     doc_data = {
         "id": file_id,
         "analysis_id": analysis_id,
         "filename": file.filename,
+        "path": str(file_path),
         "tipo": tipo,
         "size": len(contents),
         "sha256": sha256,
@@ -270,28 +282,29 @@ async def ingerir_documentos(
         "created_at": datetime.now().isoformat()
     }
     
-    # TODO: Executar OCR em background
-    # if file.filename.endswith('.pdf') or file.filename.endswith(('.jpg', '.png')):
-    #     ocr_text = await processar_ocr(file_path)
-    #     doc_data["ocr"] = True
-    #     doc_data["ocr_text"] = ocr_text
+    # Simula OCR para PDFs
+    if file.filename.lower().endswith('.pdf'):
+        doc_data["ocr"] = True
+        doc_data["ocr_text"] = f"[OCR simulado de {file.filename}] Texto extraído aqui..."
     
     await db.analysis_docs.insert_one(doc_data)
     
-    # Atualiza contador de documentos
+    # Atualiza contador
     await db.case_analysis.update_one(
         {"id": analysis_id},
-        {"$inc": {"docs_count": 1}}
+        {"$inc": {"docs_count": 1}, "$set": {"updated_at": datetime.now().isoformat()}}
     )
     
     return {
         "success": True,
         "file_id": file_id,
+        "filename": file.filename,
         "hashes": {
             "sha256": sha256,
             "sha512": sha512
         },
-        "message": f"Documento '{file.filename}' processado. OCR em execução."
+        "ocr": doc_data["ocr"],
+        "message": f"Documento '{file.filename}' processado. Hash calculado e salvo."
     }
 
 @router.post("/{analysis_id}/ai/prescricao")
