@@ -790,6 +790,7 @@ app.include_router(password_recovery_router)
 app.include_router(data_recovery_router)
 app.include_router(usb_forensics_router)
 app.include_router(browser_db_forensics_router)
+app.include_router(interceptacao_elite_router)
 
 # Health check
 @app.get("/")
