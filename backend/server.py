@@ -541,9 +541,9 @@ try:
     app.include_router(juridico_analise_pro_router)
     app.include_router(juridico_relatorios_auto_router)
     
-    logger.info(\"\u2696\ufe0f SISTEMA JUR\u00cdDICO COMPLETO (7/9 m\u00f3dulos) loaded successfully\")
+    logger.info("⚖️ SISTEMA JURÍDICO COMPLETO (7/9 módulos) loaded successfully")
 except ImportError as e:
-    logger.error(f\"\u26a0\ufe0f Sistema Jur\u00eddico not available: {e}\")
+    logger.error(f"⚠️ Sistema Jurídico not available: {e}")
 
 
 
