@@ -31,6 +31,7 @@ const CISAIPlusMain = () => {
   });
 
   const [ipForm, setIpForm] = useState({ ip: '8.8.8.8' });
+  const [wifiForm, setWifiForm] = useState({ bssid: '' });
   const [spoofForm, setSpoofForm] = useState({
     fixes: [
       { lat: -22.9068, lon: -43.1729, timestamp: new Date().toISOString() },
