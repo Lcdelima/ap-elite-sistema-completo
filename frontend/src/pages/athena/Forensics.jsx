@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Microscope, Upload, FileText, Search, CheckCircle, Clock, AlertTriangle } from 'lucide-react';
+import { Shield, Plus, AlertTriangle, CheckCircle, FileSearch } from 'lucide-react';
 import UniversalModuleLayout from '../../components/UniversalModuleLayout';
 import axios from 'axios';
 import { toast } from 'sonner';
@@ -7,33 +7,32 @@ import { toast } from 'sonner';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const Forensics = () => {
-  const [analyses, setAnalyses] = useState([]);
-  const [showModal, setShowModal] = useState(false);
+  const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
-    title: '',
-    type: 'hardware',
-    device_description: '',
-    case_id: '',
-    priority: 'medium',
-    notes: ''
+    examTitle: '',
+    caseNumber: '',
+    deviceInfo: '',
+    examType: '',
+    priority: ''
   });
 
-  const analysisTypes = ['hardware', 'software', 'network', 'mobile', 'cloud', 'memory'];
-  const priorities = ['low', 'medium', 'high', 'urgent'];
-
   useEffect(() => {
-    fetchAnalyses();
+    fetchItems();
   }, []);
 
-  const fetchAnalyses = async () => {
+  const fetchItems = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${BACKEND_URL}/api/athena/forensics/analyses`);
-      setAnalyses(response.data.data || []);
+      setError(null);
+      const response = await axios.get(`${BACKEND_URL}/api/athena/forensics/list`);
+      setItems(response.data.data || []);
     } catch (error) {
-      console.error('Error fetching analyses:', error);
-      toast.error('Erro ao carregar análises');
+      console.error('Erro ao carregar dados:', error);
+      setError('Erro ao carregar dados');
+      toast.error('Erro ao carregar dados');
     } finally {
       setLoading(false);
     }
@@ -44,25 +43,24 @@ const Forensics = () => {
     setLoading(true);
     
     try {
-      await axios.post(`${BACKEND_URL}/api/athena/forensics/analyses`, {
-        ...formData,
-        status: 'pending'
+      await axios.post(`${BACKEND_URL}/api/athena/forensics/create`, {
+        collection: 'forensics',
+        data: formData
       });
       
-      toast.success('Análise forense criada com sucesso!');
+      toast.success('Exame pericial criado com sucesso!');
       setShowModal(false);
       setFormData({
-        title: '',
-        type: 'hardware',
-        device_description: '',
-        case_id: '',
-        priority: 'medium',
-        notes: ''
+        examTitle: '',
+        caseNumber: '',
+        deviceInfo: '',
+        examType: '',
+        priority: ''
       });
-      fetchAnalyses();
+      fetchItems();
     } catch (error) {
-      console.error('Error creating analysis:', error);
-      toast.error('Erro ao criar análise forense');
+      console.error('Erro ao criar item:', error);
+      toast.error('Erro ao criar exame');
     } finally {
       setLoading(false);
     }
@@ -71,160 +69,226 @@ const Forensics = () => {
   return (
     <UniversalModuleLayout
       title="Perícia Digital"
-      subtitle="Análise forense especializada"
-      icon={Microscope}
+      subtitle="Análise forense avançada de dispositivos"
+      icon={Shield}
       headerAction={
         <button
           onClick={() => setShowModal(true)}
-          className="bg-white text-teal-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors w-full md:w-auto"
+          className="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors flex items-center gap-2"
         >
-          Nova Análise
+          <Plus size={20} />
+          Novo Exame
         </button>
       }
     >
+      {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-sm text-gray-600">Total</p>
-              <FileText className="w-5 h-5 text-teal-500" />
+        <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 p-6 rounded-lg shadow-lg text-white">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm opacity-90">Total</p>
+              <p className="text-3xl font-bold mt-1">{items.length}</p>
             </div>
-            <p className="text-3xl font-bold text-gray-900">{analyses.length}</p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-sm text-gray-600">Em Andamento</p>
-              <Clock className="w-5 h-5 text-blue-500" />
-            </div>
-            <p className="text-3xl font-bold text-blue-600">
-              {analyses.filter(a => a.status === 'in_progress').length}
-            </p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-sm text-gray-600">Concluídas</p>
-              <CheckCircle className="w-5 h-5 text-green-500" />
-            </div>
-            <p className="text-3xl font-bold text-green-600">
-              {analyses.filter(a => a.status === 'completed').length}
-            </p>
+            <Shield size={40} className="opacity-80" />
           </div>
         </div>
-
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold mb-4">Análises Forenses</h2>
-          {analyses.length === 0 ? (
-            <div className="text-center py-12">
-              <Microscope className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-600">Nenhuma análise forense cadastrada</p>
+        <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-lg shadow-lg text-white">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm opacity-90">Concluídos</p>
+              <p className="text-3xl font-bold mt-1">{items.filter(i => i.status === 'completed').length}</p>
             </div>
-          ) : (
-            <div className="space-y-4">
-              {analyses.map((analysis) => (
-                <div key={analysis.id} className="border border-gray-200 rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-900">{analysis.title}</h3>
-                  <p className="text-sm text-gray-600 mt-1">{analysis.device_description}</p>
-                </div>
-              ))}
-            </div>
-          )}
+            <CheckCircle size={40} className="opacity-80" />
+          </div>
         </div>
-
-        {showModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
-              <h3 className="text-xl font-bold mb-4 text-gray-900">Nova Análise Forense</h3>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Título da Análise*</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.title}
-                    onChange={(e) => setFormData({...formData, title: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                    placeholder="Ex: Análise de Disco HD Samsung 500GB"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Tipo de Análise*</label>
-                  <select
-                    value={formData.type}
-                    onChange={(e) => setFormData({...formData, type: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                  >
-                    <option value="hardware">HARDWARE - Dispositivos físicos</option>
-                    <option value="software">SOFTWARE - Aplicações e logs</option>
-                    <option value="network">NETWORK - Tráfego de rede</option>
-                    <option value="mobile">MOBILE - Smartphones e tablets</option>
-                    <option value="cloud">CLOUD - Armazenamento em nuvem</option>
-                    <option value="memory">MEMORY - Análise de memória RAM</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Descrição do Dispositivo/Evidência*</label>
-                  <textarea
-                    required
-                    value={formData.device_description}
-                    onChange={(e) => setFormData({...formData, device_description: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                    rows="3"
-                    placeholder="Descreva o dispositivo ou evidência a ser analisada..."
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">ID do Caso (Opcional)</label>
-                  <input
-                    type="text"
-                    value={formData.case_id}
-                    onChange={(e) => setFormData({...formData, case_id: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                    placeholder="Ex: CASO-2025-0001"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Prioridade</label>
-                  <select
-                    value={formData.priority}
-                    onChange={(e) => setFormData({...formData, priority: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                  >
-                    <option value="low">BAIXA - Análise de rotina</option>
-                    <option value="medium">MÉDIA - Análise padrão</option>
-                    <option value="high">ALTA - Análise prioritária</option>
-                    <option value="urgent">URGENTE - Análise imediata</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Observações Adicionais</label>
-                  <textarea
-                    value={formData.notes}
-                    onChange={(e) => setFormData({...formData, notes: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                    rows="2"
-                    placeholder="Informações relevantes sobre a análise..."
-                  />
-                </div>
-                <div className="flex gap-2 pt-4">
-                  <button
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium text-gray-700"
-                    disabled={loading}
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    type="submit"
-                    className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 font-medium disabled:opacity-50"
-                    disabled={loading}
-                  >
-                    {loading ? 'Criando...' : 'Criar Análise'}
-                  </button>
-                </div>
-              </form>
+        <div className="bg-gradient-to-br from-red-500 to-red-600 p-6 rounded-lg shadow-lg text-white">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm opacity-90">Urgentes</p>
+              <p className="text-3xl font-bold mt-1">{items.filter(i => i.priority === 'urgente').length}</p>
             </div>
+            <AlertTriangle size={40} className="opacity-80" />
+          </div>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <h2 className="text-xl font-bold text-gray-900 mb-4">Exames Periciais</h2>
+        
+        {loading ? (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+            <p className="text-gray-600 mt-4">Carregando...</p>
+          </div>
+        ) : error ? (
+          <div className="text-center py-12">
+            <p className="text-red-600">{error}</p>
+            <button
+              onClick={fetchItems}
+              className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+            >
+              Tentar Novamente
+            </button>
+          </div>
+        ) : items.length === 0 ? (
+          <div className="text-center py-12">
+            <FileSearch size={48} className="mx-auto text-gray-400 mb-4" />
+            <p className="text-gray-600">Nenhum exame pericial registrado</p>
+            <button
+              onClick={() => setShowModal(true)}
+              className="mt-4 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+            >
+              Criar Primeiro Exame
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {items.map((item) => (
+              <div key={item.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-semibold text-lg">{item.examTitle || 'Exame Pericial'}</p>
+                    <p className="text-sm text-gray-600">{item.caseNumber || 'Caso não especificado'}</p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {item.deviceInfo || 'Dispositivo não especificado'} • Tipo: {item.examType || 'N/A'}
+                    </p>
+                  </div>
+                  <div className="text-right flex flex-col gap-2">
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      item.priority === 'urgente' ? 'bg-red-100 text-red-800' :
+                      item.priority === 'alta' ? 'bg-orange-100 text-orange-800' :
+                      item.priority === 'média' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-gray-100 text-gray-800'
+                    }`}>
+                      {item.priority || 'Normal'}
+                    </span>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      item.status === 'completed' ? 'bg-green-100 text-green-800' :
+                      item.status === 'in_progress' ? 'bg-blue-100 text-blue-800' :
+                      'bg-gray-100 text-gray-800'
+                    }`}>
+                      {item.status === 'completed' ? 'Concluído' :
+                       item.status === 'in_progress' ? 'Em Andamento' : 'Pendente'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         )}
+      </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <h3 className="text-2xl font-bold mb-2">Novo Exame Pericial</h3>
+            <p className="text-gray-600 mb-6">Inicie um novo exame de perícia digital</p>
+            
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Título do Exame*</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.examTitle}
+                  onChange={(e) => setFormData({...formData, examTitle: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                  placeholder="Ex: Exame Pericial 001/2024"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Número do Caso*</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.caseNumber}
+                    onChange={(e) => setFormData({...formData, caseNumber: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                    placeholder="Ex: CASO-2024-001"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Informações do Dispositivo*</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.deviceInfo}
+                    onChange={(e) => setFormData({...formData, deviceInfo: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                    placeholder="Ex: Samsung Galaxy S21"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Tipo de Exame*</label>
+                  <select
+                    required
+                    value={formData.examType}
+                    onChange={(e) => setFormData({...formData, examType: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                  >
+                    <option value="">Selecione...</option>
+                    <option value="completo">Completo</option>
+                    <option value="parcial">Parcial</option>
+                    <option value="emergencial">Emergencial</option>
+                    <option value="remoto">Remoto</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Prioridade*</label>
+                  <select
+                    required
+                    value={formData.priority}
+                    onChange={(e) => setFormData({...formData, priority: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                  >
+                    <option value="">Selecione...</option>
+                    <option value="baixa">Baixa</option>
+                    <option value="média">Média</option>
+                    <option value="alta">Alta</option>
+                    <option value="urgente">Urgente</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex gap-2 pt-4 border-t">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowModal(false);
+                    setFormData({
+                      examTitle: '',
+                      caseNumber: '',
+                      deviceInfo: '',
+                      examType: '',
+                      priority: ''
+                    });
+                  }}
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 font-semibold"
+                  disabled={loading}
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 font-semibold"
+                  disabled={loading}
+                >
+                  {loading ? 'Criando Exame...' : 'Criar Exame'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </UniversalModuleLayout>
   );
 };
