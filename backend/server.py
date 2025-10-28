@@ -551,6 +551,31 @@ try:
     app.include_router(upload_router)
     logger.info("📤 UPLOAD SYSTEM loaded successfully")
 except ImportError as e:
+
+# CISAI-Forense 3.0 - 12 Submódulos Avançados
+try:
+    from pericia_digital_ultra import router as pericia_ultra_router
+    from interceptacoes_telematicas import router as interceptacoes_router
+    from extracao_dados_avancada import router as extracao_router
+    from analise_erbs import router as erbs_router
+    from iped_integration import router as iped_router
+    from custody_chain_system import router as custody_router
+    from evidencias_ia_system import router as evidencias_ia_router
+    from health_system import router as health_router
+    
+    app.include_router(pericia_ultra_router)
+    app.include_router(interceptacoes_router)
+    app.include_router(extracao_router)
+    app.include_router(erbs_router)
+    app.include_router(iped_router)
+    app.include_router(custody_router)
+    app.include_router(evidencias_ia_router)
+    app.include_router(health_router)
+    
+    logger.info("🔬 CISAI-FORENSE 3.0 (7 módulos core) loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ CISAI-Forense 3.0 not available: {e}")
+
     logger.error(f"⚠️ Upload System not available: {e}")
 
 
