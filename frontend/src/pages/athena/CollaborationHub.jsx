@@ -1,125 +1,152 @@
 import React, { useState, useEffect } from 'react';
-import { Users, FileText, MessageCircle, CheckSquare, Clock, Plus } from 'lucide-react';
+import { Users, Plus, AlertTriangle, CheckCircle } from 'lucide-react';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
+import axios from 'axios';
+import { toast } from 'sonner';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const CollaborationHub = () => {
-  const [documents, setDocuments] = useState([]);
-  const [selectedDoc, setSelectedDoc] = useState(null);
-  const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState('');
-  const [stats, setStats] = useState(null);
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [formData, setFormData] = useState({});
 
   useEffect(() => {
-    loadStats();
+    fetchItems();
   }, []);
 
-  const loadStats = async () => {
+  const fetchItems = async () => {
     try {
-      const response = await fetch(`${backendUrl}/api/collaboration/statistics`);
-      const data = await response.json();
-      setStats(data);
+      setLoading(true);
+      setError(null);
+      const response = await axios.get(`${BACKEND_URL}/api/athena/collaboration/list`);
+      setItems(response.data.data || []);
     } catch (error) {
-      console.error('Erro ao carregar estatísticas:', error);
+      console.error('Erro ao carregar dados:', error);
+      setError('Erro ao carregar dados');
+      toast.error('Erro ao carregar dados');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const createDocument = async () => {
-    if (!title || !content) return;
-
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    
     try {
-      const response = await fetch(`${backendUrl}/api/collaboration/documents/create`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title, content,
-          doc_type: 'document',
-          created_by: 'user_' + Date.now()
-        })
+      await axios.post(`${BACKEND_URL}/api/athena/collaboration/create`, {
+        collection: 'collaboration',
+        data: formData
       });
-
-      if (response.ok) {
-        alert('Documento criado!');
-        setTitle('');
-        setContent('');
-      }
+      
+      toast.success('Item criado com sucesso!');
+      setShowModal(false);
+      setFormData({});
+      fetchItems();
     } catch (error) {
-      console.error('Erro:', error);
+      console.error('Erro ao criar item:', error);
+      toast.error('Erro ao criar item');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-rose-900 to-pink-900 p-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
-            <Users className="w-10 h-10" />
-            Colaboração em Tempo Real
-          </h1>
-          <p className="text-rose-200">Edição colaborativa de documentos com WebSocket</p>
+    <UniversalModuleLayout
+      title="Hub de Colaboração"
+      subtitle="Sistema integrado de gestão"
+      icon={Users}
+      headerAction={
+        <button
+          onClick={() => setShowModal(true)}
+          className="bg-white text-teal-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+        >
+          Novo Item
+        </button>
+      }
+    >
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="bg-white p-6 rounded-lg shadow">
+          <p className="text-sm text-gray-600">Total de Itens</p>
+          <p className="text-3xl font-bold text-gray-900">{items.length}</p>
         </div>
+      </div>
 
-        {stats && (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-              <FileText className="w-8 h-8 text-rose-400 mb-2" />
-              <p className="text-white text-2xl font-bold">{stats.total_documents}</p>
-              <p className="text-gray-300 text-sm">Documentos</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-              <MessageCircle className="w-8 h-8 text-pink-400 mb-2" />
-              <p className="text-white text-2xl font-bold">{stats.total_comments}</p>
-              <p className="text-gray-300 text-sm">Comentários</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-              <CheckSquare className="w-8 h-8 text-purple-400 mb-2" />
-              <p className="text-white text-2xl font-bold">{stats.pending_approvals}</p>
-              <p className="text-gray-300 text-sm">Aprovações Pendentes</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-              <Users className="w-8 h-8 text-blue-400 mb-2" />
-              <p className="text-white text-2xl font-bold">{stats.active_connections}</p>
-              <p className="text-gray-300 text-sm">Usuários Online</p>
-            </div>
+      {/* Content */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <h2 className="text-xl font-bold text-gray-900 mb-4">Lista de Itens</h2>
+        
+        {loading ? (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto"></div>
+            <p className="text-gray-600 mt-4">Carregando...</p>
           </div>
-        )}
-
-        {/* Create Document */}
-        <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 mb-8">
-          <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-            <Plus className="w-6 h-6" />
-            Criar Documento Colaborativo
-          </h2>
-          <div className="space-y-4">
-            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)}
-              placeholder="Título do documento"
-              className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-gray-400" />
-            <textarea value={content} onChange={(e) => setContent(e.target.value)}
-              placeholder="Conteúdo do documento..."
-              className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-gray-400 h-40" />
-            <button onClick={createDocument} disabled={!title || !content}
-              className="w-full py-3 bg-gradient-to-r from-rose-500 to-pink-600 text-white rounded-lg hover:from-rose-600 hover:to-pink-700 disabled:opacity-50 font-semibold">
-              Criar Documento
+        ) : error ? (
+          <div className="text-center py-12">
+            <p className="text-red-600">{error}</p>
+            <button
+              onClick={fetchItems}
+              className="mt-4 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
+            >
+              Tentar Novamente
             </button>
           </div>
-        </div>
-
-        {/* Features */}
-        <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-          <h2 className="text-2xl font-bold text-white mb-6">Funcionalidades de Colaboração</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {stats?.features?.map((feature, idx) => (
-              <div key={idx} className="bg-white/5 border border-white/20 rounded-lg p-4 flex items-center gap-3">
-                <CheckSquare className="w-5 h-5 text-rose-400" />
-                <span className="text-white">{feature}</span>
+        ) : items.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-600">Nenhum item encontrado</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {items.map((item) => (
+              <div key={item.id} className="border border-gray-200 rounded-lg p-4">
+                <p className="font-semibold">Item {item.id}</p>
               </div>
             ))}
           </div>
-        </div>
+        )}
       </div>
-    </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 className="text-xl font-bold mb-4">Novo Item</h3>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Nome*</label>
+                <input
+                  type="text"
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  placeholder="Digite o nome..."
+                />
+              </div>
+              <div className="flex gap-2 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="flex-1 px-4 py-2 border rounded-lg hover:bg-gray-50"
+                  disabled={loading}
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50"
+                  disabled={loading}
+                >
+                  {loading ? 'Criando...' : 'Criar'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </UniversalModuleLayout>
   );
 };
 

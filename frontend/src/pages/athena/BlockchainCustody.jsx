@@ -1,228 +1,152 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Link, CheckCircle, FileText, Download, AlertTriangle } from 'lucide-react';
+import { Shield, Plus, AlertTriangle, CheckCircle } from 'lucide-react';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
 import axios from 'axios';
 import { toast } from 'sonner';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
+
 const BlockchainCustody = () => {
-  const [chain, setChain] = useState([]);
+  const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [stats, setStats] = useState(null);
-  const [evidenceId, setEvidenceId] = useState('');
-  const [action, setAction] = useState('');
-  const [userId, setUserId] = useState('user_' + Math.random().toString(36).substr(2, 9));
-  const [verifying, setVerifying] = useState(false);
-
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
+  const [showModal, setShowModal] = useState(false);
+  const [formData, setFormData] = useState({});
 
   useEffect(() => {
-    loadChain();
-    loadStats();
+    fetchItems();
   }, []);
 
-  const loadChain = async () => {
+  const fetchItems = async () => {
     try {
-      const response = await fetch(`${backendUrl}/api/blockchain/chain?limit=20`);
-      const data = await response.json();
-      setChain(data.chain || []);
+      setLoading(true);
+      setError(null);
+      const response = await axios.get(`${BACKEND_URL}/api/athena/custody/list`);
+      setItems(response.data.data || []);
     } catch (error) {
-      console.error('Erro ao carregar blockchain:', error);
-    }
-  };
-
-  const loadStats = async () => {
-    try {
-      const response = await fetch(`${backendUrl}/api/blockchain/statistics`);
-      const data = await response.json();
-      setStats(data);
-    } catch (error) {
-      console.error('Erro ao carregar estatísticas:', error);
-    }
-  };
-
-  const registerEvidence = async () => {
-    if (!evidenceId || !action) return;
-
-    try {
-      const response = await fetch(`${backendUrl}/api/blockchain/register-evidence`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          evidence_id: evidenceId,
-          action: action,
-          user_id: userId,
-          metadata: {
-            timestamp: new Date().toISOString(),
-            location: 'Sistema ATHENA'
-          }
-        })
-      });
-
-      if (response.ok) {
-        toast.success("⛓️ Evidência registrada na blockchain com sucesso!");
-        setEvidenceId('');
-        setAction('');
-        loadChain();
-        loadStats();
-      }
-    } catch (error) {
-      console.error('Erro ao registrar:', error);
-    }
-  };
-
-  const verifyIntegrity = async () => {
-    setVerifying(true);
-    try {
-      const response = await fetch(`${backendUrl}/api/blockchain/verify-integrity`);
-      const data = await response.json();
-      
-      if (data.valid) {
-        toast.success("✅ Blockchain íntegra! Todos os blocos estão válidos.");
-      } else {
-        alert('⚠️ Falha de integridade detectada no bloco ' + data.tampered_block);
-      }
-    } catch (error) {
-      console.error('Erro na verificação:', error);
+      console.error('Erro ao carregar dados:', error);
+      setError('Erro ao carregar dados');
+      toast.error('Erro ao carregar dados');
     } finally {
-      setVerifying(false);
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    try {
+      await axios.post(`${BACKEND_URL}/api/athena/custody/create`, {
+        collection: 'custody',
+        data: formData
+      });
+      
+      toast.success('Item criado com sucesso!');
+      setShowModal(false);
+      setFormData({});
+      fetchItems();
+    } catch (error) {
+      console.error('Erro ao criar item:', error);
+      toast.error('Erro ao criar item');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-indigo-900 to-purple-900 p-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
-            <Shield className="w-10 h-10" />
-            Blockchain - Cadeia de Custódia
-          </h1>
-          <p className="text-indigo-200">
-            Registro imutável e criptograficamente seguro de evidências
-          </p>
+    <UniversalModuleLayout
+      title="Cadeia de Custódia Blockchain"
+      subtitle="Sistema integrado de gestão"
+      icon={Shield}
+      headerAction={
+        <button
+          onClick={() => setShowModal(true)}
+          className="bg-white text-teal-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+        >
+          Novo Item
+        </button>
+      }
+    >
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="bg-white p-6 rounded-lg shadow">
+          <p className="text-sm text-gray-600">Total de Itens</p>
+          <p className="text-3xl font-bold text-gray-900">{items.length}</p>
         </div>
+      </div>
 
-        {stats && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-              <Link className="w-8 h-8 text-blue-400 mb-2" />
-              <p className="text-white text-2xl font-bold">{stats.total_blocks}</p>
-              <p className="text-gray-300 text-sm">Blocos na Cadeia</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-              <FileText className="w-8 h-8 text-green-400 mb-2" />
-              <p className="text-white text-2xl font-bold">{stats.total_certificates}</p>
-              <p className="text-gray-300 text-sm">Certificados Emitidos</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-              <Shield className="w-8 h-8 text-purple-400 mb-2" />
-              <p className="text-white text-2xl font-bold">{stats.blockchain_type}</p>
-              <p className="text-gray-300 text-sm">Tipo de Blockchain</p>
-            </div>
+      {/* Content */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <h2 className="text-xl font-bold text-gray-900 mb-4">Lista de Itens</h2>
+        
+        {loading ? (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto"></div>
+            <p className="text-gray-600 mt-4">Carregando...</p>
           </div>
-        )}
-
-        {/* Register Evidence */}
-        <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 mb-8">
-          <h2 className="text-2xl font-bold text-white mb-4">Registrar Evidência</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <input
-              type="text"
-              value={evidenceId}
-              onChange={(e) => setEvidenceId(e.target.value)}
-              placeholder="ID da Evidência"
-              className="px-4 py-2 bg-white/20 border border-white/30 rounded-lg text-white placeholder-gray-400"
-            />
-            <input
-              type="text"
-              value={action}
-              onChange={(e) => setAction(e.target.value)}
-              placeholder="Ação (coleta, transferência, análise...)"
-              className="px-4 py-2 bg-white/20 border border-white/30 rounded-lg text-white placeholder-gray-400"
-            />
-          </div>
-          <div className="flex gap-4">
+        ) : error ? (
+          <div className="text-center py-12">
+            <p className="text-red-600">{error}</p>
             <button
-              onClick={registerEvidence}
-              className="flex-1 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700"
+              onClick={fetchItems}
+              className="mt-4 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
             >
-              <Shield className="w-5 h-5 inline mr-2" />
-              Registrar na Blockchain
-            </button>
-            <button
-              onClick={verifyIntegrity}
-              disabled={verifying}
-              className="px-6 py-3 bg-green-500/30 hover:bg-green-500/50 text-white rounded-lg"
-            >
-              {verifying ? 'Verificando...' : 'Verificar Integridade'}
+              Tentar Novamente
             </button>
           </div>
-        </div>
-
-        {/* Blockchain */}
-        <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-          <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-            <Link className="w-6 h-6" />
-            Cadeia de Blocos ({chain.length})
-          </h2>
-
-          <div className="space-y-4">
-            {chain.map((block, idx) => (
-              <div key={block.index} className="relative">
-                <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border-2 border-blue-400/30 rounded-lg p-4">
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="bg-blue-500/30 rounded-full p-2">
-                        <Link className="w-5 h-5 text-blue-300" />
-                      </div>
-                      <div>
-                        <p className="text-white font-semibold">Bloco #{block.index}</p>
-                        <p className="text-gray-400 text-sm">{new Date(block.timestamp).toLocaleString('pt-BR')}</p>
-                      </div>
-                    </div>
-                    <CheckCircle className="w-6 h-6 text-green-400" />
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-                    <div>
-                      <p className="text-gray-400 text-sm">Evidência ID</p>
-                      <p className="text-white font-mono text-sm">{block.data?.evidence_id}</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-400 text-sm">Ação</p>
-                      <p className="text-white">{block.data?.action}</p>
-                    </div>
-                  </div>
-
-                  <div className="bg-black/20 rounded p-3">
-                    <p className="text-gray-400 text-xs mb-1">Hash do Bloco</p>
-                    <p className="text-green-400 font-mono text-xs break-all">{block.hash}</p>
-                    {block.previous_hash !== '0' && (
-                      <>
-                        <p className="text-gray-400 text-xs mt-2 mb-1">Hash Anterior</p>
-                        <p className="text-blue-400 font-mono text-xs break-all">{block.previous_hash}</p>
-                      </>
-                    )}
-                  </div>
-                </div>
-
-                {idx < chain.length - 1 && (
-                  <div className="flex justify-center my-2">
-                    <div className="w-0.5 h-8 bg-gradient-to-b from-blue-400 to-purple-400"></div>
-                  </div>
-                )}
+        ) : items.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-600">Nenhum item encontrado</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {items.map((item) => (
+              <div key={item.id} className="border border-gray-200 rounded-lg p-4">
+                <p className="font-semibold">Item {item.id}</p>
               </div>
             ))}
           </div>
-
-          {chain.length === 0 && (
-            <div className="text-center py-12">
-              <Link className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-400 text-lg">Nenhum bloco registrado ainda</p>
-            </div>
-          )}
-        </div>
+        )}
       </div>
-    </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 className="text-xl font-bold mb-4">Novo Item</h3>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Nome*</label>
+                <input
+                  type="text"
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  placeholder="Digite o nome..."
+                />
+              </div>
+              <div className="flex gap-2 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="flex-1 px-4 py-2 border rounded-lg hover:bg-gray-50"
+                  disabled={loading}
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50"
+                  disabled={loading}
+                >
+                  {loading ? 'Criando...' : 'Criar'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </UniversalModuleLayout>
   );
 };
 

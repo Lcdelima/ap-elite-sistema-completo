@@ -1,121 +1,152 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { FileText, Plus, AlertTriangle, CheckCircle } from 'lucide-react';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
 import axios from 'axios';
-import AthenaLayout from '../../components/AthenaLayout';
-import { Card, CardContent } from '../../components/ui/card';
-import { Button } from '../../components/ui/button';
-import { Badge } from '../../components/ui/badge';
-import { FileText, Download, BarChart3, FileSpreadsheet } from 'lucide-react';
 import { toast } from 'sonner';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
+
 const Reports = () => {
-  const [generating, setGenerating] = useState(false);
+  const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [formData, setFormData] = useState({});
 
-  const generateReport = async (type) => {
-    setGenerating(true);
+  useEffect(() => {
+    fetchItems();
+  }, []);
+
+  const fetchItems = async () => {
     try {
-      const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-      const token = localStorage.getItem('ap_elite_token');
-      
-      toast.info('Gerando relatório...');
-      
-      // Simular geração
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      toast.success('Relatório gerado com sucesso!');
+      setLoading(true);
+      setError(null);
+      const response = await axios.get(`${BACKEND_URL}/api/athena/reports/list`);
+      setItems(response.data.data || []);
     } catch (error) {
-      console.error('Error:', error);
-      toast.error('Erro ao gerar relatório');
+      console.error('Erro ao carregar dados:', error);
+      setError('Erro ao carregar dados');
+      toast.error('Erro ao carregar dados');
     } finally {
-      setGenerating(false);
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    try {
+      await axios.post(`${BACKEND_URL}/api/athena/reports/create`, {
+        collection: 'reports',
+        data: formData
+      });
+      
+      toast.success('Item criado com sucesso!');
+      setShowModal(false);
+      setFormData({});
+      fetchItems();
+    } catch (error) {
+      console.error('Erro ao criar item:', error);
+      toast.error('Erro ao criar item');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <AthenaLayout title="Relatórios Avançados" subtitle="PDF com Gráficos e Análises">
-      <div className="space-y-6">
-        <Card className="bg-gradient-to-r from-fuchsia-500 to-pink-600 border-0">
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-4">
-              <FileText className="h-12 w-12 text-white" />
-              <div>
-                <h3 className="text-2xl font-bold text-white mb-2">Geração Automatizada</h3>
-                <p className="text-white text-opacity-90">Relatórios profissionais com gráficos e análises</p>
-              </div>
-              <Badge className="bg-white text-pink-600 ml-auto">ReportLab</Badge>
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card className="bg-slate-800 border-slate-700 hover:border-pink-500 transition-colors cursor-pointer"
-                onClick={() => generateReport('case')}>
-            <CardContent className="p-8">
-              <FileText className="h-16 w-16 text-pink-400 mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-white text-center mb-2">Relatório de Caso</h3>
-              <p className="text-slate-400 text-center mb-4">Completo com evidências e análises</p>
-              <Button className="w-full btn-primary" disabled={generating}>
-                <Download className="h-4 w-4 mr-2" />
-                {generating ? 'Gerando...' : 'Gerar PDF'}
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-slate-800 border-slate-700 hover:border-purple-500 transition-colors cursor-pointer"
-                onClick={() => generateReport('financial')}>
-            <CardContent className="p-8">
-              <BarChart3 className="h-16 w-16 text-purple-400 mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-white text-center mb-2">Relatório Financeiro</h3>
-              <p className="text-slate-400 text-center mb-4">Análise de receitas e despesas</p>
-              <Button className="w-full btn-primary" disabled={generating}>
-                <Download className="h-4 w-4 mr-2" />
-                {generating ? 'Gerando...' : 'Gerar PDF'}
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-slate-800 border-slate-700 hover:border-cyan-500 transition-colors cursor-pointer"
-                onClick={() => generateReport('interception')}>
-            <CardContent className="p-8">
-              <FileSpreadsheet className="h-16 w-16 text-cyan-400 mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-white text-center mb-2">Relatório de Interceptação</h3>
-              <p className="text-slate-400 text-center mb-4">Timeline e dados coletados</p>
-              <Button className="w-full btn-primary" disabled={generating}>
-                <Download className="h-4 w-4 mr-2" />
-                {generating ? 'Gerando...' : 'Gerar PDF'}
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-slate-800 border-slate-700 hover:border-green-500 transition-colors cursor-pointer"
-                onClick={() => generateReport('comprehensive')}>
-            <CardContent className="p-8">
-              <FileText className="h-16 w-16 text-green-400 mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-white text-center mb-2">Relatório Completo</h3>
-              <p className="text-slate-400 text-center mb-4">Todos os dados integrados</p>
-              <Button className="w-full btn-primary" disabled={generating}>
-                <Download className="h-4 w-4 mr-2" />
-                {generating ? 'Gerando...' : 'Gerar PDF'}
-              </Button>
-            </CardContent>
-          </Card>
+    <UniversalModuleLayout
+      title="Relatórios"
+      subtitle="Sistema integrado de gestão"
+      icon={FileText}
+      headerAction={
+        <button
+          onClick={() => setShowModal(true)}
+          className="bg-white text-teal-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+        >
+          Novo Item
+        </button>
+      }
+    >
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="bg-white p-6 rounded-lg shadow">
+          <p className="text-sm text-gray-600">Total de Itens</p>
+          <p className="text-3xl font-bold text-gray-900">{items.length}</p>
         </div>
-
-        <Card className="bg-slate-800 border-slate-700">
-          <CardContent className="p-6">
-            <h3 className="text-white font-semibold mb-4">Recursos dos Relatórios:</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {['Gráficos', 'Tabelas', 'Estatísticas', 'Timeline', 'Imagens', 'Assinatura Digital', 'Marca d\'água', 'Export Excel'].map(item => (
-                <div key={item} className="bg-slate-700 p-3 rounded-lg text-center">
-                  <p className="text-white text-sm">{item}</p>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
       </div>
-    </AthenaLayout>
+
+      {/* Content */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <h2 className="text-xl font-bold text-gray-900 mb-4">Lista de Itens</h2>
+        
+        {loading ? (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto"></div>
+            <p className="text-gray-600 mt-4">Carregando...</p>
+          </div>
+        ) : error ? (
+          <div className="text-center py-12">
+            <p className="text-red-600">{error}</p>
+            <button
+              onClick={fetchItems}
+              className="mt-4 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
+            >
+              Tentar Novamente
+            </button>
+          </div>
+        ) : items.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-600">Nenhum item encontrado</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {items.map((item) => (
+              <div key={item.id} className="border border-gray-200 rounded-lg p-4">
+                <p className="font-semibold">Item {item.id}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 className="text-xl font-bold mb-4">Novo Item</h3>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Nome*</label>
+                <input
+                  type="text"
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  placeholder="Digite o nome..."
+                />
+              </div>
+              <div className="flex gap-2 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="flex-1 px-4 py-2 border rounded-lg hover:bg-gray-50"
+                  disabled={loading}
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50"
+                  disabled={loading}
+                >
+                  {loading ? 'Criando...' : 'Criar'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </UniversalModuleLayout>
   );
 };
 

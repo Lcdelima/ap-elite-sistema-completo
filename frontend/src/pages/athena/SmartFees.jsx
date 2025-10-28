@@ -1,226 +1,152 @@
 import React, { useState, useEffect } from 'react';
-import { DollarSign, Calculator, Split, FileText, TrendingUp, Download } from 'lucide-react';
+import { DollarSign, Plus, AlertTriangle, CheckCircle } from 'lucide-react';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
+import axios from 'axios';
+import { toast } from 'sonner';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const SmartFees = () => {
-  const [caseType, setCaseType] = useState('criminal_defense');
-  const [complexity, setComplexity] = useState('medium');
-  const [hours, setHours] = useState(40);
-  const [hourlyRate, setHourlyRate] = useState(250);
-  const [successFee, setSuccessFee] = useState(0);
-  const [result, setResult] = useState(null);
-  const [stats, setStats] = useState(null);
-  const [forecast, setForecast] = useState(null);
-
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [formData, setFormData] = useState({});
 
   useEffect(() => {
-    loadStats();
-    loadForecast();
+    fetchItems();
   }, []);
 
-  const loadStats = async () => {
+  const fetchItems = async () => {
     try {
-      const response = await fetch(`${backendUrl}/api/fees/statistics`);
-      const data = await response.json();
-      setStats(data);
+      setLoading(true);
+      setError(null);
+      const response = await axios.get(`${BACKEND_URL}/api/athena/fees/list`);
+      setItems(response.data.data || []);
     } catch (error) {
-      console.error('Erro ao carregar estatísticas:', error);
+      console.error('Erro ao carregar dados:', error);
+      setError('Erro ao carregar dados');
+      toast.error('Erro ao carregar dados');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const loadForecast = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    
     try {
-      const response = await fetch(`${backendUrl}/api/fees/forecast?months=6`);
-      const data = await response.json();
-      setForecast(data);
-    } catch (error) {
-      console.error('Erro ao carregar previsão:', error);
-    }
-  };
-
-  const calculateFee = async () => {
-    try {
-      const response = await fetch(`${backendUrl}/api/fees/calculate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          case_id: 'CASE_' + Date.now(),
-          case_type: caseType,
-          complexity: complexity,
-          estimated_hours: parseFloat(hours),
-          hourly_rate: parseFloat(hourlyRate),
-          success_fee: parseFloat(successFee) || null
-        })
+      await axios.post(`${BACKEND_URL}/api/athena/fees/create`, {
+        collection: 'fees',
+        data: formData
       });
-
-      const data = await response.json();
-      setResult(data);
-      loadStats();
+      
+      toast.success('Item criado com sucesso!');
+      setShowModal(false);
+      setFormData({});
+      fetchItems();
     } catch (error) {
-      console.error('Erro ao calcular:', error);
+      console.error('Erro ao criar item:', error);
+      toast.error('Erro ao criar item');
+    } finally {
+      setLoading(false);
     }
-  };
-
-  const caseTypes = {
-    criminal_defense: 'Defesa Criminal',
-    digital_forensics: 'Perícia Digital',
-    osint_investigation: 'Investigação OSINT',
-    litigation: 'Litigação'
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-green-900 to-emerald-900 p-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
-            <DollarSign className="w-10 h-10" />
-            Gestão Inteligente de Honorários
-          </h1>
-          <p className="text-green-200">Cálculo automático, split e previsão financeira</p>
-        </div>
-
-        {stats && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-              <Calculator className="w-8 h-8 text-green-400 mb-2" />
-              <p className="text-white text-2xl font-bold">{stats.total_calculations}</p>
-              <p className="text-gray-300 text-sm">Cálculos Realizados</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-              <FileText className="w-8 h-8 text-blue-400 mb-2" />
-              <p className="text-white text-2xl font-bold">{stats.total_invoices}</p>
-              <p className="text-gray-300 text-sm">Notas Fiscais</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-              <TrendingUp className="w-8 h-8 text-purple-400 mb-2" />
-              <p className="text-white text-2xl font-bold">R$ {forecast?.total_forecast?.toLocaleString('pt-BR') || '0'}</p>
-              <p className="text-gray-300 text-sm">Previsão 6 Meses</p>
-            </div>
-          </div>
-        )}
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Calculator */}
-          <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-              <Calculator className="w-6 h-6" />
-              Calculadora de Honorários
-            </h2>
-
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-green-200 mb-2">Tipo de Caso</label>
-                <select value={caseType} onChange={(e) => setCaseType(e.target.value)}
-                  className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-lg text-white">
-                  {Object.entries(caseTypes).map(([key, value]) => (
-                    <option key={key} value={key}>{value}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-green-200 mb-2">Complexidade</label>
-                <select value={complexity} onChange={(e) => setComplexity(e.target.value)}
-                  className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-lg text-white">
-                  <option value="low">Baixa</option>
-                  <option value="medium">Média</option>
-                  <option value="high">Alta</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-green-200 mb-2">Horas Estimadas</label>
-                <input type="number" value={hours} onChange={(e) => setHours(e.target.value)}
-                  className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-lg text-white"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-green-200 mb-2">Valor Hora (R$)</label>
-                <input type="number" value={hourlyRate} onChange={(e) => setHourlyRate(e.target.value)}
-                  className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-lg text-white"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-green-200 mb-2">Taxa de Êxito (R$) - Opcional</label>
-                <input type="number" value={successFee} onChange={(e) => setSuccessFee(e.target.value)}
-                  className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-lg text-white"
-                />
-              </div>
-
-              <button onClick={calculateFee}
-                className="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg hover:from-green-600 hover:to-emerald-700 font-semibold">
-                <Calculator className="w-5 h-5 inline mr-2" />
-                Calcular Honorário
-              </button>
-            </div>
-          </div>
-
-          {/* Result */}
-          <div className="space-y-6">
-            {result && (
-              <div className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 backdrop-blur-lg rounded-xl p-6 border border-green-400/30">
-                <h2 className="text-2xl font-bold text-white mb-6">Resultado do Cálculo</h2>
-
-                <div className="bg-white/10 rounded-lg p-6 mb-6">
-                  <p className="text-green-200 text-sm mb-2">Total de Honorários</p>
-                  <p className="text-white text-4xl font-bold">R$ {result.total_fee.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</p>
-                </div>
-
-                <div className="space-y-3 mb-6">
-                  <div className="flex justify-between">
-                    <span className="text-gray-300">Honorário Base</span>
-                    <span className="text-white font-semibold">R$ {result.breakdown.base.toLocaleString('pt-BR')}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-300">Componente por Hora</span>
-                    <span className="text-white font-semibold">R$ {result.breakdown.hourly.toLocaleString('pt-BR')}</span>
-                  </div>
-                  {result.breakdown.success > 0 && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-300">Taxa de Êxito</span>
-                      <span className="text-white font-semibold">R$ {result.breakdown.success.toLocaleString('pt-BR')}</span>
-                    </div>
-                  )}
-                </div>
-
-                <div className="border-t border-white/20 pt-4">
-                  <h3 className="text-white font-semibold mb-3">Parcelas Sugeridas</h3>
-                  {result.installments.map((inst, idx) => (
-                    <div key={idx} className="flex justify-between py-2">
-                      <span className="text-gray-300">{inst.number}ª Parcela - {inst.due}</span>
-                      <span className="text-white font-semibold">R$ {inst.amount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {forecast && (
-              <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-                <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                  <TrendingUp className="w-6 h-6" />
-                  Previsão de Receita
-                </h3>
-                <div className="space-y-2">
-                  {forecast.monthly_forecast.map((month) => (
-                    <div key={month.month} className="flex justify-between py-2 border-b border-white/10">
-                      <span className="text-gray-300">Mês {month.month}</span>
-                      <span className="text-white font-semibold">R$ {month.forecast.toLocaleString('pt-BR')}</span>
-                    </div>
-                  ))}
-                  <div className="flex justify-between py-3 border-t-2 border-white/30 mt-2">
-                    <span className="text-white font-bold">Total 6 Meses</span>
-                    <span className="text-green-400 font-bold text-lg">R$ {forecast.total_forecast.toLocaleString('pt-BR')}</span>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+    <UniversalModuleLayout
+      title="Honorários Inteligentes"
+      subtitle="Sistema integrado de gestão"
+      icon={DollarSign}
+      headerAction={
+        <button
+          onClick={() => setShowModal(true)}
+          className="bg-white text-teal-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+        >
+          Novo Item
+        </button>
+      }
+    >
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="bg-white p-6 rounded-lg shadow">
+          <p className="text-sm text-gray-600">Total de Itens</p>
+          <p className="text-3xl font-bold text-gray-900">{items.length}</p>
         </div>
       </div>
-    </div>
+
+      {/* Content */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <h2 className="text-xl font-bold text-gray-900 mb-4">Lista de Itens</h2>
+        
+        {loading ? (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto"></div>
+            <p className="text-gray-600 mt-4">Carregando...</p>
+          </div>
+        ) : error ? (
+          <div className="text-center py-12">
+            <p className="text-red-600">{error}</p>
+            <button
+              onClick={fetchItems}
+              className="mt-4 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
+            >
+              Tentar Novamente
+            </button>
+          </div>
+        ) : items.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-600">Nenhum item encontrado</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {items.map((item) => (
+              <div key={item.id} className="border border-gray-200 rounded-lg p-4">
+                <p className="font-semibold">Item {item.id}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 className="text-xl font-bold mb-4">Novo Item</h3>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Nome*</label>
+                <input
+                  type="text"
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  placeholder="Digite o nome..."
+                />
+              </div>
+              <div className="flex gap-2 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="flex-1 px-4 py-2 border rounded-lg hover:bg-gray-50"
+                  disabled={loading}
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50"
+                  disabled={loading}
+                >
+                  {loading ? 'Criando...' : 'Criar'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </UniversalModuleLayout>
   );
 };
 

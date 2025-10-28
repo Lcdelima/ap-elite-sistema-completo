@@ -1,193 +1,152 @@
 import React, { useState, useEffect } from 'react';
+import { Users, Plus, AlertTriangle, CheckCircle } from 'lucide-react';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
 import axios from 'axios';
-import AthenaLayout from '../../components/AthenaLayout';
-import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
-import { Button } from '../../components/ui/button';
-import { Badge } from '../../components/ui/badge';
-import { Users, Plus, Phone, Mail, Building } from 'lucide-react';
 import { toast } from 'sonner';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
+
 const Clients = () => {
-  const [clients, setClients] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    cpf: '',
-    company: '',
-    address: ''
-  });
+  const [formData, setFormData] = useState({});
 
   useEffect(() => {
-    fetchClients();
+    fetchItems();
   }, []);
 
-  const fetchClients = async () => {
+  const fetchItems = async () => {
     try {
-      const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-      const token = localStorage.getItem('ap_elite_token');
-      
-      const res = await axios.get(`${BACKEND_URL}/api/athena/clients`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      
-      setClients(res.data.clients);
-      setLoading(false);
+      setLoading(true);
+      setError(null);
+      const response = await axios.get(`${BACKEND_URL}/api/athena/clients/list`);
+      setItems(response.data.data || []);
     } catch (error) {
-      console.error('Error:', error);
-      toast.error('Erro ao carregar clientes');
+      console.error('Erro ao carregar dados:', error);
+      setError('Erro ao carregar dados');
+      toast.error('Erro ao carregar dados');
+    } finally {
       setLoading(false);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    
     try {
-      const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-      const token = localStorage.getItem('ap_elite_token');
-      
-      await axios.post(`${BACKEND_URL}/api/athena/clients`, formData, {
-        headers: { Authorization: `Bearer ${token}` }
+      await axios.post(`${BACKEND_URL}/api/athena/clients/create`, {
+        collection: 'clients',
+        data: formData
       });
       
-      toast.success('Cliente criado com sucesso!');
+      toast.success('Item criado com sucesso!');
       setShowModal(false);
-      setFormData({ name: '', email: '', phone: '', cpf: '', company: '', address: '' });
-      fetchClients();
+      setFormData({});
+      fetchItems();
     } catch (error) {
-      console.error('Error:', error);
-      toast.error('Erro ao criar cliente');
+      console.error('Erro ao criar item:', error);
+      toast.error('Erro ao criar item');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <AthenaLayout title="Gestão de Clientes" subtitle="CRM Completo">
-      <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-white">Clientes Cadastrados</h2>
-          <Button onClick={() => setShowModal(true)} className="btn-primary">
-            <Plus className="h-4 w-4 mr-2" />
-            Novo Cliente
-          </Button>
+    <UniversalModuleLayout
+      title="Clientes"
+      subtitle="Sistema integrado de gestão"
+      icon={Users}
+      headerAction={
+        <button
+          onClick={() => setShowModal(true)}
+          className="bg-white text-teal-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+        >
+          Novo Item
+        </button>
+      }
+    >
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="bg-white p-6 rounded-lg shadow">
+          <p className="text-sm text-gray-600">Total de Itens</p>
+          <p className="text-3xl font-bold text-gray-900">{items.length}</p>
         </div>
+      </div>
 
+      {/* Content */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <h2 className="text-xl font-bold text-gray-900 mb-4">Lista de Itens</h2>
+        
         {loading ? (
-          <div className="text-white text-center py-12">Carregando...</div>
-        ) : clients.length === 0 ? (
-          <Card className="bg-slate-800 border-slate-700">
-            <CardContent className="p-12 text-center">
-              <Users className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-              <p className="text-slate-300 mb-4">Nenhum cliente cadastrado</p>
-              <Button onClick={() => setShowModal(true)} className="btn-primary">
-                Adicionar Primeiro Cliente
-              </Button>
-            </CardContent>
-          </Card>
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto"></div>
+            <p className="text-gray-600 mt-4">Carregando...</p>
+          </div>
+        ) : error ? (
+          <div className="text-center py-12">
+            <p className="text-red-600">{error}</p>
+            <button
+              onClick={fetchItems}
+              className="mt-4 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
+            >
+              Tentar Novamente
+            </button>
+          </div>
+        ) : items.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-600">Nenhum item encontrado</p>
+          </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {clients.map((client) => (
-              <Card key={client.id} className="bg-slate-800 border-slate-700 hover:border-cyan-500 transition-colors cursor-pointer">
-                <CardHeader>
-                  <CardTitle className="text-white flex items-center">
-                    <Users className="h-5 w-5 mr-2 text-cyan-400" />
-                    {client.name}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <div className="flex items-center text-slate-300 text-sm">
-                    <Mail className="h-4 w-4 mr-2 text-slate-400" />
-                    {client.email}
-                  </div>
-                  <div className="flex items-center text-slate-300 text-sm">
-                    <Phone className="h-4 w-4 mr-2 text-slate-400" />
-                    {client.phone}
-                  </div>
-                  {client.company && (
-                    <div className="flex items-center text-slate-300 text-sm">
-                      <Building className="h-4 w-4 mr-2 text-slate-400" />
-                      {client.company}
-                    </div>
-                  )}
-                  <div className="pt-2">
-                    <Badge className="bg-cyan-500">CPF: {client.cpf}</Badge>
-                  </div>
-                </CardContent>
-              </Card>
+          <div className="space-y-3">
+            {items.map((item) => (
+              <div key={item.id} className="border border-gray-200 rounded-lg p-4">
+                <p className="font-semibold">Item {item.id}</p>
+              </div>
             ))}
           </div>
         )}
-
-        {/* Modal */}
-        {showModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <Card className="bg-slate-800 border-slate-700 w-full max-w-md m-4">
-              <CardHeader>
-                <CardTitle className="text-white">Novo Cliente</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">Nome *</label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-cyan-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">Email *</label>
-                    <input
-                      type="email"
-                      required
-                      value={formData.email}
-                      onChange={(e) => setFormData({...formData, email: e.target.value})}
-                      className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-cyan-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">Telefone *</label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.phone}
-                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                      className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-cyan-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">CPF *</label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.cpf}
-                      onChange={(e) => setFormData({...formData, cpf: e.target.value})}
-                      className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-cyan-500"
-                    />
-                  </div>
-                  <div className="flex justify-end space-x-3 pt-4">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => setShowModal(false)}
-                      className="text-slate-300 border-slate-600"
-                    >
-                      Cancelar
-                    </Button>
-                    <Button type="submit" className="btn-primary">
-                      Criar Cliente
-                    </Button>
-                  </div>
-                </form>
-              </CardContent>
-            </Card>
-          </div>
-        )}
       </div>
-    </AthenaLayout>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 className="text-xl font-bold mb-4">Novo Item</h3>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Nome*</label>
+                <input
+                  type="text"
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  placeholder="Digite o nome..."
+                />
+              </div>
+              <div className="flex gap-2 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="flex-1 px-4 py-2 border rounded-lg hover:bg-gray-50"
+                  disabled={loading}
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50"
+                  disabled={loading}
+                >
+                  {loading ? 'Criando...' : 'Criar'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </UniversalModuleLayout>
   );
 };
 

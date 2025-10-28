@@ -1,271 +1,152 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, Clock, Zap, FileText, Users, Briefcase, Database } from 'lucide-react';
+import { Search, Plus, AlertTriangle, CheckCircle } from 'lucide-react';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
+import axios from 'axios';
+import { toast } from 'sonner';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const GlobalSearch = () => {
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState(null);
+  const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [suggestions, setSuggestions] = useState([]);
-  const [history, setHistory] = useState([]);
-  const [stats, setStats] = useState(null);
-
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
+  const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [formData, setFormData] = useState({});
 
   useEffect(() => {
-    loadHistory();
-    loadStats();
+    fetchItems();
   }, []);
 
-  useEffect(() => {
-    if (query.length >= 2) {
-      loadSuggestions();
-    } else {
-      setSuggestions([]);
-    }
-  }, [query]);
-
-  const loadHistory = async () => {
+  const fetchItems = async () => {
     try {
-      const response = await fetch(`${backendUrl}/api/search/history?limit=10`);
-      const data = await response.json();
-      setHistory(data.history || []);
+      setLoading(true);
+      setError(null);
+      const response = await axios.get(`${BACKEND_URL}/api/athena/search/list`);
+      setItems(response.data.data || []);
     } catch (error) {
-      console.error('Erro ao carregar histórico:', error);
-    }
-  };
-
-  const loadStats = async () => {
-    try {
-      const response = await fetch(`${backendUrl}/api/search/statistics`);
-      const data = await response.json();
-      setStats(data);
-    } catch (error) {
-      console.error('Erro ao carregar estatísticas:', error);
-    }
-  };
-
-  const loadSuggestions = async () => {
-    try {
-      const response = await fetch(`${backendUrl}/api/search/suggestions?q=${encodeURIComponent(query)}`);
-      const data = await response.json();
-      setSuggestions(data.suggestions || []);
-    } catch (error) {
-      console.error('Erro ao carregar sugestões:', error);
-    }
-  };
-
-  const executeSearch = async () => {
-    if (!query.trim()) return;
-
-    setLoading(true);
-    try {
-      const response = await fetch(`${backendUrl}/api/search/global`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          query: query,
-          limit: 10
-        })
-      });
-
-      const data = await response.json();
-      setResults(data);
-      loadHistory();
-      loadStats();
-    } catch (error) {
-      console.error('Erro na busca:', error);
+      console.error('Erro ao carregar dados:', error);
+      setError('Erro ao carregar dados');
+      toast.error('Erro ao carregar dados');
     } finally {
       setLoading(false);
     }
   };
 
-  const getModuleIcon = (module) => {
-    const icons = {
-      cases: Briefcase,
-      clients: Users,
-      documents: FileText,
-      evidence: Database,
-      workflows: Filter,
-      fees: FileText
-    };
-    return icons[module] || Search;
-  };
-
-  const getModuleColor = (module) => {
-    const colors = {
-      cases: 'from-blue-500 to-blue-700',
-      clients: 'from-green-500 to-green-700',
-      documents: 'from-purple-500 to-purple-700',
-      evidence: 'from-red-500 to-red-700',
-      workflows: 'from-yellow-500 to-yellow-700',
-      fees: 'from-pink-500 to-pink-700'
-    };
-    return colors[module] || 'from-gray-500 to-gray-700';
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    try {
+      await axios.post(`${BACKEND_URL}/api/athena/search/create`, {
+        collection: 'search',
+        data: formData
+      });
+      
+      toast.success('Item criado com sucesso!');
+      setShowModal(false);
+      setFormData({});
+      fetchItems();
+    } catch (error) {
+      console.error('Erro ao criar item:', error);
+      toast.error('Erro ao criar item');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-zinc-900 p-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
-            <Search className="w-10 h-10" />
-            Busca Global Unificada
-          </h1>
-          <p className="text-gray-300">
-            Busque em todos os módulos simultaneamente
-          </p>
+    <UniversalModuleLayout
+      title="Busca Global"
+      subtitle="Sistema integrado de gestão"
+      icon={Search}
+      headerAction={
+        <button
+          onClick={() => setShowModal(true)}
+          className="bg-white text-teal-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+        >
+          Novo Item
+        </button>
+      }
+    >
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="bg-white p-6 rounded-lg shadow">
+          <p className="text-sm text-gray-600">Total de Itens</p>
+          <p className="text-3xl font-bold text-gray-900">{items.length}</p>
         </div>
+      </div>
 
-        {stats && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-              <Search className="w-8 h-8 text-blue-400 mb-2" />
-              <p className="text-white text-2xl font-bold">{stats.total_searches}</p>
-              <p className="text-gray-300 text-sm">Buscas Realizadas</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-              <Database className="w-8 h-8 text-green-400 mb-2" />
-              <p className="text-white text-2xl font-bold">{stats.modules_available?.length || 0}</p>
-              <p className="text-gray-300 text-sm">Módulos Disponíveis</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-              <Zap className="w-8 h-8 text-yellow-400 mb-2" />
-              <p className="text-white text-2xl font-bold">Instantânea</p>
-              <p className="text-gray-300 text-sm">Busca Paralela</p>
-            </div>
+      {/* Content */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <h2 className="text-xl font-bold text-gray-900 mb-4">Lista de Itens</h2>
+        
+        {loading ? (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto"></div>
+            <p className="text-gray-600 mt-4">Carregando...</p>
           </div>
-        )}
-
-        {/* Search Bar */}
-        <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 mb-8">
-          <div className="relative">
-            <div className="relative">
-              <Search className="absolute left-4 top-4 w-6 h-6 text-gray-400" />
-              <input
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && executeSearch()}
-                placeholder="Buscar em todos os módulos: casos, clientes, documentos, evidências..."
-                className="w-full pl-14 pr-4 py-4 bg-white/20 border border-white/30 rounded-lg text-white placeholder-gray-400 text-lg"
-              />
-            </div>
-
-            {suggestions.length > 0 && (
-              <div className="absolute z-10 w-full mt-2 bg-gray-800 border border-gray-700 rounded-lg shadow-xl">
-                {suggestions.map((suggestion, idx) => (
-                  <div
-                    key={idx}
-                    onClick={() => {
-                      setQuery(suggestion);
-                      setSuggestions([]);
-                    }}
-                    className="px-4 py-3 hover:bg-gray-700 cursor-pointer text-white flex items-center gap-2"
-                  >
-                    <Clock className="w-4 h-4 text-gray-400" />
-                    {suggestion}
-                  </div>
-                ))}
+        ) : error ? (
+          <div className="text-center py-12">
+            <p className="text-red-600">{error}</p>
+            <button
+              onClick={fetchItems}
+              className="mt-4 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
+            >
+              Tentar Novamente
+            </button>
+          </div>
+        ) : items.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-600">Nenhum item encontrado</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {items.map((item) => (
+              <div key={item.id} className="border border-gray-200 rounded-lg p-4">
+                <p className="font-semibold">Item {item.id}</p>
               </div>
-            )}
-          </div>
-
-          <button
-            onClick={executeSearch}
-            disabled={loading || !query.trim()}
-            className="w-full mt-4 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 disabled:opacity-50 font-semibold text-lg"
-          >
-            {loading ? 'Buscando...' : 'Buscar em Todos os Módulos'}
-          </button>
-        </div>
-
-        {/* Results */}
-        {results && (
-          <div className="space-y-6">
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold text-white">Resultados</h2>
-                <span className="px-4 py-2 bg-blue-500/30 text-blue-200 rounded-full font-semibold">
-                  {results.total_results} encontrados
-                </span>
-              </div>
-              <p className="text-gray-300">
-                Buscando por: <span className="text-white font-semibold">"{results.query}"</span>
-              </p>
-              <p className="text-gray-400 text-sm">
-                {results.modules_searched} módulos pesquisados
-              </p>
-            </div>
-
-            {results.results.map((moduleResult) => {
-              const ModuleIcon = getModuleIcon(moduleResult.module);
-              return (
-                <div key={moduleResult.module} className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className={`p-2 rounded-lg bg-gradient-to-r ${getModuleColor(moduleResult.module)}`}>
-                      <ModuleIcon className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-white">{moduleResult.module_name}</h3>
-                      <p className="text-gray-400 text-sm">{moduleResult.count} resultados</p>
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    {moduleResult.results.map((item, idx) => (
-                      <div key={idx} className="bg-white/5 border border-white/20 rounded-lg p-4 hover:bg-white/10 transition-all">
-                        <p className="text-white font-medium mb-1">
-                          {item.title || item.name || item.filename || 'Item'}
-                        </p>
-                        {item.description && (
-                          <p className="text-gray-400 text-sm line-clamp-2">{item.description}</p>
-                        )}
-                        <div className="flex gap-2 mt-2">
-                          {item.case_number && (
-                            <span className="px-2 py-1 bg-blue-500/30 text-blue-200 rounded text-xs">
-                              {item.case_number}
-                            </span>
-                          )}
-                          {item.status && (
-                            <span className="px-2 py-1 bg-green-500/30 text-green-200 rounded text-xs">
-                              {item.status}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-
-        {/* History */}
-        {!results && history.length > 0 && (
-          <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-            <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-              <Clock className="w-6 h-6" />
-              Buscas Recentes
-            </h2>
-            <div className="space-y-2">
-              {history.map((item, idx) => (
-                <div
-                  key={idx}
-                  onClick={() => setQuery(item.query)}
-                  className="bg-white/5 border border-white/20 rounded-lg p-3 hover:bg-white/10 transition-all cursor-pointer"
-                >
-                  <p className="text-white font-medium">{item.query}</p>
-                  <p className="text-gray-400 text-sm">
-                    {item.total_results} resultados | {new Date(item.timestamp).toLocaleString('pt-BR')}
-                  </p>
-                </div>
-              ))}
-            </div>
+            ))}
           </div>
         )}
       </div>
-    </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 className="text-xl font-bold mb-4">Novo Item</h3>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Nome*</label>
+                <input
+                  type="text"
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  placeholder="Digite o nome..."
+                />
+              </div>
+              <div className="flex gap-2 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="flex-1 px-4 py-2 border rounded-lg hover:bg-gray-50"
+                  disabled={loading}
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50"
+                  disabled={loading}
+                >
+                  {loading ? 'Criando...' : 'Criar'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </UniversalModuleLayout>
   );
 };
 

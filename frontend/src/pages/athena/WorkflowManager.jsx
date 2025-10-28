@@ -1,164 +1,152 @@
 import React, { useState, useEffect } from 'react';
-import { Workflow, Plus, Play, CheckCircle, Clock, TrendingUp, List } from 'lucide-react';
+import { GitBranch, Plus, AlertTriangle, CheckCircle } from 'lucide-react';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
+import axios from 'axios';
+import { toast } from 'sonner';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const WorkflowManager = () => {
-  const [workflows, setWorkflows] = useState([]);
-  const [templates, setTemplates] = useState({});
-  const [stats, setStats] = useState(null);
-  const [selectedTemplate, setSelectedTemplate] = useState('');
-  const [caseId, setCaseId] = useState('');
-
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [formData, setFormData] = useState({});
 
   useEffect(() => {
-    loadTemplates();
-    loadStats();
+    fetchItems();
   }, []);
 
-  const loadTemplates = async () => {
+  const fetchItems = async () => {
     try {
-      const response = await fetch(`${backendUrl}/api/workflows/templates`);
-      const data = await response.json();
-      setTemplates(data.templates || {});
+      setLoading(true);
+      setError(null);
+      const response = await axios.get(`${BACKEND_URL}/api/athena/workflows/list`);
+      setItems(response.data.data || []);
     } catch (error) {
-      console.error('Erro ao carregar templates:', error);
+      console.error('Erro ao carregar dados:', error);
+      setError('Erro ao carregar dados');
+      toast.error('Erro ao carregar dados');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const loadStats = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    
     try {
-      const response = await fetch(`${backendUrl}/api/workflows/statistics`);
-      const data = await response.json();
-      setStats(data);
-    } catch (error) {
-      console.error('Erro ao carregar estatísticas:', error);
-    }
-  };
-
-  const createWorkflow = async () => {
-    if (!selectedTemplate || !caseId) return;
-
-    try {
-      const response = await fetch(`${backendUrl}/api/workflows/create-from-template?template_key=${selectedTemplate}&case_id=${caseId}`, {
-        method: 'POST'
+      await axios.post(`${BACKEND_URL}/api/athena/workflows/create`, {
+        collection: 'workflows',
+        data: formData
       });
-
-      if (response.ok) {
-        alert('✅ Workflow criado com sucesso!');
-        setCaseId('');
-        setSelectedTemplate('');
-        loadStats();
-      }
+      
+      toast.success('Item criado com sucesso!');
+      setShowModal(false);
+      setFormData({});
+      fetchItems();
     } catch (error) {
-      console.error('Erro ao criar workflow:', error);
+      console.error('Erro ao criar item:', error);
+      toast.error('Erro ao criar item');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-indigo-900 to-blue-900 p-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
-            <Workflow className="w-10 h-10" />
-            Gerenciador de Workflows
-          </h1>
-          <p className="text-blue-200">Automação de processos jurídicos e investigativos</p>
+    <UniversalModuleLayout
+      title="Gerenciador de Workflows"
+      subtitle="Sistema integrado de gestão"
+      icon={GitBranch}
+      headerAction={
+        <button
+          onClick={() => setShowModal(true)}
+          className="bg-white text-teal-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+        >
+          Novo Item
+        </button>
+      }
+    >
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="bg-white p-6 rounded-lg shadow">
+          <p className="text-sm text-gray-600">Total de Itens</p>
+          <p className="text-3xl font-bold text-gray-900">{items.length}</p>
         </div>
+      </div>
 
-        {stats && (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-              <List className="w-8 h-8 text-blue-400 mb-2" />
-              <p className="text-white text-2xl font-bold">{stats.total_workflows}</p>
-              <p className="text-gray-300 text-sm">Total de Workflows</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-              <Play className="w-8 h-8 text-green-400 mb-2" />
-              <p className="text-white text-2xl font-bold">{stats.active}</p>
-              <p className="text-gray-300 text-sm">Ativos</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-              <CheckCircle className="w-8 h-8 text-purple-400 mb-2" />
-              <p className="text-white text-2xl font-bold">{stats.completed}</p>
-              <p className="text-gray-300 text-sm">Concluídos</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-              <TrendingUp className="w-8 h-8 text-yellow-400 mb-2" />
-              <p className="text-white text-2xl font-bold">{stats.templates_available}</p>
-              <p className="text-gray-300 text-sm">Templates</p>
-            </div>
+      {/* Content */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <h2 className="text-xl font-bold text-gray-900 mb-4">Lista de Itens</h2>
+        
+        {loading ? (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto"></div>
+            <p className="text-gray-600 mt-4">Carregando...</p>
           </div>
-        )}
-
-        {/* Create Workflow */}
-        <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 mb-8">
-          <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-            <Plus className="w-6 h-6" />
-            Criar Novo Workflow
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <div>
-              <label className="block text-sm font-medium text-blue-200 mb-2">Template</label>
-              <select value={selectedTemplate} onChange={(e) => setSelectedTemplate(e.target.value)}
-                className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-lg text-white">
-                <option value="">Selecione um template...</option>
-                {Object.entries(templates).map(([key, template]) => (
-                  <option key={key} value={key}>{template.name}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-blue-200 mb-2">ID do Caso</label>
-              <input type="text" value={caseId} onChange={(e) => setCaseId(e.target.value)}
-                placeholder="CASE_12345"
-                className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-lg text-white placeholder-gray-400" />
-            </div>
+        ) : error ? (
+          <div className="text-center py-12">
+            <p className="text-red-600">{error}</p>
+            <button
+              onClick={fetchItems}
+              className="mt-4 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
+            >
+              Tentar Novamente
+            </button>
           </div>
-
-          {selectedTemplate && templates[selectedTemplate] && (
-            <div className="bg-blue-500/10 border border-blue-400/30 rounded-lg p-4 mb-4">
-              <h3 className="text-white font-semibold mb-2">{templates[selectedTemplate].name}</h3>
-              <p className="text-gray-300 text-sm mb-3">Fases do Workflow:</p>
-              <div className="space-y-2">
-                {templates[selectedTemplate].stages.map((stage, idx) => (
-                  <div key={idx} className="flex items-center gap-3 text-sm">
-                    <span className="text-blue-400 font-semibold">{idx + 1}.</span>
-                    <span className="text-white">{stage.name}</span>
-                    <span className="text-gray-400">({stage.duration_days} dias)</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <button onClick={createWorkflow} disabled={!selectedTemplate || !caseId}
-            className="w-full py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 disabled:opacity-50 font-semibold">
-            <Plus className="w-5 h-5 inline mr-2" />
-            Criar Workflow
-          </button>
-        </div>
-
-        {/* Templates */}
-        <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-          <h2 className="text-2xl font-bold text-white mb-6">Templates Disponíveis</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {Object.entries(templates).map(([key, template]) => (
-              <div key={key} className="bg-gradient-to-br from-blue-500/20 to-indigo-500/20 border border-blue-400/30 rounded-lg p-6">
-                <Workflow className="w-8 h-8 text-blue-400 mb-3" />
-                <h3 className="text-white font-bold text-lg mb-2">{template.name}</h3>
-                <p className="text-gray-300 text-sm mb-4">{template.stages.length} fases automáticas</p>
-                <ul className="space-y-1">
-                  {template.stages.slice(0, 3).map((stage, idx) => (
-                    <li key={idx} className="text-gray-400 text-xs">✓ {stage.name}</li>
-                  ))}
-                </ul>
+        ) : items.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-600">Nenhum item encontrado</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {items.map((item) => (
+              <div key={item.id} className="border border-gray-200 rounded-lg p-4">
+                <p className="font-semibold">Item {item.id}</p>
               </div>
             ))}
           </div>
-        </div>
+        )}
       </div>
-    </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 className="text-xl font-bold mb-4">Novo Item</h3>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Nome*</label>
+                <input
+                  type="text"
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  placeholder="Digite o nome..."
+                />
+              </div>
+              <div className="flex gap-2 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="flex-1 px-4 py-2 border rounded-lg hover:bg-gray-50"
+                  disabled={loading}
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50"
+                  disabled={loading}
+                >
+                  {loading ? 'Criando...' : 'Criar'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </UniversalModuleLayout>
   );
 };
 

@@ -1,167 +1,152 @@
 import React, { useState, useEffect } from 'react';
+import { FileText, Plus } from 'lucide-react';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
 import axios from 'axios';
-import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
-import { Badge } from '../../components/ui/badge';
-import { ChartLine, ChartBar, ChartPie, COLORS } from '../../components/ui/chart';
-import {
-  Users,
-  FileText,
-  DollarSign,
-  Activity,
-  TrendingUp,
-  Calendar,
-  AlertTriangle
-} from 'lucide-react';
 import { toast } from 'sonner';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
+
 const Dashboard = () => {
-  const [metrics, setMetrics] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [formData, setFormData] = useState({});
 
   useEffect(() => {
-    fetchMetrics();
+    fetchItems();
   }, []);
 
-  const fetchMetrics = async () => {
+  const fetchItems = async () => {
     try {
-      const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-      const token = localStorage.getItem('ap_elite_token');
-      
-      if (!token) {
-        setLoading(false);
-        return;
-      }
-      
-      const res = await axios.get(`${BACKEND_URL}/api/athena/dashboard/metrics`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      
-      setMetrics(res.data);
+      setLoading(true);
+      setError(null);
+      const response = await axios.get(`${BACKEND_URL}/api/athena/dashboard/list`);
+      setItems(response.data.data || []);
     } catch (error) {
-      console.log('Metrics not available, using defaults');
-      // Set default metrics
-      setMetrics({
-        total_cases: 0,
-        active_cases: 0,
-        total_clients: 0,
-        revenue_month: 0
-      });
+      console.error('Erro ao carregar dados:', error);
+      setError('Erro ao carregar dados');
+      toast.error('Erro ao carregar dados');
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
-        <div className="text-white text-xl">Carregando...</div>
-      </div>
-    );
-  }
-
-  if (!metrics) {
-    return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
-        <div className="text-white text-xl">Erro ao carregar dados</div>
-      </div>
-    );
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    try {
+      await axios.post(`${BACKEND_URL}/api/athena/dashboard/create`, {
+        collection: 'dashboard',
+        data: formData
+      });
+      
+      toast.success('Item criado com sucesso!');
+      setShowModal(false);
+      setFormData({});
+      fetchItems();
+    } catch (error) {
+      console.error('Erro ao criar item:', error);
+      toast.error('Erro ao criar item');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-slate-900 p-6">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-white mb-6">Dashboard Principal</h1>
-
-        {/* Métricas */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-          <Card className="bg-slate-800 border-slate-700">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-2">
-                <p className="text-slate-400 text-sm">Casos Totais</p>
-                <FileText className="h-5 w-5 text-cyan-400" />
-              </div>
-              <p className="text-3xl font-bold text-white">{metrics?.total_cases || 0}</p>
-              <div className="flex items-center mt-2 text-green-400 text-sm">
-                <TrendingUp className="h-4 w-4 mr-1" />
-                <span>Ativos: {metrics?.active_cases || 0}</span>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-slate-800 border-slate-700">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-2">
-                <p className="text-slate-400 text-sm">Clientes</p>
-                <Users className="h-5 w-5 text-purple-400" />
-              </div>
-              <p className="text-3xl font-bold text-white">{metrics?.total_clients || 0}</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-slate-800 border-slate-700">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-2">
-                <p className="text-slate-400 text-sm">Receita Mensal</p>
-                <DollarSign className="h-5 w-5 text-green-400" />
-              </div>
-              <p className="text-3xl font-bold text-white">
-                R$ {((metrics?.monthly_revenue || 0) / 1000).toFixed(1)}k
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-slate-800 border-slate-700">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-2">
-                <p className="text-slate-400 text-sm">Tarefas Pendentes</p>
-                <AlertTriangle className="h-5 w-5 text-yellow-400" />
-              </div>
-              <p className="text-3xl font-bold text-white">{metrics?.pending_tasks || 0}</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Investigações Ativas */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-          <Card className="bg-slate-800 border-slate-700">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-2">
-                <p className="text-slate-300">Interceptações Ativas</p>
-                <Activity className="h-5 w-5 text-orange-400" />
-              </div>
-              <p className="text-2xl font-bold text-white">{metrics.active_interceptions}</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-slate-800 border-slate-700">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-2">
-                <p className="text-slate-300">Evidências em Processamento</p>
-                <FileText className="h-5 w-5 text-blue-400" />
-              </div>
-              <p className="text-2xl font-bold text-white">{metrics.evidence_processing}</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-slate-800 border-slate-700">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-2">
-                <p className="text-slate-300">Audiências Próximas</p>
-                <Calendar className="h-5 w-5 text-purple-400" />
-              </div>
-              <p className="text-2xl font-bold text-white">{metrics.upcoming_hearings}</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Voltar */}
-        <div className="mt-8">
-          <a href="/athena" className="text-cyan-400 hover:text-cyan-300">
-            ← Voltar para Athena
-          </a>
+    <UniversalModuleLayout
+      title="Dashboard"
+      subtitle="Sistema integrado de gestão"
+      icon={FileText}
+      headerAction={
+        <button
+          onClick={() => setShowModal(true)}
+          className="bg-white text-teal-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+        >
+          Novo Item
+        </button>
+      }
+    >
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="bg-white p-6 rounded-lg shadow">
+          <p className="text-sm text-gray-600">Total de Itens</p>
+          <p className="text-3xl font-bold text-gray-900">{items.length}</p>
         </div>
       </div>
-    </div>
+
+      {/* Content */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <h2 className="text-xl font-bold text-gray-900 mb-4">Lista de Itens</h2>
+        
+        {loading ? (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto"></div>
+            <p className="text-gray-600 mt-4">Carregando...</p>
+          </div>
+        ) : error ? (
+          <div className="text-center py-12">
+            <p className="text-red-600">{error}</p>
+            <button
+              onClick={fetchItems}
+              className="mt-4 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
+            >
+              Tentar Novamente
+            </button>
+          </div>
+        ) : items.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-600">Nenhum item encontrado</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {items.map((item) => (
+              <div key={item.id} className="border border-gray-200 rounded-lg p-4">
+                <p className="font-semibold">Item {item.id}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 className="text-xl font-bold mb-4">Novo Item</h3>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Nome*</label>
+                <input
+                  type="text"
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  placeholder="Digite o nome..."
+                />
+              </div>
+              <div className="flex gap-2 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="flex-1 px-4 py-2 border rounded-lg hover:bg-gray-50"
+                  disabled={loading}
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50"
+                  disabled={loading}
+                >
+                  {loading ? 'Criando...' : 'Criar'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </UniversalModuleLayout>
   );
 };
 
