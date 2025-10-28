@@ -180,6 +180,8 @@ function AppContent() {
           <Route path="/forensics/interceptacoes" element={<InterceptacoesTelematicas />} />
           <Route path="/forensics/extracao" element={<ExtracaoDados />} />
           <Route path="/forensics/erbs" element={<AnaliseERBs />} />
+          <Route path="/forensics/forense-avancada" element={<ForenseAprimorada />} />
+
           <Route path="/forensics/iped" element={<IPEDIntegration />} />
           <Route path="/forensics/custody" element={<CadeiaCustodia />} />
 
