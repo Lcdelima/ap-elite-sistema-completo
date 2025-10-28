@@ -225,33 +225,6 @@ const Forensics = () => {
             </div>
           </div>
         )}
-                  <label className="block text-sm font-medium mb-1">ID do Caso</label>
-                  <input
-                    type="text"
-                    value={formData.case_id}
-                    onChange={(e) => setFormData({...formData, case_id: e.target.value})}
-                    className="w-full px-3 py-2 border rounded-lg"
-                  />
-                </div>
-                <div className="flex gap-2 pt-4">
-                  <button
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                    className="flex-1 px-4 py-2 border rounded-lg hover:bg-gray-50"
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    type="submit"
-                    className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
-                  >
-                    Criar
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
     </UniversalModuleLayout>
   );
 };
