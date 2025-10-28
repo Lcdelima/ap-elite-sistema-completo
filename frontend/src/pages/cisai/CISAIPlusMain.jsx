@@ -294,10 +294,10 @@ const CISAIPlusMain = () => {
             {/* WiFi Intel Form */}
             {activeTab === 'wifiintel' && (
               <div className="space-y-4">
-                <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
-                  <p className="text-yellow-400 text-sm">
-                    <strong>Nota:</strong> Este módulo requer integração com Wigle API ou banco de dados próprio de BSSIDs. 
-                    Atualmente em modo demonstração.
+                <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
+                  <p className="text-green-400 text-sm flex items-center space-x-2">
+                    <CheckCircle className="w-4 h-4" />
+                    <span><strong>Integração Ativa:</strong> Wigle API configurada e operacional!</span>
                   </p>
                 </div>
 
@@ -306,16 +306,31 @@ const CISAIPlusMain = () => {
                   <input
                     type="text"
                     placeholder="Ex: AA:BB:CC:DD:EE:FF"
-                    className="w-full bg-black/50 border border-cyan-500/30 rounded px-3 py-2 text-white"
+                    value={wifiForm.bssid}
+                    onChange={e => setWifiForm({bssid: e.target.value})}
+                    className="w-full bg-black/50 border border-cyan-500/30 rounded px-3 py-2 text-white uppercase"
                   />
+                  <p className="text-xs text-gray-400 mt-1">Formato: AA:BB:CC:DD:EE:FF (6 pares hexadecimais)</p>
                 </div>
 
                 <button
-                  disabled
-                  className="w-full bg-gray-500 text-white font-semibold py-3 rounded-lg cursor-not-allowed"
+                  onClick={handleWiFiLookup}
+                  disabled={loading || !wifiForm.bssid}
+                  className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Lookup BSSID (Demo)
+                  {loading ? 'Consultando Wigle...' : 'Consultar BSSID no Wigle'}
                 </button>
+
+                <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 mt-4">
+                  <h3 className="text-blue-400 font-semibold mb-2">Dados Retornados:</h3>
+                  <ul className="text-sm text-gray-300 space-y-1">
+                    <li>• SSID (nome da rede)</li>
+                    <li>• Localização (lat/lon)</li>
+                    <li>• Primeira e última detecção</li>
+                    <li>• Canal e criptografia</li>
+                    <li>• Fabricante do AP</li>
+                  </ul>
+                </div>
               </div>
             )}
 
