@@ -684,22 +684,6 @@ async def obter_analise(analysis_id: str):
         "analyses": analyses
     }
 
-@router.get("/stats")
-async def estatisticas_analises():
-    """Estatísticas gerais"""
-    total = await db.case_analysis.count_documents({})
-    concluidas = await db.case_analysis.count_documents({"status": "concluida"})
-    em_analise = await db.case_analysis.count_documents({"status": "em_analise"})
-    urgentes = await db.case_analysis.count_documents({"prioridade": "P1"})
-    
-    return {
-        "success": True,
-        "total": total,
-        "concluidas": concluidas,
-        "em_analise": em_analise,
-        "urgentes": urgentes
-    }
-
 @router.post("/{analysis_id}/deadlines/schedule")
 async def agendar_prazos(analysis_id: str):
     """Cria prazos D-3 e D-1 no módulo de prazos"""
