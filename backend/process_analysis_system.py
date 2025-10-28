@@ -608,6 +608,42 @@ Formato JSON:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erro: {str(e)}")
 
+@router.get("/list")
+async def listar_analises(
+    status: Optional[str] = None,
+    prioridade: Optional[str] = None
+):
+    """Lista análises com filtros"""
+    query = {}
+    if status:
+        query["status"] = status
+    if prioridade:
+        query["prioridade"] = prioridade
+    
+    analyses = await db.case_analysis.find(query).sort("created_at", -1).to_list(100)
+    
+    return {
+        "success": True,
+        "count": len(analyses),
+        "analyses": analyses
+    }
+
+@router.get("/stats")
+async def estatisticas_analises():
+    """Estatísticas gerais"""
+    total = await db.case_analysis.count_documents({})
+    concluidas = await db.case_analysis.count_documents({"status": "concluida"})
+    em_analise = await db.case_analysis.count_documents({"status": "em_analise"})
+    urgentes = await db.case_analysis.count_documents({"prioridade": "P1"})
+    
+    return {
+        "success": True,
+        "total": total,
+        "concluidas": concluidas,
+        "em_analise": em_analise,
+        "urgentes": urgentes
+    }
+
 @router.get("/{analysis_id}")
 async def obter_analise(analysis_id: str):
     """Obtém análise completa com todas as IAs"""
@@ -635,14 +671,6 @@ async def obter_analise(analysis_id: str):
         "total_docs": len(docs),
         "ai_completo": len(ai_por_tipo) >= 3  # prescricao, cadeia, resumo
     }
-
-@router.get("/list")
-async def listar_analises(
-    status: Optional[str] = None,
-    prioridade: Optional[str] = None
-):
-    """Lista análises com filtros"""
-    query = {}
     if status:
         query["status"] = status
     if prioridade:
