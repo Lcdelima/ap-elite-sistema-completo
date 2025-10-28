@@ -9,6 +9,7 @@ from typing import List, Optional, Dict, Any
 from datetime import datetime, timezone
 import uuid
 import logging
+import base64
 from geopy.distance import geodesic
 from geopy.geocoders import Nominatim
 import requests
@@ -19,6 +20,7 @@ import socket
 import dns.resolver
 from ipwhois import IPWhois
 import hashlib
+import os
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
