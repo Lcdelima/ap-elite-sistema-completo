@@ -472,6 +472,14 @@ try:
 except ImportError as e:
     logger.error(f"⚠️ Oxygen Password Management not available: {e}")
 
+# Import Jurídico Module
+try:
+    from juridico_module import router as juridico_router
+    app.include_router(juridico_router)
+    logger.info("✅ Jurídico Module loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ Jurídico Module not available: {e}")
+
 # Include the router in the main app
 app.include_router(api_router)
 
