@@ -159,8 +159,3 @@ watchfiles==1.1.0
 websockets==15.0.1
 yarl==1.22.0
 zipp==3.23.0
-httpx==0.28.1
-PyPDF2==3.0.1
-python-docx==1.2.0
-numpy==2.2.6
-scikit-learn==1.7.2
