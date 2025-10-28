@@ -499,6 +499,15 @@ try:
 except ImportError as e:
     logger.error(f"⚠️ Athena Universal CRUD Module not available: {e}")
 
+# Forensic Digital ISO/IEC 27037 Module
+try:
+    from forensic_digital_iso import router as forensic_iso_router
+    app.include_router(forensic_iso_router)
+    logger.info("🔬 FORENSIC DIGITAL ISO/IEC 27037 MODULE loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ Forensic Digital ISO Module not available: {e}")
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
