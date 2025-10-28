@@ -196,6 +196,10 @@ function AppContent() {
           <Route path="/athena/compliance" element={<ComplianceCenter />} />
           <Route path="/athena/deadlines" element={<DeadlineManager />} />
           <Route path="/athena/automated-reports" element={<AutomatedReportsComplete />} />
+          
+          {/* CISAI Routes */}
+          <Route path="/admin/cisai/behavioral" element={<BehavioralForensics />} />
+          <Route path="/admin/cisai/command" element={<ForensicCommand />} />
       </Routes>
       <WhatsAppButton />
       <HybridNotifications />
