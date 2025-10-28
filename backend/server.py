@@ -551,6 +551,7 @@ try:
     app.include_router(upload_router)
     logger.info("📤 UPLOAD SYSTEM loaded successfully")
 except ImportError as e:
+    logger.error(f"⚠️ Upload System not available: {e}")
 
 # CISAI-Forense 3.0 - 12 Submódulos Avançados
 try:
@@ -575,8 +576,6 @@ try:
     logger.info("🔬 CISAI-FORENSE 3.0 (7 módulos core) loaded successfully")
 except ImportError as e:
     logger.error(f"⚠️ CISAI-Forense 3.0 not available: {e}")
-
-    logger.error(f"⚠️ Upload System not available: {e}")
 
 
 
