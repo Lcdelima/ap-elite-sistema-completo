@@ -480,6 +480,14 @@ try:
 except ImportError as e:
     logger.error(f"⚠️ Jurídico Module V2 not available: {e}")
 
+# Import CISAI Module
+try:
+    from cisai_module import router as cisai_router
+    app.include_router(cisai_router)
+    logger.info("🦅 ATHENA CISAI MODULE loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ CISAI Module not available: {e}")
+
 # Include the router in the main app
 app.include_router(api_router)
 
