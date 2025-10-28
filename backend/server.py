@@ -521,6 +521,7 @@ try:
     app.include_router(analysis_router)
     logger.info("⚖️ PROCESS ANALYSIS SYSTEM loaded successfully")
 except ImportError as e:
+    logger.error(f"⚠️ Process Analysis System not available: {e}")
 
 # Sistema Jur\u00eddico Completo - 9 M\u00f3dulos
 try:
