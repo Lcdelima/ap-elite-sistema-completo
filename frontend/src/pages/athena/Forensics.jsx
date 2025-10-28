@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Microscope, Upload, FileText, Search, CheckCircle, Clock, AlertTriangle } from 'lucide-react';
 import AthenaLayout from '../../components/AthenaLayout';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const Forensics = () => {
   const [analyses, setAnalyses] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     type: 'hardware',
@@ -25,17 +28,44 @@ const Forensics = () => {
 
   const fetchAnalyses = async () => {
     try {
-      const token = localStorage.getItem('token');
-      setAnalyses([]);
+      setLoading(true);
+      const response = await axios.get(`${BACKEND_URL}/api/athena/forensics/analyses`);
+      setAnalyses(response.data.data || []);
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error fetching analyses:', error);
+      toast.error('Erro ao carregar análises');
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    alert('Análise forense criada! (Backend em desenvolvimento)');
-    setShowModal(false);
+    setLoading(true);
+    
+    try {
+      await axios.post(`${BACKEND_URL}/api/athena/forensics/analyses`, {
+        ...formData,
+        status: 'pending'
+      });
+      
+      toast.success('Análise forense criada com sucesso!');
+      setShowModal(false);
+      setFormData({
+        title: '',
+        type: 'hardware',
+        device_description: '',
+        case_id: '',
+        priority: 'medium',
+        notes: ''
+      });
+      fetchAnalyses();
+    } catch (error) {
+      console.error('Error creating analysis:', error);
+      toast.error('Erro ao criar análise forense');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
