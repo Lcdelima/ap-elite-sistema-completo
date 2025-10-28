@@ -64,14 +64,15 @@ const DataExtraction = () => {
   return (
     <UniversalModuleLayout
       title="Extração de Dados"
-      subtitle="Sistema integrado de gestão"
+      subtitle="Extração forense de dispositivos e mídias"
       icon={HardDrive}
       headerAction={
         <button
           onClick={() => setShowModal(true)}
-          className="bg-white text-teal-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+          className="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors flex items-center gap-2"
         >
-          Novo Item
+          <Plus size={20} />
+          Nova Extração
         </button>
       }
     >
