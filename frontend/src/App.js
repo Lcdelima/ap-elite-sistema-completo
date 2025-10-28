@@ -96,6 +96,7 @@ import ComplianceCenter from './pages/athena/ComplianceCenter';
 
 // CISAI Pages
 import CISAIIndex from './pages/cisai/CISAIIndex';
+import CISAIPlusMain from './pages/cisai/CISAIPlusMain';
 import BehavioralForensics from './pages/cisai/BehavioralForensics';
 import ForensicCommand from './pages/cisai/ForensicCommand';
 import CyberIntelFusion from './pages/cisai/CyberIntelFusion';
