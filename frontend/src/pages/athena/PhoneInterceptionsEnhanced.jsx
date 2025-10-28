@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
-import AthenaLayout from '../../components/AthenaLayout';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
 import {
   Radio, Upload, Play, Pause, Download, FileAudio, Clock, User, MapPin,
   TrendingUp, AlertCircle, CheckCircle, Sparkles, Phone, PhoneCall,
@@ -711,7 +711,7 @@ const PhoneInterceptionsEnhanced = () => {
           </div>
         )}
       </div>
-    </AthenaLayout>
+    </UniversalModuleLayout>
   );
 };
 

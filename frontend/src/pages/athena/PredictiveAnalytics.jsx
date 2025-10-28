@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { TrendingUp, Target, BarChart3, Brain, Activity, Zap } from 'lucide-react';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const PredictiveAnalytics = () => {
   const [caseType, setCaseType] = useState('criminal_defense');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [evidenceQuality, setEvidenceQuality] = useState('medium');
   const [experience, setExperience] = useState(5);
   const [prediction, setPrediction] = useState(null);

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Usb, Plus, Search, AlertCircle, CheckCircle, Shield, Activity, Clock, TrendingUp, Bug } from 'lucide-react';
 import StandardModuleLayout from '../../components/StandardModuleLayout';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
@@ -64,13 +66,13 @@ const USBForensicsPro = () => {
       });
 
       if (response.ok) {
-        alert('🔍 Análise USB iniciada!');
+        toast.success("🔍 Análise USB iniciada!");
         setShowModal(false);
         fetchData();
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Erro ao iniciar análise');
+      toast.success("Erro ao iniciar análise");
     }
   };
 

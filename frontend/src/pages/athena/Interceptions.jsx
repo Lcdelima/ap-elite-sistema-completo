@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
-import AthenaLayout from '../../components/AthenaLayout';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
 import { Card, CardContent } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
-import { Radio, Wifi, Activity } from 'lucide-react';
+import { Radio, Wifi, Activity , FileText} from 'lucide-react';
+import axios from 'axios';
+import { toast } from 'sonner';
+
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const Interceptions = () => {
   return (
@@ -54,7 +59,7 @@ const Interceptions = () => {
           </CardContent>
         </Card>
       </div>
-    </AthenaLayout>
+    </UniversalModuleLayout>
   );
 };
 

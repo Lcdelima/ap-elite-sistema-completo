@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
-import AthenaLayout from '../../components/AthenaLayout';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
 import {
   BarChart3, TrendingUp, TrendingDown, DollarSign, Users, Briefcase,
   AlertCircle, CheckCircle, Clock, FileText, Phone, Mail, Calendar,
@@ -112,7 +112,7 @@ const ExecutiveDashboardPro = () => {
         <div className="flex items-center justify-center h-96">
           <RefreshCw className="h-12 w-12 animate-spin text-cyan-500" />
         </div>
-      </AthenaLayout>
+      </UniversalModuleLayout>
     );
   }
 
@@ -396,7 +396,7 @@ const ExecutiveDashboardPro = () => {
         </Card>
 
       </div>
-    </AthenaLayout>
+    </UniversalModuleLayout>
   );
 };
 

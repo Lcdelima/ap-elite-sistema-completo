@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Users, Plus, Edit, Trash2, Key, Shield, Search, Filter } from 'lucide-react';
-import AthenaLayout from '../../components/AthenaLayout';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
 import axios from 'axios';
 import { toast } from 'sonner';
 
@@ -196,7 +196,11 @@ const UserManagement = () => {
   };
 
   return (
-    <AthenaLayout>
+    <UniversalModuleLayout
+      title="User Management"
+      subtitle="Sistema integrado"
+      icon={FileText}
+    >
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-6 rounded-lg shadow-lg mb-6">
@@ -495,7 +499,7 @@ const UserManagement = () => {
           </div>
         )}
       </div>
-    </AthenaLayout>
+    </UniversalModuleLayout>
   );
 };
 

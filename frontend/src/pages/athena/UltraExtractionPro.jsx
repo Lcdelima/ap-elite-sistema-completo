@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Database, Plus, Search, Download, AlertCircle, CheckCircle, Clock, FileText, Shield, Cpu, Hash, Activity, HardDrive, Smartphone, Laptop, Cloud, Zap, Lock, Bug, Eye, Layers, ChevronRight } from 'lucide-react';
 import StandardModuleLayout from '../../components/StandardModuleLayout';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
@@ -88,7 +90,7 @@ const UltraExtractionPro = () => {
       });
 
       if (response.ok) {
-        alert('🚀 Extração Ultra Avançada iniciada com IA!');
+        toast.success("🚀 Extração Ultra Avançada iniciada com IA!");
         setShowModal(false);
         fetchData();
         setFormData({
@@ -111,7 +113,7 @@ const UltraExtractionPro = () => {
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Erro ao iniciar extração');
+      toast.success("Erro ao iniciar extração");
     }
   };
 
@@ -124,7 +126,7 @@ const UltraExtractionPro = () => {
       });
 
       if (response.ok) {
-        alert('Progresso simulado!');
+        toast.success("Progresso simulado!");
         fetchData();
       }
     } catch (error) {
@@ -142,7 +144,7 @@ const UltraExtractionPro = () => {
 
       if (response.ok) {
         const data = await response.json();
-        alert('📄 Relatório Ultra Completo gerado com sucesso!');
+        toast.success("📄 Relatório Ultra Completo gerado com sucesso!");
         console.log('Report:', data.report);
       }
     } catch (error) {
@@ -455,7 +457,7 @@ const UltraExtractionPro = () => {
                     <span>Gerar Relatório</span>
                   </button>
                   <button
-                    onClick={() => alert('Função de download em desenvolvimento')}
+                    onClick={() => toast.success("Função de download em desenvolvimento");}
                     className="bg-purple-100 text-purple-700 px-4 py-2 rounded-lg hover:bg-purple-200 transition-colors flex items-center space-x-2 text-sm font-semibold"
                   >
                     <Download className="w-4 h-4" />

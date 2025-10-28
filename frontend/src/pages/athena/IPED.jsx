@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { FileSearch, FolderOpen, Play, Pause, CheckCircle, Clock, Upload } from 'lucide-react';
-import AthenaLayout from '../../components/AthenaLayout';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const IPEDIntegration = () => {
   const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -45,7 +49,7 @@ const IPEDIntegration = () => {
       });
 
       if (response.ok) {
-        alert('Projeto IPED criado com sucesso!');
+        toast.success("Projeto IPED criado com sucesso!");
         setShowModal(false);
         setFormData({ name: '', case_id: '', evidence_path: '', description: '' });
         fetchProjects();
@@ -65,7 +69,11 @@ const IPEDIntegration = () => {
   };
 
   return (
-    <AthenaLayout>
+    <UniversalModuleLayout
+      title="I P E D"
+      subtitle="Sistema integrado"
+      icon={FileText}
+    >
       <div className="max-w-7xl mx-auto">
         <div className="bg-gradient-to-r from-lime-500 to-green-600 text-white p-6 rounded-lg shadow-lg mb-6">
           <div className="flex items-center justify-between">
@@ -219,7 +227,7 @@ const IPEDIntegration = () => {
           </div>
         )}
       </div>
-    </AthenaLayout>
+    </UniversalModuleLayout>
   );
 };
 

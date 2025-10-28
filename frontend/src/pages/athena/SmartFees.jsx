@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { DollarSign, Calculator, Split, FileText, TrendingUp, Download } from 'lucide-react';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const SmartFees = () => {
   const [caseType, setCaseType] = useState('criminal_defense');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [complexity, setComplexity] = useState('medium');
   const [hours, setHours] = useState(40);
   const [hourlyRate, setHourlyRate] = useState(250);

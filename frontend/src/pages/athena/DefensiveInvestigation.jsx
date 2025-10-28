@@ -4,12 +4,16 @@ import {
   Eye, Edit, Trash2, FileText, Calendar, Tag, AlertCircle,
   TrendingUp, Database, Users, Building, Gavel, Map, Shield
 } from 'lucide-react';
-import AthenaLayout from '../../components/AthenaLayout';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const DefensiveInvestigation = () => {
   const [categories, setCategories] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [cases, setCases] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [stats, setStats] = useState({});
@@ -127,11 +131,11 @@ const DefensiveInvestigation = () => {
         setNewCase({ title: '', description: '', target: '', type: 'person' });
         fetchCases();
         fetchStats();
-        alert('Caso criado com sucesso!');
+        toast.success("Caso criado com sucesso!");
       }
     } catch (error) {
       console.error('Error creating case:', error);
-      alert('Erro ao criar caso');
+      toast.success("Erro ao criar caso");
     }
   };
 
@@ -147,7 +151,7 @@ const DefensiveInvestigation = () => {
         body: JSON.stringify(source)
       });
       fetchFavorites();
-      alert('Fonte adicionada aos favoritos!');
+      toast.success("Fonte adicionada aos favoritos!");
     } catch (error) {
       console.error('Error adding favorite:', error);
     }
@@ -196,7 +200,7 @@ const DefensiveInvestigation = () => {
       
       setNewNote('');
       viewCaseDetails(selectedCase.id);
-      alert('Nota adicionada!');
+      toast.success("Nota adicionada!");
     } catch (error) {
       console.error('Error adding note:', error);
     }
@@ -225,7 +229,7 @@ const DefensiveInvestigation = () => {
         relevance: 'medium'
       });
       viewCaseDetails(selectedCase.id);
-      alert('Descoberta adicionada!');
+      toast.success("Descoberta adicionada!");
     } catch (error) {
       console.error('Error adding finding:', error);
     }
@@ -244,7 +248,7 @@ const DefensiveInvestigation = () => {
       fetchCases();
       fetchStats();
       setActiveTab('cases');
-      alert('Caso excluído com sucesso!');
+      toast.success("Caso excluído com sucesso!");
     } catch (error) {
       console.error('Error deleting case:', error);
     }
@@ -720,7 +724,11 @@ const DefensiveInvestigation = () => {
   };
 
   return (
-    <AthenaLayout>
+    <UniversalModuleLayout
+      title="Defensive Investigation"
+      subtitle="Sistema integrado"
+      icon={FileText}
+    >
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-6 rounded-lg shadow-lg mb-6">
@@ -859,7 +867,7 @@ const DefensiveInvestigation = () => {
           </div>
         )}
       </div>
-    </AthenaLayout>
+    </UniversalModuleLayout>
   );
 };
 

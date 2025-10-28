@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, Upload, CheckCircle, Clock, AlertCircle, Database } from 'lucide-react';
-import AthenaLayout from '../../components/AthenaLayout';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
 import axios from 'axios';
 import { toast } from 'sonner';
 
@@ -34,7 +34,11 @@ const EvidenceProcessing = () => {
   };
 
   return (
-    <AthenaLayout>
+    <UniversalModuleLayout
+      title="Evidence Processing"
+      subtitle="Sistema integrado"
+      icon={FileText}
+    >
       <div className="max-w-7xl mx-auto">
         <div className="bg-gradient-to-r from-cyan-600 to-blue-700 text-white p-6 rounded-lg shadow-lg mb-6">
           <div className="flex items-center justify-between">
@@ -150,7 +154,7 @@ const EvidenceProcessing = () => {
           </div>
         )}
       </div>
-    </AthenaLayout>
+    </UniversalModuleLayout>
   );
 };
 

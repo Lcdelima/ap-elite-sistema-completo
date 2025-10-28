@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
-import AthenaLayout from '../../components/AthenaLayout';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
 import {
   Phone, PhoneIncoming, PhoneOutgoing, PhoneMissed, Search, Filter,
   Calendar, Plus, Edit, Trash2, Eye, Download, FileText, AlertCircle,
@@ -412,7 +412,11 @@ const PhoneInterceptionsProfessional = () => {
 
   // ==================== RENDER PRINCIPAL ====================
   return (
-    <AthenaLayout>
+    <UniversalModuleLayout
+      title="Phone Interceptions Pro"
+      subtitle="Sistema integrado"
+      icon={FileText}
+    >
       <div className="p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
@@ -482,7 +486,7 @@ const PhoneInterceptionsProfessional = () => {
           </div>
         )}
       </div>
-    </AthenaLayout>
+    </UniversalModuleLayout>
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import AthenaLayout from '../../components/AthenaLayout';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { Badge } from '../../components/ui/badge';
@@ -13,6 +13,8 @@ import { toast } from 'sonner';
 
 const EvidenceAnalysis = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [analyzing, setAnalyzing] = useState(false);
   const [report, setReport] = useState(null);
@@ -255,7 +257,11 @@ const EvidenceAnalysis = () => {
   };
 
   return (
-    <AthenaLayout>
+    <UniversalModuleLayout
+      title="Evidence Analysis"
+      subtitle="Sistema integrado"
+      icon={FileText}
+    >
       <div className="p-6 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -627,7 +633,7 @@ const EvidenceAnalysis = () => {
           </Card>
         )}
       </div>
-    </AthenaLayout>
+    </UniversalModuleLayout>
   );
 };
 

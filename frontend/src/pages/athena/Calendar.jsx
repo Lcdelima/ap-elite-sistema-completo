@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar as CalendarIcon, Plus, Clock, MapPin, Users, Bell } from 'lucide-react';
-import AthenaLayout from '../../components/AthenaLayout';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
 import axios from 'axios';
 import { toast } from 'sonner';
 
@@ -55,7 +55,11 @@ const Calendar = () => {
   const eventsForDate = events.filter(e => e.date === selectedDate);
 
   return (
-    <AthenaLayout>
+    <UniversalModuleLayout
+      title="Calendar"
+      subtitle="Sistema integrado"
+      icon={FileText}
+    >
       <div className="max-w-7xl mx-auto">
         <div className="bg-gradient-to-r from-pink-600 to-rose-600 text-white p-6 rounded-lg shadow-lg mb-6">
           <div className="flex items-center justify-between">
@@ -272,7 +276,7 @@ const Calendar = () => {
           </div>
         )}
       </div>
-    </AthenaLayout>
+    </UniversalModuleLayout>
   );
 };
 

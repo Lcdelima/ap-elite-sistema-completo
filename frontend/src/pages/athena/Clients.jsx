@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import AthenaLayout from '../../components/AthenaLayout';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { Badge } from '../../components/ui/badge';
-import { Users, Plus, Phone, Mail, Building } from 'lucide-react';
+import { Users, Plus, Phone, Mail, Building , FileText} from 'lucide-react';
 import { toast } from 'sonner';
 
 const Clients = () => {
@@ -187,7 +187,7 @@ const Clients = () => {
           </div>
         )}
       </div>
-    </AthenaLayout>
+    </UniversalModuleLayout>
   );
 };
 

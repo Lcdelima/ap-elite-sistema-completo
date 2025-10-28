@@ -16,6 +16,8 @@ import { toast } from 'sonner';
 const CommunicationsEnhanced = () => {
   const navigate = useNavigate();
   const [contacts, setContacts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [conversations, setConversations] = useState([]);
   const [activeChat, setActiveChat] = useState(null);
   const [messages, setMessages] = useState([]);

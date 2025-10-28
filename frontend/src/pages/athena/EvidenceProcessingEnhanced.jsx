@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, Plus, Search, AlertCircle, CheckCircle, Clock, Database, FileText, Hash } from 'lucide-react';
 import StandardModuleLayout from '../../components/StandardModuleLayout';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
@@ -68,7 +70,7 @@ const EvidenceProcessingEnhanced = () => {
       });
 
       if (response.ok) {
-        alert('Evidência criada com sucesso!');
+        toast.success("Evidência criada com sucesso!");
         setShowModal(false);
         setFormData({
           evidence_name: '',
@@ -83,7 +85,7 @@ const EvidenceProcessingEnhanced = () => {
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Erro ao criar evidência');
+      toast.success("Erro ao criar evidência");
     }
   };
 

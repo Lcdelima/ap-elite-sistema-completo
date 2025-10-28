@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
-import AthenaLayout from '../../components/AthenaLayout';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
 import {
   Wifi,
   Upload,
@@ -21,6 +21,7 @@ import {
   Shield
 } from 'lucide-react';
 import axios from 'axios';
+import { toast } from 'sonner';
 
 const DataInterceptions = () => {
   const [interceptions, setInterceptions] = useState([]);
@@ -92,7 +93,11 @@ const DataInterceptions = () => {
   ];
 
   return (
-    <AthenaLayout>
+    <UniversalModuleLayout
+      title="Data Interceptions"
+      subtitle="Sistema integrado"
+      icon={FileText}
+    >
       <div className="p-6 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -378,7 +383,7 @@ const DataInterceptions = () => {
           </Card>
         </div>
       </div>
-    </AthenaLayout>
+    </UniversalModuleLayout>
   );
 };
 

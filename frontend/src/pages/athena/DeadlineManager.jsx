@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
-import AthenaLayout from '../../components/AthenaLayout';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
 import {
   Clock, AlertCircle, CheckCircle, Calendar, Plus, X, Bell,
   FileText, User, Building, Filter, Download, RefreshCw,
@@ -636,7 +636,7 @@ const DeadlineManager = () => {
           </div>
         )}
       </div>
-    </AthenaLayout>
+    </UniversalModuleLayout>
   );
 };
 

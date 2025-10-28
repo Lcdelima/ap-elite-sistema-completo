@@ -4,7 +4,9 @@ import {
   Download, Upload, AlertCircle, CheckCircle, Target,
   TrendingUp, Activity, Shield, User, Phone, Mail
 } from 'lucide-react';
-import AthenaLayout from '../../components/AthenaLayout';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const RelationshipMapping = () => {
   const [activeTab, setActiveTab] = useState('networks');
@@ -674,7 +676,11 @@ const RelationshipMapping = () => {
   };
 
   return (
-    <AthenaLayout>
+    <UniversalModuleLayout
+      title="Relationship Mapping"
+      subtitle="Sistema integrado"
+      icon={FileText}
+    >
       <div className="space-y-6">
         {/* Header */}
         <div className="bg-gradient-to-r from-red-900 via-pink-900 to-purple-900 rounded-lg p-6 text-white">
@@ -740,7 +746,7 @@ const RelationshipMapping = () => {
           onSubmit={createPerson}
         />
       </div>
-    </AthenaLayout>
+    </UniversalModuleLayout>
   );
 };
 

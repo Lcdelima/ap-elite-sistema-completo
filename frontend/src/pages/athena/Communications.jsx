@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import AthenaLayout from '../../components/AthenaLayout';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
 import { Card, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { Badge } from '../../components/ui/badge';
-import { MessageSquare, Send, Lock } from 'lucide-react';
+import { MessageSquare, Send, Lock , FileText} from 'lucide-react';
 import { toast } from 'sonner';
+
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const Communications = () => {
   const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [newMessage, setNewMessage] = useState('');
   const [recipientId, setRecipientId] = useState('');
 
@@ -52,7 +57,7 @@ const Communications = () => {
           </Card>
         </div>
       </div>
-    </AthenaLayout>
+    </UniversalModuleLayout>
   );
 };
 

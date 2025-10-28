@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import AthenaLayout from '../../components/AthenaLayout';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
 import { Card, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { Badge } from '../../components/ui/badge';
@@ -115,7 +115,7 @@ const Reports = () => {
           </CardContent>
         </Card>
       </div>
-    </AthenaLayout>
+    </UniversalModuleLayout>
   );
 };
 

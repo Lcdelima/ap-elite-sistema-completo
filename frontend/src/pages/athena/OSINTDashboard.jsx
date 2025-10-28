@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Globe, Shield, Users, Building2, MapPin, Cpu, Car, Briefcase, Moon, History, Brain } from 'lucide-react';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const OSINTDashboard = () => {
   const [categories, setCategories] = useState({});

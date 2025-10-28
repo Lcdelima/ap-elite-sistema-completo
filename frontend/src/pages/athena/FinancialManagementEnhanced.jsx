@@ -4,7 +4,7 @@ import {
   Building2, MessageSquare, Calendar, Download, FileText, 
   Filter, Eye, Edit, Trash2, ChevronDown
 } from 'lucide-react';
-import AthenaLayout from '../../components/AthenaLayout';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
 import { Card, CardContent } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
 import axios from 'axios';
@@ -556,7 +556,7 @@ const FinancialManagementEnhanced = () => {
           </div>
         )}
       </div>
-    </AthenaLayout>
+    </UniversalModuleLayout>
   );
 };
 

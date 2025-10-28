@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Briefcase, Plus, Search, Filter, Eye, FileText, Calendar, User } from 'lucide-react';
-import AthenaLayout from '../../components/AthenaLayout';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
 import axios from 'axios';
 import { toast } from 'sonner';
 
@@ -79,7 +79,11 @@ const Processes = () => {
   };
 
   return (
-    <AthenaLayout>
+    <UniversalModuleLayout
+      title="Processes"
+      subtitle="Sistema integrado"
+      icon={FileText}
+    >
       <div className="max-w-7xl mx-auto">
         <div className="bg-gradient-to-r from-slate-700 to-gray-800 text-white p-6 rounded-lg shadow-lg mb-6">
           <div className="flex items-center justify-between">
@@ -305,7 +309,7 @@ const Processes = () => {
           </div>
         )}
       </div>
-    </AthenaLayout>
+    </UniversalModuleLayout>
   );
 };
 
