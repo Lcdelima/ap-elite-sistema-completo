@@ -109,11 +109,11 @@ const DataExtraction = () => {
 
       {/* Content */}
       <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Lista de Itens</h2>
+        <h2 className="text-xl font-bold text-gray-900 mb-4">Extrações Recentes</h2>
         
         {loading ? (
           <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
             <p className="text-gray-600 mt-4">Carregando...</p>
           </div>
         ) : error ? (
@@ -121,20 +121,45 @@ const DataExtraction = () => {
             <p className="text-red-600">{error}</p>
             <button
               onClick={fetchItems}
-              className="mt-4 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
+              className="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
             >
               Tentar Novamente
             </button>
           </div>
         ) : items.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-600">Nenhum item encontrado</p>
+            <HardDrive size={48} className="mx-auto text-gray-400 mb-4" />
+            <p className="text-gray-600">Nenhuma extração realizada ainda</p>
+            <button
+              onClick={() => setShowModal(true)}
+              className="mt-4 px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+            >
+              Criar Primeira Extração
+            </button>
           </div>
         ) : (
           <div className="space-y-3">
             {items.map((item) => (
-              <div key={item.id} className="border border-gray-200 rounded-lg p-4">
-                <p className="font-semibold">Item {item.id}</p>
+              <div key={item.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-semibold text-lg">{item.deviceName || 'Dispositivo'}</p>
+                    <p className="text-sm text-gray-600">{item.deviceModel || 'Modelo não especificado'}</p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {item.extractionMethod || 'Método: Não especificado'} • {item.operatingSystem || 'SO: Não especificado'}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      item.status === 'completed' ? 'bg-green-100 text-green-800' :
+                      item.status === 'in_progress' ? 'bg-orange-100 text-orange-800' :
+                      'bg-gray-100 text-gray-800'
+                    }`}>
+                      {item.status === 'completed' ? 'Concluída' :
+                       item.status === 'in_progress' ? 'Em Andamento' : 'Pendente'}
+                    </span>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
