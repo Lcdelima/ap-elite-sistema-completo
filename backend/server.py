@@ -491,6 +491,14 @@ try:
 except ImportError as e:
     logger.error(f"⚠️ CISAI+ Module not available: {e}")
 
+# Import Athena Universal CRUD Module
+try:
+    from athena_universal_crud import router as athena_crud_router
+    app.include_router(athena_crud_router)
+    logger.info("🔧 ATHENA UNIVERSAL CRUD MODULE loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ Athena Universal CRUD Module not available: {e}")
+
 # Include the router in the main app
 app.include_router(api_router)
 
