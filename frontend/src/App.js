@@ -204,6 +204,10 @@ function AppContent() {
           {/* CISAI Routes */}
           <Route path="/admin/cisai/behavioral" element={<BehavioralForensics />} />
           <Route path="/admin/cisai/command" element={<ForensicCommand />} />
+          <Route path="/admin/cisai/cyberintel" element={<CyberIntelFusion />} />
+          <Route path="/admin/cisai/trial-science" element={<TrialScience />} />
+          <Route path="/admin/cisai/social-sentinel" element={<SocialSentinel />} />
+          <Route path="/admin/cisai/mobile-forensics" element={<MobileForensics />} />
       </Routes>
       <WhatsAppButton />
       <HybridNotifications />
