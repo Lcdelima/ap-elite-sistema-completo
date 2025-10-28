@@ -94,6 +94,10 @@ import CollaborationHub from './pages/athena/CollaborationHub';
 import PredictiveAnalytics from './pages/athena/PredictiveAnalytics';
 import ComplianceCenter from './pages/athena/ComplianceCenter';
 
+// CISAI Pages
+import BehavioralForensics from './pages/cisai/BehavioralForensics';
+import ForensicCommand from './pages/cisai/ForensicCommand';
+
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
 import HybridNotifications from './components/HybridNotifications';
