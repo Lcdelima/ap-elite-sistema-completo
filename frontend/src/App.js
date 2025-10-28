@@ -41,6 +41,13 @@ import ProcessAnalysisSystem from './pages/athena/ProcessAnalysisSystem';
 import GestaoProcessos from './pages/juridico/GestaoProcessos';
 import BibliotecaDocumentos from './pages/juridico/BibliotecaDocumentos';
 import GeradorContratos from './pages/juridico/GeradorContratos';
+import PericiaDigitalUltra from './pages/forensics/PericiaDigitalUltra';
+import InterceptacoesTelematicas from './pages/forensics/InterceptacoesTelematicas';
+import ExtracaoDados from './pages/forensics/ExtracaoDados';
+import AnaliseERBs from './pages/forensics/AnaliseERBs';
+import IPEDIntegration from './pages/forensics/IPEDIntegration';
+import CadeiaCustodia from './pages/forensics/CadeiaCustodia';
+
 
 
 
