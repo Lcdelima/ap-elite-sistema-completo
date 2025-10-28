@@ -13,7 +13,7 @@ import re
 import json
 
 from motor.motor_asyncio import AsyncIOMotorClient
-from emergentintegrations import EmergentClaude
+from emergentintegrations import Anthropic as EmergentClaude
 import os
 
 router = APIRouter(prefix="/api/analysis", tags=["Análise de Processos"])
