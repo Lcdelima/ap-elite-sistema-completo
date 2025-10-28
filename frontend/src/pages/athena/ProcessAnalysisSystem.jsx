@@ -111,13 +111,35 @@ const ProcessAnalysisSystem = () => {
       const response = await axios.post(`${BACKEND_URL}/api/analysis/case`, wizardData);
       
       if (response.data.success) {
+        const analysisId = response.data.analysis_id;
+        
+        // Upload de arquivos se houver
+        if (selectedFiles.length > 0) {
+          toast.info(`Enviando ${selectedFiles.length} arquivo(s)...`);
+          
+          for (const file of selectedFiles) {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('tipo', 'documento');
+            
+            try {
+              await axios.post(`${BACKEND_URL}/api/analysis/${analysisId}/ingest`, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+              });
+            } catch (uploadError) {
+              console.error('Erro no upload:', uploadError);
+            }
+          }
+        }
+        
         toast.success('Análise criada! Prazos D-3 e D-1 agendados.');
         setShowWizard(false);
         setCurrentStep(1);
+        setSelectedFiles([]);
         setWizardData({
           cnj: '', comarca: '', vara: '', tipo_processo: '', tipo_analise: '',
           prioridade: 'P2', prazo: '', legal: { basis: '', evidence_id: '', purpose: '' },
-          partes: {}, documentos: [], ai_enabled: true
+          partes: {}, documentos: [], uploading: false, ai_enabled: true
         });
         fetchAnalyses();
         fetchStats();
@@ -127,6 +149,17 @@ const ProcessAnalysisSystem = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleFileSelect = (e) => {
+    const files = Array.from(e.target.files);
+    setSelectedFiles([...selectedFiles, ...files]);
+    toast.success(`${files.length} arquivo(s) selecionado(s)`);
+  };
+
+  const removeFile = (index) => {
+    const newFiles = selectedFiles.filter((_, i) => i !== index);
+    setSelectedFiles(newFiles);
   };
 
   const executarIA = async (analysisId, tipo) => {
