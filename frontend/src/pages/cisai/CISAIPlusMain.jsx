@@ -728,10 +728,10 @@ const CISAIPlusMain = () => {
             <div className="flex items-center space-x-4">
               <span>✅ Conformidade: LGPD, ISO/IEC 27037, 27042</span>
               <span>🔒 Cadeia de Custódia Ativa</span>
-              <span>📡 OpenCellID Integrado</span>
+              <span>📡 OpenCellID + Wigle + AbuseIPDB Integrados</span>
             </div>
             <div>
-              <span className="text-cyan-400">CISAI+ v1.0.0</span>
+              <span className="text-cyan-400">CISAI+ v1.1.0</span>
             </div>
           </div>
         </div>
