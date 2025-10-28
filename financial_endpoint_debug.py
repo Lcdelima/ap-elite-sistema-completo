@@ -10,7 +10,7 @@ import json
 from datetime import datetime
 
 # Configuration
-BASE_URL = "https://apelite-digital.preview.emergentagent.com/api"
+BASE_URL = "https://digital-sleuth-9.preview.emergentagent.com/api"
 TEST_USER = {
     "email": "laura@apelite.com",
     "password": "laura2024",
@@ -74,7 +74,7 @@ class FinancialEndpointDebugger:
         headers = self.get_headers()
         
         for endpoint in endpoints_to_test:
-            full_url = f"https://apelite-digital.preview.emergentagent.com{endpoint}"
+            full_url = f"https://digital-sleuth-9.preview.emergentagent.com{endpoint}"
             self.log(f"Testing: {endpoint}")
             
             try:
@@ -120,7 +120,7 @@ class FinancialEndpointDebugger:
         working_endpoints = []
         
         for endpoint in athena_endpoints:
-            full_url = f"https://apelite-digital.preview.emergentagent.com{endpoint}"
+            full_url = f"https://digital-sleuth-9.preview.emergentagent.com{endpoint}"
             
             try:
                 async with self.session.get(full_url, headers=headers) as response:
@@ -167,7 +167,7 @@ class FinancialEndpointDebugger:
         working_enhanced = []
         
         for endpoint in enhanced_endpoints:
-            full_url = f"https://apelite-digital.preview.emergentagent.com{endpoint}"
+            full_url = f"https://digital-sleuth-9.preview.emergentagent.com{endpoint}"
             
             try:
                 async with self.session.get(full_url, headers=headers) as response:
@@ -201,7 +201,7 @@ class FinancialEndpointDebugger:
         headers = self.get_headers()
         
         for endpoint in financial_endpoints:
-            full_url = f"https://apelite-digital.preview.emergentagent.com{endpoint}"
+            full_url = f"https://digital-sleuth-9.preview.emergentagent.com{endpoint}"
             self.log(f"Testing financial endpoint: {endpoint}")
             
             try:

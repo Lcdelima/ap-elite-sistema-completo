@@ -1,6 +1,6 @@
 {
   "timestamp": "2025-10-27T20:11:18.243488",
-  "backend_url": "https://apelite-digital.preview.emergentagent.com",
+  "backend_url": "https://digital-sleuth-9.preview.emergentagent.com",
   "total_tests": 25,
   "passed_tests": 22,
   "success_rate": 88.0,
@@ -9,7 +9,7 @@
       {
         "test_name": "Password Recovery Stats",
         "method": "GET",
-        "url": "https://apelite-digital.preview.emergentagent.com/api/password-recovery-elite/stats",
+        "url": "https://digital-sleuth-9.preview.emergentagent.com/api/password-recovery-elite/stats",
         "status_code": 200,
         "expected_status": 200,
         "success": true,
@@ -31,7 +31,7 @@
       {
         "test_name": "List Recovery Attempts",
         "method": "GET",
-        "url": "https://apelite-digital.preview.emergentagent.com/api/password-recovery-elite/recovery-attempts",
+        "url": "https://digital-sleuth-9.preview.emergentagent.com/api/password-recovery-elite/recovery-attempts",
         "status_code": 200,
         "expected_status": 200,
         "success": true,
@@ -47,7 +47,7 @@
       {
         "test_name": "Create Recovery Attempt",
         "method": "POST",
-        "url": "https://apelite-digital.preview.emergentagent.com/api/password-recovery-elite/recovery-attempts",
+        "url": "https://digital-sleuth-9.preview.emergentagent.com/api/password-recovery-elite/recovery-attempts",
         "status_code": 200,
         "expected_status": 200,
         "success": true,
@@ -107,7 +107,7 @@
       {
         "test_name": "Get Recovery Attempt Details",
         "method": "GET",
-        "url": "https://apelite-digital.preview.emergentagent.com/api/password-recovery-elite/recovery-attempts/f04ef246-3fa6-42f7-868b-652c02402e82",
+        "url": "https://digital-sleuth-9.preview.emergentagent.com/api/password-recovery-elite/recovery-attempts/f04ef246-3fa6-42f7-868b-652c02402e82",
         "status_code": 200,
         "expected_status": 200,
         "success": true,
@@ -159,7 +159,7 @@
       {
         "test_name": "Simulate Recovery Progress",
         "method": "POST",
-        "url": "https://apelite-digital.preview.emergentagent.com/api/password-recovery-elite/recovery-attempts/f04ef246-3fa6-42f7-868b-652c02402e82/simulate-progress",
+        "url": "https://digital-sleuth-9.preview.emergentagent.com/api/password-recovery-elite/recovery-attempts/f04ef246-3fa6-42f7-868b-652c02402e82/simulate-progress",
         "status_code": 200,
         "expected_status": 200,
         "success": true,
@@ -178,7 +178,7 @@
       {
         "test_name": "Get Attack Methods",
         "method": "GET",
-        "url": "https://apelite-digital.preview.emergentagent.com/api/password-recovery-elite/attack-methods",
+        "url": "https://digital-sleuth-9.preview.emergentagent.com/api/password-recovery-elite/attack-methods",
         "status_code": 200,
         "expected_status": 200,
         "success": true,
@@ -288,7 +288,7 @@
       {
         "test_name": "Get Supported File Types",
         "method": "GET",
-        "url": "https://apelite-digital.preview.emergentagent.com/api/password-recovery-elite/supported-file-types",
+        "url": "https://digital-sleuth-9.preview.emergentagent.com/api/password-recovery-elite/supported-file-types",
         "status_code": 200,
         "expected_status": 200,
         "success": true,
@@ -469,7 +469,7 @@
       {
         "test_name": "Data Recovery Stats",
         "method": "GET",
-        "url": "https://apelite-digital.preview.emergentagent.com/api/data-recovery-ultimate/stats",
+        "url": "https://digital-sleuth-9.preview.emergentagent.com/api/data-recovery-ultimate/stats",
         "status_code": 200,
         "expected_status": 200,
         "success": true,
@@ -490,7 +490,7 @@
       {
         "test_name": "List Data Recoveries",
         "method": "GET",
-        "url": "https://apelite-digital.preview.emergentagent.com/api/data-recovery-ultimate/recoveries",
+        "url": "https://digital-sleuth-9.preview.emergentagent.com/api/data-recovery-ultimate/recoveries",
         "status_code": 200,
         "expected_status": 200,
         "success": true,
@@ -506,7 +506,7 @@
       {
         "test_name": "Create Data Recovery",
         "method": "POST",
-        "url": "https://apelite-digital.preview.emergentagent.com/api/data-recovery-ultimate/recoveries",
+        "url": "https://digital-sleuth-9.preview.emergentagent.com/api/data-recovery-ultimate/recoveries",
         "status_code": 200,
         "expected_status": 200,
         "success": true,
@@ -580,7 +580,7 @@
       {
         "test_name": "Get Recovery Details",
         "method": "GET",
-        "url": "https://apelite-digital.preview.emergentagent.com/api/data-recovery-ultimate/recoveries/9ce2dc8a-69ff-4a61-a009-9186dff8838d",
+        "url": "https://digital-sleuth-9.preview.emergentagent.com/api/data-recovery-ultimate/recoveries/9ce2dc8a-69ff-4a61-a009-9186dff8838d",
         "status_code": 200,
         "expected_status": 200,
         "success": true,
@@ -646,7 +646,7 @@
       {
         "test_name": "Simulate Recovery Progress",
         "method": "POST",
-        "url": "https://apelite-digital.preview.emergentagent.com/api/data-recovery-ultimate/recoveries/9ce2dc8a-69ff-4a61-a009-9186dff8838d/simulate-progress",
+        "url": "https://digital-sleuth-9.preview.emergentagent.com/api/data-recovery-ultimate/recoveries/9ce2dc8a-69ff-4a61-a009-9186dff8838d/simulate-progress",
         "status_code": 200,
         "expected_status": 200,
         "success": true,
@@ -664,7 +664,7 @@
       {
         "test_name": "Get Supported Systems",
         "method": "GET",
-        "url": "https://apelite-digital.preview.emergentagent.com/api/data-recovery-ultimate/supported-systems",
+        "url": "https://digital-sleuth-9.preview.emergentagent.com/api/data-recovery-ultimate/supported-systems",
         "status_code": 200,
         "expected_status": 200,
         "success": true,
@@ -790,7 +790,7 @@
       {
         "test_name": "Get Supported Media Types",
         "method": "GET",
-        "url": "https://apelite-digital.preview.emergentagent.com/api/data-recovery-ultimate/supported-media-types",
+        "url": "https://digital-sleuth-9.preview.emergentagent.com/api/data-recovery-ultimate/supported-media-types",
         "status_code": 200,
         "expected_status": 200,
         "success": true,
@@ -879,7 +879,7 @@
       {
         "test_name": "USB Forensics Stats",
         "method": "GET",
-        "url": "https://apelite-digital.preview.emergentagent.com/api/usb-forensics-pro/stats",
+        "url": "https://digital-sleuth-9.preview.emergentagent.com/api/usb-forensics-pro/stats",
         "status_code": 200,
         "expected_status": 200,
         "success": true,
@@ -897,7 +897,7 @@
       {
         "test_name": "List USB Analyses",
         "method": "GET",
-        "url": "https://apelite-digital.preview.emergentagent.com/api/usb-forensics-pro/analyses",
+        "url": "https://digital-sleuth-9.preview.emergentagent.com/api/usb-forensics-pro/analyses",
         "status_code": 200,
         "expected_status": 200,
         "success": true,
@@ -913,7 +913,7 @@
       {
         "test_name": "Create USB Analysis",
         "method": "POST",
-        "url": "https://apelite-digital.preview.emergentagent.com/api/usb-forensics-pro/analyses",
+        "url": "https://digital-sleuth-9.preview.emergentagent.com/api/usb-forensics-pro/analyses",
         "status_code": 200,
         "expected_status": 200,
         "success": true,
@@ -2973,7 +2973,7 @@
       {
         "test_name": "Get Analysis Details",
         "method": "GET",
-        "url": "https://apelite-digital.preview.emergentagent.com/api/usb-forensics-pro/analyses/b7d23c98-7867-4ab5-9b99-0884789485a1",
+        "url": "https://digital-sleuth-9.preview.emergentagent.com/api/usb-forensics-pro/analyses/b7d23c98-7867-4ab5-9b99-0884789485a1",
         "status_code": 200,
         "expected_status": 200,
         "success": true,
@@ -5026,7 +5026,7 @@
       {
         "test_name": "List All USB Devices",
         "method": "GET",
-        "url": "https://apelite-digital.preview.emergentagent.com/api/usb-forensics-pro/devices",
+        "url": "https://digital-sleuth-9.preview.emergentagent.com/api/usb-forensics-pro/devices",
         "status_code": 200,
         "expected_status": 200,
         "success": true,
@@ -6167,7 +6167,7 @@
       {
         "test_name": "Get Suspicious Devices",
         "method": "GET",
-        "url": "https://apelite-digital.preview.emergentagent.com/api/usb-forensics-pro/suspicious-devices",
+        "url": "https://digital-sleuth-9.preview.emergentagent.com/api/usb-forensics-pro/suspicious-devices",
         "status_code": 200,
         "expected_status": 200,
         "success": true,
@@ -6798,7 +6798,7 @@
       {
         "test_name": "Get Device Types",
         "method": "GET",
-        "url": "https://apelite-digital.preview.emergentagent.com/api/usb-forensics-pro/device-types",
+        "url": "https://digital-sleuth-9.preview.emergentagent.com/api/usb-forensics-pro/device-types",
         "status_code": 200,
         "expected_status": 200,
         "success": true,
@@ -6868,7 +6868,7 @@
       {
         "test_name": "Get Analysis Types",
         "method": "GET",
-        "url": "https://apelite-digital.preview.emergentagent.com/api/usb-forensics-pro/analysis-types",
+        "url": "https://digital-sleuth-9.preview.emergentagent.com/api/usb-forensics-pro/analysis-types",
         "status_code": 200,
         "expected_status": 200,
         "success": true,
