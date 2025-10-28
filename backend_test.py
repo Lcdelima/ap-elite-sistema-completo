@@ -13,367 +13,271 @@ from datetime import datetime
 BACKEND_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://elite-detective-1.preview.emergentagent.com')
 BASE_URL = f"{BACKEND_URL}/api"
 
-class CISAIPlusTestSuite:
-    def __init__(self):
-        self.session = requests.Session()
-        self.token = None
-        self.test_results = []
+def test_cisai_health_check():
+    """Test 1: Health Check Updated - should show Wigle and AbuseIPDB as 'active'"""
+    print("\n🔍 TEST 1: CISAI+ Health Check")
+    print("=" * 50)
+    
+    try:
+        response = requests.get(f"{BASE_URL}/cisai/health", timeout=10)
+        print(f"Status Code: {response.status_code}")
         
-    def log_test(self, test_name, status, details=""):
-        """Log test results"""
-        result = {
-            "test": test_name,
-            "status": status,
-            "details": details,
-            "timestamp": datetime.now().isoformat()
-        }
-        self.test_results.append(result)
-        status_icon = "✅" if status == "PASS" else "❌"
-        print(f"{status_icon} {test_name}: {details}")
-        
-    def authenticate(self):
-        """Authenticate with the backend"""
-        try:
-            print("\n🔐 AUTHENTICATION")
-            print("=" * 50)
+        if response.status_code == 200:
+            data = response.json()
+            print(f"✅ Response received successfully")
+            print(f"Module: {data.get('module')}")
+            print(f"Version: {data.get('version')}")
+            print(f"Status: {data.get('status')}")
             
-            auth_data = {
-                "email": AUTH_EMAIL,
-                "password": AUTH_PASSWORD,
-                "role": AUTH_ROLE
-            }
+            # Check integrations
+            integrations = data.get('integrations', {})
+            print(f"\nIntegrations:")
+            for service, status in integrations.items():
+                print(f"  - {service}: {status}")
             
-            response = self.session.post(f"{BASE_URL}/auth/login", json=auth_data)
+            # Verify Wigle and AbuseIPDB are active
+            wigle_status = integrations.get('wigle')
+            abuseipdb_status = integrations.get('abuseipdb')
             
-            if response.status_code == 200:
-                data = response.json()
-                self.token = data.get("token")
-                self.session.headers.update({"Authorization": f"Bearer {self.token}"})
-                self.log_test("Authentication", "PASS", f"Successfully authenticated as {AUTH_EMAIL}")
+            if wigle_status == 'active' and abuseipdb_status == 'active':
+                print(f"✅ PASS: Wigle ({wigle_status}) and AbuseIPDB ({abuseipdb_status}) are active")
                 return True
             else:
-                self.log_test("Authentication", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
+                print(f"❌ FAIL: Expected Wigle and AbuseIPDB to be 'active', got Wigle: {wigle_status}, AbuseIPDB: {abuseipdb_status}")
                 return False
-                
-        except Exception as e:
-            self.log_test("Authentication", "FAIL", f"Exception: {str(e)}")
-            return False
-    
-    def test_ultra_extraction_pro_stats(self):
-        """Test Ultra Extraction Pro stats endpoint"""
-        print("\n🚀 ULTRA EXTRACTION PRO - STATS")
-        print("=" * 50)
-        
-        try:
-            response = self.session.get(f"{BASE_URL}/ultra-extraction-pro/stats")
-            if response.status_code == 200:
-                data = response.json()
-                expected_keys = ["total_extractions", "em_andamento", "concluidas", "falhas", "by_method", "by_device", "total_data_extracted_gb", "ai_powered_analyses"]
-                if all(key in data for key in expected_keys):
-                    self.log_test("Ultra Extraction Pro Stats", "PASS", f"Retrieved stats: total={data['total_extractions']}, completed={data['concluidas']}, AI analyses={data['ai_powered_analyses']}")
-                else:
-                    self.log_test("Ultra Extraction Pro Stats", "FAIL", f"Missing keys in response: {data}")
-            else:
-                self.log_test("Ultra Extraction Pro Stats", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
-        except Exception as e:
-            self.log_test("Ultra Extraction Pro Stats", "FAIL", f"Exception: {str(e)}")
-    
-    def test_ultra_extraction_pro_extractions(self):
-        """Test Ultra Extraction Pro extractions management"""
-        print("\n📱 ULTRA EXTRACTION PRO - EXTRACTIONS")
-        print("=" * 50)
-        
-        # Test 1: GET /api/ultra-extraction-pro/extractions (list extractions)
-        try:
-            response = self.session.get(f"{BASE_URL}/ultra-extraction-pro/extractions")
-            if response.status_code == 200:
-                data = response.json()
-                if "extractions" in data and "count" in data:
-                    self.log_test("Ultra Extraction List", "PASS", f"Retrieved {data['count']} extractions")
-                else:
-                    self.log_test("Ultra Extraction List", "FAIL", f"Invalid response structure: {data}")
-            else:
-                self.log_test("Ultra Extraction List", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
-        except Exception as e:
-            self.log_test("Ultra Extraction List", "FAIL", f"Exception: {str(e)}")
-        
-        # Test 2: POST /api/ultra-extraction-pro/extractions (create extraction)
-        extraction_id = None
-        try:
-            extraction_data = {
-                "caso_id": "CASO-ULTRA-2024-001",
-                "dispositivo_tipo": "smartphone",
-                "dispositivo_marca": "Samsung",
-                "dispositivo_modelo": "Galaxy S24 Ultra",
-                "sistema_operacional": "Android 14",
-                "imei": "123456789012345",
-                "numero_serie": "S24ULTRA123",
-                "metodo_extracao": "physical",
-                "nivel_extracao": "completo",
-                "prioridade": "alta",
-                "enable_ai_analysis": True,
-                "enable_deleted_recovery": True,
-                "enable_encrypted_analysis": True,
-                "enable_malware_scan": True,
-                "enable_timeline_reconstruction": True
-            }
-            
-            response = self.session.post(f"{BASE_URL}/ultra-extraction-pro/extractions", json=extraction_data)
-            if response.status_code == 200:
-                data = response.json()
-                if data.get("success") and "extraction_id" in data:
-                    extraction_id = data["extraction_id"]
-                    self.log_test("Ultra Extraction Create", "PASS", f"Created extraction with ID: {extraction_id}")
-                else:
-                    self.log_test("Ultra Extraction Create", "FAIL", f"Invalid response: {data}")
-            else:
-                self.log_test("Ultra Extraction Create", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
-        except Exception as e:
-            self.log_test("Ultra Extraction Create", "FAIL", f"Exception: {str(e)}")
-        
-        # Test 3: GET /api/ultra-extraction-pro/extractions/{extraction_id} (get extraction details)
-        if extraction_id:
-            try:
-                response = self.session.get(f"{BASE_URL}/ultra-extraction-pro/extractions/{extraction_id}")
-                if response.status_code == 200:
-                    data = response.json()
-                    if "extraction_id" in data and "dispositivo_marca" in data:
-                        self.log_test("Ultra Extraction Details", "PASS", f"Retrieved extraction details for {data.get('dispositivo_marca')} {data.get('dispositivo_modelo')}")
-                    else:
-                        self.log_test("Ultra Extraction Details", "FAIL", f"Invalid response structure: {data}")
-                else:
-                    self.log_test("Ultra Extraction Details", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
-            except Exception as e:
-                self.log_test("Ultra Extraction Details", "FAIL", f"Exception: {str(e)}")
-        
-        # Test 4: POST /api/ultra-extraction-pro/extractions/{extraction_id}/simulate-progress
-        if extraction_id:
-            try:
-                response = self.session.post(f"{BASE_URL}/ultra-extraction-pro/extractions/{extraction_id}/simulate-progress")
-                if response.status_code == 200:
-                    data = response.json()
-                    if data.get("success") and "progresso" in data:
-                        self.log_test("Ultra Extraction Progress", "PASS", f"Simulated progress: {data['progresso']}%, extracted data includes {data.get('dados_extraidos', {}).get('contatos', 0)} contacts")
-                    else:
-                        self.log_test("Ultra Extraction Progress", "FAIL", f"Invalid response: {data}")
-                else:
-                    self.log_test("Ultra Extraction Progress", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
-            except Exception as e:
-                self.log_test("Ultra Extraction Progress", "FAIL", f"Exception: {str(e)}")
-        
-        # Test 5: POST /api/ultra-extraction-pro/extractions/{extraction_id}/generate-report
-        if extraction_id:
-            try:
-                response = self.session.post(f"{BASE_URL}/ultra-extraction-pro/extractions/{extraction_id}/generate-report")
-                if response.status_code == 200:
-                    data = response.json()
-                    if data.get("success") and "report" in data:
-                        report = data["report"]
-                        self.log_test("Ultra Extraction Report", "PASS", f"Generated report with {len(report.get('sections', []))} sections, compliance: {', '.join(report.get('compliance', []))}")
-                    else:
-                        self.log_test("Ultra Extraction Report", "FAIL", f"Invalid response: {data}")
-                else:
-                    self.log_test("Ultra Extraction Report", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
-            except Exception as e:
-                self.log_test("Ultra Extraction Report", "FAIL", f"Exception: {str(e)}")
-        
-        return extraction_id
-    
-    def test_ultra_extraction_pro_methods(self):
-        """Test Ultra Extraction Pro methods endpoint"""
-        print("\n🔧 ULTRA EXTRACTION PRO - METHODS")
-        print("=" * 50)
-        
-        try:
-            response = self.session.get(f"{BASE_URL}/ultra-extraction-pro/extraction-methods")
-            if response.status_code == 200:
-                data = response.json()
-                if "methods" in data and "total" in data:
-                    methods = data["methods"]
-                    expected_methods = ["physical", "logical", "filesystem", "chip-off", "jtag", "isp", "cloud"]
-                    found_methods = [m["method"] for m in methods]
-                    
-                    if len(methods) == 7 and all(method in found_methods for method in expected_methods):
-                        # Check if each method has required fields
-                        valid_methods = True
-                        for method in methods:
-                            required_fields = ["name", "description", "advantages", "disadvantages", "supported_devices", "duration", "data_recovery"]
-                            if not all(field in method for field in required_fields):
-                                valid_methods = False
-                                break
-                        
-                        if valid_methods:
-                            self.log_test("Ultra Extraction Methods", "PASS", f"Retrieved {data['total']} methods: {', '.join(found_methods)}")
-                        else:
-                            self.log_test("Ultra Extraction Methods", "FAIL", f"Methods missing required fields")
-                    else:
-                        self.log_test("Ultra Extraction Methods", "FAIL", f"Expected 7 methods, got {len(methods)}: {found_methods}")
-                else:
-                    self.log_test("Ultra Extraction Methods", "FAIL", f"Invalid response structure: {data}")
-            else:
-                self.log_test("Ultra Extraction Methods", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
-        except Exception as e:
-            self.log_test("Ultra Extraction Methods", "FAIL", f"Exception: {str(e)}")
-    
-    def test_ultra_extraction_pro_devices(self):
-        """Test Ultra Extraction Pro supported devices endpoint"""
-        print("\n📱 ULTRA EXTRACTION PRO - SUPPORTED DEVICES")
-        print("=" * 50)
-        
-        try:
-            response = self.session.get(f"{BASE_URL}/ultra-extraction-pro/supported-devices")
-            if response.status_code == 200:
-                data = response.json()
-                if "devices" in data:
-                    devices = data["devices"]
-                    expected_categories = ["smartphones", "tablets", "computers", "storage", "iot"]
-                    
-                    if all(category in devices for category in expected_categories):
-                        # Check smartphones category
-                        smartphones = devices["smartphones"]
-                        if "ios" in smartphones and "android" in smartphones:
-                            ios_devices = len(smartphones["ios"])
-                            android_devices = len(smartphones["android"])
-                            self.log_test("Ultra Extraction Devices", "PASS", f"Retrieved comprehensive device support: {ios_devices} iOS devices, {android_devices} Android devices, plus tablets, computers, storage, and IoT")
-                        else:
-                            self.log_test("Ultra Extraction Devices", "FAIL", f"Missing iOS or Android in smartphones category")
-                    else:
-                        self.log_test("Ultra Extraction Devices", "FAIL", f"Missing device categories. Expected: {expected_categories}, Found: {list(devices.keys())}")
-                else:
-                    self.log_test("Ultra Extraction Devices", "FAIL", f"Invalid response structure: {data}")
-            else:
-                self.log_test("Ultra Extraction Devices", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
-        except Exception as e:
-            self.log_test("Ultra Extraction Devices", "FAIL", f"Exception: {str(e)}")
-    
-    def test_ultra_extraction_pro_categories(self):
-        """Test Ultra Extraction Pro data categories endpoint"""
-        print("\n📊 ULTRA EXTRACTION PRO - DATA CATEGORIES")
-        print("=" * 50)
-        
-        try:
-            response = self.session.get(f"{BASE_URL}/ultra-extraction-pro/data-categories")
-            if response.status_code == 200:
-                data = response.json()
-                if "categories" in data and "total" in data:
-                    categories = data["categories"]
-                    expected_categories = ["communications", "contacts", "media", "location", "internet", "apps", "documents", "email", "calendar", "system", "security", "deleted"]
-                    found_categories = [c["category"] for c in categories]
-                    
-                    if len(categories) == 12 and all(cat in found_categories for cat in expected_categories):
-                        # Check if each category has subcategories
-                        valid_categories = True
-                        for category in categories:
-                            if "subcategories" not in category or len(category["subcategories"]) == 0:
-                                valid_categories = False
-                                break
-                        
-                        if valid_categories:
-                            total_subcategories = sum(len(c["subcategories"]) for c in categories)
-                            self.log_test("Ultra Extraction Categories", "PASS", f"Retrieved {data['total']} categories with {total_subcategories} subcategories: {', '.join(found_categories)}")
-                        else:
-                            self.log_test("Ultra Extraction Categories", "FAIL", f"Some categories missing subcategories")
-                    else:
-                        self.log_test("Ultra Extraction Categories", "FAIL", f"Expected 12 categories, got {len(categories)}: {found_categories}")
-                else:
-                    self.log_test("Ultra Extraction Categories", "FAIL", f"Invalid response structure: {data}")
-            else:
-                self.log_test("Ultra Extraction Categories", "FAIL", f"Status: {response.status_code}, Response: {response.text}")
-        except Exception as e:
-            self.log_test("Ultra Extraction Categories", "FAIL", f"Exception: {str(e)}")
-    
-    def test_authentication_required(self):
-        """Test that authentication is required for all endpoints"""
-        print("\n🔐 ULTRA EXTRACTION PRO - AUTHENTICATION VALIDATION")
-        print("=" * 50)
-        
-        # Test without authentication
-        session_no_auth = requests.Session()
-        
-        endpoints_to_test = [
-            "/ultra-extraction-pro/stats",
-            "/ultra-extraction-pro/extractions",
-            "/ultra-extraction-pro/extraction-methods",
-            "/ultra-extraction-pro/supported-devices",
-            "/ultra-extraction-pro/data-categories"
-        ]
-        
-        auth_required_count = 0
-        for endpoint in endpoints_to_test:
-            try:
-                response = session_no_auth.get(f"{BASE_URL}{endpoint}")
-                if response.status_code == 401:
-                    auth_required_count += 1
-                elif response.status_code == 200:
-                    # Some endpoints might allow anonymous access, check if they return limited data
-                    pass
-            except Exception:
-                pass
-        
-        if auth_required_count >= 3:  # At least some endpoints should require auth
-            self.log_test("Authentication Required", "PASS", f"{auth_required_count}/{len(endpoints_to_test)} endpoints properly require authentication")
         else:
-            self.log_test("Authentication Required", "PASS", f"Endpoints accessible (may allow anonymous access): {auth_required_count}/{len(endpoints_to_test)} require auth")
-    
-    def generate_summary(self):
-        """Generate test summary"""
-        print("\n📊 TEST SUMMARY")
-        print("=" * 50)
-        
-        total_tests = len(self.test_results)
-        passed_tests = len([t for t in self.test_results if t["status"] == "PASS"])
-        failed_tests = total_tests - passed_tests
-        
-        print(f"Total Tests: {total_tests}")
-        print(f"Passed: {passed_tests} ✅")
-        print(f"Failed: {failed_tests} ❌")
-        print(f"Success Rate: {(passed_tests/total_tests)*100:.1f}%")
-        
-        if failed_tests > 0:
-            print("\n❌ FAILED TESTS:")
-            for test in self.test_results:
-                if test["status"] == "FAIL":
-                    print(f"  - {test['test']}: {test['details']}")
-        
-        return passed_tests, failed_tests, total_tests
-    
-    def run_all_tests(self):
-        """Run all test suites"""
-        print("🧪 ULTRA EXTRACTION PRO MODULE - BACKEND API TESTING")
-        print("=" * 80)
-        print(f"Backend URL: {BASE_URL}")
-        print(f"Authentication: {AUTH_EMAIL} / {AUTH_ROLE}")
-        print(f"Test Started: {datetime.now().isoformat()}")
-        
-        # Authenticate first
-        if not self.authenticate():
-            print("❌ Authentication failed. Cannot proceed with tests.")
+            print(f"❌ FAIL: Expected 200, got {response.status_code}")
+            print(f"Response: {response.text}")
             return False
-        
-        # Run all test suites
-        self.test_ultra_extraction_pro_stats()
-        self.test_ultra_extraction_pro_extractions()
-        self.test_ultra_extraction_pro_methods()
-        self.test_ultra_extraction_pro_devices()
-        self.test_ultra_extraction_pro_categories()
-        self.test_authentication_required()
-        
-        # Generate summary
-        passed, failed, total = self.generate_summary()
-        
-        return failed == 0
+            
+    except Exception as e:
+        print(f"❌ ERROR: {str(e)}")
+        return False
 
-def main():
-    """Main test execution"""
-    tester = UltraExtractionProTestSuite()
-    success = tester.run_all_tests()
+def test_ip_intelligence_abuseipdb():
+    """Test 2: IP Intelligence with AbuseIPDB - test with 1.1.1.1"""
+    print("\n🔍 TEST 2: IP Intelligence with AbuseIPDB (1.1.1.1)")
+    print("=" * 50)
     
-    if success:
-        print("\n🎉 ALL TESTS PASSED!")
-        sys.exit(0)
+    try:
+        payload = {"ip": "1.1.1.1"}
+        response = requests.post(f"{BASE_URL}/cisai/net/ip/intel", 
+                               json=payload, 
+                               headers={'Content-Type': 'application/json'},
+                               timeout=15)
+        
+        print(f"Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"✅ Response received successfully")
+            
+            # Check AbuseIPDB fields
+            abuseipdb_data = data.get('abuseipdb', {})
+            if abuseipdb_data and 'error' not in abuseipdb_data:
+                print(f"\n📊 AbuseIPDB Data:")
+                print(f"  - Abuse Confidence Score: {abuseipdb_data.get('abuse_confidence_score')}")
+                print(f"  - Total Reports: {abuseipdb_data.get('total_reports')}")
+                print(f"  - Usage Type: {abuseipdb_data.get('usage_type')}")
+                print(f"  - Is Whitelisted: {abuseipdb_data.get('is_whitelisted')}")
+                print(f"  - ISP: {abuseipdb_data.get('isp')}")
+                print(f"  - Country Code: {abuseipdb_data.get('country_code')}")
+                
+                # Check risk score calculation
+                risk_score = data.get('security', {}).get('risk_score')
+                print(f"\n🎯 Risk Score: {risk_score}")
+                
+                # Verify required fields are present
+                required_fields = ['abuse_confidence_score', 'total_reports', 'usage_type', 'is_whitelisted']
+                missing_fields = [field for field in required_fields if field not in abuseipdb_data]
+                
+                if not missing_fields:
+                    print(f"✅ PASS: All required AbuseIPDB fields present")
+                    print(f"✅ PASS: Risk score calculated: {risk_score}")
+                    return True
+                else:
+                    print(f"❌ FAIL: Missing AbuseIPDB fields: {missing_fields}")
+                    return False
+            else:
+                print(f"❌ FAIL: AbuseIPDB data not found or has error: {abuseipdb_data}")
+                return False
+        else:
+            print(f"❌ FAIL: Expected 200, got {response.status_code}")
+            print(f"Response: {response.text}")
+            return False
+            
+    except Exception as e:
+        print(f"❌ ERROR: {str(e)}")
+        return False
+
+def test_wifi_lookup_wigle():
+    """Test 3: Wi-Fi Lookup with Wigle - test error 412 handling"""
+    print("\n🔍 TEST 3: Wi-Fi Lookup with Wigle (Error 412 handling)")
+    print("=" * 50)
+    
+    try:
+        payload = {"bssid": "00:11:22:33:44:55"}
+        response = requests.post(f"{BASE_URL}/cisai/wifi/lookup", 
+                               json=payload, 
+                               headers={'Content-Type': 'application/json'},
+                               timeout=15)
+        
+        print(f"Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"✅ Response received successfully")
+            
+            # Check status field
+            status = data.get('status')
+            print(f"Status: {status}")
+            
+            if status == 'rate_limit':
+                print(f"✅ PASS: Properly handled 412 rate limit error")
+                print(f"Error message: {data.get('error')}")
+                print(f"Note: {data.get('note')}")
+                return True
+            elif status == 'success':
+                print(f"✅ PASS: Successfully found BSSID data")
+                print(f"SSID: {data.get('ssid')}")
+                print(f"Location: {data.get('lat')}, {data.get('lon')}")
+                return True
+            elif status == 'not_found':
+                print(f"✅ PASS: BSSID not found (expected for test BSSID)")
+                print(f"Note: {data.get('note')}")
+                return True
+            else:
+                print(f"❌ FAIL: Unexpected status: {status}")
+                return False
+        else:
+            print(f"❌ FAIL: Expected 200, got {response.status_code}")
+            print(f"Response: {response.text}")
+            return False
+            
+    except Exception as e:
+        print(f"❌ ERROR: {str(e)}")
+        return False
+
+def test_ip_multiple_sources():
+    """Test 4: Test IP with multiple sources - 8.8.8.8 (Google DNS)"""
+    print("\n🔍 TEST 4: IP Intelligence Multiple Sources (8.8.8.8)")
+    print("=" * 50)
+    
+    try:
+        payload = {"ip": "8.8.8.8"}
+        response = requests.post(f"{BASE_URL}/cisai/net/ip/intel", 
+                               json=payload, 
+                               headers={'Content-Type': 'application/json'},
+                               timeout=15)
+        
+        print(f"Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"✅ Response received successfully")
+            
+            # Check data integration from multiple sources
+            sources_found = []
+            
+            # Check ip-api.com data
+            if 'geolocation' in data:
+                sources_found.append('ip-api.com')
+                geo = data['geolocation']
+                print(f"\n🌍 Geolocation (ip-api.com):")
+                print(f"  - Country: {geo.get('country')}")
+                print(f"  - City: {geo.get('city')}")
+                print(f"  - ISP: {data.get('network', {}).get('isp')}")
+            
+            # Check AbuseIPDB data
+            if 'abuseipdb' in data and 'error' not in data['abuseipdb']:
+                sources_found.append('AbuseIPDB')
+                abuse = data['abuseipdb']
+                print(f"\n🛡️ AbuseIPDB:")
+                print(f"  - Abuse Score: {abuse.get('abuse_confidence_score')}")
+                print(f"  - Reports: {abuse.get('total_reports')}")
+                print(f"  - Whitelisted: {abuse.get('is_whitelisted')}")
+            
+            # Check WHOIS data
+            if 'whois' in data:
+                sources_found.append('WHOIS')
+                whois = data['whois']
+                print(f"\n📋 WHOIS:")
+                print(f"  - ASN: {whois.get('asn')}")
+                print(f"  - ASN Description: {whois.get('asn_description')}")
+            
+            # Check PTR record
+            if 'ptr' in data and data['ptr']:
+                sources_found.append('PTR')
+                print(f"\n🔗 PTR Record: {data['ptr']}")
+            
+            # Check risk score
+            risk_score = data.get('security', {}).get('risk_score')
+            print(f"\n🎯 Final Risk Score: {risk_score}")
+            
+            print(f"\n📊 Data Sources Found: {', '.join(sources_found)}")
+            
+            if len(sources_found) >= 2:
+                print(f"✅ PASS: Multiple data sources integrated successfully")
+                return True
+            else:
+                print(f"❌ FAIL: Expected multiple sources, found only: {sources_found}")
+                return False
+        else:
+            print(f"❌ FAIL: Expected 200, got {response.status_code}")
+            print(f"Response: {response.text}")
+            return False
+            
+    except Exception as e:
+        print(f"❌ ERROR: {str(e)}")
+        return False
+
+def run_all_tests():
+    """Run all CISAI+ v1.1.0 integration tests"""
+    print("🦅 CISAI+ v1.1.0 Integration Testing")
+    print("=" * 60)
+    print(f"Backend URL: {BACKEND_URL}")
+    print(f"Test Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    
+    tests = [
+        ("Health Check Updated", test_cisai_health_check),
+        ("IP Intelligence with AbuseIPDB", test_ip_intelligence_abuseipdb),
+        ("Wi-Fi Lookup with Wigle", test_wifi_lookup_wigle),
+        ("IP Multiple Sources Integration", test_ip_multiple_sources)
+    ]
+    
+    results = []
+    
+    for test_name, test_func in tests:
+        try:
+            result = test_func()
+            results.append((test_name, result))
+        except Exception as e:
+            print(f"❌ CRITICAL ERROR in {test_name}: {str(e)}")
+            results.append((test_name, False))
+    
+    # Summary
+    print("\n" + "=" * 60)
+    print("📋 TEST SUMMARY")
+    print("=" * 60)
+    
+    passed = 0
+    total = len(results)
+    
+    for test_name, result in results:
+        status = "✅ PASS" if result else "❌ FAIL"
+        print(f"{status}: {test_name}")
+        if result:
+            passed += 1
+    
+    print(f"\n🎯 Results: {passed}/{total} tests passed ({(passed/total)*100:.1f}%)")
+    
+    if passed == total:
+        print("🎉 ALL TESTS PASSED - CISAI+ v1.1.0 integrations working correctly!")
     else:
-        print("\n💥 SOME TESTS FAILED!")
-        sys.exit(1)
+        print("⚠️  Some tests failed - review the issues above")
+    
+    return passed == total
 
 if __name__ == "__main__":
-    main()
+    success = run_all_tests()
+    exit(0 if success else 1)
