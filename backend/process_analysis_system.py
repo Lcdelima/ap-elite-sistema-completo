@@ -7,6 +7,7 @@ from fastapi import APIRouter, HTTPException, UploadFile, File, BackgroundTasks
 from pydantic import BaseModel, Field, validator
 from typing import Optional, List, Dict, Any
 from datetime import datetime, timedelta
+from pathlib import Path
 import uuid
 import hashlib
 import re
