@@ -443,7 +443,7 @@ Implementar sistema ERP completo para AP Elite com funcionalidades avançadas:
     file: "/app/backend/social_listening.py"
     stuck_count: 1
     priority: "medium"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: true
         agent: "testing"
@@ -451,6 +451,9 @@ Implementar sistema ERP completo para AP Elite com funcionalidades avançadas:
       - working: false
         agent: "testing"
         comment: "❌ COMPREHENSIVE AUDIT: Social Listening Statistics endpoint (/api/social/statistics) not found (404). Endpoint routing may be incorrect or module not properly included in enhanced_server.py."
+      - working: false
+        agent: "testing"
+        comment: "❌ RETESTING CONFIRMED: Social Listening Statistics endpoint still returns 404. ROOT CAUSE IDENTIFIED: The social_listening.py module is only included in enhanced_server.py (not server.py). Current backend is running server.py which does not include social_listening router. The module exists with correct prefix /api/social but is not accessible because enhanced_server.py is not running. SOLUTION NEEDED: Either switch to enhanced_server.py or include social_listening router in server.py."
 
   - task: "AI Orchestrator - Multi-Provider System"
     implemented: true
