@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Microscope, Upload, FileText, Search, CheckCircle, Clock, AlertTriangle } from 'lucide-react';
-import AthenaLayout from '../../components/AthenaLayout';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
 import axios from 'axios';
 import { toast } from 'sonner';
 
