@@ -545,7 +545,6 @@ try:
 except ImportError as e:
     logger.error(f\"\u26a0\ufe0f Sistema Jur\u00eddico not available: {e}\")
 
-    logger.error(f"⚠️ Process Analysis System not available: {e}")
 
 
 # Include the router in the main app
