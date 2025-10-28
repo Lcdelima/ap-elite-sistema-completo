@@ -28,10 +28,13 @@ const ProcessAnalysisSystem = () => {
     
     // ETAPA 2: Provas
     documentos: [],
+    uploading: false,
     
     // ETAPA 3: Conclusões
     ai_enabled: true
   });
+
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
   useEffect(() => {
     fetchAnalyses();
