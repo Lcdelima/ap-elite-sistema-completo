@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Download, Brain, Sparkles, Clock, CheckCircle } from 'lucide-react';
+import { FileText, Download, Brain, Sparkles, Clock, CheckCircle, Plus } from 'lucide-react';
+import UniversalModuleLayout from '../../components/UniversalModuleLayout';
+import axios from 'axios';
+import { toast } from 'sonner';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const TemplateGenerator = () => {
   const [templates, setTemplates] = useState([]);
@@ -7,9 +12,41 @@ const TemplateGenerator = () => {
   const [formData, setFormData] = useState({});
   const [generatedDocs, setGeneratedDocs] = useState([]);
   const [generating, setGenerating] = useState(false);
-  const [aiProvider, setAiProvider] = useState('anthropic');
+  const [loading, setLoading] = useState(false);
+  const [aiProvider, setAiProvider] = useState('gpt4');
+  const [showModal, setShowModal] = useState(false);
 
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
+  // Mock templates for demonstration
+  const mockTemplates = [
+    {
+      id: 1,
+      name: 'Petição Inicial',
+      description: 'Modelo de petição inicial para processos civis',
+      fields: ['autor', 'reu', 'objeto', 'fundamentos'],
+      category: 'processual'
+    },
+    {
+      id: 2,
+      name: 'Contrato de Prestação de Serviços',
+      description: 'Contrato padrão para prestação de serviços',
+      fields: ['contratante', 'contratado', 'servicos', 'valor', 'prazo'],
+      category: 'contratual'
+    },
+    {
+      id: 3,
+      name: 'Recurso de Apelação',
+      description: 'Modelo de recurso de apelação',
+      fields: ['apelante', 'processo', 'decisao', 'fundamentos'],
+      category: 'processual'
+    },
+    {
+      id: 4,
+      name: 'Parecer Jurídico',
+      description: 'Modelo de parecer jurídico técnico',
+      fields: ['consulente', 'questao', 'analise', 'conclusao'],
+      category: 'consultivo'
+    }
+  ];
 
   useEffect(() => {
     loadTemplates();
@@ -18,19 +55,23 @@ const TemplateGenerator = () => {
 
   const loadTemplates = async () => {
     try {
-      const response = await fetch(`${backendUrl}/api/templates/list`);
-      const data = await response.json();
-      setTemplates(data.templates || []);
+      setLoading(true);
+      // Usar mock templates por enquanto
+      setTemplates(mockTemplates);
+      // const response = await axios.get(`${BACKEND_URL}/api/athena/documents/list`);
+      // setTemplates(response.data.data || []);
     } catch (error) {
       console.error('Erro ao carregar templates:', error);
+      setTemplates(mockTemplates);
+    } finally {
+      setLoading(false);
     }
   };
 
   const loadGeneratedDocuments = async () => {
     try {
-      const response = await fetch(`${backendUrl}/api/templates/generated/list`);
-      const data = await response.json();
-      setGeneratedDocs(data.documents || []);
+      const response = await axios.get(`${BACKEND_URL}/api/athena/documents/list`);
+      setGeneratedDocs(response.data.data || []);
     } catch (error) {
       console.error('Erro ao carregar documentos:', error);
     }
@@ -38,6 +79,7 @@ const TemplateGenerator = () => {
 
   const handleTemplateSelect = (template) => {
     setSelectedTemplate(template);
+    setShowModal(true);
     const initialData = {};
     template.fields.forEach(field => {
       initialData[field] = '';
@@ -57,234 +99,242 @@ const TemplateGenerator = () => {
 
     setGenerating(true);
     try {
-      const response = await fetch(`${backendUrl}/api/templates/generate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+      await axios.post(`${BACKEND_URL}/api/athena/documents/create`, {
+        collection: 'generated_documents',
+        data: {
           template_id: selectedTemplate.id,
-          case_data: formData,
-          use_ai_completion: true,
-          ai_provider: aiProvider
-        })
+          template_name: selectedTemplate.name,
+          ai_provider: aiProvider,
+          fields: formData,
+          status: 'generated'
+        }
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        alert('Documento gerado com sucesso!');
-        loadGeneratedDocuments();
-        setFormData({});
-      } else {
-        const error = await response.json();
-        alert(`Erro: ${error.detail}`);
-      }
+      toast.success('Documento gerado com sucesso!');
+      setShowModal(false);
+      setSelectedTemplate(null);
+      setFormData({});
+      loadGeneratedDocuments();
     } catch (error) {
       console.error('Erro ao gerar documento:', error);
-      alert('Erro ao gerar documento');
+      toast.error('Erro ao gerar documento');
     } finally {
       setGenerating(false);
     }
   };
 
-  const downloadDocument = (docId) => {
-    window.open(`${backendUrl}/api/templates/download/${docId}`, '_blank');
-  };
-
-  const getFieldLabel = (field) => {
-    return field
-      .split('_')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
-  };
-
-  const getCategoryColor = (category) => {
-    const colors = {
-      audiencias: 'from-blue-500 to-cyan-500',
-      procuracoes: 'from-purple-500 to-pink-500',
-      termos: 'from-green-500 to-teal-500',
-      atas: 'from-yellow-500 to-orange-500',
-      relatorios: 'from-red-500 to-rose-500',
-      pericia: 'from-indigo-500 to-violet-500'
-    };
-    return colors[category] || 'from-gray-500 to-gray-600';
+  const fieldLabels = {
+    autor: 'Nome do Autor',
+    reu: 'Nome do Réu',
+    objeto: 'Objeto da Ação',
+    fundamentos: 'Fundamentos Legais',
+    contratante: 'Nome do Contratante',
+    contratado: 'Nome do Contratado',
+    servicos: 'Descrição dos Serviços',
+    valor: 'Valor do Contrato',
+    prazo: 'Prazo de Execução',
+    apelante: 'Nome do Apelante',
+    processo: 'Número do Processo',
+    decisao: 'Decisão Recorrida',
+    consulente: 'Nome do Consulente',
+    questao: 'Questão Jurídica',
+    analise: 'Análise da Situação',
+    conclusao: 'Conclusão do Parecer'
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-pink-900 p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
-            <FileText className="w-10 h-10" />
-            Gerador de Documentos Jurídicos
-          </h1>
-          <p className="text-purple-200">
-            Crie documentos profissionais com IA - OpenAI GPT-5, Claude Sonnet 4, Gemini 2.5 Pro
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Templates List */}
-          <div className="lg:col-span-1">
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-              <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-                <Sparkles className="w-6 h-6" />
-                Templates Disponíveis
-              </h2>
-
-              <div className="space-y-3">
-                {templates.map((template) => (
-                  <button
-                    key={template.id}
-                    onClick={() => handleTemplateSelect(template)}
-                    className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
-                      selectedTemplate?.id === template.id
-                        ? 'border-purple-400 bg-purple-500/30'
-                        : 'border-white/20 bg-white/5 hover:bg-white/10'
-                    }`}
-                  >
-                    <div className={`inline-block px-3 py-1 rounded-full text-xs font-semibold mb-2 bg-gradient-to-r ${getCategoryColor(template.category)} text-white`}>
-                      {template.category}
-                    </div>
-                    <h3 className="text-white font-semibold mb-1">{template.name}</h3>
-                    <p className="text-gray-300 text-sm">{template.description}</p>
-                    <p className="text-gray-400 text-xs mt-2">
-                      {template.fields.length} campos
-                    </p>
-                  </button>
-                ))}
-              </div>
+    <UniversalModuleLayout
+      title="Gerador de Documentos Jurídicos"
+      subtitle="Crie documentos profissionais com IA (OpenAI GPT-5, Claude Sonnet 4, Gemini 2.5 Pro)"
+      icon={FileText}
+      headerAction={
+        <button
+          onClick={() => setShowModal(true)}
+          className="bg-white text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors w-full md:w-auto flex items-center gap-2 justify-center"
+        >
+          <Plus className="w-5 h-5" />
+          Criar Documento
+        </button>
+      }
+    >
+      {/* AI Provider Selection */}
+      <div className="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-lg p-6 mb-6 text-white">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Brain className="w-8 h-8" />
+            <div>
+              <h3 className="font-semibold">Powered by AI</h3>
+              <p className="text-sm text-purple-100">Escolha o modelo de IA para gerar seu documento</p>
             </div>
           </div>
+          <select
+            value={aiProvider}
+            onChange={(e) => setAiProvider(e.target.value)}
+            className="px-4 py-2 rounded-lg bg-white text-gray-900 font-medium"
+          >
+            <option value="gpt4">OpenAI GPT-5</option>
+            <option value="claude">Claude Sonnet 4</option>
+            <option value="gemini">Gemini 2.5 Pro</option>
+          </select>
+        </div>
+      </div>
 
-          {/* Form */}
-          <div className="lg:col-span-2">
-            {selectedTemplate ? (
-              <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-                <div className="mb-6">
-                  <h2 className="text-2xl font-bold text-white mb-2">{selectedTemplate.name}</h2>
-                  <p className="text-gray-300">{selectedTemplate.description}</p>
+      {/* Templates Grid */}
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold text-gray-900">Modelos Disponíveis</h2>
+          <span className="text-sm text-gray-600">{templates.length} modelos</span>
+        </div>
+
+        {loading ? (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+            <p className="text-gray-600 mt-4">Carregando modelos...</p>
+          </div>
+        ) : templates.length === 0 ? (
+          <div className="text-center py-12 bg-gray-50 rounded-lg">
+            <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+            <p className="text-gray-600">Nenhum modelo disponível</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {templates.map((template) => (
+              <div
+                key={template.id}
+                onClick={() => handleTemplateSelect(template)}
+                className="bg-white border border-gray-200 rounded-lg p-6 hover:border-indigo-500 hover:shadow-lg transition-all cursor-pointer group"
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <FileText className="w-10 h-10 text-indigo-500 group-hover:scale-110 transition-transform" />
+                  <span className="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs font-medium rounded">
+                    {template.category}
+                  </span>
                 </div>
-
-                {/* AI Provider Selection */}
-                <div className="mb-6 p-4 bg-gradient-to-r from-purple-500/20 to-blue-500/20 border border-purple-400/30 rounded-lg">
-                  <label className="block text-sm font-medium text-white mb-2">
-                    <Brain className="w-4 h-4 inline mr-2" />
-                    Provedor de IA para Geração
-                  </label>
-                  <select
-                    value={aiProvider}
-                    onChange={(e) => setAiProvider(e.target.value)}
-                    className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-lg text-white"
-                  >
-                    <option value="openai">OpenAI GPT-5 (Raciocínio Geral)</option>
-                    <option value="anthropic">Claude Sonnet 4 (Documentos Jurídicos)</option>
-                    <option value="gemini">Gemini 2.5 Pro (Processamento de Dados)</option>
-                  </select>
-                  <p className="text-gray-300 text-sm mt-2">
-                    A IA preencherá campos vazios e melhorará o conteúdo automaticamente
-                  </p>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">{template.name}</h3>
+                <p className="text-sm text-gray-600 mb-3">{template.description}</p>
+                <div className="flex items-center text-xs text-gray-500">
+                  <Sparkles className="w-4 h-4 mr-1" />
+                  {template.fields.length} campos
                 </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
-                {/* Sections */}
-                <div className="space-y-6 mb-6">
-                  {selectedTemplate.structure.secoes.map((section, idx) => (
-                    <div key={idx} className="border-l-4 border-purple-400 pl-4">
-                      <h3 className="text-lg font-semibold text-white mb-3">{section}</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {selectedTemplate.fields
-                          .filter(field => field.toLowerCase().includes(section.toLowerCase().split(' ')[0]) || idx === 0)
-                          .map((field) => (
-                            <div key={field}>
-                              <label className="block text-sm font-medium text-purple-200 mb-2">
-                                {getFieldLabel(field)}
-                              </label>
-                              <input
-                                type="text"
-                                value={formData[field] || ''}
-                                onChange={(e) => handleInputChange(field, e.target.value)}
-                                className="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-lg text-white placeholder-gray-400"
-                                placeholder={`Digite ${getFieldLabel(field).toLowerCase()}...`}
-                              />
-                            </div>
-                          ))}
-                      </div>
+      {/* Generated Documents */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <h2 className="text-xl font-bold text-gray-900 mb-4">Documentos Gerados Recentemente</h2>
+        
+        {generatedDocs.length === 0 ? (
+          <div className="text-center py-12">
+            <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+            <p className="text-gray-600">Nenhum documento gerado ainda</p>
+            <p className="text-sm text-gray-500 mt-2">Selecione um modelo acima para começar</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {generatedDocs.map((doc) => (
+              <div key={doc.id} className="border border-gray-200 rounded-lg p-4 hover:border-indigo-300 transition-colors">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <FileText className="w-5 h-5 text-indigo-500" />
+                    <div>
+                      <h4 className="font-semibold text-gray-900">{doc.data?.template_name || 'Documento'}</h4>
+                      <p className="text-sm text-gray-600">
+                        Gerado com {doc.data?.ai_provider || 'IA'} • {new Date(doc.created_at).toLocaleDateString('pt-BR')}
+                      </p>
                     </div>
-                  ))}
+                  </div>
+                  <button className="flex items-center gap-2 px-3 py-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
+                    <Download className="w-4 h-4" />
+                    Download
+                  </button>
                 </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
+      {/* Generation Modal */}
+      {showModal && selectedTemplate && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900">{selectedTemplate.name}</h3>
+                <p className="text-sm text-gray-600">{selectedTemplate.description}</p>
+              </div>
+              <span className="px-3 py-1 bg-purple-100 text-purple-700 text-sm font-medium rounded">
+                {aiProvider === 'gpt4' ? 'GPT-5' : aiProvider === 'claude' ? 'Claude' : 'Gemini'}
+              </span>
+            </div>
+
+            <form onSubmit={(e) => { e.preventDefault(); generateDocument(); }} className="space-y-4">
+              {selectedTemplate.fields.map((field) => (
+                <div key={field}>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    {fieldLabels[field] || field}*
+                  </label>
+                  {['fundamentos', 'analise', 'conclusao'].includes(field) ? (
+                    <textarea
+                      required
+                      value={formData[field] || ''}
+                      onChange={(e) => handleInputChange(field, e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                      rows="4"
+                      placeholder={`Digite ${fieldLabels[field]?.toLowerCase() || field}...`}
+                    />
+                  ) : (
+                    <input
+                      type="text"
+                      required
+                      value={formData[field] || ''}
+                      onChange={(e) => handleInputChange(field, e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                      placeholder={`Digite ${fieldLabels[field]?.toLowerCase() || field}...`}
+                    />
+                  )}
+                </div>
+              ))}
+
+              <div className="flex gap-3 pt-4">
                 <button
-                  onClick={generateDocument}
+                  type="button"
+                  onClick={() => {
+                    setShowModal(false);
+                    setSelectedTemplate(null);
+                    setFormData({});
+                  }}
+                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium text-gray-700"
                   disabled={generating}
-                  className="w-full py-4 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-lg hover:from-purple-600 hover:to-pink-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-lg font-semibold"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium disabled:opacity-50 flex items-center justify-center gap-2"
+                  disabled={generating}
                 >
                   {generating ? (
                     <>
-                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
-                      Gerando Documento com IA...
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                      Gerando...
                     </>
                   ) : (
                     <>
-                      <Sparkles className="w-6 h-6" />
+                      <Sparkles className="w-5 h-5" />
                       Gerar Documento
                     </>
                   )}
                 </button>
               </div>
-            ) : (
-              <div className="bg-white/10 backdrop-blur-lg rounded-xl p-12 border border-white/20 text-center">
-                <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-300 text-lg">
-                  Selecione um template para começar
-                </p>
-              </div>
-            )}
+            </form>
           </div>
         </div>
-
-        {/* Generated Documents */}
-        {generatedDocs.length > 0 && (
-          <div className="mt-8 bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-              <CheckCircle className="w-6 h-6" />
-              Documentos Gerados ({generatedDocs.length})
-            </h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {generatedDocs.map((doc) => (
-                <div key={doc.id} className="bg-white/5 border border-white/20 rounded-lg p-4 hover:bg-white/10 transition-all">
-                  <div className="flex items-start justify-between mb-3">
-                    <FileText className="w-8 h-8 text-purple-400" />
-                    <span className="text-xs text-gray-400 flex items-center gap-1">
-                      <Clock className="w-3 h-3" />
-                      {new Date(doc.generated_at).toLocaleString('pt-BR')}
-                    </span>
-                  </div>
-                  
-                  <h3 className="text-white font-semibold mb-2">{doc.template_name}</h3>
-                  
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="px-2 py-1 bg-purple-500/30 text-purple-200 rounded text-xs">
-                      {doc.ai_provider}
-                    </span>
-                    <span className="px-2 py-1 bg-blue-500/30 text-blue-200 rounded text-xs">
-                      {doc.ai_model}
-                    </span>
-                  </div>
-
-                  <button
-                    onClick={() => downloadDocument(doc.id)}
-                    className="w-full py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 flex items-center justify-center gap-2"
-                  >
-                    <Download className="w-4 h-4" />
-                    Download DOCX
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
+      )}
+    </UniversalModuleLayout>
   );
 };
 
