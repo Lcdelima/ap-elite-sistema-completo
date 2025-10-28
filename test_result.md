@@ -425,7 +425,7 @@ Implementar sistema ERP completo para AP Elite com funcionalidades avançadas:
     file: "/app/backend/workflow_automation.py"
     stuck_count: 1
     priority: "medium"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: true
         agent: "testing"
@@ -433,6 +433,9 @@ Implementar sistema ERP completo para AP Elite com funcionalidades avançadas:
       - working: false
         agent: "testing"
         comment: "❌ COMPREHENSIVE AUDIT: Workflow Templates endpoint (/api/workflow/templates) not found (404). Endpoint routing may be incorrect or module not properly included in enhanced_server.py."
+      - working: false
+        agent: "testing"
+        comment: "❌ RETESTING CONFIRMED: Workflow Templates endpoint still returns 404. ROOT CAUSE IDENTIFIED: The workflow_automation.py module is only included in enhanced_server.py (not server.py). Current backend is running server.py which does not include workflow_automation router. The module exists with correct prefix /api/workflows but is not accessible because enhanced_server.py is not running. SOLUTION NEEDED: Either switch to enhanced_server.py or include workflow_automation router in server.py."
 
   - task: "Social Listening System"
     implemented: true
