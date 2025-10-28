@@ -614,20 +614,14 @@ async def ip_intelligence(request: IPIntelRequest):
 @router.post("/wifi/lookup")
 async def wifi_lookup(request: WiFiLookupRequest):
     """
-    Lookup de BSSID Wi-Fi (mock - requer integração com Wigle ou banco próprio)
+    Lookup de BSSID Wi-Fi usando Wigle API
     """
-    # Mock response
-    return {
-        "bssid": request.bssid,
-        "ssid": "MockNetwork",
-        "lat": -22.9068,
-        "lon": -43.1729,
-        "first_seen": datetime.now(timezone.utc).isoformat(),
-        "last_seen": datetime.now(timezone.utc).isoformat(),
-        "vendor": "Unknown",
-        "security": "WPA2",
-        "note": "Mock data - integração com Wigle requer API key"
-    }
+    try:
+        result = wigle_bssid_lookup(request.bssid)
+        return result
+    except Exception as e:
+        logger.error(f"WiFi lookup error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Erro ao consultar Wi-Fi: {str(e)}")
 
 @router.post("/anti/spoof/gps")
 async def gps_spoof_detection(request: SpoofDetectionRequest):
