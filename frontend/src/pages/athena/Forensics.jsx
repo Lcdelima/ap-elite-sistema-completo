@@ -69,27 +69,20 @@ const Forensics = () => {
   };
 
   return (
-    <AthenaLayout>
-      <div className="max-w-7xl mx-auto">
-        <div className="bg-gradient-to-r from-teal-600 to-cyan-600 text-white p-6 rounded-lg shadow-lg mb-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Microscope className="w-12 h-12" />
-              <div>
-                <h1 className="text-3xl font-bold mb-1">Perícia Digital</h1>
-                <p className="text-teal-100">Análise forense especializada</p>
-              </div>
-            </div>
-            <button
-              onClick={() => setShowModal(true)}
-              className="bg-white text-teal-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100"
-            >
-              Nova Análise
-            </button>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <UniversalModuleLayout
+      title="Perícia Digital"
+      subtitle="Análise forense especializada"
+      icon={Microscope}
+      headerAction={
+        <button
+          onClick={() => setShowModal(true)}
+          className="bg-white text-teal-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors w-full md:w-auto"
+        >
+          Nova Análise
+        </button>
+      }
+    >
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <div className="bg-white p-6 rounded-lg shadow">
             <div className="flex items-center justify-between mb-2">
               <p className="text-sm text-gray-600">Total</p>
