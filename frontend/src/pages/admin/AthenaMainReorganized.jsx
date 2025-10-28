@@ -124,6 +124,7 @@ const AthenaMainReorganized = () => {
       gradient: 'from-indigo-600 to-indigo-800',
       description: 'Inteligência e investigação aberta',
       modules: [
+        { name: 'CISAI+ GeoIntel', icon: MapPin, route: '/admin/cisai', description: 'Geointeligência, IP/Wi-Fi Intel & Antiforense', highlight: true },
         { name: 'Investigação Defensiva', icon: Target, route: '/athena/defensive-investigation', description: 'Investigação defensiva estratégica' },
         { name: 'Investigação Avançada', icon: Search, route: '/athena/advanced-investigation', description: 'Técnicas avançadas de investigação' },
         { name: 'OSINT Avançado', icon: Globe, route: '/athena/osint-dashboard', description: 'Open Source Intelligence' },
