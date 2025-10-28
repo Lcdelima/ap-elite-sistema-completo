@@ -169,33 +169,129 @@ const DataExtraction = () => {
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h3 className="text-xl font-bold mb-4">Novo Item</h3>
+          <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <h3 className="text-2xl font-bold mb-2">Nova Extração</h3>
+            <p className="text-gray-600 mb-6">Preencha as informações do dispositivo para extração forense</p>
+            
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Nome*</label>
-                <input
-                  type="text"
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                  placeholder="Digite o nome..."
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Nome do Dispositivo*</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.deviceName}
+                    onChange={(e) => setFormData({...formData, deviceName: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                    placeholder="Ex: iPhone de João Silva"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Modelo do Dispositivo*</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.deviceModel}
+                    onChange={(e) => setFormData({...formData, deviceModel: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                    placeholder="Ex: iPhone 13 Pro"
+                  />
+                </div>
               </div>
-              <div className="flex gap-2 pt-4">
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Tipo de Dispositivo*</label>
+                  <select
+                    required
+                    value={formData.deviceType}
+                    onChange={(e) => setFormData({...formData, deviceType: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                  >
+                    <option value="">Selecione o tipo</option>
+                    <option value="smartphone">Smartphone</option>
+                    <option value="tablet">Tablet</option>
+                    <option value="computer">Computador</option>
+                    <option value="storage">Dispositivo de Armazenamento</option>
+                    <option value="iot">IoT</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Número de Série</label>
+                  <input
+                    type="text"
+                    value={formData.serialNumber}
+                    onChange={(e) => setFormData({...formData, serialNumber: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                    placeholder="Ex: F2LX12345ABC"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Método de Extração*</label>
+                  <select
+                    required
+                    value={formData.extractionMethod}
+                    onChange={(e) => setFormData({...formData, extractionMethod: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                  >
+                    <option value="">Selecione o método</option>
+                    <option value="physical">Extração Física</option>
+                    <option value="logical">Extração Lógica</option>
+                    <option value="filesystem">Extração Filesystem</option>
+                    <option value="cloud">Extração Cloud</option>
+                    <option value="chip-off">Chip-Off</option>
+                    <option value="jtag">JTAG</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Sistema Operacional*</label>
+                  <select
+                    required
+                    value={formData.operatingSystem}
+                    onChange={(e) => setFormData({...formData, operatingSystem: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                  >
+                    <option value="">Selecione o SO</option>
+                    <option value="iOS">iOS</option>
+                    <option value="Android">Android</option>
+                    <option value="Windows">Windows</option>
+                    <option value="macOS">macOS</option>
+                    <option value="Linux">Linux</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex gap-2 pt-4 border-t">
                 <button
                   type="button"
-                  onClick={() => setShowModal(false)}
-                  className="flex-1 px-4 py-2 border rounded-lg hover:bg-gray-50"
+                  onClick={() => {
+                    setShowModal(false);
+                    setFormData({
+                      deviceName: '',
+                      deviceModel: '',
+                      deviceType: '',
+                      serialNumber: '',
+                      extractionMethod: '',
+                      operatingSystem: ''
+                    });
+                  }}
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 font-semibold"
                   disabled={loading}
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50"
+                  className="flex-1 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 font-semibold"
                   disabled={loading}
                 >
-                  {loading ? 'Criando...' : 'Criar'}
+                  {loading ? 'Criando Extração...' : 'Criar Extração'}
                 </button>
               </div>
             </form>
