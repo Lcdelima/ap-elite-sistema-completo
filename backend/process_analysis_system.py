@@ -426,14 +426,16 @@ Retorne JSON:
 """
     
     try:
-        client_ai = EmergentClaude(api_key=EMERGENT_KEY)
-        response = client_ai.chat.completions.create(
-            model="claude-sonnet-4-20250514",
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.3
-        )
+        chat = LlmChat(
+            api_key=EMERGENT_KEY,
+            session_id=f"cadeia_{analysis_id}",
+            system_message="Você é um perito em cadeia de custódia digital conforme CPP arts. 158-A a 158-F e ISO/IEC 27037."
+        ).with_model("anthropic", "claude-4-sonnet-20250514")
         
-        resultado_text = response.choices[0].message.content
+        user_msg = UserMessage(text=prompt)
+        response = await chat.send_message(user_msg)
+        
+        resultado_text = response
         
         try:
             resultado = json.loads(resultado_text)
