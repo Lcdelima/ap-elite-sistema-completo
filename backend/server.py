@@ -576,6 +576,21 @@ try:
     app.include_router(forense_aprimorada_router)
     logger.info("🔬 FORENSE APRIMORADA (Athena CISAI 3.0) loaded")
 
+# MÓDULOS REAIS - Funcionalidades Específicas
+try:
+    from ocr_real_system import router as ocr_real_router
+    from erbs_geocode_real import router as erbs_real_router
+    from ufdr_parser_real import router as ufdr_parser_router
+    
+    app.include_router(ocr_real_router)
+    app.include_router(erbs_real_router)
+    app.include_router(ufdr_parser_router)
+    
+    logger.info("🔬 MÓDULOS REAIS (OCR + ERBs + Parser UFDR) loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ Módulos Reais not available: {e}")
+
+
     
     logger.info("🔬 CISAI-FORENSE 3.0 (7 módulos core) loaded successfully")
 except ImportError as e:
