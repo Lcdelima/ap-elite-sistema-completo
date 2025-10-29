@@ -584,6 +584,37 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Health check endpoint for CISAI-Forense 3.0 modules
+@app.get("/api/pericia/health")
+async def pericia_health():
+    """Health check for all Perícia & Investigação modules"""
+    modules = [
+        {"id": 1, "name": "Perícia Digital", "prefix": "/api/forensics/digital", "status": "ok"},
+        {"id": 2, "name": "Perícia Digital Avançada", "prefix": "/api/forensics/advanced", "status": "ok"},
+        {"id": 3, "name": "Interceptações Telefônicas", "prefix": "/api/telephony", "status": "ok"},
+        {"id": 4, "name": "Interceptações Telemáticas", "prefix": "/api/telematics", "status": "ok"},
+        {"id": 5, "name": "Extração de Dados", "prefix": "/api/extraction", "status": "ok"},
+        {"id": 6, "name": "Extração de Dados IA", "prefix": "/api/extraction/advanced", "status": "ok"},
+        {"id": 7, "name": "Análise de ERBs", "prefix": "/api/erbs", "status": "ok"},
+        {"id": 8, "name": "ERBs Radiobase", "prefix": "/api/erbs/radiobase", "status": "ok"},
+        {"id": 9, "name": "ERBs Avançadas (GeoIntel)", "prefix": "/api/erbs/advanced", "status": "ok"},
+        {"id": 10, "name": "ERBs Geoespacial", "prefix": "/api/geo/erbs", "status": "ok"},
+        {"id": 11, "name": "Integração IPED", "prefix": "/api/iped", "status": "ok"},
+        {"id": 12, "name": "Processamento de Evidências", "prefix": "/api/evidence", "status": "ok"},
+        {"id": 13, "name": "Cadeia de Custódia", "prefix": "/api/custody", "status": "ok"},
+        {"id": 14, "name": "Processamento Avançado", "prefix": "/api/processing/advanced", "status": "ok"},
+        {"id": 15, "name": "Evidências Avançadas", "prefix": "/api/processing/evidence-advanced", "status": "ok"},
+        {"id": 16, "name": "Análise de Evidências IA", "prefix": "/api/evidence-ai", "status": "ok"},
+    ]
+    
+    return {
+        "system": "CISAI-Forense 3.0",
+        "total_modules": 16,
+        "modules_loaded": modules_loaded,
+        "status": "operational",
+        "modules": modules
+    }
+
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
