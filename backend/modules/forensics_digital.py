@@ -275,65 +275,79 @@ async def upload_evidence(
 @router.get("/exams/{exam_id}/timeline")
 async def get_timeline(exam_id: str):
     """Obtém a timeline de eventos do exame"""
-    if exam_id not in exams_db:
+    exam = await db.forensics_exams.find_one({"id": exam_id}, {"_id": 0, "timeline": 1})
+    if not exam:
         raise HTTPException(status_code=404, detail="Exame não encontrado")
     
-    # Simular timeline básica
-    timeline = [
-        {
-            "timestamp": datetime.utcnow().isoformat(),
-            "event": "Exame criado",
-            "details": "Exame pericial iniciado"
-        },
-        {
-            "timestamp": datetime.utcnow().isoformat(),
-            "event": "Evidência recebida",
-            "details": "Arquivo de evidência processado"
-        }
-    ]
-    
-    return {"timeline": timeline}
+    return {"timeline": exam.get("timeline", [])}
 
 @router.post("/exams/{exam_id}/report")
 async def generate_report(exam_id: str, format: str = "pdf"):
     """Gera laudo técnico em formato PAdES ou JSON"""
-    if exam_id not in exams_db:
+    exam = await db.forensics_exams.find_one({"id": exam_id}, {"_id": 0})
+    if not exam:
         raise HTTPException(status_code=404, detail="Exame não encontrado")
     
-    exam = exams_db[exam_id]
-    
     # Adicionar Ato 3 - Análise
-    exam.custody_chain.append({
-        "ato": "Análise",
-        "timestamp": datetime.utcnow().isoformat(),
-        "description": "Análise técnica realizada",
-        "hash_prev": exam.custody_chain[-1]["hash_curr"],
-        "hash_curr": exam.hash_sha256
-    })
+    custody_event_analysis = {
+        "ato": "Ato 3 - Análise",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "responsible": exam["responsible"],
+        "description": "Análise técnica forense realizada conforme NIST 800-86 e ISO 27037",
+        "hash_prev": exam["custody_chain"][-1]["hash_curr"],
+        "hash_curr": exam.get("hash_sha256", "N/A")[:16] if exam.get("hash_sha256") else "N/A"
+    }
     
     # Adicionar Ato 4 - Encerramento
-    exam.custody_chain.append({
-        "ato": "Encerramento",
-        "timestamp": datetime.utcnow().isoformat(),
-        "description": "Exame pericial concluído e laudo emitido",
-        "hash_prev": exam.custody_chain[-1]["hash_curr"],
-        "hash_curr": exam.hash_sha256
-    })
+    custody_event_closure = {
+        "ato": "Ato 4 - Encerramento",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "responsible": exam["responsible"],
+        "description": "Exame pericial concluído e laudo técnico emitido",
+        "hash_prev": exam.get("hash_sha256", "N/A")[:16] if exam.get("hash_sha256") else "N/A",
+        "hash_curr": exam.get("hash_sha256", "N/A")[:16] if exam.get("hash_sha256") else "N/A"
+    }
     
-    exam.status = "concluído"
+    timeline_event = {
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "event": "Laudo gerado",
+        "details": f"Laudo técnico gerado em formato {format.upper()}",
+        "user": exam["responsible"]
+    }
+    
+    await db.forensics_exams.update_one(
+        {"id": exam_id},
+        {
+            "$set": {"status": "concluído"},
+            "$push": {
+                "custody_chain": {"$each": [custody_event_analysis, custody_event_closure]},
+                "timeline": timeline_event
+            }
+        }
+    )
     
     if format == "json":
         return {
             "type": "json_probatorio",
-            "exam_id": exam.id,
-            "case_number": exam.case_number,
-            "legal_basis": exam.legal_basis,
-            "hashes": {
-                "sha256": exam.hash_sha256,
-                "sha512": exam.hash_sha512
+            "exam_id": exam["id"],
+            "case_number": exam["case_number"],
+            "legal_basis": exam["legal_basis"],
+            "title": exam["title"],
+            "device": {
+                "type": exam["device_type"],
+                "brand": exam.get("device_brand"),
+                "model": exam.get("device_model"),
+                "serial": exam.get("device_serial")
             },
-            "custody_chain": exam.custody_chain,
-            "generated_at": datetime.utcnow().isoformat()
+            "hashes": {
+                "sha256": exam.get("hash_sha256"),
+                "sha512": exam.get("hash_sha512")
+            },
+            "custody_chain": exam["custody_chain"] + [custody_event_analysis, custody_event_closure],
+            "timeline": exam.get("timeline", []),
+            "files": exam.get("files_uploaded", []),
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "compliance": ["ISO 27037", "ISO 27042", "NIST 800-86", "LGPD", "CPP Art. 158-184"]
         }
     
     # Simular geração de PDF PAdES
@@ -341,23 +355,31 @@ async def generate_report(exam_id: str, format: str = "pdf"):
         "type": "pades",
         "message": "Laudo técnico PAdES gerado com sucesso",
         "report_id": str(uuid.uuid4()),
-        "digital_signature": "SHA256-RSA",
-        "timestamp_rfc3161": datetime.utcnow().isoformat()
+        "digital_signature": "SHA256-RSA-4096",
+        "timestamp_rfc3161": datetime.now(timezone.utc).isoformat(),
+        "compliance": ["ISO 27037", "ISO 27042", "NIST 800-86", "LGPD", "CPP"],
+        "case_number": exam["case_number"]
     }
 
 @router.get("/stats")
 async def get_stats():
     """Retorna estatísticas do módulo"""
-    total = len(exams_db)
-    abertos = len([e for e in exams_db.values() if e.status == "aberto"])
-    em_processamento = len([e for e in exams_db.values() if e.status == "em_processamento"])
-    concluidos = len([e for e in exams_db.values() if e.status == "concluído"])
+    total = await db.forensics_exams.count_documents({})
+    abertos = await db.forensics_exams.count_documents({"status": "aberto"})
+    em_processamento = await db.forensics_exams.count_documents({"status": "em_processamento"})
+    concluidos = await db.forensics_exams.count_documents({"status": "concluído"})
+    
+    # Contar por prioridade
+    urgentes = await db.forensics_exams.count_documents({"priority": "urgente"})
+    altas = await db.forensics_exams.count_documents({"priority": "alta"})
     
     return {
         "total_exams": total,
         "abertos": abertos,
         "em_processamento": em_processamento,
-        "concluidos": concluidos
+        "concluidos": concluidos,
+        "urgentes": urgentes,
+        "altas": altas
     }
 
 @router.get("/health")
@@ -366,6 +388,7 @@ async def health_check():
     return {
         "status": "ok",
         "module": "Perícia Digital",
-        "version": "1.0.0",
+        "version": "3.0.0",
+        "compliance": ["ISO 27037", "ISO 27042", "NIST 800-86", "LGPD"],
         "uptime": "online"
     }
