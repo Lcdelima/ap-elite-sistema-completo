@@ -283,10 +283,30 @@ async def ingerir_documentos(
         "created_at": datetime.now().isoformat()
     }
     
-    # Simula OCR para PDFs
+    # OCR REAL para PDFs
     if file.filename.lower().endswith('.pdf'):
-        doc_data["ocr"] = True
-        doc_data["ocr_text"] = f"[OCR simulado de {file.filename}] Texto extraído aqui..."
+        try:
+            # Chama API OCR real
+            import requests
+            
+            ocr_files = {'file': (file.filename, contents)}
+            ocr_response = requests.post(
+                'http://localhost:8001/api/ocr/extract-text',
+                files=ocr_files,
+                data={'language': 'por'},
+                timeout=60
+            )
+            
+            if ocr_response.status_code == 200:
+                ocr_data = ocr_response.json()
+                doc_data["ocr"] = True
+                doc_data["ocr_text"] = ocr_data.get("texto", "")
+                doc_data["ocr_confianca"] = ocr_data.get("confianca_media", 0)
+                doc_data["ocr_id"] = ocr_data.get("ocr_id")
+        except Exception as e:
+            print(f"Erro OCR: {e}")
+            doc_data["ocr"] = False
+            doc_data["ocr_error"] = str(e)
     
     await db.analysis_docs.insert_one(doc_data)
     
