@@ -1,12 +1,16 @@
 """Módulo 1: Perícia Digital (Coleta e Exame Básico)"""
-from fastapi import APIRouter, HTTPException, UploadFile, File, Form
+from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Depends
 from pydantic import BaseModel, Field
 from typing import Optional, List
-from datetime import datetime
+from datetime import datetime, timezone
+from motor.motor_asyncio import AsyncIOMotorClient
 import uuid
 import os
 import hashlib
 import json
+
+# MongoDB connection
+from server import db
 
 router = APIRouter(prefix="/api/forensics/digital", tags=["Perícia Digital"])
 
@@ -14,10 +18,14 @@ router = APIRouter(prefix="/api/forensics/digital", tags=["Perícia Digital"])
 class ExamCreate(BaseModel):
     title: str
     case_number: str
-    legal_basis: str  # mandado, contrato, consentimento, ordem judicial
-    device_type: str
+    legal_basis: str  # mandado, ordem_judicial, termo_consentimento
+    device_type: str  # smartphone, computador, tablet, hd_externo, pendrive
+    device_brand: Optional[str] = None
+    device_model: Optional[str] = None
+    device_serial: Optional[str] = None
     responsible: str
-    priority: str = "normal"
+    description: Optional[str] = None
+    priority: str = "normal"  # baixa, normal, alta, urgente
 
 class DeviceInfo(BaseModel):
     device_type: str
