@@ -575,6 +575,8 @@ try:
     from forense_aprimorada import router as forense_aprimorada_router
     app.include_router(forense_aprimorada_router)
     logger.info("🔬 FORENSE APRIMORADA (Athena CISAI 3.0) loaded")
+except ImportError as e:
+    logger.error(f"⚠️ Forense Aprimorada not available: {e}")
 
 # MÓDULOS REAIS - Funcionalidades Específicas
 try:
@@ -589,10 +591,6 @@ try:
     logger.info("🔬 MÓDULOS REAIS (OCR + ERBs + Parser UFDR) loaded successfully")
 except ImportError as e:
     logger.error(f"⚠️ Módulos Reais not available: {e}")
-
-
-    
-    logger.info("🔬 CISAI-FORENSE 3.0 (7 módulos core) loaded successfully")
 except ImportError as e:
     logger.error(f"⚠️ CISAI-Forense 3.0 not available: {e}")
 
