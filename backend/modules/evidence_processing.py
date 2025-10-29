@@ -1,5 +1,5 @@
 """Módulo 12: Processamento de Evidências"""
-from fastapi import APIRouter, UploadFile, File, Form
+from fastapi import APIRouter, HTTPException, UploadFile, File, Form
 from pydantic import BaseModel, Field
 from typing import Optional, List
 from datetime import datetime
