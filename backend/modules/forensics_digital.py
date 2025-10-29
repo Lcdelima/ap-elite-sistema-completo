@@ -183,7 +183,8 @@ async def upload_evidence(
     total_chunks: int = Form(1)
 ):
     """Upload de evidências com suporte a chunks (arquivos grandes)"""
-    if exam_id not in exams_db:
+    exam = await db.forensics_exams.find_one({"id": exam_id})
+    if not exam:
         raise HTTPException(status_code=404, detail="Exame não encontrado")
     
     # Criar diretório para evidências
@@ -192,8 +193,8 @@ async def upload_evidence(
     
     # Salvar chunk
     chunk_path = f"{evidence_dir}/{file.filename}.part{chunk_number}"
+    content = await file.read()
     with open(chunk_path, "wb") as f:
-        content = await file.read()
         f.write(content)
     
     # Calcular hash do chunk
@@ -216,20 +217,48 @@ async def upload_evidence(
             final_sha512 = hashlib.sha512(file_content).hexdigest()
         
         # Atualizar exame
-        exams_db[exam_id].hash_sha256 = final_sha256
-        exams_db[exam_id].hash_sha512 = final_sha512
-        exams_db[exam_id].status = "em_processamento"
+        file_info = {
+            "filename": file.filename,
+            "size": len(file_content),
+            "sha256": final_sha256,
+            "sha512": final_sha512,
+            "uploaded_at": datetime.now(timezone.utc).isoformat()
+        }
         
         # Adicionar Ato 2 - Aquisição
-        exams_db[exam_id].custody_chain.append({
-            "ato": "Aquisição",
-            "timestamp": datetime.utcnow().isoformat(),
-            "description": f"Evidência adquirida: {file.filename}",
-            "hash_prev": exams_db[exam_id].custody_chain[-1]["hash_curr"],
-            "hash_curr": final_sha256,
+        custody_event = {
+            "ato": "Ato 2 - Aquisição",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "responsible": exam["responsible"],
+            "description": f"Evidência adquirida: {file.filename} ({len(file_content)} bytes)",
+            "hash_prev": exam["custody_chain"][-1]["hash_curr"],
+            "hash_curr": final_sha256[:16],
             "file_size": len(file_content),
             "file_name": file.filename
-        })
+        }
+        
+        timeline_event = {
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "event": "Upload concluído",
+            "details": f"Arquivo {file.filename} enviado com sucesso (SHA-256: {final_sha256[:16]}...)",
+            "user": exam["responsible"]
+        }
+        
+        await db.forensics_exams.update_one(
+            {"id": exam_id},
+            {
+                "$set": {
+                    "hash_sha256": final_sha256,
+                    "hash_sha512": final_sha512,
+                    "status": "em_processamento"
+                },
+                "$push": {
+                    "custody_chain": custody_event,
+                    "timeline": timeline_event,
+                    "files_uploaded": file_info
+                }
+            }
+        )
         
         return {
             "message": "Upload concluído com sucesso",
