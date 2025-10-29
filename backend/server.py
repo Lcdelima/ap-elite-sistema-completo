@@ -456,6 +456,123 @@ try:
 except ImportError as e:
     logger.error(f"⚠️ Advanced integrations not available: {e}")
 
+# Import and include Perícia & Investigação modules (CISAI-Forense 3.0)
+logger.info("🔍 Loading CISAI-Forense 3.0 modules...")
+modules_loaded = 0
+try:
+    from modules.forensics_digital import router as forensics_digital_router
+    app.include_router(forensics_digital_router)
+    modules_loaded += 1
+except ImportError as e:
+    logger.error(f"⚠️ forensics_digital module error: {e}")
+
+try:
+    from modules.forensics_advanced import router as forensics_advanced_router
+    app.include_router(forensics_advanced_router)
+    modules_loaded += 1
+except ImportError as e:
+    logger.error(f"⚠️ forensics_advanced module error: {e}")
+
+try:
+    from modules.telephony_interceptions import router as telephony_router
+    app.include_router(telephony_router)
+    modules_loaded += 1
+except ImportError as e:
+    logger.error(f"⚠️ telephony_interceptions module error: {e}")
+
+try:
+    from modules.telematics_interceptions import router as telematics_router
+    app.include_router(telematics_router)
+    modules_loaded += 1
+except ImportError as e:
+    logger.error(f"⚠️ telematics_interceptions module error: {e}")
+
+try:
+    from modules.data_extraction import router as data_extraction_router
+    app.include_router(data_extraction_router)
+    modules_loaded += 1
+except ImportError as e:
+    logger.error(f"⚠️ data_extraction module error: {e}")
+
+try:
+    from modules.data_extraction_advanced import router as data_extraction_adv_router
+    app.include_router(data_extraction_adv_router)
+    modules_loaded += 1
+except ImportError as e:
+    logger.error(f"⚠️ data_extraction_advanced module error: {e}")
+
+try:
+    from modules.erbs_analysis import router as erbs_analysis_router
+    app.include_router(erbs_analysis_router)
+    modules_loaded += 1
+except ImportError as e:
+    logger.error(f"⚠️ erbs_analysis module error: {e}")
+
+try:
+    from modules.erbs_radiobase import router as erbs_radiobase_router
+    app.include_router(erbs_radiobase_router)
+    modules_loaded += 1
+except ImportError as e:
+    logger.error(f"⚠️ erbs_radiobase module error: {e}")
+
+try:
+    from modules.erbs_advanced import router as erbs_advanced_router
+    app.include_router(erbs_advanced_router)
+    modules_loaded += 1
+except ImportError as e:
+    logger.error(f"⚠️ erbs_advanced module error: {e}")
+
+try:
+    from modules.erbs_geospatial import router as erbs_geospatial_router
+    app.include_router(erbs_geospatial_router)
+    modules_loaded += 1
+except ImportError as e:
+    logger.error(f"⚠️ erbs_geospatial module error: {e}")
+
+try:
+    from modules.iped_integration import router as iped_router
+    app.include_router(iped_router)
+    modules_loaded += 1
+except ImportError as e:
+    logger.error(f"⚠️ iped_integration module error: {e}")
+
+try:
+    from modules.evidence_processing import router as evidence_processing_router
+    app.include_router(evidence_processing_router)
+    modules_loaded += 1
+except ImportError as e:
+    logger.error(f"⚠️ evidence_processing module error: {e}")
+
+try:
+    from modules.custody_chain import router as custody_chain_router
+    app.include_router(custody_chain_router)
+    modules_loaded += 1
+except ImportError as e:
+    logger.error(f"⚠️ custody_chain module error: {e}")
+
+try:
+    from modules.processing_advanced import router as processing_advanced_router
+    app.include_router(processing_advanced_router)
+    modules_loaded += 1
+except ImportError as e:
+    logger.error(f"⚠️ processing_advanced module error: {e}")
+
+try:
+    from modules.evidence_advanced import router as evidence_advanced_router
+    app.include_router(evidence_advanced_router)
+    modules_loaded += 1
+except ImportError as e:
+    logger.error(f"⚠️ evidence_advanced module error: {e}")
+
+try:
+    from modules.evidence_ai import router as evidence_ai_router
+    app.include_router(evidence_ai_router)
+    modules_loaded += 1
+except ImportError as e:
+    logger.error(f"⚠️ evidence_ai module error: {e}")
+
+logger.info(f"✅ CISAI-Forense 3.0: {modules_loaded}/16 modules loaded successfully")
+
 # Include the router in the main app
 app.include_router(api_router)
 
