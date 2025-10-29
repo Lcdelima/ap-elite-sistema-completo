@@ -40,63 +40,87 @@ class Exam(BaseModel):
     title: str
     case_number: str
     legal_basis: str
-    device_info: Optional[DeviceInfo] = None
+    device_type: str
+    device_brand: Optional[str] = None
+    device_model: Optional[str] = None
+    device_serial: Optional[str] = None
     status: str = "aberto"  # aberto, em_processamento, concluído
     priority: str = "normal"
     responsible: str
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    description: Optional[str] = None
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     hash_sha256: Optional[str] = None
     hash_sha512: Optional[str] = None
     hash_blake3: Optional[str] = None
     timeline: List[dict] = []
     custody_chain: List[dict] = []  # Ato 1, 2, 3, 4
+    files_uploaded: List[dict] = []
 
-# In-memory storage (substituir por MongoDB em produção)
-exams_db = {}
-
-@router.post("/exams", response_model=Exam)
+@router.post("/exams")
 async def create_exam(exam_data: ExamCreate):
     """Cria novo exame pericial com base legal obrigatória"""
-    exam = Exam(
-        title=exam_data.title,
-        case_number=exam_data.case_number,
-        legal_basis=exam_data.legal_basis,
-        device_info=None,
-        responsible=exam_data.responsible,
-        priority=exam_data.priority,
-        custody_chain=[
-            {
-                "ato": "Recebimento",
-                "timestamp": datetime.utcnow().isoformat(),
-                "responsible": exam_data.responsible,
-                "description": "Evidência recebida e registrada no sistema",
-                "hash_prev": None,
-                "hash_curr": str(uuid.uuid4())  # Simular hash inicial
-            }
-        ]
-    )
+    exam_id = str(uuid.uuid4())
     
-    exams_db[exam.id] = exam
+    exam = {
+        "id": exam_id,
+        "title": exam_data.title,
+        "case_number": exam_data.case_number,
+        "legal_basis": exam_data.legal_basis,
+        "device_type": exam_data.device_type,
+        "device_brand": exam_data.device_brand,
+        "device_model": exam_data.device_model,
+        "device_serial": exam_data.device_serial,
+        "responsible": exam_data.responsible,
+        "description": exam_data.description,
+        "priority": exam_data.priority,
+        "status": "aberto",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "hash_sha256": None,
+        "hash_sha512": None,
+        "hash_blake3": None,
+        "timeline": [
+            {
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "event": "Exame criado",
+                "details": f"Exame pericial iniciado - Caso {exam_data.case_number}",
+                "user": exam_data.responsible
+            }
+        ],
+        "custody_chain": [
+            {
+                "ato": "Ato 1 - Recebimento",
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "responsible": exam_data.responsible,
+                "description": "Evidência recebida e registrada no sistema CISAI-Forense 3.0",
+                "hash_prev": None,
+                "hash_curr": str(uuid.uuid4())[:16]  # Hash inicial
+            }
+        ],
+        "files_uploaded": []
+    }
+    
+    await db.forensics_exams.insert_one(exam)
     return exam
 
-@router.get("/exams", response_model=List[Exam])
+@router.get("/exams")
 async def list_exams(status: Optional[str] = None, priority: Optional[str] = None):
     """Lista todos os exames com filtros opcionais"""
-    exams = list(exams_db.values())
-    
+    query = {}
     if status:
-        exams = [e for e in exams if e.status == status]
+        query["status"] = status
     if priority:
-        exams = [e for e in exams if e.priority == priority]
+        query["priority"] = priority
     
+    exams = await db.forensics_exams.find(query, {"_id": 0}).sort("created_at", -1).to_list(100)
     return exams
 
-@router.get("/exams/{exam_id}", response_model=Exam)
+@router.get("/exams/{exam_id}")
 async def get_exam(exam_id: str):
     """Obtém detalhes de um exame específico"""
-    if exam_id not in exams_db:
+    exam = await db.forensics_exams.find_one({"id": exam_id}, {"_id": 0})
+    if not exam:
         raise HTTPException(status_code=404, detail="Exame não encontrado")
-    return exams_db[exam_id]
+    return exam
 
 @router.post("/exams/{exam_id}/device")
 async def register_device(exam_id: str, device: DeviceInfo):
