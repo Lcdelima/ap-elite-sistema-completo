@@ -9,7 +9,7 @@ import json
 import os
 
 # Get backend URL from environment
-BACKEND_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://digital-sleuth-9.preview.emergentagent.com')
+BACKEND_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://seguir-em-frente.preview.emergentagent.com')
 BASE_URL = f"{BACKEND_URL}/api"
 
 def authenticate():

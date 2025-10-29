@@ -21,18 +21,18 @@
 ## 🚀 COMO ACESSAR O MÓDULO
 
 ### Passo 1: Login
-1. Acesse: https://digital-sleuth-9.preview.emergentagent.com/login
+1. Acesse: https://seguir-em-frente.preview.emergentagent.com/login
 2. Clique em **"Administrador"**
 3. Digite: `laura@apelite.com` / `laura2024`
 4. Clique em **"Entrar"**
 
 ### Passo 2: Navegar para Athena
 1. Após login, clique em **"ACESSAR ATHENA"** no dashboard
-2. Ou acesse diretamente: https://digital-sleuth-9.preview.emergentagent.com/admin/athena
+2. Ou acesse diretamente: https://seguir-em-frente.preview.emergentagent.com/admin/athena
 
 ### Passo 3: Acessar Análise Processual
 1. Na tela Athena, procure o card **"Análise Processual Pro"**
-2. Ou acesse diretamente: https://digital-sleuth-9.preview.emergentagent.com/athena/process-analysis
+2. Ou acesse diretamente: https://seguir-em-frente.preview.emergentagent.com/athena/process-analysis
 
 ---
 
@@ -85,7 +85,7 @@ Clique no botão **"Nova Análise"** no canto superior direito.
 
 ### Base URL
 ```
-https://digital-sleuth-9.preview.emergentagent.com/api/athena/process-analysis
+https://seguir-em-frente.preview.emergentagent.com/api/athena/process-analysis
 ```
 
 ### Endpoints
@@ -217,7 +217,7 @@ Response: {
 
 ### Via Interface
 1. Login com `laura@apelite.com` / `laura2024`
-2. Acessar: https://digital-sleuth-9.preview.emergentagent.com/athena/process-analysis
+2. Acessar: https://seguir-em-frente.preview.emergentagent.com/athena/process-analysis
 3. Clicar em **"Nova Análise"**
 4. Preencher:
    - Número: `0001234-56.2024.8.26.0100`
@@ -231,10 +231,10 @@ Response: {
 ### Via API (curl)
 ```bash
 # Listar análises
-curl https://digital-sleuth-9.preview.emergentagent.com/api/athena/process-analysis
+curl https://seguir-em-frente.preview.emergentagent.com/api/athena/process-analysis
 
 # Criar análise
-curl -X POST https://digital-sleuth-9.preview.emergentagent.com/api/athena/process-analysis \
+curl -X POST https://seguir-em-frente.preview.emergentagent.com/api/athena/process-analysis \
   -F "processNumber=0001234-56.2024.8.26.0100" \
   -F "processTitle=Ação de Cobrança - Teste" \
   -F "court=TJSP" \
