@@ -240,6 +240,8 @@ async def get_appointments():
 # Authentication and User Management
 @api_router.post("/auth/login")
 async def login_user(login_data: UserLogin):
+    logger.info(f"🔐 Login attempt: email={login_data.email}, role={login_data.role}")
+    
     # Find user by email and role
     user = await db.users.find_one({
         "email": login_data.email, 
@@ -248,11 +250,17 @@ async def login_user(login_data: UserLogin):
     }, {"_id": 0})
     
     if not user:
+        logger.warning(f"❌ User not found: email={login_data.email}, role={login_data.role}")
         raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    logger.info(f"✅ User found: {user.get('name')}")
     
     # In production, verify hashed password
     if user["password"] != login_data.password:
+        logger.warning(f"❌ Invalid password for user: {login_data.email}")
         raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    logger.info(f"✅ Login successful for: {user.get('name')}")
     
     # Update last login
     await db.users.update_one(
