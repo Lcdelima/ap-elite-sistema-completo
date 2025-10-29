@@ -122,13 +122,57 @@ async def get_exam(exam_id: str):
         raise HTTPException(status_code=404, detail="Exame não encontrado")
     return exam
 
+@router.put("/exams/{exam_id}/status")
+async def update_status(exam_id: str, new_status: str):
+    """Atualiza o status do exame"""
+    exam = await db.forensics_exams.find_one({"id": exam_id})
+    if not exam:
+        raise HTTPException(status_code=404, detail="Exame não encontrado")
+    
+    # Adicionar evento na timeline
+    timeline_event = {
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "event": f"Status alterado para {new_status}",
+        "details": f"Status do exame atualizado de '{exam['status']}' para '{new_status}'",
+        "user": exam["responsible"]
+    }
+    
+    await db.forensics_exams.update_one(
+        {"id": exam_id},
+        {
+            "$set": {"status": new_status},
+            "$push": {"timeline": timeline_event}
+        }
+    )
+    
+    return {"message": "Status atualizado com sucesso", "new_status": new_status}
+
+@router.delete("/exams/{exam_id}")
+async def delete_exam(exam_id: str):
+    """Exclui um exame"""
+    result = await db.forensics_exams.delete_one({"id": exam_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Exame não encontrado")
+    return {"message": "Exame excluído com sucesso"}
+
 @router.post("/exams/{exam_id}/device")
 async def register_device(exam_id: str, device: DeviceInfo):
     """Registra informações do dispositivo periciado"""
-    if exam_id not in exams_db:
+    exam = await db.forensics_exams.find_one({"id": exam_id})
+    if not exam:
         raise HTTPException(status_code=404, detail="Exame não encontrado")
     
-    exams_db[exam_id].device_info = device
+    await db.forensics_exams.update_one(
+        {"id": exam_id},
+        {"$set": {
+            "device_brand": device.brand,
+            "device_model": device.model,
+            "device_imei": device.imei,
+            "device_serial": device.serial,
+            "device_os": device.os_version
+        }}
+    )
+    
     return {"message": "Dispositivo registrado com sucesso"}
 
 @router.post("/exams/{exam_id}/upload")
