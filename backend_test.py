@@ -17,7 +17,7 @@ import sys
 from datetime import datetime
 
 # Configuration
-BASE_URL = "https://seguir-em-frente.preview.emergentagent.com/api"
+BASE_URL = "https://cisai-forense.preview.emergentagent.com/api"
 AUTH_EMAIL = "laura@apelite.com"
 AUTH_PASSWORD = "laura2024"
 AUTH_ROLE = "administrator"

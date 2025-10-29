@@ -19,7 +19,7 @@ import concurrent.futures
 from typing import List, Dict, Any
 
 # Configuration
-BASE_URL = "https://seguir-em-frente.preview.emergentagent.com/api"
+BASE_URL = "https://cisai-forense.preview.emergentagent.com/api"
 TEST_USER = {
     "email": "laura@apelite.com",
     "password": "laura2024",
