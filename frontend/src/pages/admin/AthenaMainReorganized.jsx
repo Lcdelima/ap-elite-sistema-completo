@@ -101,7 +101,7 @@ const AthenaMainReorganized = () => {
       gradient: 'from-purple-600 to-purple-800',
       description: 'Perícia forense e investigação',
       modules: [
-        { name: 'Perícia Digital', icon: Shield, route: '/athena/forensics', description: 'Análise forense de dispositivos digitais' },
+        { name: 'Perícia Digital', icon: Shield, route: '/athena/pericia-digital', description: 'Análise forense de dispositivos digitais' },
         { name: 'Perícia Digital Enhanced', icon: ShieldCheck, route: '/athena/forensics-enhanced', description: 'Perícia digital avançada' },
         { name: 'Interceptações Telefônicas', icon: PhoneCall, route: '/athena/phone-interceptions', description: 'Gestão de interceptações telefônicas' },
         { name: 'Interceptações Telemáticas', icon: Wifi, route: '/athena/data-interceptions', description: 'Interceptação de dados' },
