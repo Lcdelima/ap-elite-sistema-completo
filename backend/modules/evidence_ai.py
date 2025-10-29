@@ -1,7 +1,7 @@
 """Módulo 16: Análise de Evidências com IA (RAG Probatório)"""
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
-from typing import Optional, List
+from typing import Optional, List, Dict
 from datetime import datetime
 import uuid
 import os
