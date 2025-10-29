@@ -29,6 +29,7 @@ import ClientManagement from './pages/admin/ClientManagement';
 import DigitalForensics from './pages/admin/DigitalForensics';
 import DigitalForensicsComplete from './pages/athena/DigitalForensicsComplete';
 import ForensicsEnhanced from './pages/athena/ForensicsEnhanced';
+import PericiaDigital from './pages/athena/PericiaDigital';
 import PericiaDigitalPro from './pages/athena/PericiaDigitalPro';
 import InterceptacoesTelematicasPro from './pages/athena/InterceptacoesTelematicasPro';
 import UltraExtractionPro from './pages/athena/UltraExtractionPro';
