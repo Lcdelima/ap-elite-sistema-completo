@@ -359,23 +359,17 @@ async def login_user(login_data: UserLogin):
         "user": user,
         "token": secure_token
     }
-    
-    # Update last login
-    await db.users.update_one(
-        {"id": user["id"]},
-        {"$set": {"last_login": datetime.now(timezone.utc).isoformat()}}
-    )
-    
-    # Remove password from response
-    user.pop("password", None)
-    
-    return {
-        "user": user,
-        "token": f"token_{user['id']}_{datetime.now().timestamp()}"
-    }
 
 @api_router.post("/users", response_model=User)
 async def create_user(user_data: UserCreate):
+    """Cria novo usuário com senha em hash bcrypt"""
+    from security import hash_password, validate_password_strength
+    
+    # Validar força da senha
+    is_strong, message = validate_password_strength(user_data.password)
+    if not is_strong:
+        raise HTTPException(status_code=400, detail=message)
+    
     # Check if user already exists
     existing_user = await db.users.find_one({"email": user_data.email})
     if existing_user:
