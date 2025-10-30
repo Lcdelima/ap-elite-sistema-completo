@@ -58,7 +58,7 @@ const ForensicsEnhanced = () => {
   });
 
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
-  const token = localStorage.getItem('ap_elite_token');
+  const token = localStorage.getItem('token'); // Corrigido de 'ap_elite_token' para 'token'
 
   useEffect(() => {
     fetchExaminations();
