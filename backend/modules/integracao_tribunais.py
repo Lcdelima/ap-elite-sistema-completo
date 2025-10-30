@@ -3,18 +3,24 @@ Módulo de Integração Completa com Tribunais
 ============================================
 
 Sistema unificado para sincronização bidirecional com:
-- Tribunais: TJ, STJ, STF, TST, TSE, STM, CNJ
-- Sistemas: PJe, SEEU, ePoC, Projudi, Tucujuris, SAJ, Themis
+- Tribunais: TJ (27 estados), STJ, STF, TST, TSE, STM, CNJ
+- Sistemas: PJe, SEEU, ePoC, Projudi, Tucujuris, SAJ, Themis, ESAJ
 - Justiça Estadual e Federal (1ª e 2ª instâncias)
+- Diários Oficiais (27 estados + DOU)
+- Portal OAB (todos os estados)
 
 Funcionalidades:
 - Push automático de petições e documentos
 - Captura de publicações e movimentações
+- Pesquisa automática em Diários Oficiais
+- Sincronização com Portal OAB
+- Alertas inteligentes para intimações
 - Agenda unificada por múltiplos identificadores (CPF, CNPJ, OAB, RG)
 - Vinculação de partes, advogados e processos correlatos
 - Alertas D-5, D-3, D-1 para prazos
 - Histórico completo de sincronizações
 - Webhook para notificações em tempo real
+- Cobertura Nacional: 27 estados + DF
 """
 
 from datetime import datetime, timezone, timedelta
@@ -29,6 +35,63 @@ from server import db
 
 router = APIRouter(prefix="/api/tribunais", tags=["Integração Tribunais"])
 logger = logging.getLogger(__name__)
+
+# ============================================================================
+# ============================ CONSTANTES ===================================
+# ============================================================================
+
+# Todos os 27 estados + DF
+ESTADOS_BRASIL = [
+    {"sigla": "AC", "nome": "Acre", "capital": "Rio Branco"},
+    {"sigla": "AL", "nome": "Alagoas", "capital": "Maceió"},
+    {"sigla": "AP", "nome": "Amapá", "capital": "Macapá"},
+    {"sigla": "AM", "nome": "Amazonas", "capital": "Manaus"},
+    {"sigla": "BA", "nome": "Bahia", "capital": "Salvador"},
+    {"sigla": "CE", "nome": "Ceará", "capital": "Fortaleza"},
+    {"sigla": "DF", "nome": "Distrito Federal", "capital": "Brasília"},
+    {"sigla": "ES", "nome": "Espírito Santo", "capital": "Vitória"},
+    {"sigla": "GO", "nome": "Goiás", "capital": "Goiânia"},
+    {"sigla": "MA", "nome": "Maranhão", "capital": "São Luís"},
+    {"sigla": "MT", "nome": "Mato Grosso", "capital": "Cuiabá"},
+    {"sigla": "MS", "nome": "Mato Grosso do Sul", "capital": "Campo Grande"},
+    {"sigla": "MG", "nome": "Minas Gerais", "capital": "Belo Horizonte"},
+    {"sigla": "PA", "nome": "Pará", "capital": "Belém"},
+    {"sigla": "PB", "nome": "Paraíba", "capital": "João Pessoa"},
+    {"sigla": "PR", "nome": "Paraná", "capital": "Curitiba"},
+    {"sigla": "PE", "nome": "Pernambuco", "capital": "Recife"},
+    {"sigla": "PI", "nome": "Piauí", "capital": "Teresina"},
+    {"sigla": "RJ", "nome": "Rio de Janeiro", "capital": "Rio de Janeiro"},
+    {"sigla": "RN", "nome": "Rio Grande do Norte", "capital": "Natal"},
+    {"sigla": "RS", "nome": "Rio Grande do Sul", "capital": "Porto Alegre"},
+    {"sigla": "RO", "nome": "Rondônia", "capital": "Porto Velho"},
+    {"sigla": "RR", "nome": "Roraima", "capital": "Boa Vista"},
+    {"sigla": "SC", "nome": "Santa Catarina", "capital": "Florianópolis"},
+    {"sigla": "SP", "nome": "São Paulo", "capital": "São Paulo"},
+    {"sigla": "SE", "nome": "Sergipe", "capital": "Aracaju"},
+    {"sigla": "TO", "nome": "Tocantins", "capital": "Palmas"}
+]
+
+# Sistemas disponíveis por tribunal/estado
+SISTEMAS_DISPONIVEIS = {
+    "PJe": "Processo Judicial Eletrônico (CNJ)",
+    "ESAJ": "Sistema de Automação da Justiça Eletrônico (TJ-SP e outros)",
+    "SEEU": "Sistema Eletrônico de Execução Unificado",
+    "ePoC": "e-Processo Cível",
+    "Projudi": "Processo Judicial Digital",
+    "SAJ": "Sistema de Automação da Justiça",
+    "Themis": "Sistema Themis",
+    "Tucujuris": "Sistema Tucujuris"
+}
+
+# Tribunais Superiores
+TRIBUNAIS_SUPERIORES = {
+    "STJ": {"nome": "Superior Tribunal de Justiça", "sistema": "PJe"},
+    "STF": {"nome": "Supremo Tribunal Federal", "sistema": "PJe"},
+    "TST": {"nome": "Tribunal Superior do Trabalho", "sistema": "PJe"},
+    "TSE": {"nome": "Tribunal Superior Eleitoral", "sistema": "PJe"},
+    "STM": {"nome": "Superior Tribunal Militar", "sistema": "PJe"},
+    "CNJ": {"nome": "Conselho Nacional de Justiça", "sistema": "PJe"}
+}
 
 # ============================================================================
 # ============================ DATA MODELS ==================================
