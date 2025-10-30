@@ -50,7 +50,7 @@ const ProcessesStandardized = () => {
     try {
       setLoading(true);
       const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-      const token = localStorage.getItem('ap_elite_token');
+      const token = localStorage.getItem('token');
       
       const res = await axios.get(`${BACKEND_URL}/api/athena/processes`, {
         headers: { Authorization: `Bearer ${token}` }
@@ -84,7 +84,7 @@ const ProcessesStandardized = () => {
     try {
       setSaving(true);
       const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-      const token = localStorage.getItem('ap_elite_token');
+      const token = localStorage.getItem('token');
       
       if (view === 'edit' && selectedProcess) {
         await axios.put(
@@ -139,7 +139,7 @@ const ProcessesStandardized = () => {
     
     try {
       const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-      const token = localStorage.getItem('ap_elite_token');
+      const token = localStorage.getItem('token');
       
       await axios.delete(`${BACKEND_URL}/api/athena/processes/${processId}`, {
         headers: { Authorization: `Bearer ${token}` }
