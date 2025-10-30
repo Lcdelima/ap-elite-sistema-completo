@@ -136,48 +136,41 @@ async def listar_processos(
 
 @router.post("/processos")
 async def criar_processo(
-    data: dict = Body(...),
-    current_user: dict = Depends(get_current_user)
+    data: ProcessoCreate,
+    current_user: dict = Depends(get_current_user_jwt)
 ):
-    """Cria novo processo judicial"""
-    if not current_user:
-        raise HTTPException(status_code=401, detail="Autenticação necessária")
+    """
+    Cria novo processo judicial
+    MELHORADO: Validação Pydantic, JWT, auditoria
+    """
+    
+    # Verificar permissão
+    if not check_permission(current_user.get("role"), "cases.create"):
+        raise HTTPException(status_code=403, detail="Sem permissão para criar processos")
     
     processo_id = str(uuid.uuid4())
     now = datetime.now(timezone.utc).isoformat()
     
     processo = {
         "id": processo_id,
-        "numero_processo": data.get("numero_processo", ""),
-        "numero_cnj": data.get("numero_cnj", ""),
-        "titulo": data.get("titulo", ""),
-        "tipo": data.get("tipo", "civel"),
-        "area_direito": data.get("area_direito", ""),
+        "numero_processo": data.numero_processo,
+        "titulo": data.titulo,
+        "tipo": data.tipo,
         
         # Partes
-        "cliente": data.get("cliente", ""),
-        "cliente_cpf_cnpj": data.get("cliente_cpf_cnpj", ""),
-        "parte_contraria": data.get("parte_contraria", ""),
-        "advogado_responsavel": data.get("advogado_responsavel", current_user.get("name", "")),
-        "advogados_equipe": data.get("advogados_equipe", []),
+        "cliente": data.cliente,
+        "parte_contraria": data.parte_contraria,
+        "advogado_responsavel": data.advogado_responsavel,
         
         # Informações Judiciais
-        "comarca": data.get("comarca", ""),
-        "vara": data.get("vara", ""),
-        "juiz": data.get("juiz", ""),
-        "tribunal": data.get("tribunal", ""),
-        "instancia": data.get("instancia", "1"),
+        "comarca": data.comarca,
+        "vara": data.vara,
         
-        # Valores e Honorários
-        "valor_causa": float(data.get("valor_causa", 0)),
-        "valor_condenacao": float(data.get("valor_condenacao", 0)),
-        "honorarios_acordados": float(data.get("honorarios_acordados", 0)),
-        "honorarios_tipo": data.get("honorarios_tipo", "fixo"),  # fixo, percentual, exitoso
-        "honorarios_percentual": float(data.get("honorarios_percentual", 0)),
+        # Valores
+        "valor_causa": data.valor_causa,
         
         # Status e Controle
-        "status": data.get("status", "ativo"),
-        "fase_processual": data.get("fase_processual", "inicial"),
+        "status": data.status,
         "prioridade": data.get("prioridade", "normal"),
         "probabilidade_exito": data.get("probabilidade_exito", ""),
         "risco_processo": data.get("risco_processo", ""),
