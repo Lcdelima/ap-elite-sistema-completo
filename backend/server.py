@@ -375,13 +375,19 @@ async def create_user(user_data: UserCreate):
     if existing_user:
         raise HTTPException(status_code=400, detail="User already exists")
     
+    # Hash da senha ANTES de salvar
+    hashed_password = hash_password(user_data.password)
+    
     user_dict = user_data.model_dump()
+    user_dict['password'] = hashed_password  # Substituir senha por hash
     user_obj = User(**user_dict)
     
     doc = user_obj.model_dump()
     doc['created_at'] = doc['created_at'].isoformat()
     
     await db.users.insert_one(doc)
+    
+    logger.info(f"✅ Novo usuário criado: {user_data.email} com senha em hash bcrypt")
     
     # Remove password from response
     user_obj.password = "***"
