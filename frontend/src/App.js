@@ -65,6 +65,7 @@ import AthenaIPED from './pages/athena/IPED';
 import AthenaEvidenceProcessing from './pages/athena/EvidenceProcessing';
 import AthenaProcessAnalysis from './pages/athena/ProcessAnalysisComplete';
 import ProcessAnalysisPro from './pages/athena/ProcessAnalysisPro';
+import IntegracaoTribunais from './pages/athena/IntegracaoTribunais';
 import AthenaReports from './pages/athena/Reports';
 import AthenaFinancial from './pages/athena/FinancialManagementEnhanced';
 import AthenaIntelligentDashboards from './pages/athena/IntelligentDashboards';
