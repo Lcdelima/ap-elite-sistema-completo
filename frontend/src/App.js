@@ -31,6 +31,7 @@ import DigitalForensicsComplete from './pages/athena/DigitalForensicsComplete';
 import ForensicsEnhanced from './pages/athena/ForensicsEnhanced';
 import PericiaDigital from './pages/athena/PericiaDigital';
 import PericiaDigitalPro from './pages/athena/PericiaDigitalPro';
+import AnaliseProcessualProfissional from './pages/athena/AnaliseProcessualProfissional';
 import InterceptacoesTelematicasPro from './pages/athena/InterceptacoesTelematicasPro';
 import UltraExtractionPro from './pages/athena/UltraExtractionPro';
 import PasswordRecoveryElite from './pages/athena/PasswordRecoveryElite';
