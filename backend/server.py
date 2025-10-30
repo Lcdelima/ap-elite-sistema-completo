@@ -415,6 +415,80 @@ async def login_user(login_data: UserLogin):
         "token": access_token
     }
 
+@api_router.post("/auth/logout")
+async def logout_user(authorization: str = Header(None)):
+    """
+    Logout - invalida sessão atual
+    Registra auditoria de logout
+    """
+    from security import verify_token
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Token não fornecido")
+    
+    token = authorization.replace("Bearer ", "")
+    
+    # Verificar token
+    payload = verify_token(token)
+    if not payload:
+        raise HTTPException(status_code=401, detail="Token inválido ou expirado")
+    
+    user_id = payload.get("user_id")
+    
+    # Invalidar sessão
+    await db.sessions.update_many(
+        {"user_id": user_id, "access_token": token},
+        {"$set": {"active": False, "logged_out_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    # Registrar auditoria
+    audit_log = {
+        "id": str(uuid.uuid4()),
+        "action": "logout",
+        "user_id": user_id,
+        "user_email": payload.get("email"),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "success": True
+    }
+    
+    await db.audit_logs.insert_one(audit_log)
+    
+    logger.info(f"✅ Logout successful for user: {payload.get('email')}")
+    
+    return {"message": "Logout realizado com sucesso"}
+
+@api_router.post("/auth/refresh")
+async def refresh_access_token(refresh_token: str):
+    """
+    Renova access token usando refresh token
+    """
+    from security import verify_token, create_access_token
+    
+    payload = verify_token(refresh_token)
+    
+    if not payload or payload.get("type") != "refresh":
+        raise HTTPException(status_code=401, detail="Refresh token inválido")
+    
+    # Criar novo access token
+    token_data = {
+        "user_id": payload.get("user_id"),
+        "email": payload.get("email"),
+        "role": payload.get("role"),
+        "name": payload.get("name")
+    }
+    
+    new_access_token = create_access_token(token_data)
+    expires_at = (datetime.now(timezone.utc) + timedelta(minutes=480)).isoformat()
+    
+    logger.info(f"✅ Access token renovado para: {payload.get('email')}")
+    
+    return {
+        "access_token": new_access_token,
+        "token_type": "Bearer",
+        "expires_in": 480 * 60,
+        "expires_at": expires_at
+    }
+
 @api_router.post("/users", response_model=User)
 async def create_user(user_data: UserCreate):
     """Cria novo usuário com senha em hash bcrypt"""
