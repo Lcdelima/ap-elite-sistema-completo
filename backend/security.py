@@ -1,14 +1,22 @@
 """
 Módulo de Segurança e Autenticação
-Hashing de senhas, validação de tokens, RBAC
+Hashing de senhas, JWT tokens, RBAC, auditoria
 """
 from passlib.context import CryptContext
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
+from typing import Optional, Dict, Any
 import uuid
 import secrets
+import jwt
 
 # Contexto para hashing de senhas com bcrypt
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+# Configurações JWT
+JWT_SECRET_KEY = secrets.token_urlsafe(64)  # Em produção, usar variável de ambiente
+JWT_ALGORITHM = "HS256"
+JWT_ACCESS_TOKEN_EXPIRE_MINUTES = 480  # 8 horas
+JWT_REFRESH_TOKEN_EXPIRE_DAYS = 7
 
 def hash_password(password: str) -> str:
     """
@@ -35,9 +43,78 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
     return pwd_context.verify(plain_password, hashed_password)
 
+def create_access_token(data: Dict[str, Any], expires_delta: Optional[timedelta] = None) -> str:
+    """
+    Cria JWT access token com expiração
+    
+    Args:
+        data: Dados a incluir no token (user_id, email, role)
+        expires_delta: Tempo de expiração customizado
+        
+    Returns:
+        JWT token assinado
+    """
+    to_encode = data.copy()
+    
+    if expires_delta:
+        expire = datetime.now(timezone.utc) + expires_delta
+    else:
+        expire = datetime.now(timezone.utc) + timedelta(minutes=JWT_ACCESS_TOKEN_EXPIRE_MINUTES)
+    
+    to_encode.update({
+        "exp": expire,
+        "iat": datetime.now(timezone.utc),
+        "jti": str(uuid.uuid4())  # JWT ID único
+    })
+    
+    encoded_jwt = jwt.encode(to_encode, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
+    return encoded_jwt
+
+def create_refresh_token(data: Dict[str, Any]) -> str:
+    """
+    Cria JWT refresh token com expiração longa
+    
+    Args:
+        data: Dados do usuário
+        
+    Returns:
+        JWT refresh token
+    """
+    to_encode = data.copy()
+    expire = datetime.now(timezone.utc) + timedelta(days=JWT_REFRESH_TOKEN_EXPIRE_DAYS)
+    
+    to_encode.update({
+        "exp": expire,
+        "iat": datetime.now(timezone.utc),
+        "jti": str(uuid.uuid4()),
+        "type": "refresh"
+    })
+    
+    encoded_jwt = jwt.encode(to_encode, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
+    return encoded_jwt
+
+def verify_token(token: str) -> Optional[Dict[str, Any]]:
+    """
+    Verifica e decodifica JWT token
+    
+    Args:
+        token: JWT token
+        
+    Returns:
+        Dados do token se válido, None se inválido/expirado
+    """
+    try:
+        payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[JWT_ALGORITHM])
+        return payload
+    except jwt.ExpiredSignatureError:
+        return None
+    except jwt.JWTError:
+        return None
+
 def generate_token() -> str:
     """
-    Gera token seguro para autenticação
+    Gera token seguro para compatibilidade com sistema antigo
+    DEPRECATED: Use create_access_token() para novos sistemas
     
     Returns:
         Token único e seguro
