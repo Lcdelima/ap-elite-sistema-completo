@@ -144,6 +144,7 @@ function AppContent() {
           <Route path="/athena/forensics" element={<AthenaForensics />} />
           <Route path="/athena/forensics-enhanced" element={<ForensicsEnhanced />} />
           <Route path="/athena/pericia-digital" element={<PericiaDigital />} />
+          <Route path="/athena/analise-processual" element={<AnaliseProcessualProfissional />} />
           <Route path="/athena/pericia-digital-pro" element={<PericiaDigitalPro />} />
           <Route path="/athena/interceptacoes-telematicas-pro" element={<InterceptacoesTelematicasPro />} />
           <Route path="/athena/ultra-extraction-pro" element={<UltraExtractionPro />} />
