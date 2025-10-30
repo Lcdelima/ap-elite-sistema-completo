@@ -242,6 +242,9 @@ async def get_appointments():
 async def login_user(login_data: UserLogin):
     logger.info(f"🔐 Login attempt: email={login_data.email}, role={login_data.role}")
     
+    # Import security module
+    from security import verify_password, generate_token
+    
     # Find user by email and role
     user = await db.users.find_one({
         "email": login_data.email, 
@@ -255,12 +258,42 @@ async def login_user(login_data: UserLogin):
     
     logger.info(f"✅ User found: {user.get('name')}")
     
-    # In production, verify hashed password
-    if user["password"] != login_data.password:
+    # Verificar senha - suporta tanto hash quanto texto plano (migração)
+    password_hash = user.get("password")
+    is_valid = False
+    
+    # Se a senha começa com $2b$ é bcrypt hash
+    if password_hash and password_hash.startswith("$2b$"):
+        is_valid = verify_password(login_data.password, password_hash)
+    else:
+        # Compatibilidade com senhas antigas em texto plano
+        is_valid = (password_hash == login_data.password)
+    
+    if not is_valid:
         logger.warning(f"❌ Invalid password for user: {login_data.email}")
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
     logger.info(f"✅ Login successful for: {user.get('name')}")
+    
+    # Gerar token seguro
+    secure_token = generate_token()
+    
+    # Update last login
+    await db.users.update_one(
+        {"id": user["id"]},
+        {"$set": {
+            "last_login": datetime.now(timezone.utc).isoformat(),
+            "last_token": secure_token
+        }}
+    )
+    
+    # Remove password from response
+    user.pop("password", None)
+    
+    return {
+        "user": user,
+        "token": secure_token
+    }
     
     # Update last login
     await db.users.update_one(
