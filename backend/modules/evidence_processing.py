@@ -72,15 +72,21 @@ async def upload_evidence(
     total_chunks: int = Form(1)
 ):
     """Upload com chunks"""
-    if evidence_id not in evidences_db:
-        raise HTTPException(status_code=404)
+    evidence = await db.evidences.find_one({"id": evidence_id})
+    if not evidence:
+        raise HTTPException(status_code=404, detail="Evidência não encontrada")
     
     content = await file.read()
     hash_chunk = hashlib.sha256(content).hexdigest()
     
     if chunk_number == total_chunks - 1:
-        evidences_db[evidence_id].hash_sha256 = hash_chunk
-        evidences_db[evidence_id].status = "uploaded"
+        await db.evidences.update_one(
+            {"id": evidence_id},
+            {"$set": {
+                "hash_sha256": hash_chunk,
+                "status": "uploaded"
+            }}
+        )
     
     return {
         "evidence_id": evidence_id,
@@ -91,9 +97,15 @@ async def upload_evidence(
 @router.post("/{evidence_id}/analyze")
 async def analyze_evidence(evidence_id: str):
     """Analisa evidência"""
-    if evidence_id not in evidences_db:
-        raise HTTPException(status_code=404)
-    evidences_db[evidence_id].status = "analyzed"
+    evidence = await db.evidences.find_one({"id": evidence_id})
+    if not evidence:
+        raise HTTPException(status_code=404, detail="Evidência não encontrada")
+    
+    await db.evidences.update_one(
+        {"id": evidence_id},
+        {"$set": {"status": "analyzed"}}
+    )
+    
     return {"evidence_id": evidence_id, "status": "analyzed"}
 
 @router.post("/{evidence_id}/export")
@@ -102,9 +114,13 @@ async def export_evidence(evidence_id: str, format: str = "pdf"):
     return {
         "evidence_id": evidence_id,
         "format": format,
-        "generated_at": datetime.utcnow().isoformat()
+        "generated_at": datetime.now(timezone.utc).isoformat()
     }
 
 @router.get("/health")
 async def health_check():
-    return {"status": "ok", "module": "Processamento de Evidências"}
+    return {
+        "status": "ok",
+        "module": "Processamento de Evidências",
+        "version": "3.0.0"
+    }
