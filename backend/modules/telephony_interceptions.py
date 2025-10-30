@@ -131,23 +131,33 @@ async def transcribe_call(request: TranscriptionRequest):
         "keywords": ["reunião", "assunto", "ontem"],
         "confidence": 0.95,
         "language": request.language,
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "generated_at": datetime.now(timezone.utc).isoformat()
     }
     
-    # Atualizar chamada
-    calls_db[request.call_id].transcription = transcription["transcription"]
-    calls_db[request.call_id].speakers = transcription["speakers"]
-    calls_db[request.call_id].sentiment = transcription["sentiment"]
-    calls_db[request.call_id].keywords = transcription["keywords"]
+    # Atualizar chamada no MongoDB
+    await db.telephony_calls.update_one(
+        {"id": request.call_id},
+        {"$set": {
+            "transcription": transcription["transcription"],
+            "speakers": transcription["speakers"],
+            "sentiment": transcription["sentiment"],
+            "keywords": transcription["keywords"]
+        }}
+    )
     
-    transcripts_db[request.call_id] = transcription
+    # Salvar transcrição completa
+    await db.telephony_transcripts.insert_one(transcription)
+    
+    logger.info(f"✅ Transcrição concluída para chamada {request.call_id}")
     
     return transcription
 
 @router.get("/calls/{call_id}")
 async def get_call(call_id: str):
     """Obtém detalhes de uma chamada"""
-    if call_id not in calls_db:
+    call = await db.telephony_calls.find_one({"id": call_id}, {"_id": 0})
+    if not call:
         raise HTTPException(status_code=404, detail="Chamada não encontrada")
     return calls_db[call_id]
 
