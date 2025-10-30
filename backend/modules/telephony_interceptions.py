@@ -72,24 +72,55 @@ async def import_calls(
             "to_number": f"+5511888{i:06d}",
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "duration_seconds": 120 + i * 30 if i % 2 == 0 else None,
-            audio_file=f"call_{i}.wav" if i % 2 == 0 else None
-        )
-        calls_db[call.id] = call
+            "audio_file": f"call_{i}.wav" if i % 2 == 0 else None,
+            "legal_basis": call_data.legal_basis,
+            "operator": call_data.operator,
+            "imported_at": datetime.now(timezone.utc).isoformat()
+        }
+        
+        # Salvar no MongoDB
+        await db.telephony_calls.insert_one(call)
         imported_calls.append(call)
+    
+    logger.info(f"✅ {len(imported_calls)} chamadas importadas para caso {call_data.case_number}")
     
     return {
         "status": "success",
         "case_number": call_data.case_number,
         "imported_calls": len(imported_calls),
+        "legal_basis": call_data.legal_basis,
         "calls": imported_calls
     }
+
+@router.get("/calls")
+async def list_calls(case_number: Optional[str] = None, call_type: Optional[str] = None):
+    """Lista todas as chamadas interceptadas"""
+    try:
+        query = {}
+        if case_number:
+            query["case_number"] = case_number
+        if call_type:
+            query["call_type"] = call_type
+        
+        calls = await db.telephony_calls.find(query, {"_id": 0}).sort("timestamp", -1).to_list(100)
+        
+        return {
+            "total": len(calls),
+            "calls": calls
+        }
+    except Exception as e:
+        logger.error(f"Error listing calls: {e}")
+        return {"total": 0, "calls": []}
 
 @router.post("/transcribe")
 async def transcribe_call(request: TranscriptionRequest):
     """Transcreve áudio de chamada com diarização"""
     
-    if request.call_id not in calls_db:
+    call = await db.telephony_calls.find_one({"id": request.call_id}, {"_id": 0})
+    if not call:
         raise HTTPException(status_code=404, detail="Chamada não encontrada")
+    
+    logger.info(f"🎤 Transcrevendo chamada {request.call_id} - Idioma: {request.language}")
     
     # Simular transcrição com IA (Whisper/Gemini)
     transcription = {
