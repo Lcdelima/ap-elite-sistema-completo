@@ -167,6 +167,7 @@ function AppContent() {
           <Route path="/athena/process-analysis" element={<AthenaProcessAnalysis />} />
           <Route path="/athena/process-analysis-pro" element={<ProcessAnalysisPro />} />
           <Route path="/athena/integracao-tribunais" element={<IntegracaoTribunais />} />
+          <Route path="/athena/dosimetria-penal" element={<DosimetriaPenal />} />
           <Route path="/athena/reports" element={<AthenaReports />} />
           <Route path="/athena/financial" element={<AthenaFinancial />} />
           <Route path="/athena/intelligent-dashboards" element={<AthenaIntelligentDashboards />} />
