@@ -82,6 +82,7 @@ const AthenaMainReorganized = () => {
       description: 'Gestão jurídica e processual',
       modules: [
         { name: 'Gestão de Processos', icon: Scale, route: '/athena/processes', description: 'Controle completo de processos judiciais' },
+        { name: 'Análise Processual Profissional', icon: Brain, route: '/athena/analise-processual', description: 'Sistema avançado de análise jurídica com IA' },
         { name: 'Análise Processual', icon: FileSearch, route: '/athena/process-analysis', description: 'Análise detalhada de processos' },
         { name: 'Análise Processual Pro', icon: BarChart3, route: '/athena/process-analysis-pro', description: 'Análise avançada com IA' },
         { name: 'Gerador de Contratos', icon: FileText, route: '/athena/contract-generator', description: 'Criação automática de contratos' },
