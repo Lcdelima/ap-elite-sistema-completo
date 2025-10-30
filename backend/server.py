@@ -539,13 +539,6 @@ async def get_client_appointments(client_id: str):
     
     return appointments
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
-
 # Import and include advanced features
 try:
     from advanced_features import advanced_router
