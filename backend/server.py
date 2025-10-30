@@ -14,13 +14,49 @@ from datetime import datetime, timezone
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-# MongoDB connection
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+# Validar variáveis de ambiente essenciais
+def validate_env():
+    """Valida variáveis de ambiente críticas com mensagens amigáveis"""
+    required_vars = {
+        'MONGO_URL': 'mongodb://localhost:27017',
+        'DB_NAME': 'apelite_db'
+    }
+    
+    missing_vars = []
+    for var, default in required_vars.items():
+        if var not in os.environ:
+            logger.warning(f"⚠️ {var} não definida, usando padrão: {default}")
+            os.environ[var] = default
+        else:
+            logger.info(f"✅ {var} configurada")
+    
+    if missing_vars:
+        raise ValueError(
+            f"❌ Variáveis de ambiente faltando: {', '.join(missing_vars)}\n"
+            f"Configure o arquivo backend/.env com as seguintes chaves:\n"
+            f"MONGO_URL=mongodb://localhost:27017\n"
+            f"DB_NAME=apelite_db"
+        )
+
+# Validar antes de iniciar
+validate_env()
+
+# MongoDB connection com tratamento de erro
+try:
+    mongo_url = os.environ['MONGO_URL']
+    client = AsyncIOMotorClient(mongo_url)
+    db = client[os.environ['DB_NAME']]
+    logger.info(f"✅ MongoDB conectado: {os.environ['DB_NAME']}")
+except Exception as e:
+    logger.error(f"❌ Erro ao conectar MongoDB: {e}")
+    raise
 
 # Create the main app without a prefix
-app = FastAPI(title="AP Elite - Perícia e Investigação Criminal")
+app = FastAPI(
+    title="AP Elite ATHENA - Sistema Completo CISAI-Forense 3.0",
+    description="Sistema jurídico completo com 19 módulos especializados",
+    version="3.0.0"
+)
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
