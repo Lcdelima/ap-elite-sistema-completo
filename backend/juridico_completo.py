@@ -25,7 +25,7 @@ db = client[DB_NAME]
 # Security - Usar JWT do módulo security
 from security import verify_token, check_permission
 
-async def get_current_user_jwt(authorization: str = Header(None)) -> Dict[str, Any]:
+async def get_current_user_jwt_jwt(authorization: str = Header(None)) -> Dict[str, Any]:
     """
     Dependency segura com JWT
     Substitui autenticação fraca por token_parts
@@ -85,7 +85,7 @@ async def listar_processos(
     advogado: Optional[str] = None,
     skip: int = 0,
     limit: int = 50,
-    current_user: dict = Depends(get_current_user_jwt)
+    current_user: dict = Depends(get_current_user_jwt_jwt)
 ):
     """
     Lista processos com filtros avançados e autenticação JWT
@@ -137,7 +137,7 @@ async def listar_processos(
 @router.post("/processos")
 async def criar_processo(
     data: ProcessoCreate,
-    current_user: dict = Depends(get_current_user_jwt)
+    current_user: dict = Depends(get_current_user_jwt_jwt)
 ):
     """
     Cria novo processo judicial
@@ -235,7 +235,7 @@ async def criar_processo(
 @router.get("/processos/{processo_id}")
 async def obter_processo(
     processo_id: str,
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_user_jwt)
 ):
     """Obtém detalhes completos do processo"""
     if not current_user:
@@ -263,7 +263,7 @@ async def obter_processo(
 async def atualizar_processo(
     processo_id: str,
     data: dict = Body(...),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_user_jwt)
 ):
     """Atualiza processo"""
     if not current_user:
@@ -294,7 +294,7 @@ async def atualizar_processo(
 @router.delete("/processos/{processo_id}")
 async def excluir_processo(
     processo_id: str,
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_user_jwt)
 ):
     """Exclui processo (soft delete)"""
     if not current_user:
@@ -317,7 +317,7 @@ async def excluir_processo(
 async def adicionar_prazo(
     processo_id: str,
     data: dict = Body(...),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_user_jwt)
 ):
     """Adiciona prazo ao processo"""
     if not current_user:
@@ -354,7 +354,7 @@ async def adicionar_prazo(
 @router.get("/prazos/vencendo")
 async def prazos_vencendo(
     dias: int = 7,
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_user_jwt)
 ):
     """Lista prazos vencendo nos próximos N dias"""
     if not current_user:
@@ -390,7 +390,7 @@ async def prazos_vencendo(
 async def adicionar_movimentacao(
     processo_id: str,
     data: dict = Body(...),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_user_jwt)
 ):
     """Adiciona movimentação processual"""
     if not current_user:
@@ -428,7 +428,7 @@ async def adicionar_movimentacao(
 async def adicionar_peticao(
     processo_id: str,
     data: dict = Body(...),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_user_jwt)
 ):
     """Adiciona petição ao processo"""
     if not current_user:
@@ -466,7 +466,7 @@ async def adicionar_peticao(
 
 @router.get("/estatisticas")
 async def obter_estatisticas(
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_user_jwt)
 ):
     """Retorna estatísticas do módulo jurídico"""
     if not current_user:
