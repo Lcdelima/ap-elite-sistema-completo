@@ -597,7 +597,16 @@ try:
 except ImportError as e:
     logger.error(f"⚠️ forensics_enhanced module error: {e}")
 
-logger.info(f"✅ CISAI-Forense 3.0: {modules_loaded}/18 modules loaded successfully")
+# Import Gestão de Processos
+try:
+    from modules.gestao_processos import router as gestao_processos_router
+    app.include_router(gestao_processos_router)
+    modules_loaded += 1
+    logger.info("✅ Gestão de Processos loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ gestao_processos module error: {e}")
+
+logger.info(f"✅ CISAI-Forense 3.0: {modules_loaded}/19 modules loaded successfully")
 
 # Include the router in the main app
 app.include_router(api_router)
