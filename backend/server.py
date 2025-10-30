@@ -579,7 +579,16 @@ try:
 except ImportError as e:
     logger.error(f"⚠️ evidence_ai module error: {e}")
 
-logger.info(f"✅ CISAI-Forense 3.0: {modules_loaded}/16 modules loaded successfully")
+# Import Análise Processual Profissional
+try:
+    from modules.analise_processual import router as analise_processual_router
+    app.include_router(analise_processual_router)
+    modules_loaded += 1
+    logger.info("✅ Análise Processual Profissional loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ analise_processual module error: {e}")
+
+logger.info(f"✅ CISAI-Forense 3.0: {modules_loaded}/17 modules loaded successfully")
 
 # Include the router in the main app
 app.include_router(api_router)
