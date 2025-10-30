@@ -308,7 +308,7 @@ async def login_user(login_data: UserLogin):
     logger.info(f"🔐 Login attempt: email={login_data.email}, role={login_data.role}")
     
     # Import security module
-    from security import verify_password, generate_token
+    from security import verify_password, create_access_token, create_refresh_token
     
     # Find user by email and role
     user = await db.users.find_one({
@@ -340,24 +340,79 @@ async def login_user(login_data: UserLogin):
     
     logger.info(f"✅ Login successful for: {user.get('name')}")
     
-    # Gerar token seguro
-    secure_token = generate_token()
+    # Criar JWT tokens com expiração
+    token_data = {
+        "user_id": user["id"],
+        "email": user["email"],
+        "role": user["role"],
+        "name": user["name"]
+    }
+    
+    access_token = create_access_token(token_data)
+    refresh_token = create_refresh_token(token_data)
+    
+    # Calcular tempo de expiração
+    expires_at = (datetime.now(timezone.utc) + timedelta(minutes=480)).isoformat()
+    
+    # Registrar sessão e auditoria
+    session_id = str(uuid.uuid4())
+    session = {
+        "session_id": session_id,
+        "user_id": user["id"],
+        "email": user["email"],
+        "role": user["role"],
+        "access_token": access_token,
+        "refresh_token": refresh_token,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "expires_at": expires_at,
+        "ip_address": None,  # TODO: Capturar IP do request
+        "user_agent": None,  # TODO: Capturar User-Agent
+        "active": True
+    }
+    
+    await db.sessions.insert_one(session)
+    
+    # Registrar auditoria
+    audit_log = {
+        "id": str(uuid.uuid4()),
+        "action": "login",
+        "user_id": user["id"],
+        "user_email": user["email"],
+        "user_role": user["role"],
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "details": {
+            "session_id": session_id,
+            "login_method": "password"
+        },
+        "success": True
+    }
+    
+    await db.audit_logs.insert_one(audit_log)
     
     # Update last login
     await db.users.update_one(
         {"id": user["id"]},
         {"$set": {
             "last_login": datetime.now(timezone.utc).isoformat(),
-            "last_token": secure_token
+            "last_session_id": session_id
         }}
     )
     
     # Remove password from response
     user.pop("password", None)
     
+    logger.info(f"✅ JWT tokens created - Session: {session_id}, Expires: {expires_at}")
+    
     return {
         "user": user,
-        "token": secure_token
+        "access_token": access_token,
+        "refresh_token": refresh_token,
+        "token_type": "Bearer",
+        "expires_in": 480 * 60,  # segundos
+        "expires_at": expires_at,
+        "session_id": session_id,
+        # Compatibilidade com código antigo
+        "token": access_token
     }
 
 @api_router.post("/users", response_model=User)
