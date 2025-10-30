@@ -14,6 +14,35 @@ from datetime import datetime, timezone
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
+# Configure logging FIRST - estruturado e com mais detalhes
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - [%(filename)s:%(lineno)d] - %(message)s',
+    handlers=[
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
+logger.info("🚀 Iniciando AP Elite ATHENA - CISAI-Forense 3.0")
+
+# Validar variáveis de ambiente essenciais
+def validate_env():
+    """Valida variáveis de ambiente críticas com mensagens amigáveis"""
+    required_vars = {
+        'MONGO_URL': 'mongodb://localhost:27017',
+        'DB_NAME': 'test_database'
+    }
+    
+    for var, default in required_vars.items():
+        if var not in os.environ:
+            logger.warning(f"⚠️ {var} não definida, usando padrão: {default}")
+            os.environ[var] = default
+        else:
+            logger.info(f"✅ {var} = {os.environ[var]}")
+
+# Validar antes de iniciar
+validate_env()
+
 # Validar variáveis de ambiente essenciais
 def validate_env():
     """Valida variáveis de ambiente críticas com mensagens amigáveis"""
