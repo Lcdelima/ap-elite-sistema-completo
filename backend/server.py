@@ -826,17 +826,16 @@ try:
 except ImportError as e:
     logger.error(f"⚠️ gestao_processos module error: {e}")
 
-# Import Jurídico Completo - DESATIVADO (conflito com gestao_processos)
-# TODO: Migrar melhorias do juridico_completo.py para gestao_processos.py
-# try:
-#     from juridico_completo import router as juridico_router
-#     app.include_router(juridico_router)
-#     modules_loaded += 1
-#     logger.info("✅ Sistema Jurídico Completo loaded successfully")
-# except ImportError as e:
-#     logger.error(f"⚠️ juridico_completo module error: {e}")
+# Import Intelligence & OSINT HyperSuite
+try:
+    from intelligence_osint_suite import router as intelligence_router
+    app.include_router(intelligence_router)
+    modules_loaded += 1
+    logger.info("✅ Intelligence & OSINT HyperSuite loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ intelligence_osint_suite module error: {e}")
 
-logger.info(f"✅ CISAI-Forense 3.0: {modules_loaded}/19 modules loaded successfully")
+logger.info(f"✅ CISAI-Forense 3.0: {modules_loaded}/20 modules loaded successfully")
 
 # Include the router in the main app
 app.include_router(api_router)
