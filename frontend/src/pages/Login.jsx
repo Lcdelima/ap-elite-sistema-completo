@@ -55,9 +55,11 @@ const Login = () => {
 
       const { user, token } = response.data;
 
-      // Store user data in localStorage
+      // Store user data in localStorage (both formats for compatibility)
       localStorage.setItem('ap_elite_user', JSON.stringify(user));
       localStorage.setItem('ap_elite_token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('token', token);
       
       toast.success(`Bem-vindo(a), ${user.name}!`);
       
