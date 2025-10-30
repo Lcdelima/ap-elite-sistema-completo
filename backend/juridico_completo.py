@@ -55,7 +55,7 @@ class ProcessoCreate(BaseModel):
     """Modelo validado para criação de processo"""
     numero_processo: str = Field(..., min_length=3, max_length=100)
     titulo: str = Field(..., min_length=5, max_length=200)
-    tipo: str = Field(..., regex="^(civel|criminal|trabalhista|tributario|administrativo)$")
+    tipo: str = Field(..., pattern="^(civel|criminal|trabalhista|tributario|administrativo)$")
     comarca: str
     vara: str
     cliente: str
@@ -63,8 +63,8 @@ class ProcessoCreate(BaseModel):
     advogado_responsavel: str
     valor_causa: Optional[float] = Field(None, ge=0)
     data_distribuicao: Optional[str] = None
-    status: str = Field(default="em_andamento", regex="^(em_andamento|suspenso|arquivado|concluido)$")
-    prioridade: str = Field(default="normal", regex="^(baixa|normal|alta|urgente)$")
+    status: str = Field(default="em_andamento", pattern="^(em_andamento|suspenso|arquivado|concluido)$")
+    prioridade: str = Field(default="normal", pattern="^(baixa|normal|alta|urgente)$")
     observacoes: Optional[str] = None
 
 class MovimentacaoCreate(BaseModel):
