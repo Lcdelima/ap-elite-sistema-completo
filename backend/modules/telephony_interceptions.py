@@ -159,28 +159,7 @@ async def get_call(call_id: str):
     call = await db.telephony_calls.find_one({"id": call_id}, {"_id": 0})
     if not call:
         raise HTTPException(status_code=404, detail="Chamada não encontrada")
-    return calls_db[call_id]
-
-@router.get("/calls")
-async def list_calls(
-    case_number: Optional[str] = None,
-    call_type: Optional[str] = None,
-    keyword: Optional[str] = None
-):
-    """Lista chamadas com filtros"""
-    calls = list(calls_db.values())
-    
-    if case_number:
-        calls = [c for c in calls if c.case_number == case_number]
-    if call_type:
-        calls = [c for c in calls if c.call_type == call_type]
-    if keyword:
-        calls = [c for c in calls if keyword.lower() in str(c.keywords).lower()]
-    
-    return {
-        "total": len(calls),
-        "calls": calls
-    }
+    return call
 
 @router.post("/report")
 async def generate_report(case_number: str, format: str = "pdf"):
