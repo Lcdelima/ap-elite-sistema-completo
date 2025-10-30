@@ -219,12 +219,14 @@ async def get_stats():
             "transcribed_calls": 0,
             "transcription_rate": 0
         }
-    }
 
 @router.get("/health")
 async def health_check():
+    """Health check do módulo"""
     return {
         "status": "ok",
         "module": "Interceptações Telefônicas",
-        "version": "1.0.0"
+        "version": "3.0.0",
+        "compliance": ["Lei 9.296/96", "CPP Art. 155", "LGPD"],
+        "features": ["Import CDR", "Transcription AI", "Speech-to-Evidence", "Reports"]
     }
