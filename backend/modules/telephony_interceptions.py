@@ -2,16 +2,21 @@
 from fastapi import APIRouter, HTTPException, UploadFile, File
 from pydantic import BaseModel, Field
 from typing import List, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 import uuid
 import os
+import logging
+
+# MongoDB connection
+from server import db
 
 router = APIRouter(prefix="/api/telephony", tags=["Interceptações Telefônicas"])
+logger = logging.getLogger(__name__)
 
 # Models
 class CallImport(BaseModel):
     case_number: str
-    legal_basis: str
+    legal_basis: str  # COMPLIANCE GATE
     operator: str
     date_range_start: str
     date_range_end: str
@@ -22,7 +27,7 @@ class Call(BaseModel):
     call_type: str  # voice, sms
     from_number: str
     to_number: str
-    timestamp: datetime
+    timestamp: str
     duration_seconds: Optional[int] = None
     audio_file: Optional[str] = None
     transcription: Optional[str] = None
@@ -35,29 +40,38 @@ class TranscriptionRequest(BaseModel):
     language: str = "pt-BR"
     diarization: bool = True
 
-# Storage
-calls_db = {}
-transcripts_db = {}
-
 @router.post("/import")
 async def import_calls(
     call_data: CallImport,
     audio_files: List[UploadFile] = File(None),
     metadata_file: UploadFile = File(None)
 ):
-    """Importa chamadas e metadados da operadora"""
+    """
+    Importa chamadas e metadados da operadora
+    COMPLIANCE GATE: Requer base legal (mandado, ordem judicial)
+    """
+    
+    # Validar base legal
+    if not call_data.legal_basis:
+        raise HTTPException(
+            status_code=400,
+            detail="Base legal obrigatória. Configure mandado ou ordem judicial."
+        )
+    
+    logger.info(f"📞 Importando interceptações - Caso: {call_data.case_number}, Base legal: {call_data.legal_basis}")
     
     # Simular importação de chamadas
     imported_calls = []
     
     for i in range(5):  # Simular 5 chamadas
-        call = Call(
-            case_number=call_data.case_number,
-            call_type="voice" if i % 2 == 0 else "sms",
-            from_number=f"+5511999{i:06d}",
-            to_number=f"+5511888{i:06d}",
-            timestamp=datetime.utcnow(),
-            duration_seconds=120 + i * 30 if i % 2 == 0 else None,
+        call = {
+            "id": str(uuid.uuid4()),
+            "case_number": call_data.case_number,
+            "call_type": "voice" if i % 2 == 0 else "sms",
+            "from_number": f"+5511999{i:06d}",
+            "to_number": f"+5511888{i:06d}",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "duration_seconds": 120 + i * 30 if i % 2 == 0 else None,
             audio_file=f"call_{i}.wav" if i % 2 == 0 else None
         )
         calls_db[call.id] = call
