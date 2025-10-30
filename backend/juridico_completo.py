@@ -1,18 +1,20 @@
 """
 AP ELITE ATHENA - Sistema Jurídico Completo
-Backend avançado para gestão jurídica profissional
+Backend avançado para gestão jurídica profissional com JWT e RBAC
 """
 
-from fastapi import APIRouter, Depends, HTTPException, Body, UploadFile, File
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi import APIRouter, Depends, HTTPException, Body, UploadFile, File, Header
 from motor.motor_asyncio import AsyncIOMotorClient
 from datetime import datetime, timezone, timedelta
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
+from pydantic import BaseModel, Field, validator
 import os
 import uuid
 import json
+import logging
 
 router = APIRouter(prefix="/api/juridico", tags=["Sistema Jurídico"])
+logger = logging.getLogger(__name__)
 
 # MongoDB connection
 MONGO_URL = os.environ.get("MONGO_URL", "mongodb://localhost:27017")
@@ -20,19 +22,57 @@ DB_NAME = os.environ.get("DB_NAME", "test_database")
 client = AsyncIOMotorClient(MONGO_URL)
 db = client[DB_NAME]
 
-# Security
-security = HTTPBearer(auto_error=False)
+# Security - Usar JWT do módulo security
+from security import verify_token, check_permission
 
-async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
-    if not credentials:
-        return None
-    try:
-        token_parts = credentials.credentials.split('_')
-        user_id = token_parts[1]
-        user = await db.users.find_one({"id": user_id, "active": True}, {"_id": 0, "password": 0})
-        return user
-    except:
-        return None
+async def get_current_user_jwt(authorization: str = Header(None)) -> Dict[str, Any]:
+    """
+    Dependency segura com JWT
+    Substitui autenticação fraca por token_parts
+    """
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(
+            status_code=401,
+            detail="Token de autenticação não fornecido",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+    
+    token = authorization.replace("Bearer ", "")
+    payload = verify_token(token)
+    
+    if not payload:
+        raise HTTPException(
+            status_code=401,
+            detail="Token inválido ou expirado",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+    
+    return payload
+
+# ==================== MODELS PYDANTIC ====================
+
+class ProcessoCreate(BaseModel):
+    """Modelo validado para criação de processo"""
+    numero_processo: str = Field(..., min_length=3, max_length=100)
+    titulo: str = Field(..., min_length=5, max_length=200)
+    tipo: str = Field(..., regex="^(civel|criminal|trabalhista|tributario|administrativo)$")
+    comarca: str
+    vara: str
+    cliente: str
+    parte_contraria: str
+    advogado_responsavel: str
+    valor_causa: Optional[float] = Field(None, ge=0)
+    data_distribuicao: Optional[str] = None
+    status: str = Field(default="em_andamento", regex="^(em_andamento|suspenso|arquivado|concluido)$")
+    prioridade: str = Field(default="normal", regex="^(baixa|normal|alta|urgente)$")
+    observacoes: Optional[str] = None
+
+class MovimentacaoCreate(BaseModel):
+    """Modelo para movimentação processual"""
+    tipo_movimentacao: str
+    descricao: str = Field(..., min_length=10)
+    data_movimentacao: str
+    responsavel: str
 
 # ==================== PROCESSOS JUDICIAIS ====================
 
@@ -45,13 +85,25 @@ async def listar_processos(
     advogado: Optional[str] = None,
     skip: int = 0,
     limit: int = 50,
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_user_jwt)
 ):
-    """Lista processos com filtros avançados"""
-    if not current_user:
-        raise HTTPException(status_code=401, detail="Autenticação necessária")
+    """
+    Lista processos com filtros avançados e autenticação JWT
+    CORRIGIDO: Filtro soft delete, validação de limit, proteção JWT
+    """
     
-    query = {}
+    # Validar limit para evitar divisão por zero
+    if limit <= 0:
+        limit = 50
+    if limit > 100:
+        limit = 100
+    
+    query = {"ativo": True}  # CORRIGIDO: Soft delete filter
+    
+    # Filtros de perfil - cliente só vê seus processos
+    if current_user.get("role") == "client":
+        query["cliente_email"] = current_user.get("email")
+    
     if status:
         query["status"] = status
     if tipo:
@@ -63,18 +115,24 @@ async def listar_processos(
     if advogado:
         query["advogado"] = {"$regex": advogado, "$options": "i"}
     
-    processos = await db.processos_juridicos.find(
-        query, {"_id": 0}
-    ).sort("data_cadastro", -1).skip(skip).limit(limit).to_list(limit)
-    
-    total = await db.processos_juridicos.count_documents(query)
-    
-    return {
-        "processos": processos,
-        "total": total,
-        "page": skip // limit + 1,
-        "total_pages": (total + limit - 1) // limit
-    }
+    try:
+        processos = await db.processos_juridicos.find(
+            query, {"_id": 0}
+        ).sort("data_cadastro", -1).skip(skip).limit(limit).to_list(limit)
+        
+        total = await db.processos_juridicos.count_documents(query)
+        
+        logger.info(f"📋 Listagem de processos - User: {current_user.get('email')}, Total: {total}")
+        
+        return {
+            "processos": processos,
+            "total": total,
+            "page": skip // limit + 1,
+            "total_pages": (total + limit - 1) // limit
+        }
+    except Exception as e:
+        logger.error(f"Error listing processos: {e}")
+        raise HTTPException(status_code=500, detail="Erro ao listar processos")
 
 @router.post("/processos")
 async def criar_processo(
