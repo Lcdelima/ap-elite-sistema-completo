@@ -217,3 +217,79 @@ def check_permission(user_role: str, permission: str) -> bool:
         return True
     
     return False
+
+# ==================== DEPENDENCIES PARA FASTAPI ====================
+
+async def get_current_user(authorization: str = Header(None)) -> Dict[str, Any]:
+    """
+    Dependency para obter usuário atual do token JWT
+    Uso: user = Depends(get_current_user)
+    """
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(
+            status_code=401,
+            detail="Token de autenticação não fornecido",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+    
+    token = authorization.replace("Bearer ", "")
+    payload = verify_token(token)
+    
+    if not payload:
+        raise HTTPException(
+            status_code=401,
+            detail="Token inválido ou expirado",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+    
+    return payload
+
+async def require_role(required_roles: list[str]):
+    """
+    Dependency para verificar papel do usuário
+    Uso: user = Depends(require_role(["administrator", "perito"]))
+    """
+    async def role_checker(user: Dict = Depends(get_current_user)) -> Dict:
+        if user.get("role") not in required_roles:
+            raise HTTPException(
+                status_code=403,
+                detail=f"Acesso negado. Requer um dos papéis: {', '.join(required_roles)}"
+            )
+        return user
+    
+    return role_checker
+
+async def require_permission(permission: str):
+    """
+    Dependency para verificar permissão específica
+    Uso: user = Depends(require_permission("cases.delete"))
+    """
+    async def permission_checker(user: Dict = Depends(get_current_user)) -> Dict:
+        if not check_permission(user.get("role"), permission):
+            raise HTTPException(
+                status_code=403,
+                detail=f"Permissão negada: {permission}"
+            )
+        return user
+    
+    return permission_checker
+
+    if not role_data:
+        return False
+    
+    permissions = role_data["permissions"]
+    
+    # Super admin tem tudo
+    if "*" in permissions:
+        return True
+    
+    # Verificar permissão exata
+    if permission in permissions:
+        return True
+    
+    # Verificar wildcard (ex: "forensics.*" cobre "forensics.create")
+    resource = permission.split(".")[0]
+    if f"{resource}.*" in permissions:
+        return True
+    
+    return False
