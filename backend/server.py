@@ -844,7 +844,16 @@ try:
 except ImportError as e:
     logger.error(f"⚠️ integracao_tribunais module error: {e}")
 
-logger.info(f"✅ CISAI-Forense 3.0: {modules_loaded}/21 modules loaded successfully")
+# Import Dosimetria Penal
+try:
+    from modules.dosimetria_penal import router as dosimetria_router
+    app.include_router(dosimetria_router)
+    modules_loaded += 1
+    logger.info("✅ Dosimetria Penal loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ dosimetria_penal module error: {e}")
+
+logger.info(f"✅ CISAI-Forense 3.0: {modules_loaded}/22 modules loaded successfully")
 
 # Include the router in the main app
 app.include_router(api_router)
