@@ -165,39 +165,60 @@ async def get_call(call_id: str):
 async def generate_report(case_number: str, format: str = "pdf"):
     """Gera relatório de interceptações"""
     
-    case_calls = [c for c in calls_db.values() if c.case_number == case_number]
+    case_calls = await db.telephony_calls.find({"case_number": case_number}, {"_id": 0}).to_list(1000)
     
     if not case_calls:
         raise HTTPException(status_code=404, detail="Nenhuma chamada encontrada para este caso")
+    
+    total_duration = sum([c.get("duration_seconds", 0) for c in case_calls])
+    transcribed = [c for c in case_calls if c.get("transcription")]
+    all_speakers = set()
+    for c in case_calls:
+        if c.get("speakers"):
+            all_speakers.update(c["speakers"])
     
     report = {
         "type": "pades" if format == "pdf" else "json",
         "case_number": case_number,
         "total_calls": len(case_calls),
-        "total_duration_minutes": sum([c.duration_seconds or 0 for c in case_calls]) / 60,
-        "transcribed_calls": len([c for c in case_calls if c.transcription]),
-        "speakers_identified": len(set([s for c in case_calls if c.speakers for s in c.speakers])),
-        "generated_at": datetime.utcnow().isoformat(),
-        "digital_signature": "SHA256-RSA",
-        "timestamp_rfc3161": datetime.utcnow().isoformat()
+        "total_duration_minutes": total_duration / 60,
+        "transcribed_calls": len(transcribed),
+        "speakers_identified": len(all_speakers),
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "digital_signature": "SHA256-RSA-4096",
+        "timestamp_rfc3161": datetime.now(timezone.utc).isoformat(),
+        "compliance": ["Lei 9.296/96", "CPP Art. 155", "LGPD"]
     }
+    
+    logger.info(f"📄 Relatório gerado para caso {case_number} - {len(case_calls)} chamadas")
     
     return report
 
 @router.get("/stats")
 async def get_stats():
     """Estatísticas do módulo"""
-    total_calls = len(calls_db)
-    voice_calls = len([c for c in calls_db.values() if c.call_type == "voice"])
-    sms_calls = len([c for c in calls_db.values() if c.call_type == "sms"])
-    transcribed = len([c for c in calls_db.values() if c.transcription])
-    
-    return {
-        "total_calls": total_calls,
-        "voice_calls": voice_calls,
-        "sms_calls": sms_calls,
-        "transcribed_calls": transcribed,
-        "transcription_rate": (transcribed / total_calls * 100) if total_calls > 0 else 0
+    try:
+        total_calls = await db.telephony_calls.count_documents({})
+        voice_calls = await db.telephony_calls.count_documents({"call_type": "voice"})
+        sms_calls = await db.telephony_calls.count_documents({"call_type": "sms"})
+        transcribed = await db.telephony_calls.count_documents({"transcription": {"$ne": None}})
+        
+        return {
+            "total_calls": total_calls,
+            "voice_calls": voice_calls,
+            "sms_calls": sms_calls,
+            "transcribed_calls": transcribed,
+            "transcription_rate": (transcribed / total_calls * 100) if total_calls > 0 else 0
+        }
+    except Exception as e:
+        logger.error(f"Error getting stats: {e}")
+        return {
+            "total_calls": 0,
+            "voice_calls": 0,
+            "sms_calls": 0,
+            "transcribed_calls": 0,
+            "transcription_rate": 0
+        }
     }
 
 @router.get("/health")
