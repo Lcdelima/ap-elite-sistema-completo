@@ -5,6 +5,7 @@ Hashing de senhas, JWT tokens, RBAC, auditoria
 from passlib.context import CryptContext
 from datetime import datetime, timedelta, timezone
 from typing import Optional, Dict, Any
+from fastapi import HTTPException, Header, Depends
 import uuid
 import secrets
 import jwt
