@@ -95,9 +95,9 @@ async def get_process_analyses(current_user: dict = Depends(get_current_user)):
 
 @process_analysis_router.post("")
 async def create_process_analysis(
-    processNumber: str = Form(...),
-    processTitle: str = Form(...),
-    court: str = Form(...),
+    processNumber: str = Form(None),
+    processTitle: str = Form(None),
+    court: str = Form(None),
     vara: str = Form(""),
     processType: str = Form("civil"),
     status: str = Form("active"),
