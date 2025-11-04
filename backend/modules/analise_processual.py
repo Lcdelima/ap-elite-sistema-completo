@@ -1,23 +1,7 @@
-"""Rotas do módulo de Análise Processual detalhada.
+"""Módulo: Análise Processual Profissional.
 
-Este módulo concentra a orquestração das operações de análise processual, 
-incluindo ingestão de processos, indexação, análises assistidas por IA e
-emissão de relatórios conclusivos. A implementação anterior misturava regras
-de negócio com manipulação de dados e carecia de validações básicas –
-especialmente nos pontos de entrada que lidam com anexos e geração de análises.
-
-As rotas abaixo foram reestruturadas para garantir coerência transacional,
-resiliência a erros e reforço de compliance jurídico. As principais melhorias
-incluem:
-
-* Validações rígidas de entrada (prioridade, base legal, estrutura das partes).
-* Tratamento consistente de exceções com mensagens claras ao cliente.
-* Sanitização e auditoria de uploads com verificação de tipo/ tamanho.
-* Funções utilitárias privadas que evitam duplicação de código e mantêm
-  atualizações de timeline centralizadas.
-* Pré-condições explícitas antes da execução de rotinas críticas (indexação,
-  análises de IA e emissão de relatórios), reduzindo a chance de estados
-  intermediários inválidos.
+Este módulo foi reestruturado para centralizar regras de negócio, reduzir a
+duplicação de código e garantir validações consistentes em todos os fluxos.
 """
 
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form
