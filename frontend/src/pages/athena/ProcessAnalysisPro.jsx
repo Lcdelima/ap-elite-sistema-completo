@@ -80,8 +80,9 @@ const ProcessAnalysisComplete = () => {
           formData.documents.forEach(file => {
             formDataToSend.append('documents', file);
           });
-        } else if (formData[key]) {
-          formDataToSend.append(key, formData[key]);
+        } else if (key !== 'documents') {
+          // Always send the value, even if empty
+          formDataToSend.append(key, formData[key] || '');
         }
       });
 
