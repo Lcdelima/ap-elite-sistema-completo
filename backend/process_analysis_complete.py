@@ -117,8 +117,19 @@ async def create_process_analysis(
 ):
     """Create a new process analysis"""
     try:
+        # Validate required fields
+        if not processNumber or processNumber.strip() == "":
+            processNumber = f"PROC-{str(uuid.uuid4())[:8]}"
+            
+        if not processTitle or processTitle.strip() == "":
+            processTitle = "Análise Processual"
+            
+        if not court or court.strip() == "":
+            court = "A definir"
+        
         print(f"[POST] Creating analysis for process: {processNumber}")
         print(f"[POST] User: {current_user.get('email', 'unknown')}")
+        print(f"[POST] Analysis Type: {analysisType}, AI Provider: {aiProvider}")
         
         analysis_id = str(uuid.uuid4())
         
