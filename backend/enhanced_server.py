@@ -839,6 +839,9 @@ app.include_router(crypto_forensics_router)
 app.include_router(deepfake_router)
 app.include_router(forensic_tools_router)
 app.include_router(transcription_advanced_router)
+app.include_router(two_factor_router)
+app.include_router(financial_complete_router)
+app.include_router(nfe_router)
 
 # Health check
 @app.get("/")
