@@ -124,6 +124,9 @@ import ProcessFormWizard from './pages/advocacia/ProcessFormWizard';
 import AnaliseProcessualProFrontend from './pages/advocacia/AnaliseProcessualPro';
 import ContratoEditor from './pages/advocacia/ContratoEditor';
 import PeticoesIA from './pages/advocacia/PeticoesIA';
+import DeepfakeLab from './pages/pericia/DeepfakeLab';
+import CloudForensics from './pages/pericia/CloudForensics';
+import CryptoForensics from './pages/pericia/CryptoForensics';
 
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
