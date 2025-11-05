@@ -145,7 +145,7 @@ async def get_transcription(transcription_id: str):
 
 @router.post("/{transcription_id}/process")
 async def process_transcription(transcription_id: str):
-    """Processa transcrição (placeholder para integração real)"""
+    """Processa transcrição usando serviço real"""
     
     transcription = await db.transcriptions.find_one(
         {"transcription_id": transcription_id}
@@ -160,41 +160,53 @@ async def process_transcription(transcription_id: str):
         {"$set": {"status": "processing"}}
     )
     
-    # MOCK: Simulação de resultado
-    # TODO: Integrar com Whisper, Google, AssemblyAI
-    
-    mock_result = {
-        "full_text": "[Transcrição simulada] Esta é uma transcrição de exemplo.",
-        "segments": [
+    try:
+        # Importar serviço de transcrição
+        from services.transcription_service import TranscriptionOrchestrator
+        
+        orchestrator = TranscriptionOrchestrator()
+        
+        # Processar transcrição
+        result = await orchestrator.transcribe(
+            audio_path=transcription['temp_path'],
+            provider=transcription['provider'],
+            language=transcription['language'],
+            enable_timestamps=True,
+            prompt="Transcrição forense para uso judicial"
+        )
+        
+        # Atualizar com resultado real
+        await db.transcriptions.update_one(
+            {"transcription_id": transcription_id},
             {
-                "start": 0.0,
-                "end": 3.5,
-                "text": "Esta é uma transcrição de exemplo.",
-                "speaker": "Speaker 1",
-                "confidence": 0.95
+                "$set": {
+                    "status": "completed",
+                    "result": result,
+                    "completed_at": datetime.now(timezone.utc).isoformat()
+                }
             }
-        ],
-        "duration_seconds": 3.5,
-        "quality_score": 0.95
-    }
-    
-    # Atualizar com resultado
-    await db.transcriptions.update_one(
-        {"transcription_id": transcription_id},
-        {
-            "$set": {
-                "status": "completed",
-                "result": mock_result,
-                "completed_at": datetime.now(timezone.utc).isoformat()
-            }
+        )
+        
+        return {
+            "transcription_id": transcription_id,
+            "status": "completed",
+            "result": result
         }
-    )
-    
-    return {
-        "transcription_id": transcription_id,
-        "status": "completed",
-        "result": mock_result
-    }
+        
+    except Exception as e:
+        # Erro no processamento
+        await db.transcriptions.update_one(
+            {"transcription_id": transcription_id},
+            {
+                "$set": {
+                    "status": "failed",
+                    "error": str(e),
+                    "failed_at": datetime.now(timezone.utc).isoformat()
+                }
+            }
+        )
+        
+        raise HTTPException(status_code=500, detail=f"Erro na transcrição: {str(e)}")
 
 
 @router.get("/{transcription_id}/export-vft")
