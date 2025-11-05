@@ -232,9 +232,11 @@ function App() {
   return (
     <ThemeProvider>
       <TourProvider>
-        <Router>
-          <AppContent />
-        </Router>
+        <EntitlementsProvider>
+          <Router>
+            <AppContent />
+          </Router>
+        </EntitlementsProvider>
       </TourProvider>
     </ThemeProvider>
   );
