@@ -858,6 +858,7 @@ app.include_router(inbox_router)
 app.include_router(calendar_oauth_router)
 app.include_router(sala_aula_router)
 app.include_router(clientes_dossie_router)
+app.include_router(sync_judicial_router)
 app.include_router(pericia_complete_router)
 
 # Health check
