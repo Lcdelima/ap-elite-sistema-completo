@@ -102,9 +102,12 @@ import ComplianceCenter from './pages/athena/ComplianceCenter';
 // Elite Athena NEW Modules
 import EvidenceVault from './pages/pericia/EvidenceVault';
 import EliteSeal from './pages/pericia/EliteSeal';
+import PericiaDashboard from './pages/pericia/PericiaDashboard';
 import StorageConfig from './pages/admin/StorageConfig';
 import TranscriptionVFT from './pages/diversos/TranscriptionVFT';
 import Calculadoras from './pages/diversos/Calculadoras';
+import DiversosDashboard from './pages/diversos/DiversosDashboard';
+import AdvocaciaDashboard from './pages/advocacia/AdvocaciaDashboard';
 
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
