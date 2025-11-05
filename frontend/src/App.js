@@ -2,13 +2,18 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import './App.css';
+import './styles/elite-gravitas.css';
 import { ThemeProvider } from './context/ThemeContext';
 import { TourProvider } from './context/TourContext';
+import { EntitlementsProvider } from './contexts/EntitlementsContext';
 import KeyboardShortcutsModal from './components/KeyboardShortcutsModal';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
+import ProofBar from './components/ui/ProofBar';
 
 // Import pages
 import Home from './pages/Home';
+import SiteHome from './pages/site/Home';
+import RequestAccess from './pages/site/RequestAccess';
 import Services from './pages/Services';
 import About from './pages/About';
 import Contact from './pages/Contact';
