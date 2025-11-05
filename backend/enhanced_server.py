@@ -829,6 +829,9 @@ app.include_router(chat_elitelex_router)
 app.include_router(health_router)
 app.include_router(peticoes_ia_router)
 app.include_router(processes_advanced_router)
+app.include_router(cloud_forensics_complete_router)
+app.include_router(crypto_forensics_router)
+app.include_router(deepfake_router)
 
 # Health check
 @app.get("/")
