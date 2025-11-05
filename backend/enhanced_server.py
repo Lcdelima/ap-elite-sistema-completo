@@ -742,6 +742,9 @@ from api.modules.pericia.elite_seal import router as elite_seal_router
 from api.storage.storage_connectors import router as storage_connectors_router
 from api.modules.diversos.transcription_vft import router as transcription_vft_router
 from api.modules.diversos.calculadoras import router as calculadoras_router
+from api.modules.diversos.calculadoras_expandidas import router as calculadoras_expandidas_router
+from api.billing.billing_service import router as billing_router
+from api.entitlements.entitlements_api import router as entitlements_api_router
 
 # Add all routes to main app
 app.include_router(api_router)
