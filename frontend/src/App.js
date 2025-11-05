@@ -253,7 +253,7 @@ function AppContent() {
           <Route path="/athena/main" element={<MainDashboard />} />
           
           {/* Elite Athena NEW - Dashboards por Categoria */}
-          <Route path="/athena/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/athena/admin-dashboard" element={<AdminDashboardNew />} />
           <Route path="/athena/comunicacao-dashboard" element={<ComunicacaoDashboard />} />
           <Route path="/athena/sala-aula-dashboard" element={<SalaAulaDashboard />} />
           
