@@ -819,6 +819,7 @@ app.include_router(entitlements_api_router)
 app.include_router(stripe_router)
 app.include_router(pagbank_router)
 app.include_router(chat_elitelex_router)
+app.include_router(health_router)
 
 # Health check
 @app.get("/")
