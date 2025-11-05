@@ -1,5 +1,5 @@
 """Transcrição Completa com Diarização - Elite Athena"""
-from fastapi import APIRouter, UploadFile, File, Form, BackgroundTasks
+from fastapi import APIRouter, UploadFile, File, Form, BackgroundTasks, HTTPException
 from services.diarization_service import DiarizationService
 import os
 import uuid
