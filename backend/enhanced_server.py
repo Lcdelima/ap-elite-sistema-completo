@@ -852,6 +852,7 @@ app.include_router(chat_e2ee_router)
 app.include_router(video_conference_router)
 app.include_router(inbox_router)
 app.include_router(calendar_oauth_router)
+app.include_router(sala_aula_router)
 app.include_router(pericia_complete_router)
 
 # Health check
