@@ -37,33 +37,30 @@ Sua tarefa é fornecer análises técnicas precisas citando artigos relevantes d
     ) -> Dict[str, Any]:
         """Busca jurisprudência relevante"""
         
-        system_prompt = f"""
-Você é um assistente jurídico especializado em jurisprudência brasileira.
+        prompt = f"""
 Área de especialização: {area}
 Tribunal: {court}
 
-Sua tarefa é encontrar jurisprudências relevantes e fornecer:
+Busque jurisprudências relevantes para: {query}
+
+Forneça:
 1. Súmula ou ementário
-2. Tribunal e número do processo (se aplicável)
+2. Tribunal e número do processo
 3. Resumo da decisão
 4. Relevância para o caso
 """
         
         try:
-            response = await self.client.chat(
-                model="gpt-4o",
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": query}
-                ],
-                temperature=0.3
+            response = await self.client.send_message(
+                message=prompt,
+                model="gpt-4o"
             )
             
             return {
                 "query": query,
                 "area": area,
                 "court": court,
-                "result": response.choices[0].message.content,
+                "result": response.content,
                 "provider": "elite_lex_rag"
             }
             
