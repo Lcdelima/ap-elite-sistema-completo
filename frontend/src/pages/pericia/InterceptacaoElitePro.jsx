@@ -1,4 +1,4 @@
-"""Interceptação Elite Pro - Frontend - Elite Athena"""
+// Interceptação Elite Pro - Frontend - Elite Athena
 import React, { useState } from 'react';
 import axios from 'axios';
 import '../../styles/elite-gravitas.css';
