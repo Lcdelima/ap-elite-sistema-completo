@@ -276,6 +276,11 @@ function AppContent() {
           <Route path="/athena/analise-processual-pro" element={<AnaliseProcessualProFrontend />} />
           <Route path="/athena/contrato-editor" element={<ContratoEditor />} />
           <Route path="/athena/peticoes-ia" element={<PeticoesIA />} />
+          
+          {/* Elite Athena - Perícia Avançado - NOVO */}
+          <Route path="/athena/deepfake-lab" element={<DeepfakeLab />} />
+          <Route path="/athena/cloud-forensics" element={<CloudForensics />} />
+          <Route path="/athena/crypto-forensics" element={<CryptoForensics />} />
       </Routes>
       <WhatsAppButton />
       <HybridNotifications />
