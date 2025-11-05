@@ -266,6 +266,13 @@ function AppContent() {
           <Route path="/athena/browser-forensics" element={<BrowserForensics />} />
           <Route path="/athena/interceptacao-elite-pro" element={<InterceptacaoElitePro />} />
           <Route path="/athena/osint-new" element={<OSINTDashboardNew />} />
+          
+          {/* Elite Athena - Advocacia Avançado - NOVO */}
+          <Route path="/athena/processes-advanced" element={<ProcessesAdvanced />} />
+          <Route path="/athena/processes/new" element={<ProcessFormWizard />} />
+          <Route path="/athena/analise-processual-pro" element={<AnaliseProcessualProFrontend />} />
+          <Route path="/athena/contrato-editor" element={<ContratoEditor />} />
+          <Route path="/athena/peticoes-ia" element={<PeticoesIA />} />
       </Routes>
       <WhatsAppButton />
       <HybridNotifications />
