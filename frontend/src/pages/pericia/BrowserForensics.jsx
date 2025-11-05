@@ -1,4 +1,4 @@
-"""Browser and Database Forensics - Elite Athena"""
+// Browser and Database Forensics - Elite Athena
 import React, { useState } from 'react';
 import axios from 'axios';
 import '../../styles/elite-gravitas.css';
