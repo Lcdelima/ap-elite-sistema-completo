@@ -843,6 +843,7 @@ app.include_router(transcription_advanced_router)
 app.include_router(two_factor_router)
 app.include_router(financial_complete_router)
 app.include_router(nfe_router)
+app.include_router(pericia_complete_router)
 
 # Health check
 @app.get("/")
