@@ -1,0 +1,506 @@
+/* ========================================
+   ELITE ATHENA - FORENSIC LUXURY V3.0
+   Sofisticação Forense | Dra. Laura Cunha de Lima
+   Elite – Estratégias em Perícia e Investigação Criminal
+   ======================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Lato:wght@300;400;700;900&family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap');
+
+:root {
+  /* === PALETA OFICIAL DRA. LAURA === */
+  --elite-bg: #0C1321;              /* Azul-navy profundo (segurança e autoridade) */
+  --elite-text: #E4E6EB;            /* Branco-acinzentado (legibilidade) */
+  --elite-accent: #00A3C4;          /* Ciano forense (luz UV, análise digital) */
+  --elite-metal: #B3B8C2;           /* Aço/platina (modernidade e riqueza) */
+  --elite-champagne: #C7BEB7;       /* Prata forense (linhas e bordas) */
+  --elite-warn: #D35400;            /* Âmbar elegante (alertas) */
+  --elite-success: #27AE60;         /* Verde verificado */
+  --elite-error: #E74C3C;           /* Vermelho controlado */
+  
+  /* === SUPERFÍCIES (Frosted Glass) === */
+  --glass-01: rgba(255, 255, 255, 0.06);
+  --glass-02: rgba(255, 255, 255, 0.10);
+  --glass-blur: 14px;
+  --glass-border: rgba(199, 190, 183, 0.2);
+  
+  /* === TIPOGRAFIA === */
+  --font-title: "Orbitron", system-ui, sans-serif;          /* Geométrica, futurista, perícia */
+  --font-body: "Lato", "Inter", system-ui, sans-serif;      /* Limpa, corporativa */
+  --font-quote: "Cormorant Garamond", serif;                 /* Credibilidade jurídica */
+  
+  /* === GEOMETRIA E SOMBRAS === */
+  --radius-card: 16px;
+  --radius-btn: 12px;
+  --shadow-24: 0 24px 60px rgba(0,0,0,0.35);
+  --shadow-diffuse: 0 8px 32px rgba(0,163,196,0.15);        /* Sombra ciano difusa */
+  
+  /* === ANIMAÇÕES === */
+  --ease-elite: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 200ms;
+  --duration-normal: 350ms;
+}
+
+/* === RESET === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--elite-bg);
+  color: var(--elite-text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+}
+
+/* Background: linhas de circuito sutis */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: 
+    linear-gradient(90deg, rgba(0,163,196,0.03) 1px, transparent 1px),
+    linear-gradient(rgba(0,163,196,0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  opacity: 0.4;
+  z-index: 0;
+}
+
+/* === TIPOGRAFIA === */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-title);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--elite-text);
+}
+
+.subtitle {
+  font-family: var(--font-body);
+  font-weight: 500;
+}
+
+.quote-juridica {
+  font-family: var(--font-quote);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--elite-champagne);
+}
+
+/* === FROSTED GLASS CARDS === */
+.cipher-glass {
+  background: var(--glass-01);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-24);
+  transition: all var(--duration-normal) var(--ease-elite);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Linha de circuito animada */
+.cipher-glass::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--elite-accent), transparent);
+  opacity: 0;
+  transition: opacity var(--duration-normal);
+}
+
+.cipher-glass:hover {
+  background: var(--glass-02);
+  border-color: rgba(0,163,196,0.4);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-24), var(--shadow-diffuse);
+}
+
+.cipher-glass:hover::before {
+  opacity: 1;
+  animation: circuit-flow 2s infinite;
+}
+
+@keyframes circuit-flow {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* === BUTTONS === */
+.btn-elite {
+  font-family: var(--font-body);
+  font-weight: 600;
+  padding: 0 1.5rem;
+  height: 44px;
+  border-radius: var(--radius-btn);
+  border: none;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-elite);
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Efeito de luz UV ao hover */
+.btn-elite::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(0,163,196,0.3), transparent);
+  transform: translate(-50%, -50%);
+  transition: width 0.5s, height 0.5s;
+}
+
+.btn-elite:hover::after {
+  width: 200px;
+  height: 200px;
+}
+
+.btn-elite-primary {
+  background: linear-gradient(135deg, var(--elite-accent), #146B8C);
+  color: #000;
+  font-weight: 700;
+  box-shadow: var(--shadow-24);
+}
+
+.btn-elite-primary:hover {
+  box-shadow: var(--shadow-24), var(--shadow-diffuse);
+  opacity: 0.95;
+}
+
+.btn-elite-secondary {
+  background: var(--glass-01);
+  border: 1px solid var(--glass-border);
+  color: var(--elite-text);
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+.btn-elite-secondary:hover {
+  background: var(--glass-02);
+  border-color: rgba(0,163,196,0.4);
+}
+
+/* === HEADER STICKY === */
+.header-elite {
+  position: sticky;
+  top: 0;
+  height: 80px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(12,19,33,0.85);
+  border-bottom: 1px solid var(--glass-border);
+  z-index: 1000;
+}
+
+/* === HERO FORENSIC === */
+.hero-forensic {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0C1321 0%, #060B14 100%);
+}
+
+/* Grid forense background */
+.hero-forensic::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 1px 1px, rgba(0,163,196,0.08) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Gradiente de profundidade */
+.hero-forensic::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, 
+    transparent 0%, 
+    rgba(6,11,20,0.6) 50%, 
+    rgba(6,11,20,0.9) 100%);
+  pointer-events: none;
+}
+
+/* === BADGES === */
+.badge-elite {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.375rem 0.875rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: 1px solid;
+}
+
+.badge-iso {
+  background: rgba(0,163,196,0.1);
+  border-color: rgba(0,163,196,0.3);
+  color: var(--elite-accent);
+}
+
+.badge-verified {
+  background: rgba(39,174,96,0.1);
+  border-color: rgba(39,174,96,0.3);
+  color: var(--elite-success);
+}
+
+/* === MARCA D'ÁGUA ELITE === */
+.watermark-elite {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  opacity: 0.06;
+  pointer-events: none;
+  font-family: var(--font-title);
+  font-size: 6rem;
+  font-weight: 900;
+  color: var(--elite-accent);
+  z-index: 1;
+  transform: rotate(-5deg);
+}
+
+/* === ASSINATURA INSTITUCIONAL === */
+.signature-elite {
+  font-family: var(--font-quote);
+  font-style: italic;
+  font-size: 0.875rem;
+  color: var(--elite-champagne);
+  border-left: 2px solid var(--elite-accent);
+  padding-left: 1rem;
+}
+
+/* === INPUTS === */
+.input-elite {
+  width: 100%;
+  padding: 0.875rem 1.125rem;
+  background: var(--glass-01);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-btn);
+  color: var(--elite-text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  transition: all var(--duration-fast) var(--ease-elite);
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+.input-elite:focus {
+  outline: none;
+  border-color: var(--elite-accent);
+  box-shadow: 0 0 0 3px rgba(0,163,196,0.1), var(--shadow-diffuse);
+  background: var(--glass-02);
+}
+
+.input-elite::placeholder {
+  color: var(--elite-champagne);
+  opacity: 0.5;
+}
+
+/* === HASH DISPLAY === */
+.hash-display {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8125rem;
+  padding: 0.75rem 1rem;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(0,163,196,0.2);
+  border-radius: 8px;
+  color: var(--elite-accent);
+  letter-spacing: 0.02em;
+}
+
+/* === CATEGORY BADGES === */
+.badge-advocacia { background: linear-gradient(135deg, #2563EB, #1E40AF); }
+.badge-pericia { background: linear-gradient(135deg, #7C3AED, #5B21B6); }
+.badge-admin { background: linear-gradient(135deg, #059669, #047857); }
+.badge-comunicacao { background: linear-gradient(135deg, #EA580C, #C2410C); }
+.badge-sala { background: linear-gradient(135deg, #C026D3, #A21CAF); }
+.badge-diversos { background: linear-gradient(135deg, #0891B2, #0E7490); }
+.badge-osint { background: linear-gradient(135deg, #6366F1, #4F46E5); }
+.badge-ia { background: linear-gradient(135deg, #C2185B, #9C1548); }
+.badge-conformidade { background: linear-gradient(135deg, #DC2626, #B91C1C); }
+
+.category-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.375rem 0.875rem;
+  border-radius: 8px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* === LOGO ELITE === */
+.logo-elite {
+  font-family: var(--font-title);
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: 0.05em;
+}
+
+.logo-elite .accent {
+  color: var(--elite-accent);
+  position: relative;
+}
+
+/* Shimmer effect no logo */
+.logo-elite .accent::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255,255,255,0.3), 
+    transparent);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+
+/* === LINHAS DE CIRCUITO ANIMADAS === */
+.circuit-line {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    var(--elite-accent), 
+    transparent);
+  opacity: 0.3;
+  animation: circuit-pulse 4s infinite;
+}
+
+@keyframes circuit-pulse {
+  0%, 100% { opacity: 0.1; }
+  50% { opacity: 0.4; }
+}
+
+/* === PANEL DESLIZANTE === */
+.panel-slide {
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: all 0.5s var(--ease-elite);
+}
+
+.panel-slide.active {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* === VERIFIED SEAL === */
+.verified-seal {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(0,163,196,0.1);
+  border: 1px solid rgba(0,163,196,0.3);
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--elite-accent);
+}
+
+.verified-seal::before {
+  content: '✓';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background: var(--elite-accent);
+  color: #000;
+  border-radius: 50%;
+  font-weight: 900;
+  font-size: 0.625rem;
+}
+
+/* === SCROLLBAR === */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(12,19,33,0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--elite-accent), var(--elite-metal));
+  border-radius: 5px;
+  border: 2px solid var(--elite-bg);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--elite-accent);
+  box-shadow: 0 0 10px rgba(0,163,196,0.5);
+}
+
+/* === UTILITIES === */
+.text-elite-accent { color: var(--elite-accent); }
+.text-elite-metal { color: var(--elite-metal); }
+.text-elite-champagne { color: var(--elite-champagne); }
+.text-elite-warn { color: var(--elite-warn); }
+
+.bg-elite { background-color: var(--elite-bg); }
+.bg-glass { background: var(--glass-01); }
+
+/* === ANIMAÇÕES === */
+@keyframes fade-in-up {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+.fade-in-up {
+  animation: fade-in-up 0.6s var(--ease-elite);
+}
+
+/* === ELITE SILVER MODE (LIGHT) === */
+body.elite-silver {
+  --elite-bg: #F5F7FA;
+  --elite-text: #1A202C;
+  --glass-01: rgba(0,0,0,0.04);
+  --glass-02: rgba(0,0,0,0.08);
+  --glass-border: rgba(0,0,0,0.1);
+}
+
+body.elite-silver::before {
+  background-image: 
+    linear-gradient(90deg, rgba(12,19,33,0.02) 1px, transparent 1px),
+    linear-gradient(rgba(12,19,33,0.02) 1px, transparent 1px);
+}
+
+/* === REGRA 80/15/5 === */
+/* 80% fundo escuro (#0C1321) */
+/* 15% tons neutros (cinzas, champagne) */
+/* 5% acentos metálicos (ciano) */
