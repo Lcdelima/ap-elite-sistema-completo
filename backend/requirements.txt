@@ -164,3 +164,6 @@ PyPDF2==3.0.1
 python-docx==1.2.0
 numpy==2.2.6
 scikit-learn==1.7.2
+aioredis==2.0.1
+boto3==1.40.41
+cryptography==46.0.1
