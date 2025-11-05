@@ -208,6 +208,17 @@ function AppContent() {
           <Route path="/athena/compliance" element={<ComplianceCenter />} />
           <Route path="/athena/deadlines" element={<DeadlineManager />} />
           <Route path="/athena/automated-reports" element={<AutomatedReportsComplete />} />
+          
+          {/* Elite Athena NEW - Evidence & Forensics */}
+          <Route path="/athena/evidence-vault" element={<EvidenceVault />} />
+          <Route path="/athena/elite-seal" element={<EliteSeal />} />
+          
+          {/* Elite Athena NEW - Admin & Storage */}
+          <Route path="/athena/storage-config" element={<StorageConfig />} />
+          
+          {/* Elite Athena NEW - Diversos */}
+          <Route path="/athena/transcription-vft" element={<TranscriptionVFT />} />
+          <Route path="/athena/calculadoras" element={<Calculadoras />} />
       </Routes>
       <WhatsAppButton />
       <HybridNotifications />
