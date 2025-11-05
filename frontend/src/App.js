@@ -113,10 +113,17 @@ import AnalyticsDashboard from './pages/admin/AnalyticsDashboard';
 import MarketplaceIntegracoes from './pages/admin/MarketplaceIntegracoes';
 import ChatEliteLex from './pages/ia/ChatEliteLex';
 import MainDashboard from './pages/athena/MainDashboard';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import ComunicacaoDashboard from './pages/comunicacao/ComunicacaoDashboard';
+import SalaAulaDashboard from './pages/sala-aula/SalaAulaDashboard';
+import BrowserForensics from './pages/pericia/BrowserForensics';
+import InterceptacaoElitePro from './pages/pericia/InterceptacaoElitePro';
+import OSINTDashboardNew from './pages/osint/OSINTDashboardNew';
 
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
 import HybridNotifications from './components/HybridNotifications';
+import CommandPalette from './components/CommandPalette';
 
 function AppContent() {
   useKeyboardShortcuts();
