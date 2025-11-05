@@ -101,7 +101,7 @@ async def sync_event_to_calendar(
     event_title: str,
     start_time: str,
     end_time: str,
-    description: Optional[str] = None
+    description: str = None
 ):
     """Sincroniza evento para Google Calendar"""
     
