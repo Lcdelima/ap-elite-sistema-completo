@@ -759,6 +759,7 @@ from api.modules.pericia.transcription_advanced import router as transcription_a
 from api.auth.two_factor import router as two_factor_router
 from api.modules.admin.financial_complete import router as financial_complete_router
 from api.modules.admin.nfe_service import router as nfe_router
+from api.v1.pericia.router_complete import router as pericia_complete_router
 from api.health.health_check import router as health_router
 
 # Add all routes to main app
