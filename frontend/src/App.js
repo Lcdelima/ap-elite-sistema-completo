@@ -283,6 +283,10 @@ function AppContent() {
           <Route path="/athena/deepfake-lab" element={<DeepfakeLab />} />
           <Route path="/athena/cloud-forensics" element={<CloudForensics />} />
           <Route path="/athena/crypto-forensics" element={<CryptoForensics />} />
+          
+          {/* Elite Athena - Comunicação - NOVO */}
+          <Route path="/athena/chat-e2ee" element={<ChatE2EE />} />
+          <Route path="/athena/inbox-hibrida" element={<InboxHibrida />} />
       </Routes>
       <WhatsAppButton />
       <HybridNotifications />
