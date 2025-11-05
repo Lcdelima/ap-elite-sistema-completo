@@ -251,6 +251,16 @@ function AppContent() {
           
           {/* Elite Athena - Main Dashboard */}
           <Route path="/athena/main" element={<MainDashboard />} />
+          
+          {/* Elite Athena NEW - Dashboards por Categoria */}
+          <Route path="/athena/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/athena/comunicacao-dashboard" element={<ComunicacaoDashboard />} />
+          <Route path="/athena/sala-aula-dashboard" element={<SalaAulaDashboard />} />
+          
+          {/* Elite Athena NEW - Módulos Pendentes Implementados */}
+          <Route path="/athena/browser-forensics" element={<BrowserForensics />} />
+          <Route path="/athena/interceptacao-elite-pro" element={<InterceptacaoElitePro />} />
+          <Route path="/athena/osint-new" element={<OSINTDashboardNew />} />
       </Routes>
       <WhatsAppButton />
       <HybridNotifications />
