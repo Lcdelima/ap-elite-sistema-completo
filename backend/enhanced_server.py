@@ -736,6 +736,12 @@ from browser_database_forensics import router as browser_db_forensics_router
 from interceptacao_elite_pro import router as interceptacao_elite_router
 from extracao_dados_elite import router as extracao_dados_elite_router
 from modules.analise_processual import router as analise_processual_router
+from api.auth.register_controlled import router as register_router
+from api.modules.pericia.evidence_vault import router as evidence_vault_router
+from api.modules.pericia.elite_seal import router as elite_seal_router
+from api.storage.storage_connectors import router as storage_connectors_router
+from api.modules.diversos.transcription_vft import router as transcription_vft_router
+from api.modules.diversos.calculadoras import router as calculadoras_router
 
 # Add all routes to main app
 app.include_router(api_router)
