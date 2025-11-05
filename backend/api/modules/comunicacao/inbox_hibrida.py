@@ -1,5 +1,5 @@
 """Inbox Híbrida - Unifica Publicações, Tarefas, Mensagens e Alertas - Elite Athena"""
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from typing import Optional, List
 from datetime import datetime, timezone, timedelta
 from motor.motor_asyncio import AsyncIOMotorClient
