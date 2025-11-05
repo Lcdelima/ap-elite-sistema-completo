@@ -1,4 +1,4 @@
-"""Dashboard Principal Modular - Elite Athena"""
+// Dashboard Principal Modular - Elite Athena
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useEntitlements } from '../../contexts/EntitlementsContext';
