@@ -99,6 +99,13 @@ import CollaborationHub from './pages/athena/CollaborationHub';
 import PredictiveAnalytics from './pages/athena/PredictiveAnalytics';
 import ComplianceCenter from './pages/athena/ComplianceCenter';
 
+// Elite Athena NEW Modules
+import EvidenceVault from './pages/pericia/EvidenceVault';
+import EliteSeal from './pages/pericia/EliteSeal';
+import StorageConfig from './pages/admin/StorageConfig';
+import TranscriptionVFT from './pages/diversos/TranscriptionVFT';
+import Calculadoras from './pages/diversos/Calculadoras';
+
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
 import HybridNotifications from './components/HybridNotifications';
