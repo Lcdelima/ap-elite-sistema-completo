@@ -119,6 +119,11 @@ import SalaAulaDashboard from './pages/sala-aula/SalaAulaDashboard';
 import BrowserForensics from './pages/pericia/BrowserForensics';
 import InterceptacaoElitePro from './pages/pericia/InterceptacaoElitePro';
 import OSINTDashboardNew from './pages/osint/OSINTDashboardNew';
+import ProcessesAdvanced from './pages/advocacia/ProcessesAdvanced';
+import ProcessFormWizard from './pages/advocacia/ProcessFormWizard';
+import AnaliseProcessualProFrontend from './pages/advocacia/AnaliseProcessualPro';
+import ContratoEditor from './pages/advocacia/ContratoEditor';
+import PeticoesIA from './pages/advocacia/PeticoesIA';
 
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
