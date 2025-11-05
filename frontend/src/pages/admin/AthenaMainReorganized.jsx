@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import '../styles/elite-forensic.css';
-import EliteWatermark from '../components/EliteWatermark';
+import '../../styles/elite-forensic.css';
+import EliteWatermark from '../../components/EliteWatermark';
 
 const AthenaMainReorganized = () => {
   const navigate = useNavigate();
