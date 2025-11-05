@@ -80,26 +80,23 @@ Forneça:
             "dosimetria": "Analise a dosimetria da pena: circunstâncias judiciais, atenuantes, agravantes, causas de aumento/diminuição."
         }
         
-        system_prompt = f"""
-Você é um especialista em direito penal brasileiro.
-Tarefa: {prompts.get(analysis_type, 'Análise geral')}
+        prompt = f"""
+{prompts.get(analysis_type, 'Análise geral')}
+
+Processo: {process_description}
 
 Forneça uma análise técnica detalhada, citando artigos relevantes do CP/CPP.
 """
         
         try:
-            response = await self.client.chat(
-                model="gpt-4o",
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": process_description}
-                ],
-                temperature=0.2
+            response = await self.client.send_message(
+                message=prompt,
+                model="gpt-4o"
             )
             
             return {
                 "analysis_type": analysis_type,
-                "result": response.choices[0].message.content,
+                "result": response.content,
                 "timestamp": datetime.now(timezone.utc).isoformat()
             }
             
