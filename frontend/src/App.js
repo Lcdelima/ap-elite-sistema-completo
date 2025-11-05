@@ -127,6 +127,8 @@ import PeticoesIA from './pages/advocacia/PeticoesIA';
 import DeepfakeLab from './pages/pericia/DeepfakeLab';
 import CloudForensics from './pages/pericia/CloudForensics';
 import CryptoForensics from './pages/pericia/CryptoForensics';
+import ChatE2EE from './pages/comunicacao/ChatE2EE';
+import InboxHibrida from './pages/comunicacao/InboxHibrida';
 
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
