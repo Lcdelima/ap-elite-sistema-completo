@@ -135,11 +135,11 @@ const DeepfakeLab = () => {
                 <div 
                   className="p-6 rounded-lg border-2 text-center"
                   style={{
-                    borderColor: getRiskColor(analysis.deepfake_probability * 100 || analysis.voice_cloning_probability * 100),
-                    background: `${getRiskColor(analysis.deepfake_probability * 100 || analysis.voice_cloning_probability * 100)}15`
+                    borderColor: getRiskColor((analysis.deepfake_probability || analysis.voice_cloning_probability || 0) * 100),
+                    background: getRiskColor((analysis.deepfake_probability || analysis.voice_cloning_probability || 0) * 100) + '15'
                   }}
                 >
-                  <div className="text-3xl font-title font-bold mb-2" style={{ color: getRiskColor(analysis.deepfake_probability * 100 || analysis.voice_cloning_probability * 100) }}>
+                  <div className="text-3xl font-title font-bold mb-2" style={{ color: getRiskColor((analysis.deepfake_probability || analysis.voice_cloning_probability || 0) * 100) }}>
                     {getVerdictText(analysis.verdict)}
                   </div>
                   <div className="text-sm" style={{ color: 'rgba(228,230,235,0.7)' }}>
