@@ -115,8 +115,15 @@ function AppContent() {
   
   return (
     <div className="App min-h-screen bg-slate-50 dark:bg-slate-900">
+      <ProofBar />
       <Routes>
-          <Route path="/" element={<Home />} />
+          {/* Site Institucional - NOVA ESTRUTURA */}
+          <Route path="/" element={<SiteHome />} />
+          <Route path="/site/home" element={<SiteHome />} />
+          <Route path="/request-access" element={<RequestAccess />} />
+          
+          {/* Rotas Legacy - Manter compatibilidade */}
+          <Route path="/home-old" element={<Home />} />
           <Route path="/services" element={<Services />} />
           <Route path="/services/:id" element={<ServiceDetails />} />
           <Route path="/about" element={<About />} />
