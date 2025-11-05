@@ -756,6 +756,9 @@ from api.modules.pericia.crypto_forensics import router as crypto_forensics_rout
 from api.modules.pericia.deepfake_api import router as deepfake_router
 from api.modules.pericia.forensic_tools_api import router as forensic_tools_router
 from api.modules.pericia.transcription_advanced import router as transcription_advanced_router
+from api.auth.two_factor import router as two_factor_router
+from api.modules.admin.financial_complete import router as financial_complete_router
+from api.modules.admin.nfe_service import router as nfe_router
 from api.health.health_check import router as health_router
 
 # Add all routes to main app
