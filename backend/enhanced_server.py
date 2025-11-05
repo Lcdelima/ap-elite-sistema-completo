@@ -809,6 +809,9 @@ app.include_router(elite_seal_router)
 app.include_router(storage_connectors_router)
 app.include_router(transcription_vft_router)
 app.include_router(calculadoras_router)
+app.include_router(calculadoras_expandidas_router)
+app.include_router(billing_router)
+app.include_router(entitlements_api_router)
 
 # Health check
 @app.get("/")
