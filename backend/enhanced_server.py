@@ -751,6 +751,9 @@ from api.payments.pagbank_integration import router as pagbank_router
 from api.chat.elite_lex_api import router as chat_elitelex_router
 from api.modules.juridico.peticoes_ia import router as peticoes_ia_router
 from api.modules.juridico.processes_advanced import router as processes_advanced_router
+from api.modules.pericia.cloud_forensics_complete import router as cloud_forensics_complete_router
+from api.modules.pericia.crypto_forensics import router as crypto_forensics_router
+from api.modules.pericia.deepfake_api import router as deepfake_router
 from api.health.health_check import router as health_router
 
 # Add all routes to main app
