@@ -2,7 +2,7 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
 from typing import Optional
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta, date, timezone
 import math
 
 router = APIRouter(prefix="/api/calculadoras-expandidas", tags=["calculadoras-expandidas"])
