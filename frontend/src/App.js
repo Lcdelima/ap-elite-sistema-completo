@@ -215,6 +215,7 @@ function AppContent() {
           {/* Elite Athena NEW - Evidence & Forensics */}
           <Route path="/athena/evidence-vault" element={<EvidenceVault />} />
           <Route path="/athena/elite-seal" element={<EliteSeal />} />
+          <Route path="/athena/pericia-dashboard" element={<PericiaDashboard />} />
           
           {/* Elite Athena NEW - Admin & Storage */}
           <Route path="/athena/storage-config" element={<StorageConfig />} />
@@ -222,6 +223,10 @@ function AppContent() {
           {/* Elite Athena NEW - Diversos */}
           <Route path="/athena/transcription-vft" element={<TranscriptionVFT />} />
           <Route path="/athena/calculadoras" element={<Calculadoras />} />
+          <Route path="/athena/diversos-dashboard" element={<DiversosDashboard />} />
+          
+          {/* Elite Athena NEW - Advocacia */}
+          <Route path="/athena/advocacia-dashboard" element={<AdvocaciaDashboard />} />
       </Routes>
       <WhatsAppButton />
       <HybridNotifications />
