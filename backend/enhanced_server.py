@@ -824,6 +824,8 @@ app.include_router(stripe_router)
 app.include_router(pagbank_router)
 app.include_router(chat_elitelex_router)
 app.include_router(health_router)
+app.include_router(peticoes_ia_router)
+app.include_router(processes_advanced_router)
 
 # Health check
 @app.get("/")
