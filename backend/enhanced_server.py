@@ -847,6 +847,10 @@ app.include_router(transcription_advanced_router)
 app.include_router(two_factor_router)
 app.include_router(financial_complete_router)
 app.include_router(nfe_router)
+app.include_router(chat_e2ee_router)
+app.include_router(video_conference_router)
+app.include_router(inbox_router)
+app.include_router(calendar_oauth_router)
 app.include_router(pericia_complete_router)
 
 # Health check
