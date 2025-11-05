@@ -232,6 +232,17 @@ function AppContent() {
           
           {/* Elite Athena NEW - Advocacia */}
           <Route path="/athena/advocacia-dashboard" element={<AdvocaciaDashboard />} />
+          
+          {/* Elite Athena NEW - Portal e Analytics */}
+          <Route path="/athena/portal-cliente" element={<PortalCliente />} />
+          <Route path="/athena/analytics" element={<AnalyticsDashboard />} />
+          <Route path="/athena/marketplace" element={<MarketplaceIntegracoes />} />
+          
+          {/* Elite Athena NEW - IA */}
+          <Route path="/athena/chat-elitelex" element={<ChatEliteLex />} />
+          
+          {/* Elite Athena - Main Dashboard */}
+          <Route path="/athena/main" element={<MainDashboard />} />
       </Routes>
       <WhatsAppButton />
       <HybridNotifications />
