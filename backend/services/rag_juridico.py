@@ -16,7 +16,15 @@ class EliteLexRAG:
         self.api_key = os.getenv("EMERGENT_LLM_KEY")
         if not self.api_key:
             raise ValueError("EMERGENT_LLM_KEY não configurada")
-        self.client = LlmChat(api_key=self.api_key)
+        
+        self.system_message = """Você é um assistente jurídico especializado em jurisprudência brasileira.
+Sua tarefa é fornecer análises técnicas precisas citando artigos relevantes do CP/CPP/CPC/CLT."""
+        
+        self.client = LlmChat(
+            api_key=self.api_key,
+            session_id="elite_lex_rag",
+            system_message=self.system_message
+        )
         
         # TODO: Integrar ChromaDB para vetorização
         # Por enquanto, usar conhecimento do modelo
