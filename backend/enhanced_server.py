@@ -815,6 +815,9 @@ app.include_router(calculadoras_router)
 app.include_router(calculadoras_expandidas_router)
 app.include_router(billing_router)
 app.include_router(entitlements_api_router)
+app.include_router(stripe_router)
+app.include_router(pagbank_router)
+app.include_router(chat_elitelex_router)
 
 # Health check
 @app.get("/")
