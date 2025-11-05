@@ -1,4 +1,4 @@
-"""Command Palette - Busca Rápida Global - Elite Athena"""
+// Command Palette - Busca Rápida Global - Elite Athena
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/elite-gravitas.css';
