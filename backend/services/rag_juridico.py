@@ -1,5 +1,5 @@
 """Serviço RAG para Jurisprudência - Elite Athena"""
-from emergentintegrations.llm.openai import ChatOpenAI
+from emergentintegrations.llm.openai import LlmChat
 import os
 from dotenv import load_dotenv
 from typing import List, Dict, Any
@@ -14,7 +14,9 @@ class EliteLexRAG:
     
     def __init__(self):
         self.api_key = os.getenv("EMERGENT_LLM_KEY")
-        self.client = ChatOpenAI(api_key=self.api_key)
+        if not self.api_key:
+            raise ValueError("EMERGENT_LLM_KEY não configurada")
+        self.client = LlmChat(api_key=self.api_key)
         
         # TODO: Integrar ChromaDB para vetorização
         # Por enquanto, usar conhecimento do modelo
