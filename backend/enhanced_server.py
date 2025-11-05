@@ -763,6 +763,7 @@ from api.modules.comunicacao.chat_e2ee import router as chat_e2ee_router
 from api.modules.comunicacao.video_conference import router as video_conference_router
 from api.modules.comunicacao.inbox_hibrida import router as inbox_router
 from api.modules.comunicacao.calendar_oauth import router as calendar_oauth_router
+from api.modules.sala_aula.sala_aula_complete import router as sala_aula_router
 from api.v1.pericia.router_complete import router as pericia_complete_router
 from api.health.health_check import router as health_router
 
