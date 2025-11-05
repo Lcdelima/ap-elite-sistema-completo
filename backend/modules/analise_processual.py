@@ -144,7 +144,7 @@ class AnaliseCreate(BaseModel):
             raise ValueError(f"Base legal inválida. Valores aceitos: {', '.join(bases_validas)}")
         return value
 
-    @root_validator
+    @root_validator(skip_on_failure=True)
     def validar_documento_base_legal(cls, values: Dict[str, Any]) -> Dict[str, Any]:
         legal_basis = values.get("legal_basis")
         legal_document = values.get("legal_document")
