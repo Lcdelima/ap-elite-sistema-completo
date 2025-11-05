@@ -800,6 +800,12 @@ app.include_router(usb_forensics_router)
 app.include_router(browser_db_forensics_router)
 app.include_router(interceptacao_elite_router)
 app.include_router(analise_processual_router)
+app.include_router(register_router)
+app.include_router(evidence_vault_router)
+app.include_router(elite_seal_router)
+app.include_router(storage_connectors_router)
+app.include_router(transcription_vft_router)
+app.include_router(calculadoras_router)
 
 # Health check
 @app.get("/")
