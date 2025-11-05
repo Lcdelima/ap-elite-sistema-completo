@@ -108,6 +108,11 @@ import TranscriptionVFT from './pages/diversos/TranscriptionVFT';
 import Calculadoras from './pages/diversos/Calculadoras';
 import DiversosDashboard from './pages/diversos/DiversosDashboard';
 import AdvocaciaDashboard from './pages/advocacia/AdvocaciaDashboard';
+import PortalCliente from './pages/admin/PortalCliente';
+import AnalyticsDashboard from './pages/admin/AnalyticsDashboard';
+import MarketplaceIntegracoes from './pages/admin/MarketplaceIntegracoes';
+import ChatEliteLex from './pages/ia/ChatEliteLex';
+import MainDashboard from './pages/athena/MainDashboard';
 
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
