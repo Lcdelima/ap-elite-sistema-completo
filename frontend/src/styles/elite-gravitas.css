@@ -1,0 +1,283 @@
+/* ========================================
+   ELITE GRAVITAS™ Design System
+   AP Elite Athena - Sistema Forense Jurídico
+   ======================================== */
+
+:root {
+  /* === CORES BASE === */
+  --elite-bg: #0C1321;
+  --elite-text: #E4E6EB;
+  --elite-accent: #00A3C4;
+  --elite-metal: #B3B8C2;
+  --elite-warn: #D35400;
+  
+  /* === CORES POR CATEGORIA === */
+  --color-advocacia: #2563EB;
+  --color-pericia: #7C3AED;
+  --color-admin: #059669;
+  --color-comunicacao: #EA580C;
+  --color-sala: #C026D3;
+  --color-diversos: #0891B2;
+  
+  /* === SUPERFÍCIES (CipherGlass) === */
+  --surface-01: rgba(255, 255, 255, 0.04);
+  --surface-02: rgba(255, 255, 255, 0.08);
+  --surface-03: rgba(255, 255, 255, 0.12);
+  --glass-blur: 10px;
+  
+  /* === TIPOGRAFIA === */
+  --font-title: "Orbitron", "Rajdhani", system-ui, sans-serif;
+  --font-body: "Inter", "Lato", system-ui, sans-serif;
+  --font-quote: "Cormorant Garamond", serif;
+  
+  /* === TAMANHOS DE FONTE === */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  
+  /* === GEOMETRIA === */
+  --radius-card: 14px;
+  --radius-btn: 10px;
+  --radius-input: 8px;
+  --stroke-thin: 1px;
+  --shadow-soft: 0 10px 30px rgba(0,0,0,.35);
+  --shadow-strong: 0 20px 50px rgba(0,0,0,.5);
+  
+  /* === ANIMAÇÃO === */
+  --transition-fast: 150ms ease;
+  --transition-normal: 300ms ease;
+  --transition-slow: 500ms ease;
+}
+
+/* === RESET E BASE === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--elite-bg);
+  color: var(--elite-text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-title);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* === CIPHER GLASS COMPONENT === */
+.cipher-glass {
+  background: var(--surface-01);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
+  transition: all var(--transition-normal);
+}
+
+.cipher-glass:hover {
+  background: var(--surface-02);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-strong);
+}
+
+/* === CIPHER GLASS VARIANTES === */
+.cipher-glass-strong {
+  background: var(--surface-03);
+  backdrop-filter: blur(calc(var(--glass-blur) * 1.5));
+}
+
+/* === BUTTONS === */
+.btn-elite {
+  font-family: var(--font-body);
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-btn);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-elite-primary {
+  background: var(--elite-accent);
+  color: var(--elite-bg);
+}
+
+.btn-elite-primary:hover {
+  background: #0090AD;
+  box-shadow: 0 0 20px rgba(0, 163, 196, 0.5);
+}
+
+.btn-elite-secondary {
+  background: var(--surface-02);
+  color: var(--elite-text);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-elite-secondary:hover {
+  background: var(--surface-03);
+  border-color: var(--elite-accent);
+}
+
+/* === CATEGORY BADGES === */
+.badge-advocacia { background: var(--color-advocacia); }
+.badge-pericia { background: var(--color-pericia); }
+.badge-admin { background: var(--color-admin); }
+.badge-comunicacao { background: var(--color-comunicacao); }
+.badge-sala { background: var(--color-sala); }
+.badge-diversos { background: var(--color-diversos); }
+
+.category-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* === MODULE CARDS === */
+.module-card {
+  position: relative;
+  padding: 1.5rem;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.module-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--elite-accent);
+  transform: scaleX(0);
+  transition: transform var(--transition-normal);
+}
+
+.module-card:hover::before {
+  transform: scaleX(1);
+}
+
+/* === PROOF BAR === */
+.proof-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--elite-accent);
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.proof-bar.active {
+  opacity: 1;
+  animation: pulse-ciano 2s infinite;
+}
+
+@keyframes pulse-ciano {
+  0%, 100% { box-shadow: 0 0 10px var(--elite-accent); }
+  50% { box-shadow: 0 0 20px var(--elite-accent); }
+}
+
+/* === INPUTS === */
+.input-elite {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--surface-01);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-input);
+  color: var(--elite-text);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  transition: all var(--transition-fast);
+}
+
+.input-elite:focus {
+  outline: none;
+  border-color: var(--elite-accent);
+  box-shadow: 0 0 0 3px rgba(0, 163, 196, 0.1);
+  background: var(--surface-02);
+}
+
+.input-elite::placeholder {
+  color: var(--elite-metal);
+  opacity: 0.5;
+}
+
+/* === UTILITIES === */
+.text-elite-accent { color: var(--elite-accent); }
+.text-elite-metal { color: var(--elite-metal); }
+.text-elite-warn { color: var(--elite-warn); }
+
+.bg-elite { background-color: var(--elite-bg); }
+.bg-surface-01 { background-color: var(--surface-01); }
+.bg-surface-02 { background-color: var(--surface-02); }
+.bg-surface-03 { background-color: var(--surface-03); }
+
+/* === SCROLLBAR === */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-01);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--surface-03);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--elite-metal);
+}
+
+/* === ANIMATIONS === */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.fade-in {
+  animation: fade-in var(--transition-normal) ease-out;
+}
+
+.slide-in-right {
+  animation: slide-in-right var(--transition-normal) ease-out;
+}
+
+/* === DARK MODE ELITE SILVER (LIGHT MODE) === */
+body.elite-silver {
+  --elite-bg: #F5F7FA;
+  --elite-text: #1A202C;
+  --surface-01: rgba(0, 0, 0, 0.03);
+  --surface-02: rgba(0, 0, 0, 0.06);
+  --surface-03: rgba(0, 0, 0, 0.09);
+}
