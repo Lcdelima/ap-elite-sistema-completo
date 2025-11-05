@@ -767,6 +767,7 @@ from api.modules.comunicacao.calendar_oauth import router as calendar_oauth_rout
 from api.modules.sala_aula.sala_aula_complete import router as sala_aula_router
 from api.modules.advocacia.clientes_dossie import router as clientes_dossie_router
 from api.modules.advocacia.sync_judicial import router as sync_judicial_router
+from api.modules.advocacia.sync_judicial_complete import router as sync_judicial_complete_router
 from api.v1.pericia.router_complete import router as pericia_complete_router
 from api.health.health_check import router as health_router
 
