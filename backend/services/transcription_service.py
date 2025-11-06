@@ -1,5 +1,5 @@
 """Serviço de Transcrição com múltiplos providers - Elite Athena"""
-from emergentintegrations.llm.openai import OpenAISpeechToText
+from openai import OpenAI
 import os
 from dotenv import load_dotenv
 import asyncio
@@ -14,7 +14,9 @@ class WhisperTranscriptionService:
     
     def __init__(self):
         self.api_key = os.getenv("EMERGENT_LLM_KEY")
-        self.client = OpenAISpeechToText(api_key=self.api_key)
+        if not self.api_key:
+            raise ValueError("EMERGENT_LLM_KEY não configurada")
+        self.client = OpenAI(api_key=self.api_key)
     
     async def transcribe(
         self,
