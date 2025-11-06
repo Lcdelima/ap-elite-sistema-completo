@@ -29,35 +29,31 @@ class WhisperTranscriptionService:
         
         try:
             with open(audio_path, "rb") as audio_file:
-                # Usar verbose_json para timestamps
-                response_format = "verbose_json" if enable_timestamps else "json"
-                
-                response = await self.client.transcribe(
-                    file=audio_file,
+                # Usar API OpenAI Whisper
+                response = self.client.audio.transcriptions.create(
                     model="whisper-1",
-                    response_format=response_format,
+                    file=audio_file,
                     language=language.split('-')[0],  # pt-BR -> pt
-                    temperature=0.0,  # Determinístico
-                    prompt=prompt,
-                    timestamp_granularities=["segment", "word"] if enable_timestamps else None
+                    response_format="verbose_json" if enable_timestamps else "text",
+                    temperature=0.0
                 )
                 
                 # Processar resposta
-                if response_format == "verbose_json":
+                if enable_timestamps and hasattr(response, 'segments'):
                     segments = []
                     for seg in response.segments:
                         segments.append({
-                            "start": seg.start,
-                            "end": seg.end,
-                            "text": seg.text,
-                            "confidence": getattr(seg, 'confidence', 1.0)
+                            "start": seg.get('start', 0),
+                            "end": seg.get('end', 0),
+                            "text": seg.get('text', ''),
+                            "confidence": seg.get('confidence', 1.0)
                         })
                     
                     return {
                         "full_text": response.text,
                         "segments": segments,
-                        "language": response.language,
-                        "duration": response.duration,
+                        "language": getattr(response, 'language', language),
+                        "duration": getattr(response, 'duration', 0),
                         "provider": "whisper"
                     }
                 else:
