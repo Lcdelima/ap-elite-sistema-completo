@@ -333,6 +333,30 @@ def test_5_create_test_user():
     print_test_header(5, "Criar usuário de teste")
     
     try:
+        # Primeiro, fazer login como admin
+        print(f"{YELLOW}Autenticando como administrador...{RESET}")
+        admin_login = {
+            "email": "laura@apelite.com",
+            "password": "laura2024",
+            "role": "administrator"
+        }
+        
+        auth_response = requests.post(
+            f"{BASE_URL}/auth/login",
+            json=admin_login,
+            timeout=10
+        )
+        
+        if auth_response.status_code != 200:
+            print_result(False, "Falha na autenticação do admin", {
+                "Status": auth_response.status_code,
+                "Mensagem": auth_response.text[:200]
+            })
+            return False
+        
+        admin_token = auth_response.json().get('token')
+        print(f"✅ Admin autenticado: {admin_token[:30]}...")
+        
         # Dados do usuário
         timestamp = int(time.time())
         user_data = {
@@ -344,15 +368,20 @@ def test_5_create_test_user():
             "cpf": "123.456.789-00"
         }
         
-        print(f"{YELLOW}Criando usuário de teste...{RESET}")
+        print(f"\n{YELLOW}Criando usuário de teste...{RESET}")
         print(f"Email: {user_data['email']}")
         
-        # Criar usuário
+        # Criar usuário com token de admin
         start_time = time.time()
+        
+        headers = {
+            "Authorization": f"Bearer {admin_token}"
+        }
         
         response = requests.post(
             f"{BASE_URL}/users",
             json=user_data,
+            headers=headers,
             timeout=10
         )
         
