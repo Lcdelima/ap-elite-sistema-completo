@@ -120,6 +120,10 @@ import BrowserForensics from './pages/pericia/BrowserForensics';
 import InterceptacaoElitePro from './pages/pericia/InterceptacaoElitePro';
 import OSINTDashboardNew from './pages/osint/OSINTDashboardNew';
 
+// Elite Gravitas™ - Sistema Jurídico PRO
+import Cliente360 from './pages/athena/Cliente360';
+import JobsManagement from './pages/athena/JobsManagement';
+
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
 import HybridNotifications from './components/HybridNotifications';
