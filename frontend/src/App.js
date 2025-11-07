@@ -270,6 +270,7 @@ function AppContent() {
           {/* Elite Gravitas™ - Sistema Jurídico PRO */}
           <Route path="/athena/cliente360/:clientId" element={<Cliente360 />} />
           <Route path="/athena/jobs" element={<JobsManagement />} />
+          <Route path="/athena/documents" element={<DocumentsGenerator />} />
       </Routes>
       <WhatsAppButton />
       <HybridNotifications />
