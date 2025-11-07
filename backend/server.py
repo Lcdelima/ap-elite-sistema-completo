@@ -504,6 +504,22 @@ try:
 except ImportError as e:
     logger.error(f"⚠️ Extração de Dados Elite module not available: {e}")
 
+# Import and include Athena Enhanced APIs (ERBs, Phone Interceptions, etc.)
+try:
+    from athena_enhanced_apis import enhanced_router
+    app.include_router(enhanced_router)
+    logger.info("✅ Athena Enhanced APIs loaded successfully (ERBs, Phone Interceptions)")
+except ImportError as e:
+    logger.error(f"⚠️ Athena Enhanced APIs not available: {e}")
+
+# Import and include Super ERP modules
+try:
+    from super_erp_part2 import super_router
+    app.include_router(super_router)
+    logger.info("✅ Super ERP modules loaded successfully (ERBs, IPED, Análises)")
+except ImportError as e:
+    logger.error(f"⚠️ Super ERP modules not available: {e}")
+
 # Include the router in the main app
 app.include_router(api_router)
 
