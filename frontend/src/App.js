@@ -123,6 +123,7 @@ import OSINTDashboardNew from './pages/osint/OSINTDashboardNew';
 // Elite Gravitas™ - Sistema Jurídico PRO
 import Cliente360 from './pages/athena/Cliente360';
 import JobsManagement from './pages/athena/JobsManagement';
+import DocumentsGenerator from './pages/athena/DocumentsGenerator';
 
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
