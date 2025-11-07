@@ -825,12 +825,16 @@ from files_management import router as files_router
 from licensing_system import router as licensing_router
 from portal_cliente import router as portal_router
 from audit_trail import router as audit_router
+from contracts_manager import router as contracts_router
+from contract_templates import router as templates_router
 
 app.include_router(jobs_router)
 app.include_router(files_router)
 app.include_router(licensing_router)
 app.include_router(portal_router)
 app.include_router(audit_router)
+app.include_router(contracts_router)
+app.include_router(templates_router)
 
 # Health check
 @app.get("/")
