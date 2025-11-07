@@ -488,6 +488,22 @@ try:
 except ImportError as e:
     logger.error(f"⚠️ Interceptações Telemáticas Pro module not available: {e}")
 
+# Import and include Data Extraction Enhanced module
+try:
+    from data_extraction_enhanced import router as data_extraction_router
+    app.include_router(data_extraction_router)
+    logger.info("✅ Data Extraction Enhanced module loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ Data Extraction Enhanced module not available: {e}")
+
+# Import and include Extração de Dados Elite module
+try:
+    from extracao_dados_elite import router as extracao_dados_elite_router
+    app.include_router(extracao_dados_elite_router)
+    logger.info("✅ Extração de Dados Elite module loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ Extração de Dados Elite module not available: {e}")
+
 # Include the router in the main app
 app.include_router(api_router)
 
