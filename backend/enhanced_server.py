@@ -829,6 +829,8 @@ from contracts_manager import router as contracts_router
 from contract_templates import router as templates_router
 from documents_generator import router as documents_router
 from deadlines_management import router as deadlines_router
+from forensics_manager import router as forensics_router
+from evidences_manager import router as evidences_router
 
 app.include_router(jobs_router)
 app.include_router(files_router)
@@ -839,6 +841,8 @@ app.include_router(contracts_router)
 app.include_router(templates_router)
 app.include_router(documents_router)
 app.include_router(deadlines_router)
+app.include_router(forensics_router)
+app.include_router(evidences_router)
 
 # Health check
 @app.get("/")
