@@ -1,13 +1,29 @@
-/* AP Elite - Custom Styles */
+/* Elite Athena - Elite Gravitas Design System V4.0 */
+
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Manrope:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
 
 :root {
-  --ap-elite-navy: #1e3a8a;
-  --ap-elite-dark-navy: #1e2947;
-  --ap-elite-cyan: #06b6d4;
-  --ap-elite-light-cyan: #67e8f9;
-  --ap-elite-white: #ffffff;
-  --ap-elite-gray: #64748b;
-  --ap-elite-dark: #0f172a;
+  /* Elite Gravitas Colors */
+  --elite-black: #0A0E12;
+  --elite-glass: rgba(255,255,255,0.04);
+  --elite-gold: #E6B76A;
+  --elite-cyan: #00E5FF;
+  --elite-violet: #9E6CFF;
+  --elite-white: #F2F6F9;
+  --elite-gray: #9AA6B2;
+  
+  /* Legacy support */
+  --ap-elite-navy: #0A0E12;
+  --ap-elite-dark-navy: #0A0E12;
+  --ap-elite-cyan: #00E5FF;
+  --ap-elite-light-cyan: #00E5FF;
+  --ap-elite-white: #F2F6F9;
+  --ap-elite-gray: #9AA6B2;
+  --ap-elite-dark: #0A0E12;
+  
+  /* Shadows */
+  --shadow-elite: 0 6px 20px rgba(0,10,30,0.6);
+  --shadow-neon: 0 0 12px rgba(0,229,255,0.4);
 }
 
 * {
@@ -17,17 +33,81 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, var(--ap-elite-dark) 0%, var(--ap-elite-dark-navy) 100%);
-  color: var(--ap-elite-white);
+  background: #0A0E12;
+  color: var(--elite-white);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--elite-white);
+}
+
+/* Code/Technical */
+code, pre {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9em;
 }
 
 .gradient-bg {
-  background: linear-gradient(135deg, #1e3a8a 0%, #1e2947 100%);
+  background: radial-gradient(ellipse at top left, #07121a, #0A0E12);
+}
+
+/* Elite Gravitas Cards */
+.elite-card {
+  background: var(--elite-glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0,229,255,0.1);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-elite);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.elite-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-neon);
+  border-color: rgba(0,229,255,0.3);
+}
+
+/* Elite Buttons */
+.btn-elite-primary {
+  background: linear-gradient(135deg, #00E5FF, #9E6CFF);
+  color: #0A0E12;
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--shadow-elite);
+  transition: all 0.3s;
+}
+
+.btn-elite-primary:hover {
+  transform: scale(1.03);
+  box-shadow: var(--shadow-neon);
+}
+
+.btn-elite-secondary {
+  background: transparent;
+  color: var(--elite-white);
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border-radius: 12px;
+  border: 1px solid var(--elite-gold);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-elite-secondary:hover {
+  background: rgba(230,183,106,0.1);
+  border-color: var(--elite-gold);
+}
 }
 
 .gradient-cyan {
