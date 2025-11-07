@@ -1,204 +1,234 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Shield, Users, Award, CheckCircle, Phone, Mail } from 'lucide-react';
-import Navigation from '../components/Navigation';
-import Footer from '../components/Footer';
-import { Button } from '../components/ui/button';
-import { Card, CardContent } from '../components/ui/card';
 
-const Home = () => {
-  const features = [
-    {
-      icon: Shield,
-      title: 'Perícia Especializada',
-      description: 'Análise técnica e científica com metodologia rigorosa e precisão absoluta.'
-    },
-    {
-      icon: Users,
-      title: 'Investigação Criminal',
-      description: 'Estratégias avançadas de investigação com foco em resultados efetivos.'
-    },
-    {
-      icon: Award,
-      title: 'Consultoria Técnica',
-      description: 'Assessoria especializada para casos complexos e decisões estratégicas.'
-    }
-  ];
-
-  const advantages = [
-    'Profissional certificada e experiente',
-    'Metodologia científica comprovada',
-    'Relatórios técnicos detalhados',
-    'Atendimento personalizado',
-    'Sigilo e confidencialidade absolutos',
-    'Suporte jurídico especializado'
+const HomeModern = () => {
+  const modules = [
+    { title: 'Advocacia', icon: '⚖️', desc: 'Gestão jurídica' },
+    { title: 'Perícia Digital', icon: '🔬', desc: 'Ferramentas forenses' },
+    { title: 'Administração', icon: '💼', desc: 'Gestão e governança' },
+    { title: 'Comunicação', icon: '💬', desc: 'Chat e colaboração' },
+    { title: 'Sala de Aula', icon: '🎓', desc: 'Cursos e mentorias' },
+    { title: 'Diversos', icon: '🧮', desc: 'Calculadoras e ferramentas' }
   ];
 
   return (
-    <div className="min-h-screen bg-slate-900">
-      <Navigation />
-      
-      {/* Hero Section */}
-      <section className="gradient-bg geometric-pattern py-20 lg:py-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="content-z text-center">
-            <div className="fade-in">
-              <h1 className="text-5xl lg:text-7xl font-bold text-white mb-6">
-                <span className="text-cyan-400">AP</span> Elite
-              </h1>
-              <p className="text-xl lg:text-2xl text-slate-200 mb-8 font-light tracking-wide">
-                ESTRATÉGIAS EM PERÍCIA E INVESTIGAÇÃO CRIMINAL
-              </p>
-            </div>
-            
-            <div className="slide-up">
-              <p className="text-lg text-slate-300 mb-10 max-w-3xl mx-auto leading-relaxed">
-                Dra. Laura Cunha de Lima oferece serviços especializados em perícia criminal 
-                e investigação com excelência técnica e metodologia científica rigorosa.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <Link to="/services">
-                  <Button 
-                    className="btn-primary text-lg px-8 py-4 flex items-center space-x-2"
-                    data-testid="cta-services-button"
-                  >
-                    <span>Nossos Serviços</span>
-                    <ArrowRight className="h-5 w-5" />
-                  </Button>
-                </Link>
-                
-                <Link to="/contact">
-                  <Button 
-                    variant="outline" 
-                    className="btn-secondary text-lg px-8 py-4"
-                    data-testid="cta-contact-button"
-                  >
-                    Fale Conosco
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-20 bg-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">
-              Nossas Especialidades
-            </h2>
-            <p className="text-xl text-slate-300 max-w-2xl mx-auto">
-              Oferecemos soluções completas em perícia e investigação criminal
-            </p>
-          </div>
+    <div style={{ 
+      minHeight: '100vh',
+      background: 'radial-gradient(ellipse at top, #0a1628 0%, #050a0f 100%)',
+      color: '#F2F6F9',
+      fontFamily: 'Manrope, sans-serif'
+    }}>
+      {/* Header */}
+      <header style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 1000,
+        background: 'rgba(10,14,18,0.9)',
+        backdropFilter: 'blur(20px)',
+        borderBottom: '1px solid rgba(0,229,255,0.1)',
+        padding: '1rem 0'
+      }}>
+        <div style={{ 
+          maxWidth: '1200px',
+          margin: '0 auto',
+          padding: '0 1.5rem',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}>
+          <img src="/logo-ap-elite.svg" alt="AP Elite" style={{ height: '50px' }} />
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {features.map((feature, index) => {
-              const IconComponent = feature.icon;
-              return (
-                <Card 
-                  key={index} 
-                  className="card-hover bg-slate-700 border-slate-600 p-6"
-                  data-testid={`feature-card-${index}`}
-                >
-                  <CardContent className="text-center">
-                    <div className="flex justify-center mb-4">
-                      <div className="p-3 bg-cyan-500 bg-opacity-20 rounded-full">
-                        <IconComponent className="h-8 w-8 text-cyan-400" />
-                      </div>
-                    </div>
-                    <h3 className="text-xl font-semibold text-white mb-3">
-                      {feature.title}
-                    </h3>
-                    <p className="text-slate-300 leading-relaxed">
-                      {feature.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              );
-            })}
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <Link to="/login" style={{
+              padding: '0.625rem 1.5rem',
+              borderRadius: '8px',
+              border: '1px solid rgba(230,183,106,0.3)',
+              color: '#F2F6F9',
+              textDecoration: 'none',
+              fontSize: '0.9rem',
+              fontWeight: '600',
+              background: 'rgba(230,183,106,0.05)',
+              transition: 'all 0.3s'
+            }}>
+              Minha Conta
+            </Link>
+            <Link to="/login" style={{
+              padding: '0.625rem 1.5rem',
+              borderRadius: '8px',
+              background: 'linear-gradient(135deg, #00E5FF, #9E6CFF)',
+              color: '#0A0E12',
+              textDecoration: 'none',
+              fontSize: '0.9rem',
+              fontWeight: '700',
+              boxShadow: '0 0 20px rgba(0,229,255,0.4)',
+              transition: 'all 0.3s'
+            }}>
+              Sair
+            </Link>
           </div>
         </div>
-      </section>
+      </header>
 
-      {/* Why Choose Us Section */}
-      <section className="py-20 bg-slate-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-4xl font-bold text-white mb-6">
-                Por que escolher a 
-                <span className="text-cyan-400">AP Elite</span>?
-              </h2>
-              <p className="text-lg text-slate-300 mb-8 leading-relaxed">
-                Nossa abordagem combina experiência profissional, rigor científico e 
-                compromisso com a excelência em cada caso atendido.
-              </p>
-              
-              <div className="space-y-3">
-                {advantages.map((advantage, index) => (
-                  <div key={index} className="flex items-center space-x-3">
-                    <CheckCircle className="h-5 w-5 text-cyan-400 flex-shrink-0" />
-                    <span className="text-slate-300">{advantage}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            
-            <div className="bg-slate-800 p-8 rounded-lg border border-slate-700">
-              <h3 className="text-2xl font-bold text-white mb-6 text-center">
-                Contatos Diretos
-              </h3>
-              
-              {/* Perícia Digital */}
-              <div className="mb-4 p-4 bg-slate-700 rounded-lg">
-                <h4 className="text-cyan-400 font-semibold mb-2 flex items-center">
-                  <Phone className="h-4 w-4 mr-2" />
-                  Perícia Digital
-                </h4>
-                <p className="text-white font-medium">(11) 9 1646‑8611</p>
-              </div>
-              
-              {/* Advocacia Criminal */}
-              <div className="mb-4 p-4 bg-slate-700 rounded-lg">
-                <h4 className="text-cyan-400 font-semibold mb-2 flex items-center">
-                  <Phone className="h-4 w-4 mr-2" />
-                  Advocacia Criminal  
-                </h4>
-                <p className="text-white font-medium">(11) 9 7219‑0768</p>
-              </div>
-              
-              {/* Email e Instagram */}
-              <div className="mb-6 space-y-2">
-                <div className="flex items-center space-x-3 text-slate-300">
-                  <Mail className="h-4 w-4 text-cyan-400" />
-                  <span>elitecdel@gmail.com</span>
+      {/* Main Content */}
+      <main style={{ maxWidth: '1400px', margin: '0 auto', padding: '3rem 1.5rem' }}>
+        {/* Welcome */}
+        <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+          <h1 style={{
+            fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+            fontWeight: '800',
+            marginBottom: '1rem',
+            background: 'linear-gradient(120deg, #00E5FF, #E6B76A)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text'
+          }}>
+            Bem-vinda ao Elite Athena
+          </h1>
+          <p style={{ fontSize: '1.125rem', color: '#9AA6B2' }}>
+            Selecione um módulo para começar
+          </p>
+        </div>
+
+        {/* Modules Grid */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
+          gap: '1.5rem',
+          marginBottom: '3rem'
+        }}>
+          {modules.map((module, idx) => (
+            <Link
+              key={idx}
+              to={`/athena/${module.title.toLowerCase()}-dashboard`}
+              style={{
+                background: 'rgba(255,255,255,0.03)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(0,229,255,0.1)',
+                borderRadius: '16px',
+                padding: '2rem',
+                textDecoration: 'none',
+                transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                cursor: 'pointer',
+                minHeight: '200px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.transform = 'translateY(-8px)';
+                e.currentTarget.style.borderColor = 'rgba(230,183,106,0.4)';
+                e.currentTarget.style.boxShadow = '0 10px 40px rgba(230,183,106,0.2)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.borderColor = 'rgba(0,229,255,0.1)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
+            >
+              <div>
+                <div style={{
+                  fontSize: '3rem',
+                  marginBottom: '1rem'
+                }}>
+                  {module.icon}
                 </div>
-                <div className="flex items-center space-x-3 text-slate-300">
-                  <span className="text-cyan-400">@</span>
-                  <span>@lauracunhadel</span>
-                </div>
+                <h3 style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '700',
+                  color: '#F2F6F9',
+                  marginBottom: '0.5rem'
+                }}>
+                  {module.title}
+                </h3>
+                <p style={{
+                  fontSize: '0.95rem',
+                  color: '#9AA6B2',
+                  lineHeight: '1.6'
+                }}>
+                  {module.desc}
+                </p>
               </div>
               
-              <Link to="/contact" className="block">
-                <Button 
-                  className="btn-primary w-full"
-                  data-testid="contact-sidebar-button"
-                >
-                  Solicitar Orçamento
-                </Button>
+              <div style={{
+                marginTop: '1.5rem',
+                color: '#00E5FF',
+                fontSize: '0.9rem',
+                fontWeight: '600',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}>
+                Acessar <span>→</span>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        {/* Quick Access */}
+        <div>
+          <h2 style={{
+            fontSize: '1.75rem',
+            fontWeight: '700',
+            marginBottom: '1.5rem',
+            color: '#F2F6F9'
+          }}>
+            Acesso Rápido
+          </h2>
+          
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '1rem'
+          }}>
+            {[
+              { name: 'Evidence Vault', icon: '🔒', path: '/athena/evidence-vault' },
+              { name: 'Transcrição VFT', icon: '🎙️', path: '/athena/transcription-vft' },
+              { name: 'Calculadoras', icon: '🧮', path: '/athena/calculadoras' },
+              { name: 'Elite Seal', icon: '🛡️', path: '/athena/elite-seal' },
+              { name: 'Chat EliteLex', icon: '🤖', path: '/athena/chat-elitelex' },
+              { name: 'Analytics', icon: '📊', path: '/athena/analytics' },
+              { name: 'Marketplace', icon: '🔌', path: '/athena/marketplace' },
+              { name: 'Storage Config', icon: '☁️', path: '/athena/storage-config' }
+            ].map((item, idx) => (
+              <Link
+                key={idx}
+                to={item.path}
+                style={{
+                  background: 'rgba(255,255,255,0.02)',
+                  backdropFilter: 'blur(8px)',
+                  border: '1px solid rgba(0,229,255,0.08)',
+                  borderRadius: '12px',
+                  padding: '1.25rem',
+                  textDecoration: 'none',
+                  transition: 'all 0.3s',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.75rem'
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
+                  e.currentTarget.style.borderColor = 'rgba(0,229,255,0.2)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.02)';
+                  e.currentTarget.style.borderColor = 'rgba(0,229,255,0.08)';
+                }}
+              >
+                <span style={{ fontSize: '1.5rem' }}>{item.icon}</span>
+                <span style={{ 
+                  fontSize: '0.9rem',
+                  fontWeight: '600',
+                  color: '#F2F6F9'
+                }}>
+                  {item.name}
+                </span>
               </Link>
-            </div>
+            ))}
           </div>
         </div>
-      </section>
-
-      <Footer />
+      </main>
     </div>
   );
 };
 
-export default Home;
+export default HomeModern;
