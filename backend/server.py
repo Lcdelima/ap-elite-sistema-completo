@@ -464,6 +464,14 @@ try:
 except ImportError as e:
     logger.error(f"⚠️ Elite Seal™ module not available: {e}")
 
+# Import and include Forensics Enhanced module
+try:
+    from forensics_enhanced import forensics_enhanced_router
+    app.include_router(forensics_enhanced_router)
+    logger.info("✅ Forensics Enhanced module loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ Forensics Enhanced module not available: {e}")
+
 # Include the router in the main app
 app.include_router(api_router)
 
