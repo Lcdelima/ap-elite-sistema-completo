@@ -500,7 +500,7 @@ Whisper + Google + AssemblyAI + Elite Custom
 ## 🌐 URLS FUNCIONAIS
 
 ### Site Institucional:
-- ✅ **Home**: https://legaltech-forensics.preview.emergentagent.com/
+- ✅ **Home**: https://elite-solution.preview.emergentagent.com/
 - ✅ **Solicitar Acesso**: /request-access
 
 ### Dashboards:

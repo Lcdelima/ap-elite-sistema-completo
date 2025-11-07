@@ -9,7 +9,7 @@ import json
 import time
 from datetime import datetime
 
-BASE_URL = "https://legaltech-forensics.preview.emergentagent.com/api"
+BASE_URL = "https://elite-solution.preview.emergentagent.com/api"
 TEST_USER = {
     "email": "laura@apelite.com",
     "password": "laura2024",
