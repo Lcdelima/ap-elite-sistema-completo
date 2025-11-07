@@ -472,6 +472,22 @@ try:
 except ImportError as e:
     logger.error(f"⚠️ Forensics Enhanced module not available: {e}")
 
+# Import and include Phone Interceptions Pro module
+try:
+    from phone_interceptions_pro import router as phone_interceptions_router
+    app.include_router(phone_interceptions_router)
+    logger.info("✅ Phone Interceptions Pro module loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ Phone Interceptions Pro module not available: {e}")
+
+# Import and include Interceptações Telemáticas Pro module
+try:
+    from interceptacoes_telematicas_pro import router as interceptacoes_telematicas_router
+    app.include_router(interceptacoes_telematicas_router)
+    logger.info("✅ Interceptações Telemáticas Pro module loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ Interceptações Telemáticas Pro module not available: {e}")
+
 # Include the router in the main app
 app.include_router(api_router)
 
