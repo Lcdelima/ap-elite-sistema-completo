@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 80">
+  <defs>
+    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00BFFF"/>
+      <stop offset="100%" stop-color="#00E5FF"/>
+    </linearGradient>
+    <filter id="logoGlow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Shield/Eye Icon -->
+  <g filter="url(#logoGlow)">
+    <path d="M100 15 Q85 15 75 25 Q65 35 65 50 Q65 65 75 75 Q85 85 100 85 Q115 85 125 75 Q135 65 135 50 Q135 35 125 25 Q115 15 100 15 Z" 
+          stroke="url(#logoGrad)" 
+          stroke-width="2" 
+          fill="none"/>
+    <circle cx="100" cy="50" r="8" fill="url(#logoGrad)"/>
+    <line x1="85" y1="50" x2="92" y2="50" stroke="url(#logoGrad)" stroke-width="2"/>
+    <line x1="108" y1="50" x2="115" y2="50" stroke="url(#logoGrad)" stroke-width="2"/>
+  </g>
+  
+  <!-- Text AP Elite -->
+  <text x="100" y="105" 
+        fill="url(#logoGrad)" 
+        font-family="Montserrat, sans-serif" 
+        font-size="20" 
+        font-weight="700" 
+        text-anchor="middle"
+        letter-spacing="2">
+    AP ELITE
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="100" y="118" 
+        fill="#9AA6B2" 
+        font-family="Montserrat, sans-serif" 
+        font-size="6" 
+        text-anchor="middle"
+        letter-spacing="1">
+    ESTRATÉGIAS EM PERÍCIA E INVESTIGAÇÃO CRIMINAL
+  </text>
+</svg>
