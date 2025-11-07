@@ -124,6 +124,7 @@ import OSINTDashboardNew from './pages/osint/OSINTDashboardNew';
 import Cliente360 from './pages/athena/Cliente360';
 import JobsManagement from './pages/athena/JobsManagement';
 import DocumentsGenerator from './pages/athena/DocumentsGenerator';
+import DeadlinesManagement from './pages/athena/DeadlinesManagement';
 
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
