@@ -74,8 +74,7 @@ DOCUMENT_TEMPLATES = {
     "peticao_inicial": {
         "name": "Petição Inicial",
         "category": "peticao",
-        "description": "Modelo de petição inicial para ações jud
-iciais",
+        "description": "Modelo de petição inicial para ações judiciais",
         "variables": [
             "exmo_juiz",
             "comarca",
