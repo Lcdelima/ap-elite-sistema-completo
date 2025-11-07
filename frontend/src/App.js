@@ -265,6 +265,10 @@ function AppContent() {
           <Route path="/athena/browser-forensics" element={<BrowserForensics />} />
           <Route path="/athena/interceptacao-elite-pro" element={<InterceptacaoElitePro />} />
           <Route path="/athena/osint-new" element={<OSINTDashboardNew />} />
+          
+          {/* Elite Gravitas™ - Sistema Jurídico PRO */}
+          <Route path="/athena/cliente360/:clientId" element={<Cliente360 />} />
+          <Route path="/athena/jobs" element={<JobsManagement />} />
       </Routes>
       <WhatsAppButton />
       <HybridNotifications />
