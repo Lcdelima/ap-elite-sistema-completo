@@ -828,6 +828,7 @@ from audit_trail import router as audit_router
 from contracts_manager import router as contracts_router
 from contract_templates import router as templates_router
 from documents_generator import router as documents_router
+from deadlines_management import router as deadlines_router
 
 app.include_router(jobs_router)
 app.include_router(files_router)
@@ -837,6 +838,7 @@ app.include_router(audit_router)
 app.include_router(contracts_router)
 app.include_router(templates_router)
 app.include_router(documents_router)
+app.include_router(deadlines_router)
 
 # Health check
 @app.get("/")
