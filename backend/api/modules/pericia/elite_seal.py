@@ -645,7 +645,8 @@ async def create_elite_seal(
         "hash": hashes["sha256"],
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
-    await db.chain_of_custody.insert_one(lacration_event)
+    # Insert a copy to avoid MongoDB adding _id to our dict
+    await db.chain_of_custody.insert_one(lacration_event.copy())
     chain_of_custody.insert(0, lacration_event)
     
     # Cria manifesto pré-assinatura
