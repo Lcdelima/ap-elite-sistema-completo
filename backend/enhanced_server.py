@@ -819,10 +819,23 @@ app.include_router(stripe_router)
 app.include_router(pagbank_router)
 app.include_router(chat_elitelex_router)
 
+# Elite Gravitas™ - Sistema Jurídico PRO
+from jobs_management import router as jobs_router
+from files_management import router as files_router
+from licensing_system import router as licensing_router
+from portal_cliente import router as portal_router
+from audit_trail import router as audit_router
+
+app.include_router(jobs_router)
+app.include_router(files_router)
+app.include_router(licensing_router)
+app.include_router(portal_router)
+app.include_router(audit_router)
+
 # Health check
 @app.get("/")
 async def root():
-    return {"message": "AP Elite - Sistema de Gestão Criminal v2.0", "status": "active"}
+    return {"message": "AP Elite - Sistema de Gestão Criminal v2.0 + Elite Gravitas™", "status": "active"}
 
 if __name__ == "__main__":
     import uvicorn
