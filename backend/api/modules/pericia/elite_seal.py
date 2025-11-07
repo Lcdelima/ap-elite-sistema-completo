@@ -36,8 +36,9 @@ from cryptography.hazmat.backends import default_backend
 # PDF generation
 try:
     from weasyprint import HTML, CSS
-except ImportError:
+except (ImportError, OSError) as e:
     HTML = None  # PDF generation will be unavailable
+    print(f"WeasyPrint not available: {e}")
 import tempfile
 
 router = APIRouter(prefix="/api/elite-seal", tags=["Elite Seal™ - Digital Custody"])
