@@ -272,6 +272,7 @@ function AppContent() {
           <Route path="/athena/cliente360/:clientId" element={<Cliente360 />} />
           <Route path="/athena/jobs" element={<JobsManagement />} />
           <Route path="/athena/documents" element={<DocumentsGenerator />} />
+          <Route path="/athena/deadlines" element={<DeadlinesManagement />} />
       </Routes>
       <WhatsAppButton />
       <HybridNotifications />
