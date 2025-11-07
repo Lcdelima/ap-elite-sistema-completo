@@ -609,7 +609,8 @@ async def create_elite_seal(
     
     # Busca cadeia de custódia
     custody_events = await db.chain_of_custody.find(
-        {"evidence_id": evidence_id}
+        {"evidence_id": evidence_id},
+        {"_id": 0}  # Exclude MongoDB _id field
     ).sort("timestamp", -1).to_list(length=100)
     
     chain_of_custody = []
