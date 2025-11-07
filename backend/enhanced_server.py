@@ -827,6 +827,7 @@ from portal_cliente import router as portal_router
 from audit_trail import router as audit_router
 from contracts_manager import router as contracts_router
 from contract_templates import router as templates_router
+from documents_generator import router as documents_router
 
 app.include_router(jobs_router)
 app.include_router(files_router)
@@ -835,6 +836,7 @@ app.include_router(portal_router)
 app.include_router(audit_router)
 app.include_router(contracts_router)
 app.include_router(templates_router)
+app.include_router(documents_router)
 
 # Health check
 @app.get("/")
