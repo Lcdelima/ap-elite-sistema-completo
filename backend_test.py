@@ -17,7 +17,7 @@ import sys
 from datetime import datetime
 
 # Configuration
-BASE_URL = "https://elite-solution.preview.emergentagent.com/api"
+BASE_URL = "https://gravitas-law.preview.emergentagent.com/api"
 AUTH_EMAIL = "laura@apelite.com"
 AUTH_PASSWORD = "laura2024"
 AUTH_ROLE = "administrator"
