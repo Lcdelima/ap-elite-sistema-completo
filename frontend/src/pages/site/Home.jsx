@@ -20,47 +20,11 @@ const Home = () => {
       }}>
         <div className="mx-auto max-w-screen-xl px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div style={{
-              width: '48px',
-              height: '48px',
-              borderRadius: '12px',
-              background: 'linear-gradient(135deg, rgba(0,229,255,0.2), rgba(230,183,106,0.2))',
-              border: '1px solid rgba(0,229,255,0.3)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <span style={{
-                fontSize: '24px',
-                fontWeight: '800',
-                background: 'linear-gradient(135deg, #00E5FF, #E6B76A)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
-              }}>E</span>
-            </div>
-            <div>
-              <div style={{
-                fontFamily: 'Sora, sans-serif',
-                fontSize: '1.75rem',
-                fontWeight: '800',
-                background: 'linear-gradient(135deg, #00E5FF, #E6B76A)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                letterSpacing: '0.08em'
-              }}>
-                ELITE
-              </div>
-              <div style={{
-                fontSize: '0.625rem',
-                color: '#9AA6B2',
-                letterSpacing: '0.15em',
-                marginTop: '-4px'
-              }}>
-                ATHENA
-              </div>
-            </div>
+            <img 
+              src="/logo-ap-elite.svg" 
+              alt="AP Elite Logo" 
+              style={{ height: '60px', width: 'auto' }}
+            />
           </div>
 
           <nav className="hidden md:flex items-center gap-8" style={{ color: 'rgba(242,246,249,0.8)', fontSize: '0.9rem', fontWeight: '500' }}>
