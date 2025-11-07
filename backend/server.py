@@ -456,6 +456,14 @@ try:
 except ImportError as e:
     logger.error(f"⚠️ Advanced integrations not available: {e}")
 
+# Import and include Elite Seal™ module
+try:
+    from api.modules.pericia.elite_seal import router as elite_seal_router
+    app.include_router(elite_seal_router)
+    logger.info("✅ Elite Seal™ module loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ Elite Seal™ module not available: {e}")
+
 # Include the router in the main app
 app.include_router(api_router)
 
