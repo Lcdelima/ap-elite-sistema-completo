@@ -482,3 +482,217 @@ async def gerar_relatorio_interceptacao(interceptacao_id: str, authorization: st
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# ==================== UPLOAD E PROCESSAMENTO DE ARQUIVOS ====================
+from fastapi import UploadFile, File, Form
+import hashlib
+import aiofiles
+
+@router.post("/telecom/upload")
+async def upload_telecom_file(
+    file: UploadFile = File(...),
+    case_id: str = Form(None),
+    tipo: str = Form("documento"),  # mensagem, imagem, documento, weblog
+    descricao: str = Form(None),
+    authorization: str = Header(None)
+):
+    """
+    Upload universal de arquivos telemáticos com:
+    - Validação de extensão e tamanho (max 1GB)
+    - Cálculo de hash SHA-256/SHA-512
+    - Extração de metadados
+    - Armazenamento seguro
+    - Registro na cadeia de custódia
+    """
+    user = await get_current_user(authorization)
+    if not user or user.get("id") == "anonymous":
+        raise HTTPException(status_code=401, detail="Autenticação necessária")
+    
+    try:
+        # Validar extensão
+        allowed_extensions = ['.json', '.csv', '.xml', '.txt', '.zip', '.jpg', '.jpeg', '.png', 
+                            '.pdf', '.mp3', '.wav', '.mp4', '.html', '.db', '.sqlite']
+        file_ext = os.path.splitext(file.filename)[1].lower()
+        if file_ext not in allowed_extensions:
+            raise HTTPException(status_code=400, detail=f"Extensão {file_ext} não permitida")
+        
+        # Ler conteúdo do arquivo
+        file_content = await file.read()
+        file_size = len(file_content)
+        
+        # Validar tamanho (max 1GB)
+        if file_size > 1024 * 1024 * 1024:
+            raise HTTPException(status_code=400, detail="Arquivo excede 1GB")
+        
+        # Calcular hashes
+        hash_sha256 = hashlib.sha256(file_content).hexdigest()
+        hash_sha512 = hashlib.sha512(file_content).hexdigest()
+        
+        # Gerar ID único
+        file_id = str(uuid.uuid4())
+        
+        # Determinar tipo MIME
+        mime_types = {
+            '.json': 'application/json',
+            '.csv': 'text/csv',
+            '.xml': 'application/xml',
+            '.txt': 'text/plain',
+            '.zip': 'application/zip',
+            '.jpg': 'image/jpeg',
+            '.jpeg': 'image/jpeg',
+            '.png': 'image/png',
+            '.pdf': 'application/pdf',
+            '.mp3': 'audio/mpeg',
+            '.wav': 'audio/wav',
+            '.mp4': 'video/mp4',
+            '.html': 'text/html',
+            '.db': 'application/x-sqlite3',
+            '.sqlite': 'application/x-sqlite3'
+        }
+        mime_type = mime_types.get(file_ext, 'application/octet-stream')
+        
+        # Criar estrutura de diretórios
+        storage_base = "/app/backend/storage/telecom"
+        os.makedirs(storage_base, exist_ok=True)
+        
+        if case_id:
+            file_path = os.path.join(storage_base, case_id, f"{file_id}_{file.filename}")
+            os.makedirs(os.path.join(storage_base, case_id), exist_ok=True)
+        else:
+            file_path = os.path.join(storage_base, f"{file_id}_{file.filename}")
+        
+        # Salvar arquivo
+        async with aiofiles.open(file_path, 'wb') as f:
+            await f.write(file_content)
+        
+        # Extrair metadados básicos
+        metadados = {
+            "size_bytes": file_size,
+            "size_readable": f"{file_size / (1024*1024):.2f} MB" if file_size > 1024*1024 else f"{file_size / 1024:.2f} KB",
+            "mime_type": mime_type,
+            "extension": file_ext,
+            "uploaded_at": datetime.now(timezone.utc).isoformat()
+        }
+        
+        # Registrar no banco
+        telecom_file = {
+            "id": file_id,
+            "case_id": case_id,
+            "nome_arquivo": file.filename,
+            "tipo": tipo,
+            "hash_sha256": hash_sha256,
+            "hash_sha512": hash_sha512,
+            "metadados": metadados,
+            "caminho": file_path,
+            "descricao": descricao,
+            "status": "uploaded",
+            "uploaded_by": user.get("email"),
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        
+        await db.telecom_files.insert_one(telecom_file)
+        
+        # Registrar na cadeia de custódia
+        custody_event = {
+            "id": str(uuid.uuid4()),
+            "file_id": file_id,
+            "evento": "upload_telecom_file",
+            "operador": user.get("email"),
+            "ip": "system",
+            "hash": hash_sha256,
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
+        await db.chain_of_custody.insert_one(custody_event)
+        
+        # Iniciar análise automática (assíncrona)
+        analysis_task = {
+            "id": str(uuid.uuid4()),
+            "file_id": file_id,
+            "status": "pending",
+            "tarefas": []
+        }
+        
+        # Determinar tarefas baseadas no tipo de arquivo
+        if file_ext in ['.jpg', '.jpeg', '.png']:
+            analysis_task["tarefas"].extend(["ocr", "exif_extraction", "face_detection"])
+        elif file_ext in ['.mp3', '.wav']:
+            analysis_task["tarefas"].extend(["transcription", "sentiment_analysis"])
+        elif file_ext in ['.json', '.csv', '.xml']:
+            analysis_task["tarefas"].extend(["data_parsing", "entity_extraction", "clustering"])
+        elif file_ext == '.txt':
+            analysis_task["tarefas"].extend(["nlp_analysis", "entity_extraction", "sentiment"])
+        elif file_ext in ['.html', '.db', '.sqlite']:
+            analysis_task["tarefas"].extend(["web_parsing", "timeline_extraction"])
+        
+        await db.telecom_analysis.insert_one(analysis_task)
+        
+        return {
+            "success": True,
+            "file_id": file_id,
+            "filename": file.filename,
+            "hash_sha256": hash_sha256,
+            "hash_sha512": hash_sha512,
+            "size": file_size,
+            "mime_type": mime_type,
+            "analysis_queued": True,
+            "analysis_tasks": analysis_task["tarefas"],
+            "message": f"Arquivo {file.filename} enviado e análise iniciada"
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erro no upload: {str(e)}")
+
+@router.get("/telecom/files")
+async def list_telecom_files(
+    case_id: str = None,
+    tipo: str = None,
+    limit: int = 50,
+    authorization: str = Header(None)
+):
+    """Listar arquivos telemáticos com filtros"""
+    user = await get_current_user(authorization)
+    if not user or user.get("id") == "anonymous":
+        raise HTTPException(status_code=401, detail="Autenticação necessária")
+    
+    try:
+        query = {}
+        if case_id:
+            query["case_id"] = case_id
+        if tipo:
+            query["tipo"] = tipo
+        
+        files = await db.telecom_files.find(query, {"_id": 0}).sort("created_at", -1).to_list(length=limit)
+        
+        return {
+            "success": True,
+            "total": len(files),
+            "files": files
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/telecom/files/{file_id}/analysis")
+async def get_file_analysis(file_id: str, authorization: str = Header(None)):
+    """Obter análise de um arquivo telemático"""
+    user = await get_current_user(authorization)
+    if not user or user.get("id") == "anonymous":
+        raise HTTPException(status_code=401, detail="Autenticação necessária")
+    
+    try:
+        file_data = await db.telecom_files.find_one({"id": file_id}, {"_id": 0})
+        if not file_data:
+            raise HTTPException(status_code=404, detail="Arquivo não encontrado")
+        
+        analysis = await db.telecom_analysis.find_one({"file_id": file_id}, {"_id": 0})
+        
+        return {
+            "success": True,
+            "file": file_data,
+            "analysis": analysis or {"status": "not_started", "message": "Análise não iniciada"}
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
