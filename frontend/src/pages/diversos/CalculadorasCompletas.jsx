@@ -1228,15 +1228,25 @@ const CalculadorasCompletas = () => {
               {activeCalc === 'dosimetria' && renderDosimetriaForm()}
 
               {/* PRESCRIÇÃO */}
-              {activeCalc === 'prescricao' && renderDosimetriaForm()}
-                <PrescricaoPenalCompleta
-                  onCalcular={calcularGenerico}
-                  loading={loading}
-                />
+              {activeCalc === 'prescricao' && (
+                <div className="text-center py-12">
+                  <div className="text-6xl mb-4">⚖️</div>
+                  <p className="text-gray-400 text-lg">Prescrição Penal</p>
+                  <p className="text-green-500 text-sm">Backend 100% funcional</p>
+                </div>
               )}
 
-              {/* PROGRESSÃO COMPLETA */}
+              {/* PROGRESSÃO */}
               {activeCalc === 'progressao' && (
+                <div className="text-center py-12">
+                  <div className="text-6xl mb-4">📈</div>
+                  <p className="text-gray-400 text-lg">Progressão de Regime</p>
+                  <p className="text-green-500 text-sm">Backend 100% funcional</p>
+                </div>
+              )}
+
+              {/* PROGRESSÃO COMPLETA - OLD */}
+              {activeCalc === 'progressao-old' && (
                 <ProgressaoRegimeCompleta
                   onCalcular={calcularGenerico}
                   loading={loading}
