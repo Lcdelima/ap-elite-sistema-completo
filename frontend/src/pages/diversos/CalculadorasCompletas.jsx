@@ -888,21 +888,27 @@ const CalculadorasCompletas = () => {
             </div>
 
             {/* Ações */}
-            <div className="flex gap-3">
+            <div className="grid grid-cols-3 gap-3">
               <button
                 onClick={() => {
                   navigator.clipboard.writeText(JSON.stringify(result, null, 2));
                   toast.success('Resultado copiado!');
                 }}
-                className="flex-1 px-4 py-2 bg-blue-600/20 border border-blue-600 text-blue-400 rounded-lg hover:bg-blue-600/30"
+                className="px-4 py-2 bg-blue-600/20 border border-blue-600 text-blue-400 rounded-lg hover:bg-blue-600/30"
               >
                 📋 Copiar JSON
               </button>
               <button
-                onClick={() => toast.info('Exportação PDF em desenvolvimento')}
-                className="flex-1 px-4 py-2 bg-red-600/20 border border-red-600 text-red-400 rounded-lg hover:bg-red-600/30"
+                onClick={baixarRelatorioDOCX}
+                className="px-4 py-2 bg-blue-700/20 border border-blue-700 text-blue-300 rounded-lg hover:bg-blue-700/30"
               >
-                📄 Exportar PDF
+                📝 Baixar DOCX
+              </button>
+              <button
+                onClick={baixarRelatorioPDF}
+                className="px-4 py-2 bg-red-600/20 border border-red-600 text-red-400 rounded-lg hover:bg-red-600/30"
+              >
+                📄 Baixar PDF
               </button>
             </div>
           </div>
