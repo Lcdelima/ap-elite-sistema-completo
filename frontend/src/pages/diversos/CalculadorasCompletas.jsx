@@ -649,36 +649,18 @@ const CalculadorasCompletas = () => {
         />
       </div>
 
-      {/* Pena Abstrata */}
+      {/* Pena Abstrata com Conversão */}
       <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-semibold text-gray-300 mb-2">
-            Pena Mínima (meses)
-          </label>
-          <input
-            type="number"
-            value={dosimetria.minimo_meses}
-            onChange={(e) => setDosimetria({...dosimetria, minimo_meses: parseInt(e.target.value)})}
-            className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-          />
-          <div className="text-xs text-gray-500 mt-1">
-            = {converterMesesParaAnosMeses(dosimetria.minimo_meses)}
-          </div>
-        </div>
-        <div>
-          <label className="block text-sm font-semibold text-gray-300 mb-2">
-            Pena Máxima (meses)
-          </label>
-          <input
-            type="number"
-            value={dosimetria.maximo_meses}
-            onChange={(e) => setDosimetria({...dosimetria, maximo_meses: parseInt(e.target.value)})}
-            className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-          />
-          <div className="text-xs text-gray-500 mt-1">
-            = {converterMesesParaAnosMeses(dosimetria.maximo_meses)}
-          </div>
-        </div>
+        <PenaInput
+          label="Pena Mínima"
+          value={dosimetria.minimo_meses}
+          onChange={(meses) => setDosimetria({...dosimetria, minimo_meses: meses})}
+        />
+        <PenaInput
+          label="Pena Máxima"
+          value={dosimetria.maximo_meses}
+          onChange={(meses) => setDosimetria({...dosimetria, maximo_meses: meses})}
+        />
       </div>
 
       {/* Fase 1: Vetores do art. 59 */}
