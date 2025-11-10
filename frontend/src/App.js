@@ -242,7 +242,8 @@ function AppContent() {
           
           {/* Elite Athena NEW - Diversos */}
           <Route path="/athena/transcription-vft" element={<TranscriptionVFT />} />
-          <Route path="/athena/calculadoras" element={<Calculadoras />} />
+          <Route path="/athena/calculadoras" element={<CalculadorasCompletas />} />
+          <Route path="/athena/calculadoras-old" element={<Calculadoras />} />
           <Route path="/athena/diversos-dashboard" element={<DiversosDashboard />} />
           
           {/* Elite Athena NEW - Advocacia */}
