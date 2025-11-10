@@ -212,4 +212,4 @@ export const PrescricaoPenalCompleta = ({ onCalcular, loading }) => {
   );
 };
 
-export default { PenaUniversal, PrescricaoPenalCompleta };
+export { PenaUniversal, PrescricaoPenalCompleta, ProgressaoRegimeCompleta, RemicaoCompleta, LivramentoCondicionalCompleto, CorrecaoMonetariaCompleta };
