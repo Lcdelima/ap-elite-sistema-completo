@@ -1351,34 +1351,12 @@ const CalculadorasCompletas = () => {
                 </div>
               )}
 
-              {/* REMIÇÃO */}
+              {/* REMIÇÃO COMPLETA */}
               {activeCalc === 'remicao' && (
-                <div className="space-y-4">
-                  <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
-                    <h3 className="text-green-400 font-semibold mb-2">📚 Remição de Pena (art. 126 LEP)</h3>
-                    <p className="text-gray-400 text-sm">3 dias de trabalho = 1 dia de remição</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-300 mb-2">Dias Trabalhados</label>
-                    <input type="number" defaultValue="90" id="dias_trabalhados" className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
-                  </div>
-                  <button onClick={async () => {
-                    setLoading(true);
-                    try {
-                      const response = await axios.post(`${API_BASE}/api/calculadoras/criminal/remicao`, {
-                        dias_trabalhados: parseInt(document.getElementById('dias_trabalhados').value)
-                      });
-                      setResult(response.data);
-                      toast.success('Remição calculada!');
-                    } catch (error) {
-                      toast.error('Erro: ' + error.message);
-                    } finally {
-                      setLoading(false);
-                    }
-                  }} disabled={loading} className="w-full py-3 bg-gradient-to-r from-green-500 to-teal-600 text-white font-bold rounded-lg">
-                    {loading ? 'Calculando...' : '📚 CALCULAR REMIÇÃO'}
-                  </button>
-                </div>
+                <RemicaoCompleta
+                  onCalcular={calcularGenerico}
+                  loading={loading}
+                />
               )}
 
               {/* Prescrição Intercorrente */}
