@@ -199,6 +199,23 @@ const AthenaMainReorganized = () => {
         { name: 'Centro de Compliance', icon: ShieldCheck, route: '/athena/compliance-center', description: 'Gestão de conformidade LGPD' },
         { name: 'Blockchain Custódia', icon: Lock, route: '/athena/blockchain-custody', description: 'Cadeia de custódia blockchain' }
       ]
+    },
+    
+    ferramentas: {
+      id: 'ferramentas',
+      name: 'Ferramentas & Calculadoras',
+      icon: Calculator,
+      color: 'teal',
+      gradient: 'from-teal-600 to-teal-800',
+      description: 'Calculadoras jurídicas e ferramentas técnicas',
+      modules: [
+        { name: 'Calculadoras Jurídicas', icon: Calculator, route: '/athena/calculadoras', description: '54 calculadoras jurídicas completas' },
+        { name: 'Dosimetria de Pena', icon: Scale, route: '/athena/calculadoras', description: 'Calculadora de sentença penal trifásica' },
+        { name: 'Calculadoras Cíveis', icon: FileText, route: '/athena/calculadoras', description: 'Correção monetária, juros, honorários' },
+        { name: 'Calculadoras Trabalhistas', icon: Briefcase, route: '/athena/calculadoras', description: 'Rescisão, horas extras, FGTS' },
+        { name: 'Calculadoras Tributárias', icon: DollarSign, route: '/athena/calculadoras', description: 'IPVA, ITBI, planejamento tributário' },
+        { name: 'Calculadoras Financeiras', icon: TrendingUp, route: '/athena/calculadoras', description: 'Juros, amortização, VPL, TIR' }
+      ]
     }
   };
 
