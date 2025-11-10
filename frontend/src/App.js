@@ -106,6 +106,7 @@ import PericiaDashboard from './pages/pericia/PericiaDashboard';
 import StorageConfig from './pages/admin/StorageConfig';
 import TranscriptionVFT from './pages/diversos/TranscriptionVFT';
 import Calculadoras from './pages/diversos/Calculadoras';
+import CalculadorasCompletas from './pages/diversos/CalculadorasCompletas';
 import DiversosDashboard from './pages/diversos/DiversosDashboard';
 import AdvocaciaDashboard from './pages/advocacia/AdvocaciaDashboard';
 import PortalCliente from './pages/admin/PortalCliente';
