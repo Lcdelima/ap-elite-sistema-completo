@@ -1245,24 +1245,12 @@ const CalculadorasCompletas = () => {
                 />
               )}
 
-              {/* PRESCRIÇÃO PENAL */}
+              {/* PRESCRIÇÃO PENAL COMPLETA */}
               {activeCalc === 'prescricao' && (
-                <div className="space-y-4">
-                  <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
-                    <h3 className="text-blue-400 font-semibold mb-2">📅 Prescrição Penal (art. 109 CP)</h3>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-300 mb-2">Pena Máxima (anos)</label>
-                    <input type="number" value={prescricao.pena_maxima_anos} onChange={(e) => setPrescricao({...prescricao, pena_maxima_anos: parseInt(e.target.value)})} className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-300 mb-2">Data do Fato</label>
-                    <input type="date" onChange={(e) => setPrescricao({...prescricao, data_fato: e.target.value + 'T00:00:00Z'})} className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
-                  </div>
-                  <button onClick={calcularPrescricao} disabled={loading} className="w-full py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold rounded-lg">
-                    {loading ? 'Calculando...' : '📅 CALCULAR PRESCRIÇÃO'}
-                  </button>
-                </div>
+                <PrescricaoPenalCompleta
+                  onCalcular={calcularGenerico}
+                  loading={loading}
+                />
               )}
 
               {/* PROGRESSÃO DE REGIME */}
