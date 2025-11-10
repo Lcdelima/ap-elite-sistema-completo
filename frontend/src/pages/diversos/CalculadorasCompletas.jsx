@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import axios from 'axios';
-import * as Forms from '../../components/FormulariosCalculadoras';
-import { PenaInput } from '../../components/PenaInputs';
-import { PenaInputCompleto, DosimetriaCompleta } from '../../components/CalculadoraComponents';
-import { PenaUniversal, PrescricaoPenalCompleta } from '../../components/CalculadorasCompletas';
+import { PenaUniversal, PrescricaoPenalCompleta, ProgressaoRegimeCompleta, RemicaoCompleta, LivramentoCondicionalCompleto, CorrecaoMonetariaCompleta } from '../../components/TodasCalculadorasCompletas';
+import { DosimetriaCompleta } from '../../components/CalculadoraComponents';
 
 const CalculadorasCompletas = () => {
   const navigate = useNavigate();
