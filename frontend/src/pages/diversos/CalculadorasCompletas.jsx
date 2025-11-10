@@ -1392,7 +1392,7 @@ const CalculadorasCompletas = () => {
               )}
 
               {/* Prescrição Intercorrente */}
-              {activeCalc === 'prescricao-intercorrente' && <Forms.FormPrescricaoIntercorrente onCalcular={calcularGenerico} loading={loading} />}
+              {activeCalc === 'prescricao-intercorrente' && <Forms.FormPrescricaoIntercorrente onCalcular={calcularGenerico} loading={loading} PenaInput={PenaInput} />}
 
               {/* Livramento Condicional */}
               {activeCalc === 'livramento' && <Forms.FormLivramento onCalcular={calcularGenerico} loading={loading} />}
