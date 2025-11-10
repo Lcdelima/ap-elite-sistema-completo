@@ -1224,25 +1224,11 @@ const CalculadorasCompletas = () => {
                 {calculadorasPorCategoria[activeCategory]?.find(c => c.id === activeCalc)?.nome}
               </h2>
 
-              {/* DOSIMETRIA DE PENA COMPLETA */}
-              {activeCalc === 'dosimetria' && (
-                <DosimetriaCompleta
-                  crimes={crimes}
-                  crimeAtivo={crimeAtivo}
-                  setCrimeAtivo={setCrimeAtivo}
-                  adicionarCrime={adicionarCrime}
-                  removerCrime={removerCrime}
-                  calcularCrime={calcularDosimetria}
-                  calcularConcurso={calcularConcursoMaterial}
-                  loading={loading}
-                  conversor={conversor}
-                  converterTempo={converterTempo}
-                  resultado={result}
-                />
-              )}
+              {/* DOSIMETRIA */}
+              {activeCalc === 'dosimetria' && renderDosimetriaForm()}
 
-              {/* PRESCRIÇÃO PENAL COMPLETA */}
-              {activeCalc === 'prescricao' && (
+              {/* PRESCRIÇÃO */}
+              {activeCalc === 'prescricao' && renderDosimetriaForm()}
                 <PrescricaoPenalCompleta
                   onCalcular={calcularGenerico}
                   loading={loading}
