@@ -1484,7 +1484,45 @@ const CalculadorasCompletas = () => {
               {/* Honorários */}
               {activeCalc === 'honorarios' && <Forms.FormHonorarios onCalcular={calcularGenerico} loading={loading} />}
 
-              {/* Outras calculadoras - Backend pronto, UI simplificada */}
+              {/* NOVOS FORMULÁRIOS - PENAIS */}
+              {activeCalc === 'detracao' && <Forms.FormDetracao onCalcular={(e, data) => setResult(data)} loading={loading} />}
+              {activeCalc === 'prescricao-executoria' && <Forms.FormPrescricaoExecutoria onCalcular={calcularGenerico} loading={loading} />}
+              {activeCalc === 'comutacao' && <Forms.FormComutacao onCalcular={(e, data) => setResult(data)} loading={loading} />}
+              {activeCalc === 'pena-multa' && <Forms.FormPenaMulta onCalcular={(e, data) => setResult(data)} loading={loading} />}
+              {activeCalc === 'conversao-pena' && <Forms.FormConversaoPena onCalcular={(e, data) => setResult(data)} loading={loading} />}
+              {activeCalc === 'sursis' && <Forms.FormSursis onCalcular={(e, data) => setResult(data)} loading={loading} />}
+
+              {/* NOVOS FORMULÁRIOS - CÍVEIS */}
+              {activeCalc === 'multa-contratual' && <Forms.FormMultaContratual onCalcular={(e, data) => setResult(data)} loading={loading} />}
+              {activeCalc === 'dano-moral' && <Forms.FormDanoMoral onCalcular={(e, data) => setResult(data)} loading={loading} />}
+              {activeCalc === 'astreintes' && <Forms.FormAstreintes onCalcular={(e, data) => setResult(data)} loading={loading} />}
+              {activeCalc === 'lucros-cessantes' && <Forms.FormLucrosCessantes onCalcular={(e, data) => setResult(data)} loading={loading} />}
+              {activeCalc === 'honorarios-sucumbenciais' && <Forms.FormHonorariosSucumbenciais onCalcular={(e, data) => setResult(data)} loading={loading} />}
+
+              {/* NOVOS FORMULÁRIOS - TRIBUTÁRIAS */}
+              {activeCalc === 'prescricao-tributaria' && <Forms.FormPrescricaoTributaria onCalcular={(e, data) => setResult(data)} loading={loading} />}
+              {activeCalc === 'multa-fiscal' && <Forms.FormMultaFiscal onCalcular={(e, data) => setResult(data)} loading={loading} />}
+              {activeCalc === 'restituicao' && <Forms.FormRestituicao onCalcular={(e, data) => setResult(data)} loading={loading} />}
+
+              {/* NOVOS FORMULÁRIOS - TRABALHISTAS */}
+              {activeCalc === 'atraso-salarial' && <Forms.FormAtrasoSalarial onCalcular={(e, data) => setResult(data)} loading={loading} />}
+              {activeCalc === 'fgts' && <Forms.FormFGTS onCalcular={(e, data) => setResult(data)} loading={loading} />}
+              {activeCalc === 'perdas-danos' && <Forms.FormPerdasDanos onCalcular={calcularGenerico} loading={loading} />}
+
+              {/* NOVOS FORMULÁRIOS - FINANCEIRAS */}
+              {activeCalc === 'juros-simples' && <Forms.FormJurosSimples onCalcular={(e, data) => setResult(data)} loading={loading} />}
+              {activeCalc === 'lucro-real' && <Forms.FormLucroReal onCalcular={calcularGenerico} loading={loading} />}
+              {activeCalc === 'ebitda' && <Forms.FormEBITDA onCalcular={(e, data) => setResult(data)} loading={loading} />}
+              {activeCalc === 'fluxo-caixa' && <Forms.FormFluxoCaixa onCalcular={(e, data) => setResult(data)} loading={loading} />}
+
+              {/* NOVOS FORMULÁRIOS - PERICIAIS */}
+              {activeCalc === 'amplitude' && <Forms.FormAmplitude onCalcular={(e, data) => setResult(data)} loading={loading} />}
+              {activeCalc === 'entropia' && <Forms.FormEntropia onCalcular={(e, data) => setResult(data)} loading={loading} />}
+
+              {/* NOVOS FORMULÁRIOS - DIVERSAS */}
+              {activeCalc === 'conversao-moedas' && <Forms.FormConversaoMoedas onCalcular={(e, data) => setResult(data)} loading={loading} />}
+
+              {/* Outras calculadoras - todas implementadas */}
               {![
                 'dosimetria', 'prescricao', 'progressao', 'horas-extras', 'correcao', 'ipva', 'juros-mora', 'remicao', 
                 'livramento', 'honorarios', 'prescricao-intercorrente', 'unificacao', 'itcmd', 'decadencia', 
