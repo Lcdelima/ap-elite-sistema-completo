@@ -315,27 +315,31 @@ async def create_user(user_data: UserCreate):
 #     await db.cases.insert_one(doc)
 #     return case_obj
 
-# @api_router.get("/cases", response_model=List[Case])
-# async def get_cases():
-#     cases = await db.cases.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
-#     for case in cases:
-#         if isinstance(case['start_date'], str):
-#             case['start_date'] = datetime.fromisoformat(case['start_date'])
-#         if isinstance(case['created_at'], str):
-#             case['created_at'] = datetime.fromisoformat(case['created_at'])
-#         if case.get('completion_date') and isinstance(case['completion_date'], str):
-#             case['completion_date'] = datetime.fromisoformat(case['completion_date'])
-#     return cases
+@api_router.get("/cases")
+async def get_cases(current_user: dict = Depends(get_current_user)):
+    """Get all cases"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    try:
+        cases = await db.cases.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
+        return {"cases": cases, "total": len(cases)}
+    except Exception as e:
+        print(f"Error getting cases: {e}")
+        return {"cases": [], "total": 0}
 
-# @api_router.get("/cases/client/{client_id}", response_model=List[Case])
-# async def get_client_cases(client_id: str):
-#     cases = await db.cases.find({"client_id": client_id}, {"_id": 0}).sort("created_at", -1).to_list(100)
-#     for case in cases:
-#         if isinstance(case['start_date'], str):
-#             case['start_date'] = datetime.fromisoformat(case['start_date'])
-#         if isinstance(case['created_at'], str):
-#             case['created_at'] = datetime.fromisoformat(case['created_at'])
-#     return cases
+@api_router.get("/cases/client/{client_id}")
+async def get_client_cases(client_id: str, current_user: dict = Depends(get_current_user)):
+    """Get cases for specific client"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    try:
+        cases = await db.cases.find({"client_id": client_id}, {"_id": 0}).sort("created_at", -1).to_list(100)
+        return {"cases": cases, "total": len(cases)}
+    except Exception as e:
+        print(f"Error getting client cases: {e}")
+        return {"cases": [], "total": 0}
 
 @api_router.put("/cases/{case_id}/status")
 async def update_case_status(case_id: str, status: str):
