@@ -1279,30 +1279,12 @@ const CalculadorasCompletas = () => {
                 </div>
               )}
 
-              {/* CORREÇÃO MONETÁRIA */}
+              {/* CORREÇÃO MONETÁRIA COMPLETA */}
               {activeCalc === 'correcao' && (
-                <div className="space-y-4">
-                  <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
-                    <h3 className="text-yellow-400 font-semibold mb-2">💰 Correção Monetária</h3>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-300 mb-2">Valor Principal (R$)</label>
-                    <input type="number" step="0.01" value={correcaoMon.valor_principal} onChange={(e) => setCorrecaoMon({...correcaoMon, valor_principal: parseFloat(e.target.value)})} className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-300 mb-2">Data Inicial</label>
-                      <input type="date" value={correcaoMon.data_inicial} onChange={(e) => setCorrecaoMon({...correcaoMon, data_inicial: e.target.value})} className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-300 mb-2">Data Final</label>
-                      <input type="date" value={correcaoMon.data_final} onChange={(e) => setCorrecaoMon({...correcaoMon, data_final: e.target.value})} className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
-                    </div>
-                  </div>
-                  <button onClick={calcularCorrecao} disabled={loading} className="w-full py-3 bg-gradient-to-r from-yellow-500 to-orange-600 text-white font-bold rounded-lg">
-                    {loading ? 'Calculando...' : '💰 CALCULAR CORREÇÃO'}
-                  </button>
-                </div>
+                <CorrecaoMonetariaCompleta
+                  onCalcular={calcularGenerico}
+                  loading={loading}
+                />
               )}
 
               {/* JUROS DE MORA */}
