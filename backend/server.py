@@ -1,4 +1,5 @@
-from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi import FastAPI, APIRouter, HTTPException, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -18,6 +19,21 @@ load_dotenv(ROOT_DIR / '.env')
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
+
+# Security
+security = HTTPBearer(auto_error=False)
+
+# Auth dependency
+async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    if not credentials:
+        return None
+    try:
+        token_parts = credentials.credentials.split('_')
+        user_id = token_parts[1]
+        user = await db.users.find_one({"id": user_id, "active": True}, {"_id": 0, "password": 0})
+        return user
+    except:
+        return None
 
 # Create the main app without a prefix
 app = FastAPI(title="AP Elite - Perícia e Investigação Criminal")
