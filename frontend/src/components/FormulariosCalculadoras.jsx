@@ -72,6 +72,84 @@ export const FormITCMD = ({ onCalcular, loading }) => {
         <input type="number" step="0.1" defaultValue="4" id="aliquota_itcmd" className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
       </div>
       <div>
+
+
+export const FormLivramento = ({ onCalcular, loading }) => {
+  return (
+    <div className="space-y-4">
+      <div className="bg-cyan-500/10 border border-cyan-500/30 rounded-lg p-4">
+        <h3 className="text-cyan-400 font-semibold mb-2">🔓 Livramento Condicional (art. 83 CP)</h3>
+        <p className="text-gray-400 text-sm">1/3 primário, 1/2 reincidente, 2/3 hediondo</p>
+      </div>
+      <div>
+        <label className="block text-sm font-semibold text-gray-300 mb-2">Pena Total (meses)</label>
+        <input type="number" defaultValue="120" id="pena_livramento" className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
+      </div>
+      <div>
+        <label className="block text-sm font-semibold text-gray-300 mb-2">Tempo Cumprido (meses)</label>
+        <input type="number" defaultValue="50" id="tempo_cumprido_livramento" className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        <label className="flex items-center space-x-2">
+          <input type="checkbox" id="reincidente_liv" className="rounded border-gray-700 bg-gray-800" />
+          <span className="text-gray-300 text-sm">Reincidente</span>
+        </label>
+        <label className="flex items-center space-x-2">
+          <input type="checkbox" id="hediondo_liv" className="rounded border-gray-700 bg-gray-800" />
+          <span className="text-gray-300 text-sm">Crime Hediondo</span>
+        </label>
+      </div>
+      <button onClick={() => onCalcular('/criminal/livramento-condicional', {
+        pena_total_meses: parseInt(document.getElementById('pena_livramento').value),
+        tempo_cumprido_meses: parseInt(document.getElementById('tempo_cumprido_livramento').value),
+        reincidente: document.getElementById('reincidente_liv').checked,
+        crime_hediondo: document.getElementById('hediondo_liv').checked
+      })} disabled={loading} className="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-lg">
+        {loading ? 'Calculando...' : '🔓 CALCULAR LIVRAMENTO'}
+      </button>
+    </div>
+  );
+};
+
+export const FormHonorarios = ({ onCalcular, loading }) => {
+  return (
+    <div className="space-y-4">
+      <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+        <h3 className="text-blue-400 font-semibold mb-2">⚖️ Honorários Advocatícios (CPC art. 85)</h3>
+        <p className="text-gray-400 text-sm">10% a 20% conforme fase processual</p>
+      </div>
+      <div>
+        <label className="block text-sm font-semibold text-gray-300 mb-2">Valor da Causa (R$)</label>
+        <input type="number" step="0.01" defaultValue="50000" id="valor_causa_hon" className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
+      </div>
+      <div>
+        <label className="block text-sm font-semibold text-gray-300 mb-2">Fase Processual</label>
+        <select id="fase_hon" className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white">
+          <option value="conhecimento">Conhecimento (10-20%)</option>
+          <option value="recursal">Recursal (15-20%)</option>
+          <option value="execucao">Execução (10-20%)</option>
+        </select>
+      </div>
+      <div>
+        <label className="block text-sm font-semibold text-gray-300 mb-2">Percentual (%)</label>
+        <input type="number" step="0.1" defaultValue="15" id="percentual_hon" min="10" max="20" className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
+      </div>
+      <button onClick={() => {
+        const pct = parseFloat(document.getElementById('percentual_hon').value);
+        onCalcular('/civil/honorarios-advocaticios', {
+          valor_causa: parseFloat(document.getElementById('valor_causa_hon').value),
+          fase_processual: document.getElementById('fase_hon').value,
+          percentual_minimo: pct,
+          percentual_maximo: pct,
+          sucumbencia: 'total'
+        });
+      }} disabled={loading} className="w-full py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold rounded-lg">
+        {loading ? 'Calculando...' : '⚖️ CALCULAR HONORÁRIOS'}
+      </button>
+    </div>
+  );
+};
+
         <label className="block text-sm font-semibold text-gray-300 mb-2">Tipo</label>
         <select id="tipo_itcmd" className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white">
           <option value="ITCMD">ITCMD (Herança/Doação)</option>
