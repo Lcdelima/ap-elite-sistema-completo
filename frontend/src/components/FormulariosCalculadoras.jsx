@@ -418,7 +418,7 @@ export const FormPayback = ({ onCalcular, loading }) => {
       </button>
     </div>
   );
-
+};
 
 // ==================== PENAIS RESTANTES (6) ====================
 
