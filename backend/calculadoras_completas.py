@@ -976,6 +976,178 @@ async def calcular_vp_vf(
         # VP = VF / (1 + i)^n
         resultado = valor / ((1 + taxa_decimal) ** periodos)
         formula = "VP = VF / (1 + i)^n"
+
+
+# ==================== GERAÇÃO DE RELATÓRIOS ====================
+
+from fastapi.responses import StreamingResponse
+from io import BytesIO
+try:
+    from docx import Document
+    from docx.shared import Inches, Pt, RGBColor
+    from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
+    DOCX_AVAILABLE = True
+except ImportError:
+    DOCX_AVAILABLE = False
+    print("python-docx not available - install with: pip install python-docx")
+
+@router.post("/relatorio/gerar")
+async def gerar_relatorio_calculo(
+    calculo_id: str,
+    formato: str = "pdf",  # pdf, docx, txt
+    incluir_elite_seal: bool = True,
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    Gera relatório técnico do cálculo em PDF, DOCX ou TXT
+    """
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Autenticação necessária")
+    
+    try:
+        # Buscar cálculo
+        calculo = await db.calculos.find_one({"id": calculo_id}, {"_id": 0})
+        if not calculo:
+            raise HTTPException(status_code=404, detail="Cálculo não encontrado")
+        
+        # Gerar conteúdo do relatório
+        if formato == "txt":
+            # Relatório TXT simples
+            conteudo = gerar_relatorio_txt(calculo)
+            return StreamingResponse(
+                BytesIO(conteudo.encode('utf-8')),
+                media_type="text/plain",
+                headers={"Content-Disposition": f"attachment; filename=relatorio_{calculo_id[:8]}.txt"}
+            )
+        
+        elif formato == "docx" and DOCX_AVAILABLE:
+            # Relatório DOCX
+            doc = gerar_relatorio_docx(calculo, incluir_elite_seal)
+            
+            # Salvar em buffer
+            buffer = BytesIO()
+            doc.save(buffer)
+            buffer.seek(0)
+            
+            return StreamingResponse(
+                buffer,
+                media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                headers={"Content-Disposition": f"attachment; filename=relatorio_{calculo_id[:8]}.docx"}
+            )
+        
+        elif formato == "pdf":
+            # Por enquanto, retornar TXT (PDF requer conversão DOCX→PDF)
+            toast_msg = "PDF em desenvolvimento - baixando como TXT"
+            conteudo = gerar_relatorio_txt(calculo)
+            return StreamingResponse(
+                BytesIO(conteudo.encode('utf-8')),
+                media_type="text/plain",
+                headers={"Content-Disposition": f"attachment; filename=relatorio_{calculo_id[:8]}.txt"}
+            )
+        
+        else:
+            raise HTTPException(status_code=400, detail="Formato não suportado ou biblioteca não instalada")
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erro ao gerar relatório: {str(e)}")
+
+def gerar_relatorio_txt(calculo: dict) -> str:
+    """Gera relatório em formato TXT"""
+    resultado = calculo.get("resultado", {})
+    input_data = calculo.get("input_data", {})
+    
+    txt = f"""
+═══════════════════════════════════════════════════════════
+    RELATÓRIO TÉCNICO DE DOSIMETRIA DE PENA
+    Sistema AP Elite Gravitas™
+═══════════════════════════════════════════════════════════
+
+IDENTIFICAÇÃO DO CÁLCULO
+ID: {calculo.get('id')}
+Tipo: {calculo.get('tipo')}
+Data: {calculo.get('created_at')}
+Calculado por: {calculo.get('created_by')}
+Hash SHA-256: {calculo.get('hash_sha256')}
+
+DADOS DO CASO
+Tipo Penal: {input_data.get('tipo_penal')}
+Pena Abstrata: {input_data.get('minimo_meses')} a {input_data.get('maximo_meses')} meses
+
+RESULTADO DA DOSIMETRIA
+════════════════════════════════════════════════════════════
+
+FASE 1 - PENA-BASE (Art. 59 CP)
+Pena-base calculada: {resultado.get('pena_base_meses')} meses ({round(resultado.get('pena_base_meses', 0) / 12, 2)} anos)
+
+FASE 2 - ATENUANTES/AGRAVANTES (Art. 61-66 CP)
+Pena intermediária: {resultado.get('pena_intermediaria_meses')} meses
+
+FASE 3 - CAUSAS DE AUMENTO/DIMINUIÇÃO
+Pena final: {resultado.get('pena_final_meses')} meses ({resultado.get('pena_final_anos')} anos)
+
+REGIME INICIAL SUGERIDO
+Regime: {resultado.get('regime_sugerido', 'N/A')}
+
+════════════════════════════════════════════════════════════
+Este relatório foi gerado automaticamente pelo Sistema
+AP Elite Gravitas™ e possui rastreabilidade via hash SHA-256.
+
+Fundamentação Legal: Art. 68 CP (Método Trifásico)
+════════════════════════════════════════════════════════════
+"""
+    return txt.strip()
+
+def gerar_relatorio_docx(calculo: dict, incluir_seal: bool) -> Document:
+    """Gera relatório em formato DOCX"""
+    doc = Document()
+    
+    # Título
+    titulo = doc.add_heading('RELATÓRIO TÉCNICO DE DOSIMETRIA DE PENA', 0)
+    titulo.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+    
+    subtitulo = doc.add_paragraph('Sistema AP Elite Gravitas™')
+    subtitulo.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+    
+    doc.add_paragraph()
+    
+    # Identificação
+    doc.add_heading('1. IDENTIFICAÇÃO DO CÁLCULO', level=1)
+    doc.add_paragraph(f"ID do Cálculo: {calculo.get('id')}")
+    doc.add_paragraph(f"Data: {calculo.get('created_at')}")
+    doc.add_paragraph(f"Calculado por: {calculo.get('created_by')}")
+    doc.add_paragraph(f"Hash SHA-256: {calculo.get('hash_sha256')}")
+    
+    # Dados do caso
+    input_data = calculo.get('input_data', {})
+    doc.add_heading('2. DADOS DO CASO', level=1)
+    doc.add_paragraph(f"Tipo Penal: {input_data.get('tipo_penal')}")
+    doc.add_paragraph(f"Pena Abstrata: {input_data.get('minimo_meses')} a {input_data.get('maximo_meses')} meses")
+    
+    # Resultado
+    resultado = calculo.get('resultado', {})
+    doc.add_heading('3. RESULTADO DA DOSIMETRIA', level=1)
+    doc.add_paragraph(f"Pena-base (Fase 1): {resultado.get('pena_base_meses')} meses")
+    doc.add_paragraph(f"Pena Intermediária (Fase 2): {resultado.get('pena_intermediaria_meses')} meses")
+    doc.add_paragraph(f"Pena Final (Fase 3): {resultado.get('pena_final_meses')} meses ({resultado.get('pena_final_anos')} anos)")
+    doc.add_paragraph(f"Regime Inicial Sugerido: {resultado.get('regime_sugerido', 'N/A')}")
+    
+    # Fundamentação
+    doc.add_heading('4. FUNDAMENTAÇÃO LEGAL', level=1)
+    doc.add_paragraph("Art. 68 do Código Penal - Método Trifásico")
+    doc.add_paragraph("Art. 59 CP - Circunstâncias judiciais")
+    doc.add_paragraph("Art. 61-66 CP - Circunstâncias agravantes e atenuantes")
+    
+    if incluir_seal:
+        doc.add_paragraph()
+        doc.add_heading('5. AUTENTICIDADE', level=1)
+        doc.add_paragraph(f"Este relatório possui rastreabilidade via hash criptográfico.")
+        doc.add_paragraph(f"Hash SHA-256: {calculo.get('hash_sha256')}")
+        doc.add_paragraph("Elite Seal™ - Sistema de Custódia Digital")
+    
+    return doc
+
     
     return {
         "valor_inicial": round(valor, 2),
