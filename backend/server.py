@@ -556,6 +556,14 @@ try:
 except ImportError as e:
     logger.error(f"⚠️ Calculadoras Expandidas module not available: {e}")
 
+# Import and include Calculadoras Completas module (NOVO)
+try:
+    from calculadoras_completas import router as calculadoras_completas_router
+    app.include_router(calculadoras_completas_router)
+    logger.info("✅ Calculadoras Completas module loaded successfully (Dosimetria COMPLETA + 35+ calculadoras)")
+except ImportError as e:
+    logger.error(f"⚠️ Calculadoras Completas module not available: {e}")
+
 # Include the router in the main app
 app.include_router(api_router)
 
