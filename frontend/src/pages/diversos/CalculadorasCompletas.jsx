@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import axios from 'axios';
-import { PenaUniversal, PrescricaoPenalCompleta, ProgressaoRegimeCompleta, RemicaoCompleta, LivramentoCondicionalCompleto, CorrecaoMonetariaCompleta } from '../../components/TodasCalculadorasCompletas';
-import { DosimetriaCompleta } from '../../components/CalculadoraComponents';
+import { PenaUniversal } from '../../components/CalculadorasCompl';
 
 const CalculadorasCompletas = () => {
   const navigate = useNavigate();
