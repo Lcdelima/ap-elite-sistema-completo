@@ -19,6 +19,46 @@ const CalculadorasCompletas = () => {
   // Conversor de tempo
   const [conversor, setConversor] = useState({ dias: 0, meses: 0, anos: 0 });
 
+  // Estados para cada calculadora
+  const [prescricao, setPrescricao] = useState({
+    pena_maxima_anos: 8,
+    data_fato: '2020-01-01T00:00:00Z',
+    marcos_interruptivos: []
+  });
+
+  const [progressao, setProgressao] = useState({
+    pena_total_meses: 120,
+    regime_inicial: 'fechado',
+    reincidente: false,
+    bom_comportamento: true
+  });
+
+  const [horasExtras, setHorasExtras] = useState({
+    salario_mensal: 3000,
+    horas_mensais: 20,
+    percentual_extra: 50
+  });
+
+  const [correcaoMon, setCorrecaoMon] = useState({
+    valor_principal: 10000,
+    data_inicial: '2020-01-01',
+    data_final: new Date().toISOString().split('T')[0],
+    indice: 'INPC'
+  });
+
+  const [jurosMora, setJurosMora] = useState({
+    valor_principal: 10000,
+    data_inicial: '2020-01-01',
+    data_final: new Date().toISOString().split('T')[0],
+    taxa_anual: 0.06
+  });
+
+  const [ipva, setIpva] = useState({
+    valor_ipva: 2000,
+    meses_atraso: 6,
+    uf: 'SP'
+  });
+
   // Estados para Dosimetria
   const [dosimetria, setDosimetria] = useState({
     tipo_penal: '',
