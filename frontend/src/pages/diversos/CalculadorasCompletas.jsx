@@ -1362,8 +1362,13 @@ const CalculadorasCompletas = () => {
               {/* Prescrição Intercorrente */}
               {activeCalc === 'prescricao-intercorrente' && <Forms.FormPrescricaoIntercorrente onCalcular={calcularGenerico} loading={loading} PenaInput={PenaInput} />}
 
-              {/* Livramento Condicional */}
-              {activeCalc === 'livramento' && <Forms.FormLivramento onCalcular={calcularGenerico} loading={loading} />}
+              {/* LIVRAMENTO COMPLETO */}
+              {activeCalc === 'livramento' && (
+                <LivramentoCondicionalCompleto
+                  onCalcular={calcularGenerico}
+                  loading={loading}
+                />
+              )}
 
               {/* Unificação de Penas */}
               {activeCalc === 'unificacao' && <Forms.FormUnificacaoPenas onCalcular={calcularGenerico} loading={loading} />}
