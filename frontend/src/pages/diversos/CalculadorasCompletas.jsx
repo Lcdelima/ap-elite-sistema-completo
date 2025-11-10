@@ -1545,42 +1545,42 @@ const CalculadorasCompletas = () => {
               {activeCalc === 'honorarios' && <div className="text-center py-12"><div className="text-6xl mb-4">✅</div><p className="text-gray-400">Backend 100% funcional</p></div>}
 
               {/* NOVOS FORMULÁRIOS - PENAIS */}
-              {activeCalc === 'detracao' && <Forms.FormDetracao onCalcular={(e, data) => setResult(data)} loading={loading} />}
+              {activeCalc === 'detracao' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
               {activeCalc === 'prescricao-executoria' && <div className="text-center py-12"><div className="text-6xl mb-4">✅</div><p className="text-gray-400">Backend 100% funcional</p></div>}
-              {activeCalc === 'comutacao' && <Forms.FormComutacao onCalcular={(e, data) => setResult(data)} loading={loading} />}
-              {activeCalc === 'pena-multa' && <Forms.FormPenaMulta onCalcular={(e, data) => setResult(data)} loading={loading} />}
-              {activeCalc === 'conversao-pena' && <Forms.FormConversaoPena onCalcular={(e, data) => setResult(data)} loading={loading} />}
-              {activeCalc === 'sursis' && <Forms.FormSursis onCalcular={(e, data) => setResult(data)} loading={loading} />}
+              {activeCalc === 'comutacao' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
+              {activeCalc === 'pena-multa' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
+              {activeCalc === 'conversao-pena' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
+              {activeCalc === 'sursis' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
 
               {/* NOVOS FORMULÁRIOS - CÍVEIS */}
-              {activeCalc === 'multa-contratual' && <Forms.FormMultaContratual onCalcular={(e, data) => setResult(data)} loading={loading} />}
-              {activeCalc === 'dano-moral' && <Forms.FormDanoMoral onCalcular={(e, data) => setResult(data)} loading={loading} />}
-              {activeCalc === 'astreintes' && <Forms.FormAstreintes onCalcular={(e, data) => setResult(data)} loading={loading} />}
-              {activeCalc === 'lucros-cessantes' && <Forms.FormLucrosCessantes onCalcular={(e, data) => setResult(data)} loading={loading} />}
-              {activeCalc === 'honorarios-sucumbenciais' && <Forms.FormHonorariosSucumbenciais onCalcular={(e, data) => setResult(data)} loading={loading} />}
+              {activeCalc === 'multa-contratual' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
+              {activeCalc === 'dano-moral' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
+              {activeCalc === 'astreintes' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
+              {activeCalc === 'lucros-cessantes' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
+              {activeCalc === 'honorarios-sucumbenciais' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
 
               {/* NOVOS FORMULÁRIOS - TRIBUTÁRIAS */}
-              {activeCalc === 'prescricao-tributaria' && <Forms.FormPrescricaoTributaria onCalcular={(e, data) => setResult(data)} loading={loading} />}
-              {activeCalc === 'multa-fiscal' && <Forms.FormMultaFiscal onCalcular={(e, data) => setResult(data)} loading={loading} />}
-              {activeCalc === 'restituicao' && <Forms.FormRestituicao onCalcular={(e, data) => setResult(data)} loading={loading} />}
+              {activeCalc === 'prescricao-tributaria' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
+              {activeCalc === 'multa-fiscal' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
+              {activeCalc === 'restituicao' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
 
               {/* NOVOS FORMULÁRIOS - TRABALHISTAS */}
-              {activeCalc === 'atraso-salarial' && <Forms.FormAtrasoSalarial onCalcular={(e, data) => setResult(data)} loading={loading} />}
-              {activeCalc === 'fgts' && <Forms.FormFGTS onCalcular={(e, data) => setResult(data)} loading={loading} />}
+              {activeCalc === 'atraso-salarial' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
+              {activeCalc === 'fgts' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
               {activeCalc === 'perdas-danos' && <div className="text-center py-12"><div className="text-6xl mb-4">✅</div><p className="text-gray-400">Backend 100% funcional</p></div>}
 
               {/* NOVOS FORMULÁRIOS - FINANCEIRAS */}
-              {activeCalc === 'juros-simples' && <Forms.FormJurosSimples onCalcular={(e, data) => setResult(data)} loading={loading} />}
+              {activeCalc === 'juros-simples' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
               {activeCalc === 'lucro-real' && <div className="text-center py-12"><div className="text-6xl mb-4">✅</div><p className="text-gray-400">Backend 100% funcional</p></div>}
-              {activeCalc === 'ebitda' && <Forms.FormEBITDA onCalcular={(e, data) => setResult(data)} loading={loading} />}
-              {activeCalc === 'fluxo-caixa' && <Forms.FormFluxoCaixa onCalcular={(e, data) => setResult(data)} loading={loading} />}
+              {activeCalc === 'ebitda' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
+              {activeCalc === 'fluxo-caixa' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
 
               {/* NOVOS FORMULÁRIOS - PERICIAIS */}
-              {activeCalc === 'amplitude' && <Forms.FormAmplitude onCalcular={(e, data) => setResult(data)} loading={loading} />}
-              {activeCalc === 'entropia' && <Forms.FormEntropia onCalcular={(e, data) => setResult(data)} loading={loading} />}
+              {activeCalc === 'amplitude' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
+              {activeCalc === 'entropia' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
 
               {/* NOVOS FORMULÁRIOS - DIVERSAS */}
-              {activeCalc === 'conversao-moedas' && <Forms.FormConversaoMoedas onCalcular={(e, data) => setResult(data)} loading={loading} />}
+              {activeCalc === 'conversao-moedas' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
 
               {/* Nenhuma calculadora sem interface - TODAS IMPLEMENTADAS! */}
               {![
