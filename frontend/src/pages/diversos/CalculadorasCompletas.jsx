@@ -1522,13 +1522,24 @@ const CalculadorasCompletas = () => {
               {/* NOVOS FORMULÁRIOS - DIVERSAS */}
               {activeCalc === 'conversao-moedas' && <Forms.FormConversaoMoedas onCalcular={(e, data) => setResult(data)} loading={loading} />}
 
-              {/* Outras calculadoras - todas implementadas */}
+              {/* Nenhuma calculadora sem interface - TODAS IMPLEMENTADAS! */}
               {![
-                'dosimetria', 'prescricao', 'progressao', 'horas-extras', 'correcao', 'ipva', 'juros-mora', 'remicao', 
-                'livramento', 'honorarios', 'prescricao-intercorrente', 'unificacao', 'itcmd', 'decadencia', 
-                'planejamento', 'rescisao', 'diferenca-salarial', 'prescricao-trab', 'juros-compostos', 'vp-vf', 
-                'amortizacao', 'payback', 'erro-percentual', 'desvio-padrao', 'media-ponderada', 'probabilidade', 
-                'prescricao-civel', 'conversao-unidades', 'custas'
+                // Penais (13)
+                'dosimetria', 'prescricao', 'progressao', 'remicao', 'prescricao-intercorrente', 'livramento', 
+                'unificacao', 'detracao', 'prescricao-executoria', 'comutacao', 'pena-multa', 'conversao-pena', 'sursis',
+                // Cíveis (8)
+                'correcao', 'juros-mora', 'honorarios', 'honorarios-sucumbenciais', 'multa-contratual', 'dano-moral', 
+                'astreintes', 'lucros-cessantes',
+                // Tributárias (7)
+                'ipva', 'itcmd', 'decadencia', 'planejamento', 'prescricao-tributaria', 'multa-fiscal', 'restituicao',
+                // Trabalhistas (7)
+                'horas-extras', 'rescisao', 'diferenca-salarial', 'prescricao-trab', 'atraso-salarial', 'fgts', 'perdas-danos',
+                // Financeiras (8)
+                'juros-compostos', 'vp-vf', 'amortizacao', 'payback', 'juros-simples', 'lucro-real', 'ebitda', 'fluxo-caixa',
+                // Periciais (6)
+                'erro-percentual', 'desvio-padrao', 'media-ponderada', 'probabilidade', 'amplitude', 'entropia',
+                // Diversas (4)
+                'prescricao-civel', 'conversao-unidades', 'custas', 'conversao-moedas'
               ].includes(activeCalc) && (
                 <div className="text-center py-12">
                   <div className="text-6xl mb-4">✅</div>
