@@ -1251,24 +1251,12 @@ const CalculadorasCompletas = () => {
                 />
               )}
 
-              {/* PROGRESSÃO DE REGIME */}
+              {/* PROGRESSÃO COMPLETA */}
               {activeCalc === 'progressao' && (
-                <div className="space-y-4">
-                  <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
-                    <h3 className="text-green-400 font-semibold mb-2">📈 Progressão de Regime</h3>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-300 mb-2">Pena Total (meses)</label>
-                    <input type="number" value={progressao.pena_total_meses} onChange={(e) => setProgressao({...progressao, pena_total_meses: parseInt(e.target.value)})} className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
-                  </div>
-                  <label className="flex items-center space-x-2">
-                    <input type="checkbox" checked={progressao.reincidente} onChange={(e) => setProgressao({...progressao, reincidente: e.target.checked})} className="rounded" />
-                    <span className="text-gray-300">Reincidente (3/5)</span>
-                  </label>
-                  <button onClick={calcularProgressao} disabled={loading} className="w-full py-3 bg-gradient-to-r from-green-500 to-teal-600 text-white font-bold rounded-lg">
-                    {loading ? 'Calculando...' : '📈 CALCULAR PROGRESSÃO'}
-                  </button>
-                </div>
+                <ProgressaoRegimeCompleta
+                  onCalcular={calcularGenerico}
+                  loading={loading}
+                />
               )}
 
               {/* HORAS EXTRAS */}
