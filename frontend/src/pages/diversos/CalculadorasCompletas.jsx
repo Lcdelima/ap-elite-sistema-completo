@@ -261,6 +261,25 @@ const CalculadorasCompletas = () => {
     }
   };
 
+  const calcularGenerico = async (endpoint, data) => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem('ap_elite_token');
+      const response = await axios.post(
+        `${API_BASE}/api/calculadoras-completas${endpoint}`,
+        data,
+        { headers: { 'Authorization': `Bearer ${token}` } }
+      );
+      setResult(response.data);
+      toast.success('Cálculo realizado com sucesso!');
+    } catch (error) {
+      console.error('Erro:', error);
+      toast.error('Erro ao calcular: ' + (error.response?.data?.detail || error.message));
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const adicionarCrime = () => {
     const novoId = Math.max(...crimes.map(c => c.id)) + 1;
     setCrimes([...crimes, { id: novoId, nome: `Crime ${novoId}`, resultado: null }]);
