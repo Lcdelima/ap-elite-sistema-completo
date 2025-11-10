@@ -72,7 +72,23 @@ export const FormITCMD = ({ onCalcular, loading }) => {
         <input type="number" step="0.1" defaultValue="4" id="aliquota_itcmd" className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
       </div>
       <div>
-
+        <label className="block text-sm font-semibold text-gray-300 mb-2">Tipo</label>
+        <select id="tipo_itcmd" className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white">
+          <option value="ITCMD">ITCMD (Herança/Doação)</option>
+          <option value="ITBI">ITBI (Transmissão Imobiliária)</option>
+        </select>
+      </div>
+      <button onClick={() => onCalcular('/tributario/itcmd-itbi', {
+        valor_venal: parseFloat(document.getElementById('valor_venal').value),
+        aliquota_percentual: parseFloat(document.getElementById('aliquota_itcmd').value),
+        tipo: document.getElementById('tipo_itcmd').value,
+        uf: 'SP'
+      })} disabled={loading} className="w-full py-3 bg-gradient-to-r from-yellow-500 to-orange-600 text-white font-bold rounded-lg">
+        {loading ? 'Calculando...' : '🏠 CALCULAR'}
+      </button>
+    </div>
+  );
+};
 
 export const FormLivramento = ({ onCalcular, loading }) => {
   return (
