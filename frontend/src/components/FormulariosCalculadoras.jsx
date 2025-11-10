@@ -1192,8 +1192,6 @@ export const FormConversaoMoedas = ({ onCalcular, loading }) => {
   );
 };
 
-};
-
 // ==================== PERICIAIS ====================
 
 export const FormErroPercentual = ({ onCalcular, loading }) => {
