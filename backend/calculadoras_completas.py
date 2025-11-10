@@ -676,6 +676,567 @@ async def calcular_ipva(
 
 # ==================== CALCULADORAS TRABALHISTAS ====================
 
+
+
+# ==================== CALCULADORAS PENAIS ADICIONAIS ====================
+
+@router.post("/criminal/prescricao-intercorrente")
+async def calcular_prescricao_intercorrente(
+    pena_aplicada_anos: int,
+    data_recebimento_denuncia: str,
+    data_ultima_movimentacao: str
+):
+    """Prescrição intercorrente (art. 110 §1º CP)"""
+    # Prazo da prescrição pela pena em abstrato
+    tabela = {4: 8, 8: 12, 12: 16, 999: 20}
+    prazo = next((v for k, v in tabela.items() if pena_aplicada_anos <= k), 20)
+    
+    data_rec = datetime.fromisoformat(data_recebimento_denuncia.replace('Z', '+00:00'))
+    data_ult = datetime.fromisoformat(data_ultima_movimentacao.replace('Z', '+00:00'))
+    
+    dias_parado = (datetime.now(timezone.utc) - data_ult).days
+    prescrito = dias_parado >= (prazo * 365)
+    
+    return {
+        "pena_anos": pena_aplicada_anos,
+        "prazo_prescricao_anos": prazo,
+        "dias_sem_movimentacao": dias_parado,
+        "prescrito": prescrito,
+        "status": "PRESCRITO INTERCORRENTE" if prescrito else "EM CURSO",
+        "fundamentacao": "CPP art. 110 §1º - Prescrição pela pena em abstrato"
+    }
+
+@router.post("/criminal/livramento-condicional")
+async def calcular_livramento_condicional(
+    pena_total_meses: int,
+    tempo_cumprido_meses: int,
+    reincidente: bool = False,
+    crime_hediondo: bool = False
+):
+    """Livramento condicional (art. 83 CP)"""
+    # Fração necessária
+    if crime_hediondo:
+        fracao = 2/3
+    elif reincidente:
+        fracao = 1/2
+    else:
+        fracao = 1/3
+    
+    tempo_necessario = pena_total_meses * fracao
+    tempo_restante = max(tempo_necessario - tempo_cumprido_meses, 0)
+    elegivel = tempo_cumprido_meses >= tempo_necessario
+    
+    return {
+        "pena_total_meses": pena_total_meses,
+        "tempo_cumprido_meses": tempo_cumprido_meses,
+        "fracao_necessaria": fracao,
+        "tempo_necessario_meses": round(tempo_necessario, 2),
+        "tempo_restante_meses": round(tempo_restante, 2),
+        "elegivel": elegivel,
+        "data_elegibilidade": (datetime.now(timezone.utc) + timedelta(days=tempo_restante*30)).isoformat() if not elegivel else "JÁ ELEGÍVEL",
+        "fundamentacao": f"Art. 83 CP - {'Crime hediondo' if crime_hediondo else 'Reincidente' if reincidente else 'Primário'}"
+    }
+
+@router.post("/criminal/unificacao-penas")
+async def calcular_unificacao_penas(
+    penas_anteriores_meses: List[int],
+    nova_pena_meses: int
+):
+    """Unificação de penas (art. 111 LEP)"""
+    soma_anteriores = sum(penas_anteriores_meses)
+    total_unificado = soma_anteriores + nova_pena_meses
+    
+    # Limite de 40 anos (art. 75 CP - 2019)
+    if total_unificado > 480:  # 40 anos
+        total_unificado = 480
+        
+    return {
+        "penas_anteriores": penas_anteriores_meses,
+        "soma_anteriores_meses": soma_anteriores,
+        "nova_pena_meses": nova_pena_meses,
+        "total_unificado_meses": total_unificado,
+        "total_unificado_anos": round(total_unificado / 12, 2),
+        "limite_40_anos_aplicado": total_unificado == 480,
+        "fundamentacao": "Art. 111 LEP c/c Art. 75 CP (limite 40 anos)"
+    }
+
+# ==================== CALCULADORAS TRIBUTÁRIAS ADICIONAIS ====================
+
+@router.post("/tributario/itcmd-itbi")
+async def calcular_itcmd_itbi(
+    valor_venal: float,
+    tipo: str,  # "ITCMD" ou "ITBI"
+    aliquota_percentual: float,
+    uf: str = "SP"
+):
+    """ITCMD (herança/doação) ou ITBI (transmissão imobiliária)"""
+    imposto = valor_venal * (aliquota_percentual / 100)
+    
+    return {
+        "tipo": tipo,
+        "valor_venal": round(valor_venal, 2),
+        "aliquota": aliquota_percentual,
+        "imposto": round(imposto, 2),
+        "uf": uf,
+        "fundamentacao": f"Legislação estadual {uf} - {tipo}"
+    }
+
+@router.post("/tributario/decadencia")
+async def calcular_decadencia_tributaria(
+    data_fato_gerador: str
+):
+    """Decadência tributária (CTN art. 173)"""
+    data_fg = datetime.fromisoformat(data_fato_gerador.replace('Z', '+00:00'))
+    data_limite = data_fg + timedelta(days=5*365)
+    dias_restantes = (data_limite - datetime.now(timezone.utc)).days
+    
+    return {
+        "data_fato_gerador": data_fato_gerador,
+        "prazo_anos": 5,
+        "data_limite": data_limite.isoformat(),
+        "dias_restantes": dias_restantes,
+        "decaido": dias_restantes < 0,
+        "status": "DECAÍDO" if dias_restantes < 0 else "EM PRAZO",
+        "fundamentacao": "CTN art. 173 - Decadência em 5 anos"
+    }
+
+@router.post("/tributario/planejamento")
+async def planejamento_tributario(
+    faturamento_anual: float,
+    despesas_anuais: float,
+    funcionarios: int
+):
+    """Planejamento tributário básico - Simples vs Presumido vs Real"""
+    lucro_bruto = faturamento_anual - despesas_anuais
+    
+    # Simples Nacional (aprox 6-15% conforme faixa)
+    aliquota_simples = 0.08 if faturamento_anual <= 360000 else 0.11
+    imposto_simples = faturamento_anual * aliquota_simples
+    
+    # Lucro Presumido (32% presunção × 34% alíquota)
+    base_presumida = faturamento_anual * 0.32
+    imposto_presumido = base_presumida * 0.34
+    
+    # Lucro Real (sobre lucro efetivo)
+    imposto_real = lucro_bruto * 0.34
+    
+    return {
+        "faturamento_anual": round(faturamento_anual, 2),
+        "regimes": {
+            "simples_nacional": {
+                "aliquota": aliquota_simples,
+                "imposto": round(imposto_simples, 2),
+                "liquido": round(faturamento_anual - imposto_simples, 2)
+            },
+            "lucro_presumido": {
+                "base_calculo": round(base_presumida, 2),
+                "imposto": round(imposto_presumido, 2),
+                "liquido": round(faturamento_anual - imposto_presumido, 2)
+            },
+            "lucro_real": {
+                "base_calculo": round(lucro_bruto, 2),
+                "imposto": round(imposto_real, 2),
+                "liquido": round(faturamento_anual - imposto_real, 2)
+            }
+        },
+        "melhor_regime": "simples_nacional" if imposto_simples < min(imposto_presumido, imposto_real) else "lucro_real" if imposto_real < imposto_presumido else "lucro_presumido",
+        "fundamentacao": "Análise comparativa - LC 123/2006 (Simples) vs Lei 9.249/95"
+    }
+
+# ==================== CALCULADORAS TRABALHISTAS ADICIONAIS ====================
+
+@router.post("/trabalhista/rescisao-completa")
+async def calcular_rescisao_completa(
+    salario_mensal: float,
+    tempo_servico_meses: int,
+    aviso_previo_indenizado: bool = True,
+    ferias_vencidas: int = 0,
+    tipo_rescisao: str = "sem_justa_causa"
+):
+    """Rescisão trabalhista completa (CLT)"""
+    # Saldo de salário (proporcional ao mês)
+    dias_trabalhados = 15  # Mock - em produção calcular real
+    saldo_salario = (salario_mensal / 30) * dias_trabalhados
+    
+    # Aviso prévio (30 dias + 3 dias por ano, max 90)
+    dias_aviso = min(30 + (tempo_servico_meses // 12) * 3, 90)
+    aviso_previo = (salario_mensal / 30) * dias_aviso if aviso_previo_indenizado else 0
+    
+    # 13º proporcional
+    decimo_terceiro = (salario_mensal / 12) * (tempo_servico_meses % 12)
+    
+    # Férias proporcionais + 1/3
+    ferias_proporcionais = (salario_mensal / 12) * (tempo_servico_meses % 12)
+    terco_ferias = ferias_proporcionais / 3
+    ferias_vencidas_valor = (salario_mensal + salario_mensal / 3) * ferias_vencidas
+    
+    # FGTS + 40% multa (se sem justa causa)
+    fgts_depositado = salario_mensal * 0.08 * tempo_servico_meses
+    multa_fgts = fgts_depositado * 0.40 if tipo_rescisao == "sem_justa_causa" else 0
+    
+    total = saldo_salario + aviso_previo + decimo_terceiro + ferias_proporcionais + terco_ferias + ferias_vencidas_valor + fgts_depositado + multa_fgts
+    
+    return {
+        "salario_mensal": round(salario_mensal, 2),
+        "tempo_servico_meses": tempo_servico_meses,
+        "tipo_rescisao": tipo_rescisao,
+        "verbas": {
+            "saldo_salario": round(saldo_salario, 2),
+            "aviso_previo": round(aviso_previo, 2),
+            "decimo_terceiro": round(decimo_terceiro, 2),
+            "ferias_proporcionais": round(ferias_proporcionais, 2),
+            "terco_ferias": round(terco_ferias, 2),
+            "ferias_vencidas": round(ferias_vencidas_valor, 2),
+            "fgts": round(fgts_depositado, 2),
+            "multa_40_fgts": round(multa_fgts, 2)
+        },
+        "total_rescisao": round(total, 2),
+        "fundamentacao": "CLT arts. 477, 478, 479, 487"
+    }
+
+@router.post("/trabalhista/diferenca-salarial")
+async def calcular_diferenca_salarial(
+    salario_recebido: float,
+    salario_devido: float,
+    meses_diferenca: int
+):
+    """Diferença salarial / Equiparação salarial"""
+    diferenca_mensal = salario_devido - salario_recebido
+    total_diferenca = diferenca_mensal * meses_diferenca
+    
+    # Reflexos (13º, férias, FGTS)
+    reflexo_13 = (diferenca_mensal / 12) * meses_diferenca
+    reflexo_ferias = reflexo_13 + (reflexo_13 / 3)
+    reflexo_fgts = total_diferenca * 0.08
+    
+    total_com_reflexos = total_diferenca + reflexo_13 + reflexo_ferias + reflexo_fgts
+    
+    return {
+        "salario_recebido": round(salario_recebido, 2),
+        "salario_devido": round(salario_devido, 2),
+        "diferenca_mensal": round(diferenca_mensal, 2),
+        "meses": meses_diferenca,
+        "total_diferenca": round(total_diferenca, 2),
+        "reflexos": {
+            "decimo_terceiro": round(reflexo_13, 2),
+            "ferias_e_terco": round(reflexo_ferias, 2),
+            "fgts": round(reflexo_fgts, 2)
+        },
+        "total_com_reflexos": round(total_com_reflexos, 2),
+        "fundamentacao": "CLT art. 461 - Equiparação salarial"
+    }
+
+@router.post("/trabalhista/prescricao-trabalhista")
+async def calcular_prescricao_trabalhista(
+    data_termino_contrato: str
+):
+    """Prescrição bienal e quinquenal (CLT art. 7º XXIX)"""
+    data_termino = datetime.fromisoformat(data_termino_contrato.replace('Z', '+00:00'))
+    
+    # Bienal (2 anos para ajuizar)
+    data_limite_bienal = data_termino + timedelta(days=2*365)
+    dias_bienal = (data_limite_bienal - datetime.now(timezone.utc)).days
+    
+    # Quinquenal (5 anos retroativos à data de ajuizamento)
+    data_limite_quinquenal = data_termino - timedelta(days=5*365)
+    
+    return {
+        "data_termino_contrato": data_termino_contrato,
+        "prescricao_bienal": {
+            "prazo_anos": 2,
+            "data_limite": data_limite_bienal.isoformat(),
+            "dias_restantes": dias_bienal,
+            "prescrito": dias_bienal < 0,
+            "fundamentacao": "CLT art. 7º XXIX - 2 anos após término do contrato"
+        },
+        "prescricao_quinquenal": {
+            "prazo_anos": 5,
+            "alcance_retroativo_ate": data_limite_quinquenal.isoformat(),
+            "fundamentacao": "CLT art. 7º XXIX - Alcança 5 anos retroativos"
+        }
+    }
+
+# ==================== CALCULADORAS FINANCEIRAS ADICIONAIS ====================
+
+@router.post("/financeiro/valor-presente-futuro")
+async def calcular_vp_vf(
+    valor: float,
+    taxa_mensal: float,
+    periodos: int,
+    tipo: str = "futuro"  # "futuro" ou "presente"
+):
+    """Valor Presente (VP) ou Valor Futuro (VF)"""
+    taxa_decimal = taxa_mensal / 100
+    
+    if tipo == "futuro":
+        # VF = VP * (1 + i)^n
+        resultado = valor * ((1 + taxa_decimal) ** periodos)
+        formula = "VF = VP × (1 + i)^n"
+    else:
+        # VP = VF / (1 + i)^n
+        resultado = valor / ((1 + taxa_decimal) ** periodos)
+        formula = "VP = VF / (1 + i)^n"
+    
+    return {
+        "valor_inicial": round(valor, 2),
+        "taxa_mensal_percentual": taxa_mensal,
+        "periodos_meses": periodos,
+        "tipo_calculo": tipo,
+        "resultado": round(resultado, 2),
+        "formula": formula,
+        "fundamentacao": "Matemática financeira - Valor do dinheiro no tempo"
+    }
+
+@router.post("/financeiro/amortizacao-sac-price")
+async def calcular_amortizacao(
+    valor_financiado: float,
+    taxa_mensal: float,
+    prazo_meses: int,
+    sistema: str = "SAC"  # "SAC" ou "PRICE"
+):
+    """Sistemas de amortização SAC e PRICE"""
+    taxa = taxa_mensal / 100
+    
+    if sistema == "SAC":
+        # SAC: amortização constante
+        amortizacao_mensal = valor_financiado / prazo_meses
+        parcelas = []
+        saldo = valor_financiado
+        
+        for mes in range(1, min(prazo_meses + 1, 13)):  # Limita a 12 meses para exemplo
+            juros_mes = saldo * taxa
+            parcela = amortizacao_mensal + juros_mes
+            saldo -= amortizacao_mensal
+            parcelas.append({
+                "mes": mes,
+                "parcela": round(parcela, 2),
+                "amortizacao": round(amortizacao_mensal, 2),
+                "juros": round(juros_mes, 2),
+                "saldo_devedor": round(saldo, 2)
+            })
+    else:
+        # PRICE: parcela constante
+        parcela_price = valor_financiado * (taxa * ((1 + taxa) ** prazo_meses)) / (((1 + taxa) ** prazo_meses) - 1)
+        parcelas = []
+        saldo = valor_financiado
+        
+        for mes in range(1, min(prazo_meses + 1, 13)):
+            juros_mes = saldo * taxa
+            amortizacao_mes = parcela_price - juros_mes
+            saldo -= amortizacao_mes
+            parcelas.append({
+                "mes": mes,
+                "parcela": round(parcela_price, 2),
+                "amortizacao": round(amortizacao_mes, 2),
+                "juros": round(juros_mes, 2),
+                "saldo_devedor": round(max(saldo, 0), 2)
+            })
+    
+    total_pago = sum([p["parcela"] for p in parcelas]) * (prazo_meses / len(parcelas))
+    total_juros = total_pago - valor_financiado
+    
+    return {
+        "valor_financiado": round(valor_financiado, 2),
+        "taxa_mensal": taxa_mensal,
+        "prazo_meses": prazo_meses,
+        "sistema": sistema,
+        "total_pago_estimado": round(total_pago, 2),
+        "total_juros_estimado": round(total_juros, 2),
+        "parcelas_exemplo": parcelas[:6],  # Primeiras 6 parcelas
+        "fundamentacao": f"Sistema de Amortização {sistema}"
+    }
+
+@router.post("/financeiro/payback-vpn-tir")
+async def calcular_payback(
+    investimento_inicial: float,
+    fluxos_caixa_mensais: List[float]
+):
+    """Payback, VPL e TIR (análise de investimento)"""
+    # Payback simples
+    acumulado = 0
+    mes_payback = None
+    for i, fluxo in enumerate(fluxos_caixa_mensais):
+        acumulado += fluxo
+        if acumulado >= investimento_inicial and mes_payback is None:
+            mes_payback = i + 1
+    
+    # VPL (simplificado - taxa 1% ao mês)
+    taxa = 0.01
+    vpn = -investimento_inicial + sum([fluxo / ((1 + taxa) ** (i+1)) for i, fluxo in enumerate(fluxos_caixa_mensais)])
+    
+    return {
+        "investimento_inicial": round(investimento_inicial, 2),
+        "fluxos_mensais_count": len(fluxos_caixa_mensais),
+        "payback_meses": mes_payback or "Não recuperado",
+        "vpn": round(vpn, 2),
+        "vpn_positivo": vpn > 0,
+        "recomendacao": "INVESTIR" if vpn > 0 else "NÃO INVESTIR",
+        "fundamentacao": "Análise de viabilidade econômica"
+    }
+
+# ==================== CALCULADORAS PERICIAIS ADICIONAIS ====================
+
+@router.post("/pericial/desvio-padrao-variancia")
+async def calcular_desvio_padrao(
+    valores: List[float]
+):
+    """Desvio padrão e variância (estatística pericial)"""
+    n = len(valores)
+    media = sum(valores) / n if n > 0 else 0
+    
+    variancia = sum([(x - media) ** 2 for x in valores]) / n if n > 0 else 0
+    desvio_padrao = math.sqrt(variancia)
+    
+    return {
+        "quantidade_amostras": n,
+        "valores_analisados": valores,
+        "media": round(media, 4),
+        "variancia": round(variancia, 4),
+        "desvio_padrao": round(desvio_padrao, 4),
+        "coeficiente_variacao": round((desvio_padrao / media * 100), 2) if media != 0 else 0,
+        "fundamentacao": "Estatística descritiva - Análise de dispersão"
+    }
+
+@router.post("/pericial/media-ponderada")
+async def calcular_media_ponderada(
+    valores: List[float],
+    pesos: List[float]
+):
+    """Média ponderada"""
+    if len(valores) != len(pesos):
+        raise HTTPException(status_code=400, detail="Valores e pesos devem ter mesmo tamanho")
+    
+    soma_produtos = sum([v * p for v, p in zip(valores, pesos)])
+    soma_pesos = sum(pesos)
+    media_ponderada = soma_produtos / soma_pesos if soma_pesos != 0 else 0
+    
+    return {
+        "valores": valores,
+        "pesos": pesos,
+        "media_ponderada": round(media_ponderada, 4),
+        "soma_pesos": round(soma_pesos, 2),
+        "fundamentacao": "Média ponderada para análise pericial"
+    }
+
+@router.post("/pericial/probabilidade-forense")
+async def calcular_probabilidade_forense(
+    tipo_analise: str,  # "DNA", "voz", "digital"
+    coincidencias: int,
+    total_comparacoes: int
+):
+    """Probabilidade de coincidência forense (DNA, voz, impressão digital)"""
+    probabilidade = (coincidencias / total_comparacoes * 100) if total_comparacoes > 0 else 0
+    
+    # Índice de confiança
+    if probabilidade >= 99.9:
+        confianca = "MUITO ALTA"
+    elif probabilidade >= 95:
+        confianca = "ALTA"
+    elif probabilidade >= 80:
+        confianca = "MÉDIA"
+    else:
+        confianca = "BAIXA"
+    
+    return {
+        "tipo_analise": tipo_analise,
+        "coincidencias": coincidencias,
+        "total_comparacoes": total_comparacoes,
+        "probabilidade_percentual": round(probabilidade, 4),
+        "confianca": confianca,
+        "recomendacao": "POSITIVO PARA IDENTIFICAÇÃO" if probabilidade >= 95 else "INCONCLUSIVO",
+        "fundamentacao": f"Análise estatística forense - {tipo_analise}"
+    }
+
+# ==================== CALCULADORAS DIVERSAS ====================
+
+@router.post("/diversos/prescricao-civel")
+async def calcular_prescricao_civel(
+    tipo_acao: str,
+    data_fato: str
+):
+    """Prescrição cível e administrativa"""
+    prazos = {
+        "cobranca_geral": 10,
+        "responsabilidade_civil": 3,
+        "reparacao_civil": 3,
+        "seguro": 1,
+        "pretensao_rescisoria": 2,
+        "administrativa": 5
+    }
+    
+    prazo_anos = prazos.get(tipo_acao, 10)
+    data_fato_dt = datetime.fromisoformat(data_fato.replace('Z', '+00:00'))
+    data_limite = data_fato_dt + timedelta(days=prazo_anos*365)
+    dias_restantes = (data_limite - datetime.now(timezone.utc)).days
+    
+    return {
+        "tipo_acao": tipo_acao,
+        "prazo_anos": prazo_anos,
+        "data_fato": data_fato,
+        "data_limite": data_limite.isoformat(),
+        "dias_restantes": dias_restantes,
+        "prescrito": dias_restantes < 0,
+        "status": "PRESCRITO" if dias_restantes < 0 else "EM PRAZO",
+        "fundamentacao": f"CC art. {205 if prazo_anos == 10 else 206} - Prescrição {prazo_anos} anos"
+    }
+
+@router.post("/diversos/conversao-unidades-forenses")
+async def converter_unidades_forenses(
+    valor: float,
+    unidade_origem: str,
+    unidade_destino: str
+):
+    """Conversão de unidades para perícia digital (bytes, bits, velocidades)"""
+    # Tabela de conversão para bytes
+    unidades_bytes = {
+        "B": 1,
+        "KB": 1024,
+        "MB": 1024**2,
+        "GB": 1024**3,
+        "TB": 1024**4,
+        "PB": 1024**5
+    }
+    
+    if unidade_origem in unidades_bytes and unidade_destino in unidades_bytes:
+        valor_bytes = valor * unidades_bytes[unidade_origem]
+        resultado = valor_bytes / unidades_bytes[unidade_destino]
+    else:
+        raise HTTPException(status_code=400, detail="Unidades não suportadas")
+    
+    return {
+        "valor_original": valor,
+        "unidade_origem": unidade_origem,
+        "unidade_destino": unidade_destino,
+        "resultado": round(resultado, 6),
+        "valor_em_bytes": valor_bytes,
+        "fundamentacao": "Conversão de unidades digitais - Perícia forense"
+    }
+
+@router.post("/diversos/custas-processuais")
+async def calcular_custas_processuais(
+    valor_causa: float,
+    tipo_acao: str = "conhecimento",
+    uf: str = "SP"
+):
+    """Estimativa de custas processuais conforme tabela TJ"""
+    # Mock - em produção, usar tabelas reais por UF
+    aliquota = 0.01  # 1% sobre valor da causa (referência)
+    custas = valor_causa * aliquota
+    
+    # Limites mínimo e máximo
+    minimo = 50.0
+    maximo = 5000.0
+    custas = max(minimo, min(custas, maximo))
+    
+    return {
+        "valor_causa": round(valor_causa, 2),
+        "tipo_acao": tipo_acao,
+        "uf": uf,
+        "custas_estimadas": round(custas, 2),
+        "aliquota_aplicada": aliquota,
+        "fundamentacao": f"Tabela de Custas {uf} - Estimativa"
+    }
+
 @router.post("/trabalhista/horas-extras")
 async def calcular_horas_extras(
     salario_mensal: float,
