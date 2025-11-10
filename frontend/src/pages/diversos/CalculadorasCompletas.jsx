@@ -1222,25 +1222,145 @@ const CalculadorasCompletas = () => {
               {/* Renderizar formulário conforme calculadora ativa */}
               {activeCalc === 'dosimetria' && renderDosimetriaForm()}
 
-              {/* Placeholder para outras calculadoras */}
-              {activeCalc !== 'dosimetria' && (
+              {/* PRESCRIÇÃO PENAL */}
+              {activeCalc === 'prescricao' && (
+                <div className="space-y-4">
+                  <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+                    <h3 className="text-blue-400 font-semibold mb-2">📅 Prescrição Penal (art. 109 CP)</h3>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-300 mb-2">Pena Máxima (anos)</label>
+                    <input type="number" value={prescricao.pena_maxima_anos} onChange={(e) => setPrescricao({...prescricao, pena_maxima_anos: parseInt(e.target.value)})} className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-300 mb-2">Data do Fato</label>
+                    <input type="date" onChange={(e) => setPrescricao({...prescricao, data_fato: e.target.value + 'T00:00:00Z'})} className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
+                  </div>
+                  <button onClick={calcularPrescricao} disabled={loading} className="w-full py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold rounded-lg">
+                    {loading ? 'Calculando...' : '📅 CALCULAR PRESCRIÇÃO'}
+                  </button>
+                </div>
+              )}
+
+              {/* PROGRESSÃO DE REGIME */}
+              {activeCalc === 'progressao' && (
+                <div className="space-y-4">
+                  <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
+                    <h3 className="text-green-400 font-semibold mb-2">📈 Progressão de Regime</h3>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-300 mb-2">Pena Total (meses)</label>
+                    <input type="number" value={progressao.pena_total_meses} onChange={(e) => setProgressao({...progressao, pena_total_meses: parseInt(e.target.value)})} className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
+                  </div>
+                  <label className="flex items-center space-x-2">
+                    <input type="checkbox" checked={progressao.reincidente} onChange={(e) => setProgressao({...progressao, reincidente: e.target.checked})} className="rounded" />
+                    <span className="text-gray-300">Reincidente (3/5)</span>
+                  </label>
+                  <button onClick={calcularProgressao} disabled={loading} className="w-full py-3 bg-gradient-to-r from-green-500 to-teal-600 text-white font-bold rounded-lg">
+                    {loading ? 'Calculando...' : '📈 CALCULAR PROGRESSÃO'}
+                  </button>
+                </div>
+              )}
+
+              {/* HORAS EXTRAS */}
+              {activeCalc === 'horas-extras' && (
+                <div className="space-y-4">
+                  <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
+                    <h3 className="text-green-400 font-semibold mb-2">⏰ Horas Extras e Reflexos</h3>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-300 mb-2">Salário Mensal (R$)</label>
+                    <input type="number" value={horasExtras.salario_mensal} onChange={(e) => setHorasExtras({...horasExtras, salario_mensal: parseFloat(e.target.value)})} className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-300 mb-2">Horas Extras/Mês</label>
+                    <input type="number" value={horasExtras.horas_mensais} onChange={(e) => setHorasExtras({...horasExtras, horas_mensais: parseInt(e.target.value)})} className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
+                  </div>
+                  <button onClick={calcularHorasExtras} disabled={loading} className="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg">
+                    {loading ? 'Calculando...' : '⏰ CALCULAR HORAS EXTRAS'}
+                  </button>
+                </div>
+              )}
+
+              {/* CORREÇÃO MONETÁRIA */}
+              {activeCalc === 'correcao' && (
+                <div className="space-y-4">
+                  <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
+                    <h3 className="text-yellow-400 font-semibold mb-2">💰 Correção Monetária</h3>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-300 mb-2">Valor Principal (R$)</label>
+                    <input type="number" step="0.01" value={correcaoMon.valor_principal} onChange={(e) => setCorrecaoMon({...correcaoMon, valor_principal: parseFloat(e.target.value)})} className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-300 mb-2">Data Inicial</label>
+                      <input type="date" value={correcaoMon.data_inicial} onChange={(e) => setCorrecaoMon({...correcaoMon, data_inicial: e.target.value})} className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-300 mb-2">Data Final</label>
+                      <input type="date" value={correcaoMon.data_final} onChange={(e) => setCorrecaoMon({...correcaoMon, data_final: e.target.value})} className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
+                    </div>
+                  </div>
+                  <button onClick={calcularCorrecao} disabled={loading} className="w-full py-3 bg-gradient-to-r from-yellow-500 to-orange-600 text-white font-bold rounded-lg">
+                    {loading ? 'Calculando...' : '💰 CALCULAR CORREÇÃO'}
+                  </button>
+                </div>
+              )}
+
+              {/* IPVA */}
+              {activeCalc === 'ipva' && (
+                <div className="space-y-4">
+                  <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
+                    <h3 className="text-yellow-400 font-semibold mb-2">🚗 IPVA Atrasado</h3>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-300 mb-2">Valor IPVA (R$)</label>
+                    <input type="number" value={ipva.valor_ipva} onChange={(e) => setIpva({...ipva, valor_ipva: parseFloat(e.target.value)})} className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-300 mb-2">Meses de Atraso</label>
+                    <input type="number" value={ipva.meses_atraso} onChange={(e) => setIpva({...ipva, meses_atraso: parseInt(e.target.value)})} className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
+                  </div>
+                  <button onClick={calcularIpva} disabled={loading} className="w-full py-3 bg-gradient-to-r from-yellow-500 to-red-600 text-white font-bold rounded-lg">
+                    {loading ? 'Calculando...' : '🚗 CALCULAR IPVA'}
+                  </button>
+                </div>
+              )}
+
+              {/* Outras calculadoras - Placeholder */}
+              {!['dosimetria', 'prescricao', 'progressao', 'horas-extras', 'correcao', 'ipva'].includes(activeCalc) && (
                 <div className="text-center py-12">
-                  <div className="text-6xl mb-4">🚧</div>
+                  <div className="text-6xl mb-4">✅</div>
                   <p className="text-gray-400 text-lg mb-2">
                     Calculadora "{calculadorasPorCategoria[activeCategory]?.find(c => c.id === activeCalc)?.nome}"
                   </p>
-                  <p className="text-gray-500 text-sm mb-4">
-                    Backend implementado e funcional. Interface em desenvolvimento.
+                  <p className="text-green-500 text-sm mb-4 font-semibold">
+                    ✅ Backend 100% implementado e funcional
                   </p>
-                  <div className="mt-4 text-xs text-gray-600">
-                    Endpoint: /api/calculadoras-completas{calculadorasPorCategoria[activeCategory]?.find(c => c.id === activeCalc)?.endpoint}
+                  <p className="text-gray-500 text-sm mb-4">
+                    Interface em desenvolvimento. Use a API diretamente ou aguarde próxima atualização.
+                  </p>
+                  <div className="mt-4 text-xs text-gray-600 bg-gray-900/50 p-3 rounded">
+                    <strong>Endpoint disponível:</strong> /api/calculadoras-completas{calculadorasPorCategoria[activeCategory]?.find(c => c.id === activeCalc)?.endpoint}
                   </div>
-                  <button
-                    onClick={() => toast.info('Interface em desenvolvimento. Backend 100% funcional.')}
-                    className="mt-4 px-6 py-2 bg-purple-600/20 border border-purple-600 text-purple-400 rounded-lg hover:bg-purple-600/30"
-                  >
-                    📋 Ver Documentação da API
-                  </button>
+                </div>
+              )}
+
+              {/* Resultado Genérico */}
+              {result && !result.fase1_pena_base && result.tipo !== 'concurso_material' && (
+                <div className="mt-6 bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/30 rounded-lg p-6">
+                  <h3 className="text-xl font-bold text-green-400 mb-4">✅ Resultado</h3>
+                  <div className="bg-gray-900/50 rounded-lg p-4">
+                    <pre className="text-sm text-gray-300 whitespace-pre-wrap overflow-x-auto">
+                      {JSON.stringify(result, null, 2)}
+                    </pre>
+                  </div>
+                  <div className="flex gap-3 mt-4">
+                    <button onClick={() => { navigator.clipboard.writeText(JSON.stringify(result, null, 2)); toast.success('Copiado!'); }} className="flex-1 px-4 py-2 bg-blue-600/20 border border-blue-600 text-blue-400 rounded-lg">
+                      📋 Copiar JSON
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
