@@ -976,6 +976,18 @@ const CalculadorasCompletas = () => {
           <button
             onClick={() => navigate('/athena')}
             className="text-cyan-400 hover:text-cyan-300 mb-4 flex items-center"
+  const loadHistorico = async () => {
+    try {
+      const token = localStorage.getItem('ap_elite_token');
+      const response = await axios.get(
+        `${API_BASE}/api/calculadoras-completas/historico`,
+        { headers: { 'Authorization': `Bearer ${token}` } }
+      );
+      setHistorico(response.data.calculos || []);
+    } catch (error) {
+      console.error('Error loading historico:', error);
+    }
+  };
           >
             ← Voltar para Athena
           </button>
