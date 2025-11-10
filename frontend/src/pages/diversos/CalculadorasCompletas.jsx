@@ -81,6 +81,80 @@ const CalculadorasCompletas = () => {
     }
   };
 
+  const baixarRelatorioPDF = async () => {
+    if (!result || !result.calculo_id) {
+      toast.error('Realize um cálculo primeiro');
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('ap_elite_token');
+      const response = await axios.post(
+        `${API_BASE}/api/calculadoras-completas/relatorio/gerar`,
+        {
+          calculo_id: result.calculo_id,
+          formato: 'pdf',
+          incluir_elite_seal: true
+        },
+        { 
+          headers: { 'Authorization': `Bearer ${token}` },
+          responseType: 'blob'
+        }
+      );
+
+      // Download do PDF
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `relatorio_dosimetria_${result.calculo_id.substring(0, 8)}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      
+      toast.success('Relatório PDF baixado com sucesso!');
+    } catch (error) {
+      console.error('Erro:', error);
+      toast.error('Erro ao gerar PDF: ' + (error.response?.data?.detail || error.message));
+    }
+  };
+
+  const baixarRelatorioDOCX = async () => {
+    if (!result || !result.calculo_id) {
+      toast.error('Realize um cálculo primeiro');
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('ap_elite_token');
+      const response = await axios.post(
+        `${API_BASE}/api/calculadoras-completas/relatorio/gerar`,
+        {
+          calculo_id: result.calculo_id,
+          formato: 'docx',
+          incluir_elite_seal: false
+        },
+        { 
+          headers: { 'Authorization': `Bearer ${token}` },
+          responseType: 'blob'
+        }
+      );
+
+      // Download do DOCX
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `relatorio_dosimetria_${result.calculo_id.substring(0, 8)}.docx`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      
+      toast.success('Relatório DOCX baixado com sucesso!');
+    } catch (error) {
+      console.error('Erro:', error);
+      toast.error('Erro ao gerar DOCX: ' + (error.response?.data?.detail || error.message));
+    }
+  };
+
   // Conversor de tempo
   const converterTempo = (tipo, valor) => {
     if (tipo === 'dias') {
