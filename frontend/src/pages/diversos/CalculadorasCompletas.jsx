@@ -301,6 +301,103 @@ const CalculadorasCompletas = () => {
     }
   };
 
+  const calcularPrescricao = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        `${API_BASE}/api/calculadoras-completas/criminal/prescricao`,
+        prescricao
+      );
+      setResult(response.data);
+      toast.success('Prescrição calculada!');
+    } catch (error) {
+      toast.error('Erro: ' + (error.response?.data?.detail || error.message));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const calcularProgressao = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        `${API_BASE}/api/calculadoras/criminal/progressao`,
+        progressao
+      );
+      setResult(response.data);
+      toast.success('Progressão calculada!');
+    } catch (error) {
+      toast.error('Erro: ' + (error.response?.data?.detail || error.message));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const calcularHorasExtras = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        `${API_BASE}/api/calculadoras-completas/trabalhista/horas-extras`,
+        horasExtras
+      );
+      setResult(response.data);
+      toast.success('Horas extras calculadas!');
+    } catch (error) {
+      toast.error('Erro: ' + (error.response?.data?.detail || error.message));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const calcularCorrecao = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        `${API_BASE}/api/calculadoras-completas/civil/correcao-monetaria`,
+        correcaoMon
+      );
+      setResult(response.data);
+      toast.success('Correção calculada!');
+    } catch (error) {
+      toast.error('Erro: ' + (error.response?.data?.detail || error.message));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const calcularJuros = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        `${API_BASE}/api/calculadoras-completas/civil/juros-mora`,
+        jurosMora
+      );
+      setResult(response.data);
+      toast.success('Juros calculados!');
+    } catch (error) {
+      toast.error('Erro: ' + (error.response?.data?.detail || error.message));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const calcularIpva = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        `${API_BASE}/api/calculadoras-completas/tributario/ipva-atrasado`,
+        ipva
+      );
+      setResult(response.data);
+      toast.success('IPVA calculado!');
+    } catch (error) {
+      toast.error('Erro: ' + (error.response?.data?.detail || error.message));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
   const calcularGenerico = async (endpoint, data) => {
     setLoading(true);
     try {
