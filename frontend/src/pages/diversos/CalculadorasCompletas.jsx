@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import axios from 'axios';
 import * as Forms from '../../components/FormulariosCalculadoras';
+import { PenaInput } from '../../components/PenaInputs';
 
 const CalculadorasCompletas = () => {
   const navigate = useNavigate();
