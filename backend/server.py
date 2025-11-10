@@ -540,6 +540,22 @@ try:
 except ImportError as e:
     logger.error(f"⚠️ Super ERP modules not available: {e}")
 
+# Import and include Calculadoras modules
+try:
+    from api.modules.diversos.calculadoras import router as calculadoras_router
+    app.include_router(calculadoras_router)
+    logger.info("✅ Calculadoras module loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ Calculadoras module not available: {e}")
+
+# Import and include Calculadoras Expandidas module
+try:
+    from api.modules.diversos.calculadoras_expandidas import router as calculadoras_expandidas_router
+    app.include_router(calculadoras_expandidas_router)
+    logger.info("✅ Calculadoras Expandidas module loaded successfully (35+ calculadoras)")
+except ImportError as e:
+    logger.error(f"⚠️ Calculadoras Expandidas module not available: {e}")
+
 # Include the router in the main app
 app.include_router(api_router)
 
