@@ -234,43 +234,66 @@ const CalculadorasCompletas = () => {
       { id: 'dosimetria', nome: 'Dosimetria de Pena (Trifásico Completo)', endpoint: '/dosimetria/calcular' },
       { id: 'prescricao', nome: 'Prescrição Penal', endpoint: '/criminal/prescricao' },
       { id: 'prescricao-intercorrente', nome: 'Prescrição Intercorrente', endpoint: '/criminal/prescricao-intercorrente' },
+      { id: 'prescricao-executoria', nome: 'Prescrição Executória', endpoint: '/criminal/prescricao' },
+      { id: 'detracao', nome: 'Detração', endpoint: '/criminal/detracao' },
       { id: 'livramento', nome: 'Livramento Condicional', endpoint: '/criminal/livramento-condicional' },
       { id: 'unificacao', nome: 'Unificação de Penas', endpoint: '/criminal/unificacao-penas' },
       { id: 'progressao', nome: 'Progressão de Regime', endpoint: '/criminal/progressao' },
       { id: 'remicao', nome: 'Remição de Pena', endpoint: '/criminal/remicao' },
-      { id: 'detracao', nome: 'Detração', endpoint: '/criminal/detracao' }
+      { id: 'comutacao', nome: 'Comutação / Indulto', endpoint: '/criminal/comutacao' },
+      { id: 'pena-multa', nome: 'Pena de Multa', endpoint: '/criminal/multa' },
+      { id: 'conversao-pena', nome: 'Conversão de Pena', endpoint: '/criminal/conversao' },
+      { id: 'sursis', nome: 'Sursis', endpoint: '/criminal/sursis' }
     ],
     civil: [
       { id: 'correcao', nome: 'Correção Monetária', endpoint: '/civil/correcao-monetaria' },
       { id: 'juros-mora', nome: 'Juros de Mora', endpoint: '/civil/juros-mora' },
-      { id: 'honorarios', nome: 'Honorários Advocatícios', endpoint: '/civil/honorarios-advocaticios' }
+      { id: 'honorarios', nome: 'Honorários Advocatícios', endpoint: '/civil/honorarios-advocaticios' },
+      { id: 'honorarios-sucumbenciais', nome: 'Honorários Sucumbenciais', endpoint: '/civil/honorarios-sucumbenciais' },
+      { id: 'multa-contratual', nome: 'Multa Contratual', endpoint: '/civil/multa-contratual' },
+      { id: 'dano-moral', nome: 'Dano Moral', endpoint: '/civil/dano-moral' },
+      { id: 'astreintes', nome: 'Astreintes', endpoint: '/civil/astreintes' },
+      { id: 'lucros-cessantes', nome: 'Lucros Cessantes', endpoint: '/civil/lucros-cessantes' }
     ],
     tributario: [
       { id: 'ipva', nome: 'IPVA Atrasado', endpoint: '/tributario/ipva-atrasado' },
       { id: 'itcmd', nome: 'ITCMD/ITBI', endpoint: '/tributario/itcmd-itbi' },
       { id: 'decadencia', nome: 'Decadência Tributária', endpoint: '/tributario/decadencia' },
+      { id: 'prescricao-tributaria', nome: 'Prescrição Tributária', endpoint: '/tributario/prescricao' },
+      { id: 'multa-fiscal', nome: 'Multa Fiscal', endpoint: '/tributario/multa-fiscal' },
+      { id: 'restituicao', nome: 'Restituição Tributária', endpoint: '/tributario/restituicao' },
       { id: 'planejamento', nome: 'Planejamento Tributário', endpoint: '/tributario/planejamento' }
     ],
     trabalhista: [
       { id: 'horas-extras', nome: 'Horas Extras e Reflexos', endpoint: '/trabalhista/horas-extras' },
       { id: 'rescisao', nome: 'Rescisão Completa', endpoint: '/trabalhista/rescisao-completa' },
       { id: 'diferenca-salarial', nome: 'Diferença Salarial', endpoint: '/trabalhista/diferenca-salarial' },
-      { id: 'prescricao-trab', nome: 'Prescrição Trabalhista', endpoint: '/trabalhista/prescricao-trabalhista' }
+      { id: 'prescricao-trab', nome: 'Prescrição Trabalhista', endpoint: '/trabalhista/prescricao-trabalhista' },
+      { id: 'fgts', nome: 'Multa FGTS 40%', endpoint: '/trabalhista/fgts' },
+      { id: 'atraso-salarial', nome: 'Atraso Salarial', endpoint: '/trabalhista/atraso' },
+      { id: 'perdas-danos', nome: 'Perdas e Danos', endpoint: '/trabalhista/perdas-danos' }
     ],
     financeiro: [
       { id: 'juros-compostos', nome: 'Juros Compostos', endpoint: '/financeiro/juros-compostos' },
+      { id: 'juros-simples', nome: 'Juros Simples', endpoint: '/financeiro/juros-simples' },
       { id: 'vp-vf', nome: 'Valor Presente/Futuro', endpoint: '/financeiro/valor-presente-futuro' },
       { id: 'amortizacao', nome: 'Amortização SAC/PRICE', endpoint: '/financeiro/amortizacao-sac-price' },
-      { id: 'payback', nome: 'Payback/VPL/TIR', endpoint: '/financeiro/payback-vpn-tir' }
+      { id: 'payback', nome: 'Payback/VPL/TIR', endpoint: '/financeiro/payback-vpn-tir' },
+      { id: 'lucro-real', nome: 'Lucro Real/Presumido', endpoint: '/financeiro/lucro' },
+      { id: 'ebitda', nome: 'EBITDA', endpoint: '/financeiro/ebitda' },
+      { id: 'fluxo-caixa', nome: 'Fluxo de Caixa', endpoint: '/financeiro/fluxo-caixa' }
     ],
     pericial: [
       { id: 'erro-percentual', nome: 'Erro Percentual', endpoint: '/pericial/erro-percentual' },
       { id: 'desvio-padrao', nome: 'Desvio Padrão e Variância', endpoint: '/pericial/desvio-padrao-variancia' },
       { id: 'media-ponderada', nome: 'Média Ponderada', endpoint: '/pericial/media-ponderada' },
-      { id: 'probabilidade', nome: 'Probabilidade Forense', endpoint: '/pericial/probabilidade-forense' }
+      { id: 'amplitude', nome: 'Amplitude Total', endpoint: '/pericial/amplitude' },
+      { id: 'probabilidade', nome: 'Probabilidade Forense', endpoint: '/pericial/probabilidade-forense' },
+      { id: 'entropia', nome: 'Entropia de Hash', endpoint: '/pericial/entropia' }
     ],
     diversas: [
       { id: 'prescricao-civel', nome: 'Prescrição Cível', endpoint: '/diversos/prescricao-civel' },
+      { id: 'conversao-moedas', nome: 'Conversão de Moedas', endpoint: '/diversos/moedas' },
       { id: 'conversao-unidades', nome: 'Conversão de Unidades Forenses', endpoint: '/diversos/conversao-unidades-forenses' },
       { id: 'custas', nome: 'Custas Processuais', endpoint: '/diversos/custas-processuais' }
     ]
