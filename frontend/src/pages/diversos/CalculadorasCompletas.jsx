@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import axios from 'axios';
 import * as Forms from '../../components/FormulariosCalculadoras';
 import { PenaInput } from '../../components/PenaInputs';
+import { PenaInputCompleto, DosimetriaCompleta } from '../../components/CalculadoraComponents';
 
 const CalculadorasCompletas = () => {
   const navigate = useNavigate();
