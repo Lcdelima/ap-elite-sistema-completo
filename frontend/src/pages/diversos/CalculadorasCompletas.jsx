@@ -5,6 +5,7 @@ import axios from 'axios';
 import * as Forms from '../../components/FormulariosCalculadoras';
 import { PenaInput } from '../../components/PenaInputs';
 import { PenaInputCompleto, DosimetriaCompleta } from '../../components/CalculadoraComponents';
+import { PenaUniversal, PrescricaoPenalCompleta } from '../../components/CalculadorasCompletas';
 
 const CalculadorasCompletas = () => {
   const navigate = useNavigate();
