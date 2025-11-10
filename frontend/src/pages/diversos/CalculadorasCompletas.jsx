@@ -220,7 +220,7 @@ const CalculadorasCompletas = () => {
   };
 
   const categorias = [
-    { id: 'penal', nome: 'Direito Penal', icon: '⚖️', color: 'purple', total: 14 },
+    { id: 'penal', nome: 'Direito Penal', icon: '⚖️', color: 'purple', total: 13 },
     { id: 'civil', nome: 'Direito Civil', icon: '📜', color: 'blue', total: 8 },
     { id: 'tributario', nome: 'Direito Tributário', icon: '💰', color: 'yellow', total: 7 },
     { id: 'trabalhista', nome: 'Direito Trabalhista', icon: '👔', color: 'green', total: 7 },
