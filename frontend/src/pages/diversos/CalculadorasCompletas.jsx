@@ -1146,7 +1146,7 @@ const CalculadorasCompletas = () => {
             Calculadoras Jurídicas Elite 🧮
           </h1>
           <p className="text-gray-400 text-lg">
-            54 calculadoras especializadas com conversores, múltiplos crimes e concurso material
+            54 calculadoras com conversão automática (dias/meses/anos), análise individual de múltiplos crimes e concurso material
           </p>
         </div>
 
