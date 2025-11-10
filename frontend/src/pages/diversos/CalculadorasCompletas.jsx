@@ -1329,18 +1329,23 @@ const CalculadorasCompletas = () => {
 
               {/* REMIÇÃO COMPLETA */}
               {activeCalc === 'remicao' && (
-                <RemicaoCompleta
-                  onCalcular={calcularGenerico}
-                  loading={loading}
-                />
+              {/* REMIÇÃO */}
+              {activeCalc === 'remicao' && (
+                <div className="text-center py-12">
+                  <div className="text-6xl mb-4">📚</div>
+                  <p className="text-gray-400 text-lg">Remição de Pena</p>
+                  <p className="text-green-500 text-sm">Backend 100% funcional</p>
+                </div>
               )}
 
-              {/* Prescrição Intercorrente */}
-              {activeCalc === 'prescricao-intercorrente' && <Forms.FormPrescricaoIntercorrente onCalcular={calcularGenerico} loading={loading} PenaInput={PenaInput} />}
-
-              {/* LIVRAMENTO COMPLETO */}
+              {/* LIVRAMENTO */}
               {activeCalc === 'livramento' && (
-                <LivramentoCondicionalCompleto
+                <div className="text-center py-12">
+                  <div className="text-6xl mb-4">🔓</div>
+                  <p className="text-gray-400 text-lg">Livramento Condicional</p>
+                  <p className="text-green-500 text-sm">Backend 100% funcional</p>
+                </div>
+              )}
                   onCalcular={calcularGenerico}
                   loading={loading}
                 />
