@@ -2,16 +2,22 @@ import React from 'react';
 
 // ==================== PENAIS ====================
 
-export const FormPrescricaoIntercorrente = ({ onCalcular, loading }) => {
+export const FormPrescricaoIntercorrente = ({ onCalcular, loading, PenaInput }) => {
+  const [penaAplicada, setPenaAplicada] = useState(72); // em meses
+
   return (
     <div className="space-y-4">
       <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
         <h3 className="text-blue-400 font-semibold mb-2">⏳ Prescrição Intercorrente (art. 110 CP)</h3>
+        <p className="text-gray-400 text-sm">Prescrição pela pena em abstrato durante o processo</p>
       </div>
-      <div>
-        <label className="block text-sm font-semibold text-gray-300 mb-2">Pena Aplicada (anos)</label>
-        <input type="number" defaultValue="6" id="pena_intercorrente" className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
-      </div>
+      
+      <PenaInput
+        label="Pena Aplicada"
+        value={penaAplicada}
+        onChange={setPenaAplicada}
+      />
+
       <div>
         <label className="block text-sm font-semibold text-gray-300 mb-2">Data Recebimento Denúncia</label>
         <input type="date" defaultValue="2020-01-01" id="data_rec" className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
@@ -21,11 +27,11 @@ export const FormPrescricaoIntercorrente = ({ onCalcular, loading }) => {
         <input type="date" defaultValue="2021-01-01" id="data_ult" className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
       </div>
       <button onClick={() => onCalcular('/criminal/prescricao-intercorrente', {
-        pena_aplicada_anos: parseInt(document.getElementById('pena_intercorrente').value),
+        pena_aplicada_anos: Math.round(penaAplicada / 12),
         data_recebimento_denuncia: document.getElementById('data_rec').value + 'T00:00:00Z',
         data_ultima_movimentacao: document.getElementById('data_ult').value + 'T00:00:00Z'
       })} disabled={loading} className="w-full py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold rounded-lg">
-        {loading ? 'Calculando...' : '⏳ CALCULAR'}
+        {loading ? 'Calculando...' : '⏳ CALCULAR PRESCRIÇÃO'}
       </button>
     </div>
   );
