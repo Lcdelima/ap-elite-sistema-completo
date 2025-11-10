@@ -479,12 +479,13 @@ def converter_meses_para_anos_meses(total_meses: float) -> str:
 
 # ==================== OUTRAS CALCULADORAS PENAIS ====================
 
-@router.post("/criminal/prescricao")
-async def calcular_prescricao(
-    pena_maxima_anos: int,
-    data_fato: str,
+class PrescricaoRequest(BaseModel):
+    pena_maxima_anos: int
+    data_fato: str
     marcos_interruptivos: List[str] = []
-):
+
+@router.post("/criminal/prescricao")
+async def calcular_prescricao(data: PrescricaoRequest):
     """
     Calcula prescrição da pretensão punitiva (art. 109 CP)
     """
@@ -500,16 +501,16 @@ async def calcular_prescricao(
     
     prazo_prescricao = 20  # Default
     for (min_pena, max_pena), prazo in tabela_prescricao.items():
-        if min_pena <= pena_maxima_anos < max_pena:
+        if min_pena <= data.pena_maxima_anos < max_pena:
             prazo_prescricao = prazo
             break
     
-    data_fato_dt = datetime.fromisoformat(data_fato.replace('Z', '+00:00'))
+    data_fato_dt = datetime.fromisoformat(data.data_fato.replace('Z', '+00:00'))
     data_prescricao = data_fato_dt + timedelta(days=prazo_prescricao*365)
     
     # Verifica marcos interruptivos
     marcos_processados = []
-    for marco in marcos_interruptivos:
+    for marco in data.marcos_interruptivos:
         marco_dt = datetime.fromisoformat(marco.replace('Z', '+00:00'))
         nova_prescricao = marco_dt + timedelta(days=prazo_prescricao*365)
         marcos_processados.append({
@@ -522,15 +523,15 @@ async def calcular_prescricao(
     prescrito = dias_restantes < 0
     
     return {
-        "pena_maxima_anos": pena_maxima_anos,
+        "pena_maxima_anos": data.pena_maxima_anos,
         "prazo_prescricao_anos": prazo_prescricao,
-        "data_fato": data_fato,
+        "data_fato": data.data_fato,
         "data_prescricao": data_prescricao.isoformat(),
         "marcos_interruptivos": marcos_processados,
         "dias_restantes": dias_restantes,
         "prescrito": prescrito,
         "status": "PRESCRITO" if prescrito else "DENTRO DO PRAZO",
-        "fundamentacao": f"Art. 109, inciso aplicável - Pena máxima {pena_maxima_anos} anos → prescrição em {prazo_prescricao} anos"
+        "fundamentacao": f"Art. 109, inciso aplicável - Pena máxima {data.pena_maxima_anos} anos → prescrição em {prazo_prescricao} anos"
     }
 
 # ==================== CALCULADORAS CIVEIS ====================
