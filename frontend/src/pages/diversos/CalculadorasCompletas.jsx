@@ -1486,23 +1486,6 @@ const CalculadorasCompletas = () => {
                 </div>
               )}
 
-                <div className="text-center py-12">
-                  <div className="text-6xl mb-4">✅</div>
-                  <p className="text-gray-400 text-lg mb-2">
-                    {calculadorasPorCategoria[activeCategory]?.find(c => c.id === activeCalc)?.nome}
-                  </p>
-                  <p className="text-green-500 text-sm mb-4 font-semibold">
-                    ✅ Backend 100% implementado e funcional
-                  </p>
-                  <p className="text-gray-500 text-sm mb-4">
-                    Interface em desenvolvimento. Backend testado e operacional.
-                  </p>
-                  <div className="mt-4 text-xs text-gray-600 bg-gray-900/50 p-3 rounded">
-                    <strong>Endpoint:</strong> {calculadorasPorCategoria[activeCategory]?.find(c => c.id === activeCalc)?.endpoint}
-                  </div>
-                </div>
-              )}
-
               {/* Resultado Genérico */}
               {result && !result.fase1_pena_base && result.tipo !== 'concurso_material' && (
                 <div className="mt-6 bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/30 rounded-lg p-6">
