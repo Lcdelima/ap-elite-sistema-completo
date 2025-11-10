@@ -1327,8 +1327,6 @@ const CalculadorasCompletas = () => {
                 </div>
               )}
 
-              {/* REMIÇÃO COMPLETA */}
-              {activeCalc === 'remicao' && (
               {/* REMIÇÃO */}
               {activeCalc === 'remicao' && (
                 <div className="text-center py-12">
@@ -1345,10 +1343,6 @@ const CalculadorasCompletas = () => {
                   <p className="text-gray-400 text-lg">Livramento Condicional</p>
                   <p className="text-green-500 text-sm">Backend 100% funcional</p>
                 </div>
-              )}
-                  onCalcular={calcularGenerico}
-                  loading={loading}
-                />
               )}
 
               {/* Unificação de Penas */}
