@@ -398,6 +398,19 @@ const CalculadorasCompletas = () => {
     }
   };
 
+  const calcularGenerico = async (endpoint, data) => {
+    setLoading(true);
+    try {
+      const response = await axios.post(`${API_BASE}/api/calculadoras-completas${endpoint}`, data);
+      setResult(response.data);
+      toast.success('Cálculo realizado!');
+    } catch (error) {
+      toast.error('Erro: ' + (error.response?.data?.detail || error.message));
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   const calcularGenerico = async (endpoint, data) => {
     setLoading(true);
