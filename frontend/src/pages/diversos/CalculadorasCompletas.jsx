@@ -257,12 +257,12 @@ const CalculadorasCompletas = () => {
 
   const renderDosimetriaForm = () => (
     <div className="space-y-6">
-      {/* Conversor de Tempo */}
+      {/* Conversor de Tempo COMPLETO */}
       <div className="bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/30 rounded-lg p-4">
         <h3 className="text-lg font-semibold text-cyan-400 mb-3">
-          🔄 Conversor de Tempo (Dias ↔ Meses ↔ Anos)
+          🔄 Conversor de Tempo Universal (Dias ↔ Meses ↔ Anos)
         </h3>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-4 mb-4">
           <div>
             <label className="block text-xs text-gray-400 mb-1">Dias</label>
             <input
@@ -289,6 +289,28 @@ const CalculadorasCompletas = () => {
               onChange={(e) => converterTempo('anos', parseFloat(e.target.value) || 0)}
               className="w-full bg-gray-800/50 border border-gray-700 rounded px-3 py-2 text-white"
             />
+          </div>
+        </div>
+        
+        {/* Tabela de Conversões */}
+        <div className="bg-gray-900/50 rounded-lg p-3">
+          <div className="text-xs text-gray-400 mb-2 font-semibold">📊 Todas as Conversões:</div>
+          <div className="grid grid-cols-3 gap-3 text-xs">
+            <div className="space-y-1">
+              <div className="text-cyan-400 font-semibold">Anos →</div>
+              <div className="text-gray-300">→ Meses: <span className="text-white font-mono">{(conversor.anos * 12).toFixed(2)}</span></div>
+              <div className="text-gray-300">→ Dias: <span className="text-white font-mono">{(conversor.anos * 365).toFixed(0)}</span></div>
+            </div>
+            <div className="space-y-1">
+              <div className="text-blue-400 font-semibold">Meses →</div>
+              <div className="text-gray-300">→ Anos: <span className="text-white font-mono">{(conversor.meses / 12).toFixed(2)}</span></div>
+              <div className="text-gray-300">→ Dias: <span className="text-white font-mono">{(conversor.meses * 30).toFixed(0)}</span></div>
+            </div>
+            <div className="space-y-1">
+              <div className="text-purple-400 font-semibold">Dias →</div>
+              <div className="text-gray-300">→ Meses: <span className="text-white font-mono">{(conversor.dias / 30).toFixed(2)}</span></div>
+              <div className="text-gray-300">→ Anos: <span className="text-white font-mono">{(conversor.dias / 365).toFixed(2)}</span></div>
+            </div>
           </div>
         </div>
       </div>
