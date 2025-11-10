@@ -1322,12 +1322,76 @@ const CalculadorasCompletas = () => {
                 </div>
               )}
 
-              {/* PROGRESSÃO */}
+              {/* PROGRESSÃO DE REGIME COMPLETA */}
               {activeCalc === 'progressao' && (
-                <div className="text-center py-12">
-                  <div className="text-6xl mb-4">📈</div>
-                  <p className="text-gray-400 text-lg">Progressão de Regime</p>
-                  <p className="text-green-500 text-sm">Backend 100% funcional</p>
+                <div className="space-y-6">
+                  <div className="bg-gradient-to-r from-green-500/10 to-teal-500/10 border-2 border-green-500/30 rounded-xl p-6">
+                    <h3 className="text-2xl font-bold text-green-400 mb-2">📈 Progressão de Regime (LEP art. 112)</h3>
+                    <p className="text-gray-400 mb-6">Cálculo do tempo necessário: 1/6 primário | 2/5 primário crime grave | 3/5 reincidente</p>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-bold text-gray-300 mb-2">Pena Total</label>
+                        <div className="flex gap-2">
+                          <input
+                            type="number"
+                            defaultValue="120"
+                            id="pena_total_prog"
+                            className="flex-1 bg-gray-800/50 border-2 border-gray-700 rounded-lg px-4 py-3 text-white text-lg font-bold"
+                          />
+                          <select className="bg-purple-600 border-2 border-purple-500 rounded-lg px-4 py-3 text-white font-bold">
+                            <option value="meses">Meses</option>
+                            <option value="anos">Anos</option>
+                            <option value="dias">Dias</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-bold text-gray-300 mb-2">Regime Inicial</label>
+                        <select id="regime_prog" className="w-full bg-gray-800/50 border-2 border-gray-700 rounded-lg px-4 py-3 text-white font-bold">
+                          <option value="fechado">Fechado</option>
+                          <option value="semiaberto">Semiaberto</option>
+                          <option value="aberto">Aberto</option>
+                        </select>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <label className="flex items-center space-x-3 p-4 bg-gray-800/50 rounded-lg border-2 border-gray-700">
+                          <input type="checkbox" id="reincidente_prog" className="w-6 h-6 rounded" />
+                          <span className="text-white font-bold">Reincidente (3/5)</span>
+                        </label>
+                        <label className="flex items-center space-x-3 p-4 bg-gray-800/50 rounded-lg border-2 border-gray-700">
+                          <input type="checkbox" defaultChecked className="w-6 h-6 rounded" />
+                          <span className="text-white font-bold">Bom Comportamento</span>
+                        </label>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={async () => {
+                        setLoading(true);
+                        try {
+                          const response = await axios.post(`${API_BASE}/api/calculadoras/criminal/progressao`, {
+                            pena_total_meses: parseInt(document.getElementById('pena_total_prog').value),
+                            regime_inicial: document.getElementById('regime_prog').value,
+                            reincidente: document.getElementById('reincidente_prog').checked,
+                            bom_comportamento: true
+                          });
+                          setResult(response.data);
+                          toast.success('Progressão calculada!');
+                        } catch (error) {
+                          toast.error('Erro: ' + (error.response?.data?.detail || error.message));
+                        } finally {
+                          setLoading(false);
+                        }
+                      }}
+                      disabled={loading}
+                      className="w-full mt-6 py-4 bg-gradient-to-r from-green-500 to-teal-600 text-white font-bold text-xl rounded-xl"
+                    >
+                      {loading ? '⚙️ Calculando...' : '📈 CALCULAR PROGRESSÃO'}
+                    </button>
+                  </div>
                 </div>
               )}
 
