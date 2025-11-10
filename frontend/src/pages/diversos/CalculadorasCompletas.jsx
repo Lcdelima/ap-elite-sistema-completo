@@ -1308,6 +1308,32 @@ const CalculadorasCompletas = () => {
                 </div>
               )}
 
+              {/* JUROS DE MORA */}
+              {activeCalc === 'juros-mora' && (
+                <div className="space-y-4">
+                  <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+                    <h3 className="text-blue-400 font-semibold mb-2">💵 Juros de Mora (art. 406 CC)</h3>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-300 mb-2">Valor Principal (R$)</label>
+                    <input type="number" step="0.01" value={jurosMora.valor_principal} onChange={(e) => setJurosMora({...jurosMora, valor_principal: parseFloat(e.target.value)})} className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-300 mb-2">Data Inicial</label>
+                      <input type="date" value={jurosMora.data_inicial} onChange={(e) => setJurosMora({...jurosMora, data_inicial: e.target.value})} className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-300 mb-2">Data Final</label>
+                      <input type="date" value={jurosMora.data_final} onChange={(e) => setJurosMora({...jurosMora, data_final: e.target.value})} className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
+                    </div>
+                  </div>
+                  <button onClick={calcularJuros} disabled={loading} className="w-full py-3 bg-gradient-to-r from-blue-500 to-cyan-600 text-white font-bold rounded-lg">
+                    {loading ? 'Calculando...' : '💵 CALCULAR JUROS'}
+                  </button>
+                </div>
+              )}
+
               {/* IPVA */}
               {activeCalc === 'ipva' && (
                 <div className="space-y-4">
@@ -1328,21 +1354,125 @@ const CalculadorasCompletas = () => {
                 </div>
               )}
 
-              {/* Outras calculadoras - Placeholder */}
-              {!['dosimetria', 'prescricao', 'progressao', 'horas-extras', 'correcao', 'ipva'].includes(activeCalc) && (
+              {/* REMIÇÃO */}
+              {activeCalc === 'remicao' && (
+                <div className="space-y-4">
+                  <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
+                    <h3 className="text-green-400 font-semibold mb-2">📚 Remição de Pena (art. 126 LEP)</h3>
+                    <p className="text-gray-400 text-sm">3 dias de trabalho = 1 dia de remição</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-300 mb-2">Dias Trabalhados</label>
+                    <input type="number" defaultValue="90" id="dias_trabalhados" className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
+                  </div>
+                  <button onClick={async () => {
+                    setLoading(true);
+                    try {
+                      const response = await axios.post(`${API_BASE}/api/calculadoras/criminal/remicao`, {
+                        dias_trabalhados: parseInt(document.getElementById('dias_trabalhados').value)
+                      });
+                      setResult(response.data);
+                      toast.success('Remição calculada!');
+                    } catch (error) {
+                      toast.error('Erro: ' + error.message);
+                    } finally {
+                      setLoading(false);
+                    }
+                  }} disabled={loading} className="w-full py-3 bg-gradient-to-r from-green-500 to-teal-600 text-white font-bold rounded-lg">
+                    {loading ? 'Calculando...' : '📚 CALCULAR REMIÇÃO'}
+                  </button>
+                </div>
+              )}
+
+              {/* LIVRAMENTO CONDICIONAL */}
+              {activeCalc === 'livramento' && (
+                <div className="space-y-4">
+                  <div className="bg-cyan-500/10 border border-cyan-500/30 rounded-lg p-4">
+                    <h3 className="text-cyan-400 font-semibold mb-2">🔓 Livramento Condicional (art. 83 CP)</h3>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-300 mb-2">Pena Total (meses)</label>
+                    <input type="number" defaultValue="120" id="pena_livramento" className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-300 mb-2">Tempo Cumprido (meses)</label>
+                    <input type="number" defaultValue="50" id="tempo_cumprido_livramento" className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
+                  </div>
+                  <button onClick={async () => {
+                    setLoading(true);
+                    try {
+                      const response = await axios.post(`${API_BASE}/api/calculadoras-completas/criminal/livramento-condicional`, {
+                        pena_total_meses: parseInt(document.getElementById('pena_livramento').value),
+                        tempo_cumprido_meses: parseInt(document.getElementById('tempo_cumprido_livramento').value),
+                        reincidente: false,
+                        crime_hediondo: false
+                      });
+                      setResult(response.data);
+                      toast.success('Livramento calculado!');
+                    } catch (error) {
+                      toast.error('Erro: ' + error.message);
+                    } finally {
+                      setLoading(false);
+                    }
+                  }} disabled={loading} className="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-lg">
+                    {loading ? 'Calculando...' : '🔓 CALCULAR LIVRAMENTO'}
+                  </button>
+                </div>
+              )}
+
+              {/* HONORÁRIOS */}
+              {activeCalc === 'honorarios' && (
+                <div className="space-y-4">
+                  <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+                    <h3 className="text-blue-400 font-semibold mb-2">⚖️ Honorários Advocatícios (CPC art. 85)</h3>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-300 mb-2">Valor da Causa (R$)</label>
+                    <input type="number" step="0.01" defaultValue="50000" id="valor_causa" className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-300 mb-2">Percentual (%)</label>
+                    <input type="number" step="0.1" defaultValue="15" id="percentual_hon" min="10" max="20" className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
+                  </div>
+                  <button onClick={async () => {
+                    setLoading(true);
+                    try {
+                      const pct = parseFloat(document.getElementById('percentual_hon').value);
+                      const response = await axios.post(`${API_BASE}/api/calculadoras-completas/civil/honorarios-advocaticios`, {
+                        valor_causa: parseFloat(document.getElementById('valor_causa').value),
+                        fase_processual: 'conhecimento',
+                        percentual_minimo: pct,
+                        percentual_maximo: pct,
+                        sucumbencia: 'total'
+                      });
+                      setResult(response.data);
+                      toast.success('Honorários calculados!');
+                    } catch (error) {
+                      toast.error('Erro: ' + error.message);
+                    } finally {
+                      setLoading(false);
+                    }
+                  }} disabled={loading} className="w-full py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold rounded-lg">
+                    {loading ? 'Calculando...' : '⚖️ CALCULAR HONORÁRIOS'}
+                  </button>
+                </div>
+              )}
+
+              {/* Outras calculadoras - Backend pronto, UI simplificada */}
+              {!['dosimetria', 'prescricao', 'progressao', 'horas-extras', 'correcao', 'ipva', 'juros-mora', 'remicao', 'livramento', 'honorarios'].includes(activeCalc) && (
                 <div className="text-center py-12">
                   <div className="text-6xl mb-4">✅</div>
                   <p className="text-gray-400 text-lg mb-2">
-                    Calculadora "{calculadorasPorCategoria[activeCategory]?.find(c => c.id === activeCalc)?.nome}"
+                    {calculadorasPorCategoria[activeCategory]?.find(c => c.id === activeCalc)?.nome}
                   </p>
                   <p className="text-green-500 text-sm mb-4 font-semibold">
                     ✅ Backend 100% implementado e funcional
                   </p>
                   <p className="text-gray-500 text-sm mb-4">
-                    Interface em desenvolvimento. Use a API diretamente ou aguarde próxima atualização.
+                    Interface em desenvolvimento. Backend testado e operacional.
                   </p>
                   <div className="mt-4 text-xs text-gray-600 bg-gray-900/50 p-3 rounded">
-                    <strong>Endpoint disponível:</strong> /api/calculadoras-completas{calculadorasPorCategoria[activeCategory]?.find(c => c.id === activeCalc)?.endpoint}
+                    <strong>Endpoint:</strong> {calculadorasPorCategoria[activeCategory]?.find(c => c.id === activeCalc)?.endpoint}
                   </div>
                 </div>
               )}
@@ -1352,7 +1482,7 @@ const CalculadorasCompletas = () => {
                 <div className="mt-6 bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/30 rounded-lg p-6">
                   <h3 className="text-xl font-bold text-green-400 mb-4">✅ Resultado</h3>
                   <div className="bg-gray-900/50 rounded-lg p-4">
-                    <pre className="text-sm text-gray-300 whitespace-pre-wrap overflow-x-auto">
+                    <pre className="text-sm text-gray-300 whitespace-pre-wrap overflow-x-auto max-h-96">
                       {JSON.stringify(result, null, 2)}
                     </pre>
                   </div>
