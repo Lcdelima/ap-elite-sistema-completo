@@ -1266,15 +1266,27 @@ const CalculadorasCompletas = () => {
                         <div className="flex gap-2">
                           <input
                             type="number"
+                            step="any"
                             defaultValue="8"
                             id="pena_max_prescricao"
                             className="flex-1 bg-gray-800/50 border-2 border-gray-700 rounded-lg px-4 py-3 text-white text-lg font-bold"
                           />
-                          <select className="bg-purple-600 border-2 border-purple-500 rounded-lg px-4 py-3 text-white font-bold">
+                          <select id="unidade_pena_max" className="bg-purple-600 border-2 border-purple-500 rounded-lg px-4 py-3 text-white font-bold">
                             <option value="anos">Anos</option>
                             <option value="meses">Meses</option>
                             <option value="dias">Dias</option>
                           </select>
+                        </div>
+                        <div className="mt-2 grid grid-cols-3 gap-2 text-xs font-bold">
+                          <div className="bg-cyan-500/20 border border-cyan-500 rounded px-2 py-1 text-center">
+                            <span className="text-cyan-400" id="conv_dias_prescricao">2920</span> <span className="text-gray-400">dias</span>
+                          </div>
+                          <div className="bg-blue-500/20 border border-blue-500 rounded px-2 py-1 text-center">
+                            <span className="text-blue-400" id="conv_meses_prescricao">96.00</span> <span className="text-gray-400">meses</span>
+                          </div>
+                          <div className="bg-purple-500/20 border border-purple-500 rounded px-2 py-1 text-center">
+                            <span className="text-purple-400" id="conv_anos_prescricao">8.00</span> <span className="text-gray-400">anos</span>
+                          </div>
                         </div>
                       </div>
 
