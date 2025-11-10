@@ -1407,37 +1407,21 @@ const CalculadorasCompletas = () => {
                 </div>
               )}
 
-              {/* PROGRESSÃO COMPLETA - OLD */}
+              {/* PROGRESSÃO - OLD */}
               {activeCalc === 'progressao-old' && (
-                <ProgressaoRegimeCompleta
-                  onCalcular={calcularGenerico}
-                  loading={loading}
-                />
-              )}
-
-              {/* HORAS EXTRAS */}
-              {activeCalc === 'horas-extras' && (
-                <div className="space-y-4">
-                  <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
-                    <h3 className="text-green-400 font-semibold mb-2">⏰ Horas Extras e Reflexos</h3>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-300 mb-2">Salário Mensal (R$)</label>
-                    <input type="number" value={horasExtras.salario_mensal} onChange={(e) => setHorasExtras({...horasExtras, salario_mensal: parseFloat(e.target.value)})} className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-300 mb-2">Horas Extras/Mês</label>
-                    <input type="number" value={horasExtras.horas_mensais} onChange={(e) => setHorasExtras({...horasExtras, horas_mensais: parseInt(e.target.value)})} className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white" />
-                  </div>
-                  <button onClick={calcularHorasExtras} disabled={loading} className="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg">
-                    {loading ? 'Calculando...' : '⏰ CALCULAR HORAS EXTRAS'}
-                  </button>
+                <div className="text-center py-12">
+                  <div className="text-6xl mb-4">📈</div>
+                  <p className="text-gray-400">Progressão - Backend 100%</p>
                 </div>
               )}
 
-              {/* CORREÇÃO MONETÁRIA COMPLETA */}
-              {activeCalc === 'correcao' && (
-                <CorrecaoMonetariaCompleta
+              {/* CORREÇÃO - PLACEHOLDER */}
+              {activeCalc === 'correcao-old' && (
+                <div className="text-center py-12">
+                  <div className="text-6xl mb-4">💰</div>
+                  <p className="text-gray-400">Correção - Backend 100%</p>
+                </div>
+              )}
                   onCalcular={calcularGenerico}
                   loading={loading}
                 />
