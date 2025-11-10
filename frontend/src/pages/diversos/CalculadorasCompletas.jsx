@@ -1235,12 +1235,90 @@ const CalculadorasCompletas = () => {
               {/* DOSIMETRIA */}
               {activeCalc === 'dosimetria' && renderDosimetriaForm()}
 
-              {/* PRESCRIÇÃO */}
+              {/* PRESCRIÇÃO PENAL COMPLETA */}
               {activeCalc === 'prescricao' && (
-                <div className="text-center py-12">
-                  <div className="text-6xl mb-4">⚖️</div>
-                  <p className="text-gray-400 text-lg">Prescrição Penal</p>
-                  <p className="text-green-500 text-sm">Backend 100% funcional</p>
+                <div className="space-y-6">
+                  {/* Gestão de Crimes */}
+                  <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border-2 border-blue-500/30 rounded-xl p-5">
+                    <h3 className="text-xl font-bold text-blue-400 mb-4">📚 Crimes para Verificar Prescrição</h3>
+                    <button onClick={() => toast.info('Adicionar crime em desenvolvimento')} className="px-4 py-2 bg-green-600/30 border-2 border-green-600 text-green-400 rounded-lg font-bold">
+                      ➕ Adicionar Crime
+                    </button>
+                  </div>
+
+                  {/* Formulário */}
+                  <div className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-2 border-blue-500/30 rounded-xl p-6">
+                    <h3 className="text-2xl font-bold text-blue-400 mb-2">📅 Prescrição Penal (art. 109 CP)</h3>
+                    <p className="text-gray-400 mb-6">Cálculo do prazo prescricional conforme pena máxima em abstrato</p>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-bold text-gray-300 mb-2">Tipo Penal</label>
+                        <input
+                          type="text"
+                          placeholder="Ex: Art. 157 §2º (Roubo majorado)"
+                          className="w-full bg-gray-800/50 border-2 border-gray-700 rounded-lg px-4 py-3 text-white"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-bold text-gray-300 mb-2">Pena Máxima</label>
+                        <div className="flex gap-2">
+                          <input
+                            type="number"
+                            defaultValue="8"
+                            id="pena_max_prescricao"
+                            className="flex-1 bg-gray-800/50 border-2 border-gray-700 rounded-lg px-4 py-3 text-white text-lg font-bold"
+                          />
+                          <select className="bg-purple-600 border-2 border-purple-500 rounded-lg px-4 py-3 text-white font-bold">
+                            <option value="anos">Anos</option>
+                            <option value="meses">Meses</option>
+                            <option value="dias">Dias</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-bold text-gray-300 mb-2">Data do Fato</label>
+                        <input
+                          type="date"
+                          defaultValue="2020-01-01"
+                          id="data_fato_prescricao"
+                          className="w-full bg-gray-800/50 border-2 border-gray-700 rounded-lg px-4 py-3 text-white"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-bold text-gray-300 mb-2">Marcos Interruptivos (opcional)</label>
+                        <button className="w-full px-4 py-2 bg-blue-600/20 border border-blue-600 text-blue-400 rounded-lg">
+                          + Adicionar Marco Interruptivo
+                        </button>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={async () => {
+                        setLoading(true);
+                        try {
+                          const response = await axios.post(`${API_BASE}/api/calculadoras-completas/criminal/prescricao`, {
+                            pena_maxima_anos: parseInt(document.getElementById('pena_max_prescricao').value),
+                            data_fato: document.getElementById('data_fato_prescricao').value + 'T00:00:00Z',
+                            marcos_interruptivos: []
+                          });
+                          setResult(response.data);
+                          toast.success('Prescrição calculada!');
+                        } catch (error) {
+                          toast.error('Erro: ' + (error.response?.data?.detail || error.message));
+                        } finally {
+                          setLoading(false);
+                        }
+                      }}
+                      disabled={loading}
+                      className="w-full mt-6 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold text-xl rounded-xl"
+                    >
+                      {loading ? '⚙️ Calculando...' : '📅 CALCULAR PRESCRIÇÃO'}
+                    </button>
+                  </div>
                 </div>
               )}
 
