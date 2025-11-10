@@ -1422,10 +1422,6 @@ const CalculadorasCompletas = () => {
                   <p className="text-gray-400">Correção - Backend 100%</p>
                 </div>
               )}
-                  onCalcular={calcularGenerico}
-                  loading={loading}
-                />
-              )}
 
               {/* JUROS DE MORA */}
               {activeCalc === 'juros-mora' && (
