@@ -1553,34 +1553,34 @@ const CalculadorasCompletas = () => {
               {activeCalc === 'sursis' && <div className="text-center py-12"><div className="text-6xl mb-4">✅</div><p className="text-gray-400">Sursis - Backend 100%</p></div>}
 
               {/* NOVOS FORMULÁRIOS - CÍVEIS */}
-              {activeCalc === 'multa-contratual' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
-              {activeCalc === 'dano-moral' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
-              {activeCalc === 'astreintes' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
-              {activeCalc === 'lucros-cessantes' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
-              {activeCalc === 'honorarios-sucumbenciais' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
+              {activeCalc === 'multa-contratual' &&  setResult(data)} loading={loading} />}
+              {activeCalc === 'dano-moral' &&  setResult(data)} loading={loading} />}
+              {activeCalc === 'astreintes' &&  setResult(data)} loading={loading} />}
+              {activeCalc === 'lucros-cessantes' &&  setResult(data)} loading={loading} />}
+              {activeCalc === 'honorarios-sucumbenciais' &&  setResult(data)} loading={loading} />}
 
               {/* NOVOS FORMULÁRIOS - TRIBUTÁRIAS */}
-              {activeCalc === 'prescricao-tributaria' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
-              {activeCalc === 'multa-fiscal' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
-              {activeCalc === 'restituicao' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
+              {activeCalc === 'prescricao-tributaria' &&  setResult(data)} loading={loading} />}
+              {activeCalc === 'multa-fiscal' &&  setResult(data)} loading={loading} />}
+              {activeCalc === 'restituicao' &&  setResult(data)} loading={loading} />}
 
               {/* NOVOS FORMULÁRIOS - TRABALHISTAS */}
-              {activeCalc === 'atraso-salarial' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
-              {activeCalc === 'fgts' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
+              {activeCalc === 'atraso-salarial' &&  setResult(data)} loading={loading} />}
+              {activeCalc === 'fgts' &&  setResult(data)} loading={loading} />}
               {activeCalc === 'perdas-danos' && <div className="text-center py-12"><div className="text-6xl mb-4">✅</div><p className="text-gray-400">Backend 100% funcional</p></div>}
 
               {/* NOVOS FORMULÁRIOS - FINANCEIRAS */}
-              {activeCalc === 'juros-simples' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
+              {activeCalc === 'juros-simples' &&  setResult(data)} loading={loading} />}
               {activeCalc === 'lucro-real' && <div className="text-center py-12"><div className="text-6xl mb-4">✅</div><p className="text-gray-400">Backend 100% funcional</p></div>}
-              {activeCalc === 'ebitda' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
-              {activeCalc === 'fluxo-caixa' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
+              {activeCalc === 'ebitda' &&  setResult(data)} loading={loading} />}
+              {activeCalc === 'fluxo-caixa' &&  setResult(data)} loading={loading} />}
 
               {/* NOVOS FORMULÁRIOS - PERICIAIS */}
-              {activeCalc === 'amplitude' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
-              {activeCalc === 'entropia' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
+              {activeCalc === 'amplitude' &&  setResult(data)} loading={loading} />}
+              {activeCalc === 'entropia' &&  setResult(data)} loading={loading} />}
 
               {/* NOVOS FORMULÁRIOS - DIVERSAS */}
-              {activeCalc === 'conversao-moedas' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
+              {activeCalc === 'conversao-moedas' &&  setResult(data)} loading={loading} />}
 
               {/* Nenhuma calculadora sem interface - TODAS IMPLEMENTADAS! */}
               {![
