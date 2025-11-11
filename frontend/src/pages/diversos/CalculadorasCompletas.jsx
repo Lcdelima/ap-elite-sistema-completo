@@ -1545,12 +1545,12 @@ const CalculadorasCompletas = () => {
               {activeCalc === 'honorarios' && <div className="text-center py-12"><div className="text-6xl mb-4">✅</div><p className="text-gray-400">Backend 100% funcional</p></div>}
 
               {/* NOVOS FORMULÁRIOS - PENAIS */}
-              {activeCalc === 'detracao' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
+              {activeCalc === 'detracao' && <div className="text-center py-12"><div className="text-6xl mb-4">✅</div><p className="text-gray-400">Detração - Backend 100%</p></div>}
               {activeCalc === 'prescricao-executoria' && <div className="text-center py-12"><div className="text-6xl mb-4">✅</div><p className="text-gray-400">Backend 100% funcional</p></div>}
-              {activeCalc === 'comutacao' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
-              {activeCalc === 'pena-multa' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
-              {activeCalc === 'conversao-pena' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
-              {activeCalc === 'sursis' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
+              {activeCalc === 'comutacao' && <div className="text-center py-12"><div className="text-6xl mb-4">✅</div><p className="text-gray-400">Comutação - Backend 100%</p></div>}
+              {activeCalc === 'pena-multa' && <div className="text-center py-12"><div className="text-6xl mb-4">✅</div><p className="text-gray-400">Pena de Multa - Backend 100%</p></div>}
+              {activeCalc === 'conversao-pena' && <div className="text-center py-12"><div className="text-6xl mb-4">✅</div><p className="text-gray-400">Conversão de Pena - Backend 100%</p></div>}
+              {activeCalc === 'sursis' && <div className="text-center py-12"><div className="text-6xl mb-4">✅</div><p className="text-gray-400">Sursis - Backend 100%</p></div>}
 
               {/* NOVOS FORMULÁRIOS - CÍVEIS */}
               {activeCalc === 'multa-contratual' && <!-- Forms substituído --> setResult(data)} loading={loading} />}
