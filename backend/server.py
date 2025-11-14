@@ -564,6 +564,14 @@ try:
 except ImportError as e:
     logger.error(f"⚠️ Calculadoras Completas module not available: {e}")
 
+# Import and include ERBs Integrations module (APIs: OpenCellID, WiGLE, AbuseIPDB)
+try:
+    from erbs_integrations import router as erbs_integrations_router
+    app.include_router(erbs_integrations_router)
+    logger.info("✅ ERBs Integrations loaded (OpenCellID, WiGLE, AbuseIPDB)")
+except ImportError as e:
+    logger.error(f"⚠️ ERBs Integrations module not available: {e}")
+
 # Include the router in the main app
 app.include_router(api_router)
 
