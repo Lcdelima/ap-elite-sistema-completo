@@ -66,14 +66,25 @@ async def search_opencellid(
         raise HTTPException(status_code=503, detail="Token OpenCellID não configurado")
     
     try:
+        # Converter radius em metros para graus (bounding box)
+        import math
+        lat_delta = radius / 111111  # 1 grau = 111.111 km
+        lon_delta = radius / (111111 * math.cos(math.radians(lat)))
+        
+        latmin = lat - lat_delta
+        latmax = lat + lat_delta
+        lonmin = lon - lon_delta
+        lonmax = lon + lon_delta
+        
         async with httpx.AsyncClient() as client:
-            # OpenCellID API
-            url = f"https://opencellid.org/cell/getInArea"
+            # OpenCellID API com bounding box correto
+            url = "https://opencellid.org/cell/getInArea"
             params = {
                 "token": OPENCELLID_TOKEN,
-                "lat": lat,
-                "lon": lon,
-                "radius": radius,
+                "latmin": latmin,
+                "latmax": latmax,
+                "lonmin": lonmin,
+                "lonmax": lonmax,
                 "format": "json",
                 "limit": 100
             }
@@ -92,8 +103,8 @@ async def search_opencellid(
                         "operadora": cell.get("radio", "Unknown"),
                         "mcc": cell.get("mcc"),
                         "mnc": cell.get("mnc"),
-                        "lac": cell.get("area", ""),
-                        "cid": cell.get("cell", ""),
+                        "lac": str(cell.get("area", "")),
+                        "cid": str(cell.get("cell", "")),
                         "latitude": cell.get("lat"),
                         "longitude": cell.get("lon"),
                         "raio_metros": cell.get("range", 500),
@@ -118,7 +129,8 @@ async def search_opencellid(
                     "erbs_encontradas": len(erbs_encontradas),
                     "erbs": erbs_encontradas,
                     "total_api": len(data.get("cells", [])),
-                    "localizacao": {"lat": lat, "lon": lon, "radius": radius}
+                    "localizacao": {"lat": lat, "lon": lon, "radius": radius},
+                    "bounding_box": {"latmin": latmin, "latmax": latmax, "lonmin": lonmin, "lonmax": lonmax}
                 }
             else:
                 return {
