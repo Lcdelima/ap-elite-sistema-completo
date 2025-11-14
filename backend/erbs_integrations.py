@@ -159,8 +159,11 @@ async def search_wigle(
                 "longrange2": lon + radius
             }
             
+            # Correct Basic Auth encoding
+            auth_string = f"{WIGLE_API_NAME}:{WIGLE_API_TOKEN}"
+            encoded_auth = base64.b64encode(auth_string.encode()).decode()
             headers = {
-                "Authorization": f"Basic {WIGLE_API_NAME}:{WIGLE_API_TOKEN}"
+                "Authorization": f"Basic {encoded_auth}"
             }
             
             response = await client.get(url, params=params, headers=headers, timeout=30.0)
