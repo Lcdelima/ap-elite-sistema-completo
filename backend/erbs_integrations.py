@@ -16,6 +16,7 @@ from typing import Optional, List
 import os
 import uuid
 import httpx
+import base64
 from datetime import datetime, timezone
 
 router = APIRouter(prefix="/api/erbs/integrations", tags=["ERBs Integrations"])
