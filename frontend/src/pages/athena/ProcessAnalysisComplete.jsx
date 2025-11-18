@@ -75,25 +75,27 @@ const ProcessAnalysisComplete = () => {
       const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
       const token = localStorage.getItem('ap_elite_token');
       
-      const formDataToSend = new FormData();
-      Object.keys(formData).forEach(key => {
-        if (key === 'documents' && formData.documents.length > 0) {
-          formData.documents.forEach(file => {
-            formDataToSend.append('documents', file);
-          });
-        } else if (key !== 'documents') {
-          // Always send the value, even if empty
-          formDataToSend.append(key, formData[key] || '');
-        }
-      });
+      // Preparar dados como JSON (não FormData)
+      const payload = {
+        cnj: formData.numero_processo || '',
+        comarca: formData.comarca || '',
+        vara: formData.vara || '',
+        tipo_processo: formData.tipo_acao || 'criminal',
+        partes: formData.parte_principal || '',
+        legal_basis: formData.legal_basis || 'ordem_judicial',
+        legal_document: formData.legal_document || '',
+        prioridade: formData.priority || 'normal',
+        prazo: formData.prazo || '15',
+        tags: formData.tags ? formData.tags.split(',').map(t => t.trim()) : []
+      };
 
-      await axios.post(
+      const response = await axios.post(
         `${BACKEND_URL}/api/processo/analises`,
-        formDataToSend,
+        payload,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'application/json'
           }
         }
       );
@@ -104,7 +106,8 @@ const ProcessAnalysisComplete = () => {
       resetForm();
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Erro ao criar análise: ' + (error.response?.data?.detail || error.message));
+      const errorMsg = error.response?.data?.detail || error.message;
+      toast.error('Erro ao criar análise: ' + (Array.isArray(errorMsg) ? errorMsg[0].msg : errorMsg));
     } finally {
       setAnalyzing(false);
     }
