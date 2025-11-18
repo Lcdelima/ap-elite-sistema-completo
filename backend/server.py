@@ -572,6 +572,14 @@ try:
 except ImportError as e:
     logger.error(f"⚠️ ERBs Integrations module not available: {e}")
 
+# Import and include Análise Processual module
+try:
+    from modules.analise_processual import router as analise_processual_router
+    app.include_router(analise_processual_router)
+    logger.info("✅ Análise Processual com IA loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ Análise Processual module not available: {e}")
+
 # Include the router in the main app
 app.include_router(api_router)
 
