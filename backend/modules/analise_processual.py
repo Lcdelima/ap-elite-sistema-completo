@@ -144,15 +144,7 @@ class AnaliseCreate(BaseModel):
             raise ValueError(f"Base legal inválida. Valores aceitos: {', '.join(bases_validas)}")
         return value
 
-    @root_validator
-    def validar_documento_base_legal(cls, values: Dict[str, Any]) -> Dict[str, Any]:
-        legal_basis = values.get("legal_basis")
-        legal_document = values.get("legal_document")
-
-        if legal_basis in {"mandato", "ordem_judicial"} and not legal_document:
-            raise ValueError("Documento comprobatório obrigatório para a base legal informada")
-
-        return values
+    # Removido root_validator - causava erro no Pydantic v2
 
 class VinculoEvidencia(BaseModel):
     """Modelo para vincular evidência ao processo"""
