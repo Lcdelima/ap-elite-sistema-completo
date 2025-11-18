@@ -400,7 +400,7 @@ const ProcessAnalysisComplete = () => {
                     </label>
                     <input
                       type="text"
-                      required
+                      
                       value={formData.processNumber}
                       onChange={(e) => setFormData({...formData, processNumber: e.target.value})}
                       placeholder="0000000-00.0000.0.00.0000"
@@ -427,7 +427,7 @@ const ProcessAnalysisComplete = () => {
                     </label>
                     <input
                       type="text"
-                      required
+                      
                       value={formData.processTitle}
                       onChange={(e) => setFormData({...formData, processTitle: e.target.value})}
                       placeholder="Ex: Ação de Cobrança, Homicídio Doloso..."
@@ -440,7 +440,7 @@ const ProcessAnalysisComplete = () => {
                     </label>
                     <input
                       type="text"
-                      required
+                      
                       value={formData.court}
                       onChange={(e) => setFormData({...formData, court: e.target.value})}
                       placeholder="Ex: TJSP, TJRJ..."
