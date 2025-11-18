@@ -171,8 +171,10 @@ const ProcessAnalysisComplete = () => {
 
   const stats = getStats();
   const filteredAnalyses = analyses.filter(a =>
-    a.processTitle?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    a.processNumber?.includes(searchTerm)
+    a.cnj?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    a.comarca?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    a.tipo_processo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    searchTerm === ''
   );
 
   const headerActions = [
