@@ -580,6 +580,14 @@ try:
 except ImportError as e:
     logger.error(f"⚠️ Análise Processual module not available: {e}")
 
+# Import and include Jurídico Completo module
+try:
+    from juridico_completo import router as juridico_router
+    app.include_router(juridico_router)
+    logger.info("✅ Jurídico Completo loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ Jurídico Completo module not available: {e}")
+
 # Include the router in the main app
 app.include_router(api_router)
 
