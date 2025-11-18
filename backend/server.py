@@ -612,6 +612,14 @@ try:
 except ImportError as e:
     logger.error(f"⚠️ Document Library module not available: {e}")
 
+# Import and include IA Athena module (Perita Forense Inteligente)
+try:
+    from ia_athena import router as ia_athena_router
+    app.include_router(ia_athena_router)
+    logger.info("✅ IA Athena (Perita Forense) loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ IA Athena module not available: {e}")
+
 # Include the router in the main app
 app.include_router(api_router)
 
