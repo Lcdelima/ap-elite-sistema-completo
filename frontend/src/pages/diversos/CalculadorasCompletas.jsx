@@ -1553,7 +1553,108 @@ const CalculadorasCompletas = () => {
               {activeCalc === 'sursis' && <div className="text-center py-12"><div className="text-6xl mb-4">✅</div><p className="text-gray-400">Sursis - Backend 100%</p></div>}
 
               {/* NOVOS FORMULÁRIOS - CÍVEIS */}
-              {activeCalc === 'multa-contratual' && <div className="text-center py-12"><div className="text-6xl mb-4">✅</div><p className="text-gray-400">Backend 100%</p></div>}
+              {/* MULTA CONTRATUAL COMPLETA */}
+              {activeCalc === 'multa-contratual' && (
+                <div className="space-y-6">
+                  <div className="bg-gradient-to-r from-orange-500/10 to-red-500/10 border-2 border-orange-500/30 rounded-xl p-6">
+                    <h3 className="text-2xl font-bold text-orange-400 mb-2">📋 Multa Contratual / Cláusula Penal</h3>
+                    <p className="text-gray-400 mb-6">CC art. 408-416 - Cálculo de multa por inadimplemento contratual</p>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-bold text-gray-300 mb-2">Descrição do Contrato</label>
+                        <input
+                          type="text"
+                          placeholder="Ex: Contrato de prestação de serviços, Locação comercial"
+                          id="desc_contrato"
+                          className="w-full bg-gray-800/50 border-2 border-gray-700 rounded-lg px-4 py-3 text-white"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-bold text-gray-300 mb-2">Valor do Contrato (R$)</label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          defaultValue="100000"
+                          id="valor_contrato_multa"
+                          className="w-full bg-gray-800/50 border-2 border-gray-700 rounded-lg px-4 py-3 text-white text-lg font-bold"
+                        />
+                        <div className="mt-2 text-sm text-gray-400">
+                          Por extenso: R$ <span id="extenso_contrato">100.000,00</span>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-bold text-gray-300 mb-2">Percentual da Multa Contratual (%)</label>
+                        <div className="flex gap-2">
+                          <input
+                            type="number"
+                            step="0.1"
+                            defaultValue="10"
+                            id="pct_multa_contratual"
+                            className="flex-1 bg-gray-800/50 border-2 border-gray-700 rounded-lg px-4 py-3 text-white text-lg font-bold"
+                          />
+                          <div className="bg-purple-600 border-2 border-purple-500 rounded-lg px-6 py-3 text-white font-bold flex items-center">
+                            %
+                          </div>
+                        </div>
+                        <div className="mt-2 text-xs text-gray-400">
+                          Comum: 10-20% | Grave: 20-30% | Máximo legal: até 100%
+                        </div>
+                      </div>
+
+                      {/* Preview do Cálculo */}
+                      <div className="bg-orange-500/10 border-2 border-orange-500 rounded-lg p-4">
+                        <div className="text-orange-400 font-bold mb-2">📊 Preview do Cálculo:</div>
+                        <div className="grid grid-cols-2 gap-4 text-sm">
+                          <div>
+                            <span className="text-gray-400">Valor do contrato:</span>
+                            <span className="text-white font-bold ml-2" id="preview_valor_contrato">R$ 100.000,00</span>
+                          </div>
+                          <div>
+                            <span className="text-gray-400">Percentual multa:</span>
+                            <span className="text-white font-bold ml-2" id="preview_pct">10%</span>
+                          </div>
+                          <div className="col-span-2">
+                            <span className="text-gray-400">Valor da multa:</span>
+                            <span className="text-orange-400 font-bold text-xl ml-2" id="preview_multa">R$ 10.000,00</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={async () => {
+                        setLoading(true);
+                        try {
+                          const valor = parseFloat(document.getElementById('valor_contrato_multa').value);
+                          const pct = parseFloat(document.getElementById('pct_multa_contratual').value);
+                          const multa = valor * (pct / 100);
+                          
+                          const resultado = {
+                            valor_contrato: valor,
+                            percentual_multa: pct,
+                            valor_multa: multa,
+                            fundamentacao: 'CC art. 408-416 - Cláusula penal'
+                          };
+                          
+                          setResult(resultado);
+                          toast.success('Multa contratual calculada!');
+                        } catch (error) {
+                          toast.error('Erro: ' + error.message);
+                        } finally {
+                          setLoading(false);
+                        }
+                      }}
+                      disabled={loading}
+                      className="w-full mt-6 py-4 bg-gradient-to-r from-orange-500 to-red-600 text-white font-bold text-xl rounded-xl"
+                    >
+                      {loading ? '⚙️ Calculando...' : '📋 CALCULAR MULTA CONTRATUAL'}
+                    </button>
+                  </div>
+                </div>
+              )}
               {activeCalc === 'dano-moral' && <div className="text-center py-12"><div className="text-6xl mb-4">✅</div><p className="text-gray-400">Backend 100%</p></div>}
               {activeCalc === 'astreintes' && <div className="text-center py-12"><div className="text-6xl mb-4">✅</div><p className="text-gray-400">Backend 100%</p></div>}
               {activeCalc === 'lucros-cessantes' && <div className="text-center py-12"><div className="text-6xl mb-4">✅</div><p className="text-gray-400">Backend 100%</p></div>}
