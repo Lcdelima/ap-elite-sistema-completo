@@ -88,7 +88,7 @@ const ProcessAnalysisComplete = () => {
       });
 
       await axios.post(
-        `${BACKEND_URL}/api/athena/process-analysis`,
+        `${BACKEND_URL}/api/processo/analises`,
         formDataToSend,
         {
           headers: {
@@ -98,13 +98,13 @@ const ProcessAnalysisComplete = () => {
         }
       );
 
-      toast.success('Análise iniciada com sucesso!');
+      toast.success('Análise criada com sucesso!');
       setShowModal(false);
       fetchAnalyses();
       resetForm();
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Erro ao iniciar análise');
+      toast.error('Erro ao criar análise: ' + (error.response?.data?.detail || error.message));
     } finally {
       setAnalyzing(false);
     }
