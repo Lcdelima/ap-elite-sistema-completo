@@ -486,33 +486,6 @@ Gere um resumo técnico profissional deste processo incluindo:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erro na IA: {str(e)}")
 
-## Observações
-A análise detalhada revela [observações importantes].
-        """,
-        "referencias": [
-            {"pagina": 45, "topico": "Questão de mérito"},
-            {"pagina": 67, "topico": "Tese defensiva"},
-            {"pagina": 89, "topico": "Evidências digitais"}
-        ],
-        "gerado_em": datetime.now(timezone.utc).isoformat()
-    }
-    
-    await db.analises_processuais.update_one(
-        {"id": analise_id},
-        {"$set": {"ia_resumo": resumo, "updated_at": _now_iso()}},
-    )
-
-    await _append_timeline(
-        analise_id,
-        {
-            "evento": "IA: Resumo gerado",
-            "detalhes": "Análise técnica dos autos concluída",
-            "responsavel": "Sistema IA",
-        },
-    )
-
-    return resumo
-
 @router.post("/analises/{analise_id}/ia/prescricao")
 async def ia_prescricao(analise_id: str):
     """
