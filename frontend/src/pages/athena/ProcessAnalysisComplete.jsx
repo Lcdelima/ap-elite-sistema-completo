@@ -53,14 +53,15 @@ const ProcessAnalysisComplete = () => {
       const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
       const token = localStorage.getItem('ap_elite_token');
       
-      const res = await axios.get(`${BACKEND_URL}/api/athena/process-analysis`, {
+      const res = await axios.get(`${BACKEND_URL}/api/processo/analises`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
-      setAnalyses(res.data.analyses || []);
+      setAnalyses(res.data.items || []);
+      toast.success('Análises carregadas com sucesso!');
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Erro ao carregar análises');
+      toast.error('Erro ao carregar análises: ' + (error.response?.data?.detail || error.message));
     } finally {
       setLoading(false);
     }
