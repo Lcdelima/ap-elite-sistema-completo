@@ -5,7 +5,7 @@ duplicação de código e garantir validações consistentes em todos os fluxos.
 """
 
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form
-from pydantic import BaseModel, Field, validator, root_validator
+from pydantic import BaseModel, Field, validator
 from typing import Optional, Dict, Any
 from datetime import datetime, timezone, timedelta
 import uuid
