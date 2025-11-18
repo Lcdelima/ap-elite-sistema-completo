@@ -423,41 +423,68 @@ async def indexar_processo(analise_id: str):
 @router.post("/analises/{analise_id}/ia/resumo")
 async def ia_resumo(analise_id: str):
     """
-    IA: Resumo técnico dos autos com referências a páginas
+    IA REAL: Resumo técnico dos autos usando IA Athena
     """
     analise = await _get_analise_or_404(analise_id)
 
     if not analise.get("indexado"):
         raise HTTPException(status_code=400, detail="Execute a indexação antes de gerar o resumo")
 
-    # Simular análise de IA
-    resumo = {
-        "id": str(uuid.uuid4()),
-        "tipo": "resumo",
-        "conteudo": f"""
-# Resumo Técnico dos Autos
+    try:
+        from ia_athena import EMERGENT_LLM_KEY
+        from emergentintegrations.llm.chat import LlmChat, UserMessage
+        
+        # Inicializar IA Athena
+        chat = LlmChat(
+            api_key=EMERGENT_LLM_KEY,
+            session_id=f"resumo_{analise_id}",
+            system_message="Você é Athena, perita forense. Gere resumos técnicos de processos judiciais."
+        ).with_model("openai", "gpt-4o")
+        
+        # Preparar contexto do processo
+        contexto = f"""
+Processo: {analise.get('cnj', 'N/A')}
+Comarca/Vara: {analise.get('comarca', 'N/A')} - {analise.get('vara', 'N/A')}
+Tipo: {analise.get('tipo_processo', 'N/A')}
+Partes: {analise.get('partes', 'N/A')}
+Base Legal: {analise.get('legal_basis', 'N/A')}
+Prazo: {analise.get('prazo', 'N/A')} dias
 
-## Partes
-- **Autor**: {analise['partes'].get('autor', 'N/A')}
-- **Réu**: {analise['partes'].get('reu', 'N/A')}
-
-## Comarca/Vara
-{analise['comarca']} - {analise['vara']}
-
-## Tipo de Processo
-{analise['tipo_processo']}
-
-## Fatos Principais
-O presente caso trata de [fatos principais do processo]. As evidências coletadas incluem [resumo das evidências]. 
-
-## Pontos Relevantes
-1. Questão de mérito principal (ref. pág. 45-48)
-2. Tese defensiva apresentada (ref. pág. 67-70)
-3. Elementos probatórios digitais (ref. pág. 89-95)
-
-## Jurisprudência Aplicável
-- STJ REsp 1234567 - Tema relevante
-- TJ-SP Apelação 5678901 - Precedente similar
+Gere um resumo técnico profissional deste processo incluindo:
+1. Identificação completa
+2. Partes envolvidas
+3. Tipo de ação
+4. Prazos processuais
+5. Pontos relevantes
+"""
+        
+        # Enviar para IA
+        mensagem = UserMessage(text=contexto)
+        resposta_ia = await chat.send_message(mensagem)
+        
+        # Salvar resumo
+        resumo = {
+            "id": str(uuid.uuid4()),
+            "tipo": "resumo",
+            "conteudo": resposta_ia,
+            "gerado_por": "IA Athena (GPT-4o)",
+            "timestamp": _now_iso()
+        }
+        
+        await db.analises_processuais.update_one(
+            {"id": analise_id},
+            {"$set": {"ia_resumo": resumo, "updated_at": _now_iso()}},
+        )
+        
+        await _append_timeline(analise_id, {
+            "evento": "IA: Resumo gerado com sucesso",
+            "resumo_id": resumo["id"]
+        })
+        
+        return resumo
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erro na IA: {str(e)}")
 
 ## Observações
 A análise detalhada revela [observações importantes].
