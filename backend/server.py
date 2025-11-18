@@ -588,6 +588,30 @@ try:
 except ImportError as e:
     logger.error(f"⚠️ Jurídico Completo module not available: {e}")
 
+# Import and include Documentos Jurídicos module
+try:
+    from documentos_juridicos import router as documentos_router
+    app.include_router(documentos_router)
+    logger.info("✅ Documentos Jurídicos loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ Documentos Jurídicos module not available: {e}")
+
+# Import and include Contracts modules
+try:
+    from contracts_complete import contracts_router
+    app.include_router(contracts_router)
+    logger.info("✅ Contracts Complete loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ Contracts Complete module not available: {e}")
+
+# Import and include Document Library module
+try:
+    from document_library_complete import library_complete_router
+    app.include_router(library_complete_router)
+    logger.info("✅ Document Library loaded successfully")
+except ImportError as e:
+    logger.error(f"⚠️ Document Library module not available: {e}")
+
 # Include the router in the main app
 app.include_router(api_router)
 
