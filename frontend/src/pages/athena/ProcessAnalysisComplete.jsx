@@ -75,18 +75,22 @@ const ProcessAnalysisComplete = () => {
       const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
       const token = localStorage.getItem('ap_elite_token');
       
-      // Preparar dados como JSON (não FormData)
+      // Mapeamento correto conforme AnaliseCreate do backend
       const payload = {
-        cnj: formData.numero_processo || '',
-        comarca: formData.comarca || '',
-        vara: formData.vara || '',
-        tipo_processo: formData.tipo_acao || 'criminal',
-        partes: formData.parte_principal || '',
-        legal_basis: formData.legal_basis || 'ordem_judicial',
-        legal_document: formData.legal_document || '',
-        prioridade: formData.priority || 'normal',
-        prazo: formData.prazo || '15',
-        tags: formData.tags ? formData.tags.split(',').map(t => t.trim()) : []
+        cnj: formData.processNumber || null,
+        comarca: formData.court || "Não informado",  // min_length=2
+        vara: formData.chamber || "Não informado",   // min_length=2
+        tipo_processo: formData.processType || "criminal",
+        partes: {  // Dict com autor e reu
+          autor: formData.mainParty || "Não informado",
+          reu: formData.opposingParty || "Não informado"
+        },
+        legal_basis: formData.legalBasis || "ordem_judicial",
+        legal_document: formData.legalDocument || null,
+        prioridade: parseInt(formData.priority) || 2,
+        prazo: formData.deadline || null,
+        objetivo: formData.analysisObjective || null,
+        responsavel: formData.responsible || "Sistema"  // min_length=2
       };
 
       const response = await axios.post(
@@ -105,9 +109,17 @@ const ProcessAnalysisComplete = () => {
       fetchAnalyses();
       resetForm();
     } catch (error) {
-      console.error('Error:', error);
-      const errorMsg = error.response?.data?.detail || error.message;
-      toast.error('Erro ao criar análise: ' + (Array.isArray(errorMsg) ? errorMsg[0].msg : errorMsg));
+      console.error('Error completo:', error);
+      const errorDetail = error.response?.data?.detail;
+      let errorMsg = 'Erro desconhecido';
+      
+      if (Array.isArray(errorDetail)) {
+        errorMsg = errorDetail.map(e => `${e.loc.join('.')}: ${e.msg}`).join(', ');
+      } else if (typeof errorDetail === 'string') {
+        errorMsg = errorDetail;
+      }
+      
+      toast.error('Erro: ' + errorMsg);
     } finally {
       setAnalyzing(false);
     }
