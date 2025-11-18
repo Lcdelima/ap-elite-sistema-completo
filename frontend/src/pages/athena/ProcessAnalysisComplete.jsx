@@ -75,22 +75,22 @@ const ProcessAnalysisComplete = () => {
       const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
       const token = localStorage.getItem('ap_elite_token');
       
-      // Mapeamento correto conforme AnaliseCreate do backend
+      // Mapeamento COMPLETO e CORRETO conforme AnaliseCreate do backend
       const payload = {
         cnj: formData.processNumber || null,
-        comarca: formData.court || "Não informado",  // min_length=2
-        vara: formData.chamber || "Não informado",   // min_length=2
-        tipo_processo: formData.processType || "criminal",
-        partes: {  // Dict com autor e reu
-          autor: formData.mainParty || "Não informado",
-          reu: formData.opposingParty || "Não informado"
+        comarca: formData.court || "Não informado",  // OBRIGATÓRIO min_length=2
+        vara: formData.vara || "Não informado",       // OBRIGATÓRIO min_length=2
+        tipo_processo: formData.processType || "civil",  // OBRIGATÓRIO
+        partes: {  // OBRIGATÓRIO - Dict com autor e reu
+          autor: formData.plaintiff || "Não informado",
+          reu: formData.defendant || "Não informado"
         },
-        legal_basis: formData.legalBasis || "ordem_judicial",
-        legal_document: formData.legalDocument || null,
-        prioridade: parseInt(formData.priority) || 2,
-        prazo: formData.deadline || null,
-        objetivo: formData.analysisObjective || null,
-        responsavel: formData.responsible || "Sistema"  // min_length=2
+        legal_basis: formData.legalBasis || "mandato",  // OBRIGATÓRIO
+        legal_document: formData.legalDocument || null,  // Opcional
+        prioridade: parseInt(formData.priority) || 2,    // OBRIGATÓRIO 1-4
+        prazo: formData.deadline || null,                 // Opcional
+        objetivo: formData.subject || null,               // Opcional
+        responsavel: formData.plaintiffLawyer || localStorage.getItem('user_name') || "Usuário"  // OBRIGATÓRIO min_length=2
       };
 
       const response = await axios.post(
