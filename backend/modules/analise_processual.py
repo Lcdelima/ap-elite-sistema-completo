@@ -75,14 +75,19 @@ def _parse_prazo(prazo: Optional[str]) -> Dict[str, Optional[str]]:
 
 def _calcular_risco(analise: Dict[str, Any]) -> int:
     """Simples heurística de risco baseada em prioridade e existência de nulidades."""
-
+    
+    if not analise:
+        return 2  # Risco médio se análise for None
+    
     prioridade = int(analise.get("prioridade", 2))
     base = prioridade
 
-    if analise.get("ia_nulidades", {}).get("nulidades_encontradas"):
+    nulidades = analise.get("ia_nulidades")
+    if nulidades and isinstance(nulidades, dict) and nulidades.get("nulidades_encontradas"):
         base += 1
 
-    if analise.get("ia_prescricao", {}).get("alerta"):
+    prescricao = analise.get("ia_prescricao")
+    if prescricao and isinstance(prescricao, dict) and prescricao.get("alerta"):
         base += 1
 
     return min(base, 5)
