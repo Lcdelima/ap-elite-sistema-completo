@@ -610,6 +610,12 @@ except ImportError as e:
 # Include the router in the main app
 app.include_router(api_router)
 
+# Evento de shutdown para fechar conexão MongoDB corretamente
+@app.on_event("shutdown")
+async def shutdown_event():
+    await close_database_connection()
+    logger.info("✅ MongoDB connection closed")
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
