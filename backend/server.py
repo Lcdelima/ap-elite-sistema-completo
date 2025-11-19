@@ -15,25 +15,12 @@ from datetime import datetime, timezone
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-# MongoDB connection
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+# MongoDB connection - NOVO: Importado do core
+from core.database import db, close_database_connection
+from core.security import get_current_user, JWT_SECRET
 
-# Security
+# Security - usar do core
 security = HTTPBearer(auto_error=False)
-
-# Auth dependency
-async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
-    if not credentials:
-        return None
-    try:
-        token_parts = credentials.credentials.split('_')
-        user_id = token_parts[1]
-        user = await db.users.find_one({"id": user_id, "active": True}, {"_id": 0, "password": 0})
-        return user
-    except:
-        return None
 
 # Create the main app without a prefix
 app = FastAPI(title="AP Elite - Perícia e Investigação Criminal")
