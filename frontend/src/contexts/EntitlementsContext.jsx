@@ -25,6 +25,8 @@ export const EntitlementsProvider = ({ children }) => {
     try {
       const token = localStorage.getItem('elite_token');
       if (!token) {
+        // Sem token - usar modo corporativo padrão (acesso total)
+        setPlanType('corporate');
         setLoading(false);
         return;
       }
@@ -63,7 +65,9 @@ export const EntitlementsProvider = ({ children }) => {
       
       setLoading(false);
     } catch (error) {
-      console.error('Erro ao carregar entitlements:', error);
+      // Em caso de erro, usar modo corporativo (acesso total) para não bloquear o sistema
+      console.warn('Entitlements não disponíveis, usando acesso total:', error.message);
+      setPlanType('corporate');
       setLoading(false);
     }
   };
