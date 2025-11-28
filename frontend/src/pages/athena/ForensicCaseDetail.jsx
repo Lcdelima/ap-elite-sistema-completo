@@ -258,60 +258,7 @@ const ForensicCaseDetail = () => {
         {activeTab === 'custodia' && (
           <div>
             <h2 className="text-xl font-semibold text-white mb-6">Timeline de Custódia</h2>
-            {caseData.custody_chain && caseData.custody_chain.length > 0 ? (
-              <div className="space-y-4">
-                {caseData.custody_chain.map((event, index) => (
-                  <div key={event.id} className="flex gap-4">
-                    <div className="flex flex-col items-center">
-                      <div className="w-10 h-10 rounded-full bg-cyan-500/20 border-2 border-cyan-500 flex items-center justify-center">
-                        <Shield className="text-cyan-300" size={18} />
-                      </div>
-                      {index < caseData.custody_chain.length - 1 && (
-                        <div className="w-0.5 h-full bg-slate-700 mt-2" />
-                      )}
-                    </div>
-
-                    <div className="flex-1 bg-slate-800/50 p-4 rounded-lg border border-slate-700/50 mb-4">
-                      <div className="flex items-start justify-between mb-2">
-                        <div>
-                          <h4 className="text-white font-medium capitalize">
-                            {event.event_type?.replace('_', ' ')}
-                          </h4>
-                          <p className="text-sm text-slate-300 mt-1">{event.description}</p>
-                        </div>
-                        <span className="text-xs text-slate-400">
-                          {new Date(event.timestamp).toLocaleString('pt-BR')}
-                        </span>
-                      </div>
-
-                      <div className="grid grid-cols-3 gap-4 mt-3 pt-3 border-t border-slate-700/50 text-sm">
-                        <div>
-                          <div className="text-xs text-slate-400">Usuário</div>
-                          <div className="text-white">{event.user_name || 'Sistema'}</div>
-                        </div>
-                        <div>
-                          <div className="text-xs text-slate-400">Local</div>
-                          <div className="text-white">{event.location || 'N/A'}</div>
-                        </div>
-                        {event.hash_after && (
-                          <div>
-                            <div className="text-xs text-slate-400">Hash</div>
-                            <div className="text-cyan-300 font-mono text-xs">
-                              {event.hash_after.substring(0, 16)}...
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="bg-slate-800/50 p-8 rounded-lg border border-slate-700/50 text-center text-slate-400">
-                <Shield size={48} className="mx-auto mb-4 text-slate-600" />
-                <p>Nenhum evento de custódia registrado</p>
-              </div>
-            )}
+            <CustodyTimeline events={caseData.custody_chain || []} />
           </div>
         )}
 
