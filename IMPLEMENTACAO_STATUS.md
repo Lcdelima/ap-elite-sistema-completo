@@ -337,8 +337,8 @@
 ## 🌐 URLS ATIVAS
 
 ### Site Institucional:
-- **Home**: https://elite-solution.preview.emergentagent.com/
-- **Solicitar Acesso**: https://elite-solution.preview.emergentagent.com/request-access
+- **Home**: https://legal-gravity.preview.emergentagent.com/
+- **Solicitar Acesso**: https://legal-gravity.preview.emergentagent.com/request-access
 
 ### Plataforma (após login):
 - **Evidence Vault**: `/athena/evidence-vault`
