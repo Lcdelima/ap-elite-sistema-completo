@@ -380,20 +380,14 @@ const ForensicCaseDetail = () => {
 
       {/* Upload Modal */}
       {showUpload && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-slate-800 rounded-lg border border-cyan-500/30 p-6 max-w-2xl w-full mx-4">
-            <h2 className="text-2xl font-bold text-white mb-4">Upload de Evidência</h2>
-            <p className="text-slate-400 mb-4">
-              Componente de upload será implementado. Use API: POST /api/evidences/upload
-            </p>
-            <button
-              onClick={() => setShowUpload(false)}
-              className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg"
-            >
-              Fechar
-            </button>
-          </div>
-        </div>
+        <EvidenceUpload
+          caseId={caseId}
+          onUploadComplete={() => {
+            setShowUpload(false);
+            fetchCaseDetails();
+          }}
+          onClose={() => setShowUpload(false)}
+        />
       )}
     </StandardModuleLayout>
   );
