@@ -28,7 +28,7 @@ router = APIRouter(prefix="/api/evidences", tags=["Evidences - Elite Gravitas"])
 
 # MongoDB connection
 MONGO_URL = os.environ.get("MONGO_URL", "mongodb://localhost:27017")
-DB_NAME = os.environ.get("DB_NAME", "test_database")
+DB_NAME = os.environ.get("DB_NAME", "apelite_db")
 client = AsyncIOMotorClient(MONGO_URL)
 db = client[DB_NAME]
 
