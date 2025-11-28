@@ -275,6 +275,8 @@ function AppContent() {
           <Route path="/athena/jobs" element={<JobsManagement />} />
           <Route path="/athena/documents" element={<DocumentsGenerator />} />
           <Route path="/athena/deadlines" element={<DeadlinesManagement />} />
+          <Route path="/athena/forensics-management" element={<ForensicsManagement />} />
+          <Route path="/athena/forensics/:caseId" element={<ForensicCaseDetail />} />
       </Routes>
       <WhatsAppButton />
       <HybridNotifications />
