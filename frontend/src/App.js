@@ -125,6 +125,8 @@ import Cliente360 from './pages/athena/Cliente360';
 import JobsManagement from './pages/athena/JobsManagement';
 import DocumentsGenerator from './pages/athena/DocumentsGenerator';
 import DeadlinesManagement from './pages/athena/DeadlinesManagement';
+import ForensicsManagement from './pages/athena/ForensicsManagement';
+import ForensicCaseDetail from './pages/athena/ForensicCaseDetail';
 
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
