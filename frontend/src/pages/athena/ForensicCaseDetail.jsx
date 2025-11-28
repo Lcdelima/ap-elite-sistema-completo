@@ -7,6 +7,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import StandardModuleLayout from '../../components/StandardModuleLayout';
 import { BackBar } from '../../components/BackBar';
+import EvidenceUpload from '../../components/forensics/EvidenceUpload';
+import CustodyTimeline from '../../components/forensics/CustodyTimeline';
 import {
   Microscope,
   Upload,
