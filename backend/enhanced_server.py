@@ -841,7 +841,13 @@ app.include_router(contracts_router)
 app.include_router(templates_router)
 app.include_router(documents_router)
 app.include_router(deadlines_router)
+
+import logging
+logger = logging.getLogger(__name__)
+logger.info(f"🔍 Incluindo forensics_manager_router: {forensics_manager_router.prefix}")
 app.include_router(forensics_manager_router)
+logger.info(f"🔍 forensics_manager_router incluído com sucesso!")
+
 app.include_router(evidences_router)
 
 # Health check
