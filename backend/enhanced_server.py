@@ -817,7 +817,7 @@ app.include_router(billing_router)
 app.include_router(entitlements_api_router)
 app.include_router(stripe_router)
 app.include_router(pagbank_router)
-app.include_router(chat_elitelex_router)
+# app.include_router(chat_elitelex_router)  # Comentado temporariamente
 
 # Elite Gravitas™ - Sistema Jurídico PRO
 from jobs_management import router as jobs_router
