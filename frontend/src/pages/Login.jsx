@@ -62,7 +62,7 @@ const Login = () => {
       toast.success(`Bem-vindo(a), ${user.name}!`);
       
       // Redirect based on user type
-      if (user.role === 'administrator') {
+      if (user.role === 'admin' || user.role === 'administrator') {
         navigate('/admin/dashboard');
       } else {
         navigate('/client/dashboard');
