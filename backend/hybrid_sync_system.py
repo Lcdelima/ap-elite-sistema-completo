@@ -590,4 +590,5 @@ async def auto_backup_task():
             await asyncio.sleep(300)  # Aguardar 5 minutos em caso de erro
 
 # Inicializar sistema na importação
-asyncio.create_task(sync_manager.initialize())
+# asyncio.create_task(sync_manager.initialize())  # Comentado - causa erro ao importar
+# TODO: Inicializar no startup event do FastAPI
