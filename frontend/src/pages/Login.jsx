@@ -50,7 +50,7 @@ const Login = () => {
       const response = await axios.post(`${API}/auth/login`, {
         email: loginData.email,
         password: loginData.password,
-        role: loginData.userType === 'admin' ? 'administrator' : 'client'
+        role: loginData.userType === 'admin' ? 'admin' : 'client'
       });
 
       const { user, token } = response.data;
