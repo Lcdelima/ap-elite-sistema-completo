@@ -55,7 +55,7 @@ const AdminDashboard = () => {
     }
     
     const parsedUser = JSON.parse(userData);
-    if (parsedUser.role !== 'administrator') {
+    if (parsedUser.role !== 'admin' && parsedUser.role !== 'administrator') {
       toast.error('Acesso não autorizado');
       navigate('/login');
       return;
