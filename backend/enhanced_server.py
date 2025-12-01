@@ -747,7 +747,7 @@ from api.billing.billing_service import router as billing_router
 from api.entitlements.entitlements_api import router as entitlements_api_router
 from api.payments.stripe_integration import router as stripe_router
 from api.payments.pagbank_integration import router as pagbank_router
-from api.chat.elite_lex_api import router as chat_elitelex_router
+# from api.chat.elite_lex_api import router as chat_elitelex_router  # Comentado temporariamente - problema de import
 
 # Add all routes to main app
 app.include_router(api_router)
