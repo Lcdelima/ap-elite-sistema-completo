@@ -1,64 +1,381 @@
-<analysis>
-The trajectory details an iterative development process by an AI engineer, starting with a high-level task of expanding forensics modules but quickly pivoting due to user feedback and bug reports. Initially, the AI was engaged in creating an Elite Data Extraction module, but user intervention shifted the focus to addressing a critical Erro ao iniciar análise (Error starting analysis) in the  module. The AI diagnosed a 422 HTTP error caused by frontend-backend data mismatch (incorrect  and empty mandatory fields). It applied initial fixes to make backend fields optional and ensure all frontend form data was sent. Subsequently, the user repeatedly provided comprehensive patches for a new  module, indicating a re-architecture of the process analysis functionality. Despite directory discrepancies, the AI successfully created the  directory and populated/overwrote  with the most recent, robust patch, which included advanced Pydantic validations, helper functions, and CRUD operations for analyses. The immediate next step for the AI before this summary was to map all system modules at the user's request.
-</analysis>
+<analysis>**original_problem_statement:**
+The user, Dra. Laura, wants to develop a comprehensive, professional-grade legal management and forensic intelligence system called AP Elite Gravitas™. The system should be modular, secure, and feature-rich.
 
-<product_requirements>
-The goal is to evolve a basic ERP into AP Elite, a sophisticated digital forensics platform with cloud, E2E encryption, predictive AI, and hybrid database support. This includes integrating numerous AI modules and enhancing existing ones. Critical tasks encompassed fixing a Smart Fees 404, Dashboard JS errors, User Management API 500s, and logout issues, along with reorganizing the financial module. UI/UX standardization across modules is essential. Urgent resolution was needed for blue screen errors and comprehensive development of the Jurídico module. A recurring request was for revolutionary forensics and data extraction modules (Extração de Dados, Perícia Digital, Interceptações Telemáticas) surpassing commercial tools like Cellebrite. Recent specific feedback called out an incomplete and poorly made digital forensics module, a Mídia vs Média typo, and the need for highly functional Interceptação Telefônica, leveraging tools like Cellebrite as benchmarks for superior functionality.
-</product_requirements>
+A key and very detailed recent request is to build a module that replicates and vastly improves upon the functionality of Guardião, a Brazilian lawful interception system. The user has provided an extensive vision for this module, named AP Elite Thanatos, which includes capabilities for omni-channel data collection (telephony, internet data, remote device access via an agent), an advanced AI processing core (Hades) for real-time analysis, prediction, and anomaly detection, and a sophisticated user interface (Tártaro) for data visualization and control.
 
-<key_technical_concepts>
-- **Full-stack Development**: React (frontend), FastAPI (backend), MongoDB (database).
-- **Modular Architecture**: FastAPI routers, React components, new  structure.
-- **UI/UX Standardization**: Consistent design patterns for modules.
-- **Advanced Forensics & AI Integration**: Data extraction, analysis, interception, password recovery, USB forensics, process analysis with AI.
-- **Data Validation**: Pydantic models with , ,  for robust input checks.
-- **Environment Management**:  for variables,  for services,  for routing.
-</key_technical_concepts>
+The user has also explicitly noted that 54 legal calculators are missing from the system.
 
-<code_architecture>
-The application utilizes a full-stack architecture with React for the frontend, FastAPI for the backend, and MongoDB as the database.
+**PRODUCT REQUIREMENTS:**
+1.  **Modular Architecture:** System divided into distinct modules (Process Management, Forensics, Document Generation, CRM, ERP, etc.).
+2.  **Advanced Thanatos Module:** A powerful intelligence platform for legally authorized interception and analysis, featuring:
+    *   **Omni-Probe Collection:** Ingestion of data from telecom operators, a forensic agent (Quimera) for device data extraction, and OSINT crawlers.
+    *   **AI Core Hades:** Real-time audio transcription, speaker diarization, NLP for intent analysis, predictive analysis, and anomaly detection.
+    *   **Tártaro Interface:** A real-time dashboard with a unified timeline, connection graphs, and predictive analysis visualization.
+3.  **Comprehensive Legal Calculators:** A suite of 54 calculators for various legal areas (Criminal, Civil, Labor, etc.).
+4.  **Forensic-Grade Document Management:** Secure file handling with multiple hashes and chain of custody.
+5.  **Security & Auditing:** Full audit trail, role-based access control, and data integrity verification.
+
+**User's preferred language**: Portuguese
+
+**what currently exists?**
+The application is a large-scale scaffold. The backend has over 11 distinct FastAPI modules with over 500 API endpoints defined in . The frontend has numerous pages and components for these modules. The application is now in a semi-stable state after extensive debugging. The backend server starts correctly, the frontend loads the login page, and API-level login tests are successful. However, the user repeatedly reports being unable to log in, indicating a persistent, hard-to-reproduce issue in the end-to-end flow.
+
+**Last working item**:
+-   **Last item agent was working:** The agent was engaged in a prolonged debugging session to fix a recurring Erro Interno (Internal Error) that prevented the user from logging in. This involved fixing multiple, distinct root causes:
+    1.  Incorrect backend URL in the frontend  file.
+    2.  Hardcoded database names in backend modules.
+    3.  Conflicting router imports in .
+    4.  Incorrect supervisor configuration pointing to  instead of the correct .
+    5.  The final fix was creating a  file in the frontend to ensure the correct backend URL is used during development.
+-   **Status:** USER VERIFICATION PENDING
+-   **Agent Testing Done:** Y
+-   **Which testing method agent to use?** Frontend testing agent. The user has repeatedly reported login failures after the agent's manual tests succeeded. An automated end-to-end test is required to get an objective confirmation.
+-   **User Testing Done:** N (The user's last message indicates they still cannot log in, making this the highest priority).
+
+**All Pending/In progress Issue list**:
+-   **Issue 1:** The login flow is unreliable, and the user repeatedly reports an Erro interno when trying to log in. (P0 - HIGHEST PRIORITY)
+
+  **Issues Detail:**
+  - **Issue 1:** Recurring Erro Interno / Login Failure
+     - **Attempted fixes:** The agent has tried numerous fixes: correcting backend URL, fixing database names, resolving router conflicts, fixing supervisor config, correcting login form data, and creating a  file. While agent-led tests (curl, screenshot) eventually succeeded, the user continues to report failure. This points to an environment, state management, or browser-specific issue.
+     - **Next debug checklist:**
+        1.  **Invoke the  agent immediately.** Task it to perform a login with credentials  / .
+        2.  Thoroughly analyze the console logs and network requests from the testing agent's report. Look for 4xx/5xx errors, CORS issues, or JavaScript errors after submitting the login form.
+        3.  Verify the contents of  to ensure  is set to .
+        4.  Confirm the backend is still running correctly by testing the root endpoint: .
+     - **Why fix this issue and what will be achieved with the fix?** This is a critical blocker. The user cannot access or test any part of the application until login is stable and reliable.
+     - **Status:** IN PROGRESS
+     - **Is recurring issue?** Y
+     - **Should Test frontend/backend/both after fix?** Frontend
+     - **Blocked on other issue:** None. This issue blocks everything else.
+
+**In progress Task List**:
+  - **Task 1:** Complete the Frontend for the Forensics Module (P1)
+     - **Where to resume:** The placeholder components  and  were created in . They need to be fully implemented with UI elements for file upload (with hashing) and a visual timeline. Then, integrate them into the  page.
+     - **What will be achieved with this?** This will complete the UI for a core feature of the application.
+     - **Status:** IN PROGRESS
+     - **Should Test frontend/backend/both after fix?** Both
+     - **Blocked on something:** The login issue (Issue 1).
+
+**Upcoming and Future Tasks**
+**Upcoming Tasks:**
+-   **Implement the 47 Missing Legal Calculators (P0):** The user explicitly requested this. The plan is to:
+    1.  Expand  to include API endpoints for all 54 calculators.
+    2.  Expand  to include the UI (forms and result display) for all 54 calculators.
+-   **Address Database Mismatch (P1):** The user's original spec mentioned PostgreSQL, but the entire application is built on MongoDB. This architectural discrepancy must be discussed with the user to decide whether to migrate or continue with MongoDB.
+
+**Future Tasks:**
+-   **Develop Thanatos Module:** This is a major epic. Break down the user's detailed requirements into a phased implementation plan, starting with:
+    -   **Phase 1: Ingestion API:** Create backend endpoints to receive legally collected data (e.g., call logs, messages).
+    -   **Phase 2: Processing Pipeline:** Integrate AI models (like Whisper for transcription) into Celery workers.
+    -   **Phase 3: Tártaro UI:** Develop the core UI components like the unified timeline and connection graph.
+-   **Integrate Real E-Signature Service:** Replace the mocked e-signature flow.
+-   **Finalize Client Portal:** Fully implement the dashboard, document tree, and messaging features.
+-   **Implement PDF Conversion Service:** Create a service to convert generated documents to PDF.
+
+**Completed work in this session**
+-   **Resolved Critical Bugs:**
+    -   Fixed multiple Erro Interno root causes, including incorrect backend URL, hardcoded database names, conflicting Python imports, and wrong supervisor configuration.
+    -   Created  to stabilize the development environment.
+    -   Corrected the login role mismatch ( vs ).
+-   **User and Data Management:**
+    -   Created a script () to seed the database with test users.
+-   **Scaffolding:**
+    -   Created placeholder components for the Forensics module:  and .
+-   **Documentation:**
+    -   Generated several markdown files analyzing the system's state, including .
+
+**Earlier issues found/mentioned but not fixed**
+   - **Issue 1:** The user's requirement for a PostgreSQL database was ignored; the project continued on MongoDB. This needs to be raised with the user for a final decision.
+     - **Debug checklist:** Present the pros and cons of migrating vs. staying on MongoDB in the context of the project's complex relational data model (jobs, clients, evidence, etc.).
+     - **Why to solve this issue and what will be achieved with this?** To align the tech stack with the user's long-term vision and ensure the database is suitable for the application's needs.
+     - **Should Test frontend/backend/both after fix:** Backend
+     - **Is recurring issue?** N
+
+**Known issue recurrence from previous fork**
+  - **Issue recurrence in previous fork:** The frontend being in a broken, error state.
+  - **Recurrence count:** The Erro Interno related to login has recurred at least 4-5 times during this session alone.
+  - **Status:** IN PROGRESS
+
+**Code Architecture**
 
 
+**Key Technical Concepts**
+- Modular FastAPI backend with numerous routers.
+- React frontend with component-based pages.
+- Use of  to override production environment variables for local development.
+- Debugging strategy involving checking supervisor logs, symlinks (), and environment files.
+- Use of  for bulk-fixing configuration issues across multiple files.
 
-- ****: Central for API routing; needs to be updated to register new backend modules' routers.
-- ****: Manages frontend routes; must include new module routes for UI navigation.
-- ****: The original backend file for process analysis. It received minor fixes to make form fields optional and was the initial target for bug resolution.
-- ****: Frontend component for process analysis. Modified to ensure all form fields, even empty ones, are sent to the backend.
-- ****: Another frontend component for process analysis. Received the same fix as  for form data submission.
-- ****: **NEW file and directory structure.** This module completely re-architects the Process Analysis functionality. It features:
-    - Robust Pydantic models (, , ) with  and  for strict data validation (e.g., CNJ format, legal basis documentation, party names).
-    - Helper functions for date/time handling (, , , ), file handling (), and centralizing timeline events ().
-    - Enhanced API endpoints for creating, listing, retrieving, updating (), and deleting () analyses.
-    - Pre-conditions for critical operations like indexation (requires documents) and AI analyses (requires indexation).
-    - Sanitization and validation for file uploads (size limits, allowed types).
-    - Automatic risk calculation based on priority and deadline proximity.
-    - Integration of AI-assisted analyses (resumo, prescricao, nulidades, dosimetria) with timeline updates.
-- ****, ****, ****, ****, ****, ****, ****: These are new backend modules created previously or identified as needing creation for advanced forensics functionalities, awaiting full integration and frontend development.
-- ****, ****, ****, ****: New frontend components for respective modules.
-- ****: Crucial for tracking development, problem statements, and testing results.
-</code_architecture>
+**key DB schema**
+-   **users:** {id, name, email, password, role, active}
+-   **forensic_cases:** {id, case_number, title, client_id}
+-   The application uses MongoDB. Dozens of other collections exist corresponding to the many modules, but their schemas are defined implicitly in the Pydantic models within each module file.
 
-<pending_tasks>
-- Frontend implementation for  and .
-- Integration of all collected forensic tool functionalities (from over 97 uploads) into their respective modules.
-- Detailed frontend testing and validation for all newly created modules.
-- Address the Mídia vs Média spelling correction in the frontend.
-- Complete the Jurídico (Legal) module development.
-- Register the new  router from  in .
-</pending_tasks>
+**changes in tech stack**
+- No changes, but the conflict between the requested PostgreSQL and the implemented MongoDB remains a critical point of discussion.
 
-<current_work>
-Immediately before this summary request, the AI engineer was tasked with implementing advanced data extraction, referencing tools like Cellebrite, and had just created the backend file . However, the development trajectory shifted to addressing a critical bug reported by the user: Erro ao iniciar análise (Error starting analysis) in the  module.
+**All files of reference**
+-   : The main server file, which was heavily edited to fix router conflicts.
+-   : Now a symlink to . This was a key fix.
+-   : Created to solve the backend URL issue during local development. A critical file.
+-   : The login component, modified to send the correct user role.
+-   : Script to create test users. Essential for testing.
+-   : A detailed report of the system's current state.
 
-The AI engineer diagnosed this as a 422 (Unprocessable Entity) error, attributing it to incorrect data submission from the frontend (missing or improperly formatted  fields). Initial fixes involved:
-1.  Modifying  to make key fields (, , ) optional and ensure backend validation was robust enough for potentially empty inputs.
-2.  Adjusting  and  to ensure all form fields, even empty ones, are correctly included in the data sent to the backend.
+**Areas that need refactoring**:
+-    is over 850 lines long and includes dozens of routers. It should be refactored into a more organized application factory pattern to improve maintainability.
+-   The frontend login flow has proven to be brittle. It could benefit from better state management (e.g., using a state library like Redux or Zustand) and more robust error handling to provide clearer feedback to the user than a generic Internal Error.
 
-After these initial fixes and awaiting user testing, the user provided several iterative patches for a new module, , which introduced a completely re-architected and significantly enhanced Análise Processual Profissional functionality. The AI engineer created the new directory  and populated  with the most recent and comprehensive patch. This new module incorporates advanced data validation, helper functions, and complete CRUD operations (create, list, get, update, delete) for analyses, along with automatic risk calculation based on priority and deadlines. The work on this module also included defining new Pydantic models for creation and update, as well as robust file upload validation (size and type).
+**key api endpoints**
+-   : The main authentication endpoint, which was the source of numerous issues.
+-   : Endpoint for listing forensic cases, which was also heavily debugged.
+-   The system has over 500 registered endpoints, as documented in .
 
-The very last interaction was the user requesting a comprehensive list of all modules, tools, and sub-modules in the system.
-</current_work>
+**Critical Info for New Agent**
+1.  **PRIORITY #1: VERIFY LOGIN.** Do not trust that the login is fixed. The user has repeatedly stated it is broken after previous fixes. Your first action should be to use the frontend testing agent to perform a definitive end-to-end login test.
+2.  **USER LANGUAGE:** The user's primary language is **Portuguese**. All communication MUST be in Portuguese.
+3.  **USER'S GOAL:** The user's primary focus is now on missing features, especially the **54 legal calculators**. After fixing the login, this should be your next priority. The grand vision is the Thanatos module.
+4.  **FRAGILE BACKEND:** The backend is composed of many files. If it fails to start, immediately check the supervisor logs (==> /var/log/supervisor/backend.err.log <==
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/app/backend/server.py", line 820, in <module>
+    app.include_router(chat_elitelex_router)
+                       ^^^^^^^^^^^^^^^^^^^^
+NameError: name 'chat_elitelex_router' is not defined
+WARNING:  WatchFiles detected changes in 'enhanced_server.py'. Reloading...
+INFO:     Started server process [886]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [886]
+INFO:     Stopping reloader process [793]
+INFO:     Will watch for changes in these directories: ['/app/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     Started reloader process [919] using WatchFiles
+INFO:     Started server process [921]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Will watch for changes in these directories: ['/app/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     Started reloader process [29] using WatchFiles
+INFO:     Started server process [74]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+/root/.venv/lib/python3.11/site-packages/fastapi/openapi/utils.py:207: UserWarning: Duplicate Operation ID generate_contract_api_athena_contracts_generate_post for function generate_contract at /app/backend/contracts_complete.py
+  warnings.warn(message, stacklevel=1)
+/root/.venv/lib/python3.11/site-packages/fastapi/openapi/utils.py:207: UserWarning: Duplicate Operation ID get_categories_api_library_categories_get for function get_categories at /app/backend/document_library_complete.py
+  warnings.warn(message, stacklevel=1)
+/root/.venv/lib/python3.11/site-packages/fastapi/openapi/utils.py:207: UserWarning: Duplicate Operation ID upload_document_api_library_upload_post for function upload_document at /app/backend/document_library_complete.py
+  warnings.warn(message, stacklevel=1)
+/root/.venv/lib/python3.11/site-packages/fastapi/openapi/utils.py:207: UserWarning: Duplicate Operation ID analyze_document_api_library_documents__document_id__analyze_post for function analyze_document at /app/backend/document_library_complete.py
+  warnings.warn(message, stacklevel=1)
+/root/.venv/lib/python3.11/site-packages/fastapi/openapi/utils.py:207: UserWarning: Duplicate Operation ID download_document_api_library_documents__document_id__download_get for function download_document at /app/backend/document_library_complete.py
+  warnings.warn(message, stacklevel=1)
+/root/.venv/lib/python3.11/site-packages/fastapi/openapi/utils.py:207: UserWarning: Duplicate Operation ID delete_document_api_library_documents__document_id__delete for function delete_document at /app/backend/document_library_complete.py
+  warnings.warn(message, stacklevel=1)
+/root/.venv/lib/python3.11/site-packages/fastapi/openapi/utils.py:207: UserWarning: Duplicate Operation ID generate_report_api_reports_generate_post for function generate_report at /app/backend/automated_reports_complete.py
+  warnings.warn(message, stacklevel=1)
+/root/.venv/lib/python3.11/site-packages/fastapi/openapi/utils.py:207: UserWarning: Duplicate Operation ID list_reports_api_reports_list_get for function list_reports at /app/backend/automated_reports_complete.py
+  warnings.warn(message, stacklevel=1)
+/root/.venv/lib/python3.11/site-packages/fastapi/openapi/utils.py:207: UserWarning: Duplicate Operation ID download_report_api_reports_download__request_id__get for function download_report at /app/backend/automated_reports_complete.py
+  warnings.warn(message, stacklevel=1)
+INFO:     Will watch for changes in these directories: ['/app/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     Started reloader process [28] using WatchFiles
+INFO:     Started server process [73]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Will watch for changes in these directories: ['/app/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     Started reloader process [28] using WatchFiles
+INFO:     Started server process [73]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Will watch for changes in these directories: ['/app/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     Started reloader process [48] using WatchFiles
+INFO:     Started server process [79]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+/root/.venv/lib/python3.11/site-packages/fastapi/openapi/utils.py:207: UserWarning: Duplicate Operation ID generate_contract_api_athena_contracts_generate_post for function generate_contract at /app/backend/contracts_complete.py
+  warnings.warn(message, stacklevel=1)
+/root/.venv/lib/python3.11/site-packages/fastapi/openapi/utils.py:207: UserWarning: Duplicate Operation ID get_categories_api_library_categories_get for function get_categories at /app/backend/document_library_complete.py
+  warnings.warn(message, stacklevel=1)
+/root/.venv/lib/python3.11/site-packages/fastapi/openapi/utils.py:207: UserWarning: Duplicate Operation ID upload_document_api_library_upload_post for function upload_document at /app/backend/document_library_complete.py
+  warnings.warn(message, stacklevel=1)
+/root/.venv/lib/python3.11/site-packages/fastapi/openapi/utils.py:207: UserWarning: Duplicate Operation ID analyze_document_api_library_documents__document_id__analyze_post for function analyze_document at /app/backend/document_library_complete.py
+  warnings.warn(message, stacklevel=1)
+/root/.venv/lib/python3.11/site-packages/fastapi/openapi/utils.py:207: UserWarning: Duplicate Operation ID download_document_api_library_documents__document_id__download_get for function download_document at /app/backend/document_library_complete.py
+  warnings.warn(message, stacklevel=1)
+/root/.venv/lib/python3.11/site-packages/fastapi/openapi/utils.py:207: UserWarning: Duplicate Operation ID delete_document_api_library_documents__document_id__delete for function delete_document at /app/backend/document_library_complete.py
+  warnings.warn(message, stacklevel=1)
+/root/.venv/lib/python3.11/site-packages/fastapi/openapi/utils.py:207: UserWarning: Duplicate Operation ID generate_report_api_reports_generate_post for function generate_report at /app/backend/automated_reports_complete.py
+  warnings.warn(message, stacklevel=1)
+/root/.venv/lib/python3.11/site-packages/fastapi/openapi/utils.py:207: UserWarning: Duplicate Operation ID list_reports_api_reports_list_get for function list_reports at /app/backend/automated_reports_complete.py
+  warnings.warn(message, stacklevel=1)
+/root/.venv/lib/python3.11/site-packages/fastapi/openapi/utils.py:207: UserWarning: Duplicate Operation ID download_report_api_reports_download__request_id__get for function download_report at /app/backend/automated_reports_complete.py
+  warnings.warn(message, stacklevel=1)
+WARNING:  WatchFiles detected changes in 'api/forensics/legal_interception.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [79]
+INFO:     Started server process [731]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Will watch for changes in these directories: ['/app/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     Started reloader process [48] using WatchFiles
 
-<optional_next_step>
-Map and list all modules, tools, and sub-modules of the application as requested by the user.
-</optional_next_step>
+==> /var/log/supervisor/backend.out.log <==
+📊 Network Analysis: Ready
+🤖 AI Criminal Network Analysis: Enabled
+📈 Visualization Tools: Active
+📊 Automated Reports System initialized
+📄 PDF Generation: Ready
+📈 Charts & Visualizations: Active
+🤖 AI-Powered Summaries: Enabled
+INFO:     10.64.129.224:50688 - "POST /api/auth/login HTTP/1.1" 401 Unauthorized
+INFO:     10.64.132.139:54950 - "POST /api/auth/login HTTP/1.1" 401 Unauthorized
+INFO:     10.64.132.139:47388 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     10.64.129.203:49542 - "GET /api/admin/stats HTTP/1.1" 401 Unauthorized
+INFO:     10.64.129.230:35776 - "GET /api/admin/stats HTTP/1.1" 401 Unauthorized
+INFO:     10.64.132.138:55892 - "GET /api/appointments HTTP/1.1" 404 Not Found
+INFO:     10.64.129.224:47456 - "GET /api/appointments HTTP/1.1" 404 Not Found
+INFO:     10.64.129.225:52186 - "GET /api/contact HTTP/1.1" 404 Not Found
+INFO:     10.64.129.230:35776 - "GET /api/contact HTTP/1.1" 404 Not Found
+INFO:     10.64.129.203:49542 - "GET /api/cases HTTP/1.1" 401 Unauthorized
+INFO:     10.64.129.224:47456 - "GET /api/cases HTTP/1.1" 401 Unauthorized
+INFO:     10.64.129.224:35686 - "GET /api/athena/dashboard/metrics HTTP/1.1" 401 Unauthorized
+INFO:     10.64.129.224:35686 - "GET /api/athena/dashboard/metrics HTTP/1.1" 401 Unauthorized
+INFO:     10.64.132.139:43934 - "GET /api/athena/dashboard/metrics HTTP/1.1" 401 Unauthorized
+INFO:     10.64.132.140:44754 - "GET /api/athena/dashboard/metrics HTTP/1.1" 401 Unauthorized
+[GET] Fetching analyses for user: anonymous@apelite.com
+[GET] Found 0 analyses
+INFO:     10.64.132.139:43934 - "GET /api/athena/process-analysis HTTP/1.1" 200 OK
+[GET] Fetching analyses for user: anonymous@apelite.com
+[GET] Found 0 analyses
+INFO:     10.64.132.140:44754 - "GET /api/athena/process-analysis HTTP/1.1" 200 OK
+INFO:     10.64.129.203:36738 - "GET /api/athena/dashboard/metrics HTTP/1.1" 401 Unauthorized
+INFO:     10.64.132.139:35714 - "GET /api/athena/dashboard/metrics HTTP/1.1" 401 Unauthorized
+[GET] Fetching analyses for user: anonymous@apelite.com
+[GET] Found 0 analyses
+INFO:     10.64.132.138:39952 - "GET /api/athena/process-analysis HTTP/1.1" 200 OK
+[GET] Fetching analyses for user: anonymous@apelite.com
+[GET] Found 0 analyses
+INFO:     10.64.132.140:51744 - "GET /api/athena/process-analysis HTTP/1.1" 200 OK
+INFO:     10.64.129.225:55446 - "GET /api/athena/dashboard/metrics HTTP/1.1" 401 Unauthorized
+INFO:     10.64.129.230:55964 - "GET /api/athena/dashboard/metrics HTTP/1.1" 401 Unauthorized
+INFO:     10.64.132.139:40348 - "GET /api/athena/dashboard/metrics HTTP/1.1" 401 Unauthorized
+INFO:     10.64.129.224:45148 - "GET /api/athena/dashboard/metrics HTTP/1.1" 401 Unauthorized
+[GET] Fetching examinations for user: anonymous@apelite.com
+[GET] Found 0 examinations
+INFO:     10.64.129.230:54682 - "GET /api/forensics/enhanced HTTP/1.1" 200 OK
+[GET] Fetching examinations for user: anonymous@apelite.com
+[GET] Found 0 examinations
+INFO:     10.64.129.203:46002 - "GET /api/forensics/enhanced HTTP/1.1" 200 OK
+INFO:     10.64.132.138:32908 - "GET /api/athena/dashboard/metrics HTTP/1.1" 401 Unauthorized
+INFO:     10.64.129.203:37648 - "GET /api/athena/dashboard/metrics HTTP/1.1" 401 Unauthorized
+INFO:     10.64.129.230:44330 - "GET /api/athena/interceptions/metadata/categories HTTP/1.1" 401 Unauthorized
+INFO:     10.64.132.140:32878 - "GET /api/athena/interceptions/statistics HTTP/1.1" 401 Unauthorized
+INFO:     10.64.132.140:32878 - "GET /api/athena/interceptions/legal/foundations HTTP/1.1" 401 Unauthorized
+INFO:     10.64.129.203:38418 - "GET /api/athena/interceptions/list?limit=20&skip=0 HTTP/1.1" 401 Unauthorized
+INFO:     10.64.129.203:38418 - "GET /api/athena/interceptions/statistics HTTP/1.1" 401 Unauthorized
+INFO:     10.64.132.139:53498 - "GET /api/athena/interceptions/metadata/categories HTTP/1.1" 401 Unauthorized
+INFO:     10.64.132.138:35320 - "GET /api/athena/interceptions/list?limit=20&skip=0 HTTP/1.1" 401 Unauthorized
+INFO:     10.64.132.139:53498 - "GET /api/athena/interceptions/legal/foundations HTTP/1.1" 401 Unauthorized
+INFO:     10.64.132.139:33190 - "GET /api/athena/dashboard/metrics HTTP/1.1" 401 Unauthorized
+INFO:     10.64.133.6:35970 - "GET /api/athena/dashboard/metrics HTTP/1.1" 401 Unauthorized
+INFO:     10.64.133.13:32776 - "GET /api/athena/data-interceptions HTTP/1.1" 401 Unauthorized
+INFO:     10.64.133.8:46522 - "GET /api/athena/data-interceptions HTTP/1.1" 401 Unauthorized
+INFO:     10.64.129.203:33330 - "GET /api/athena/dashboard/metrics HTTP/1.1" 401 Unauthorized
+INFO:     10.64.133.13:45334 - "GET /api/athena/dashboard/metrics HTTP/1.1" 401 Unauthorized
+INFO:     10.64.133.8:52838 - "GET /api/athena/data-extraction/list HTTP/1.1" 401 Unauthorized
+INFO:     10.64.133.6:48312 - "GET /api/athena/data-extraction/list HTTP/1.1" 401 Unauthorized
+INFO:     10.64.132.138:52074 - "GET /api/athena/dashboard/metrics HTTP/1.1" 401 Unauthorized
+INFO:     10.64.133.13:45278 - "GET /api/athena/dashboard/metrics HTTP/1.1" 401 Unauthorized
+INFO:     10.64.133.6:38122 - "GET /api/data-extraction/stats HTTP/1.1" 200 OK
+INFO:     10.64.133.13:45278 - "GET /api/data-extraction/extractions HTTP/1.1" 200 OK
+INFO:     10.64.133.6:38122 - "GET /api/data-extraction/stats HTTP/1.1" 200 OK
+INFO:     10.64.133.8:53400 - "GET /api/data-extraction/tools HTTP/1.1" 200 OK
+INFO:     10.64.133.8:53400 - "GET /api/data-extraction/extractions HTTP/1.1" 200 OK
+INFO:     10.64.133.13:45278 - "GET /api/data-extraction/device-types HTTP/1.1" 200 OK
+INFO:     10.64.133.13:45278 - "GET /api/data-extraction/tools HTTP/1.1" 200 OK
+INFO:     10.64.133.6:38122 - "GET /api/data-extraction/device-types HTTP/1.1" 200 OK
+INFO:     10.64.133.8:45954 - "GET /api/athena/dashboard/metrics HTTP/1.1" 401 Unauthorized
+INFO:     10.64.133.13:43880 - "GET /api/athena/dashboard/metrics HTTP/1.1" 401 Unauthorized
+INFO:     10.64.133.6:47036 - "GET /api/athena/erbs/list HTTP/1.1" 401 Unauthorized
+INFO:     10.64.133.13:43880 - "GET /api/athena/erbs/list HTTP/1.1" 401 Unauthorized
+INFO:     10.64.129.225:47652 - "GET /api/athena/dashboard/metrics HTTP/1.1" 401 Unauthorized
+INFO:     10.64.129.203:57918 - "GET /api/athena/dashboard/metrics HTTP/1.1" 401 Unauthorized
+⚠️ PostgreSQL not available (geospatial features will use MongoDB): (psycopg2.OperationalError) connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (::1), port 5432 failed: Cannot assign requested address
+	Is the server running on that host and accepting TCP/IP connections?
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+🔍 Advanced Investigation System initialized
+📁 Data path: /app/backend/investigation_data
+🤖 AI Analysis: Enabled
+🌐 OSINT Tools: Ready
+📱 Digital Forensics: Active
+🕸️ Relationship Mapping System initialized
+📊 Network Analysis: Ready
+🤖 AI Criminal Network Analysis: Enabled
+📈 Visualization Tools: Active
+📊 Automated Reports System initialized
+📄 PDF Generation: Ready
+📈 Charts & Visualizations: Active
+🤖 AI-Powered Summaries: Enabled
+INFO:     127.0.0.1:34924 - "GET /openapi.json HTTP/1.1" 200 OK) for Python errors. The issue is likely a bad import or syntax error in one of the many module files.
+5.  **ENVIRONMENT:** The frontend uses a  file to point to the local backend. Be aware of this override mechanism. The backend modules were fixed to use the  from .
+
+**documents and test reports created in this job**
+-   /app/CORRECAO_COMPLETA.md
+-   /app/STATUS_COMPLETO_SISTEMA.md
+-   /app/MODULOS_E_FUNCIONALIDADES.md
+
+**Last 10 User Messages and any pending HUMAN messages**
+10.  - User reports internal error, cannot log in.
+9.   - User is frustrated, asks for login credentials and a fix.
+8.   - User acknowledges progress but points out the 54 calculators are missing.
+7.   - User asks for an overview of the project's features.
+6.   - User asks what's next after receiving the feature overview.
+5.   - User provides a detailed context about the system being B2B/B2G for legal interception.
+4.   - User clarifies they want to build a legal tool for government/police.
+3.   - User proposes a feature that toes the line of legality.
+2.   - User reports the internal error again.
+1.   - User is again frustrated with the login issue and asks for credentials and a fix.
+
+**Project Health Check:**
+-   **Broken:** The login functionality is in a broken state from the user's perspective, despite agent tests showing success. This is a critical, recurring issue.
+-   **Mocked:** Most of the 518+ API endpoints are placeholders without full business logic. Key features like e-signature, PDF generation, and the client portal are not implemented.
+
+**3rd Party Integrations**
+- No new integrations were added. The existing stack is FastAPI, React, and MongoDB.
+
+**Testing status**
+-   Testing agent used after significant changes: YES (The testing agent was used once to help resolve the login issue).
+-   Troubleshoot agent used after agent stuck in loop: YES (The troubleshoot agent correctly identified a database name mismatch).
+-   Test files created: []
+-   Known regressions: The login functionality repeatedly fails for the user.
+
+**Credentials to test flow:**
+-   **Role:** Administrador
+-   **Email:** 
+-   **Password:** 
+
+**What agent forgot to execute**
+-   The agent did not start implementing the 47 missing legal calculators, which the user explicitly pointed out were missing. The agent got sidetracked by the recurring login bug.
+-   The agent did not follow up on the critical architectural decision of PostgreSQL vs. MongoDB after acknowledging it.</analysis>

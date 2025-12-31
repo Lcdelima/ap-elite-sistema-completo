@@ -500,7 +500,7 @@ Whisper + Google + AssemblyAI + Elite Custom
 ## 🌐 URLS FUNCIONAIS
 
 ### Site Institucional:
-- ✅ **Home**: https://legal-gravity.preview.emergentagent.com/
+- ✅ **Home**: https://legalgravitas.preview.emergentagent.com/
 - ✅ **Solicitar Acesso**: /request-access
 
 ### Dashboards:
