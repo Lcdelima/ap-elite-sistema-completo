@@ -128,6 +128,7 @@ import DocumentsGenerator from './pages/athena/DocumentsGenerator';
 import DeadlinesManagement from './pages/athena/DeadlinesManagement';
 import ForensicsManagement from './pages/athena/ForensicsManagement';
 import ForensicCaseDetail from './pages/athena/ForensicCaseDetail';
+import AegisModule from './pages/aegis/AegisModule';
 
 // Import components
 import WhatsAppButton from './components/WhatsAppButton';
