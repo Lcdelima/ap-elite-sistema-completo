@@ -1194,7 +1194,7 @@ async def calcular_punicao_militar(data: TransgressaoDisciplinarRequest):
     }
 
 
-class DireitoAutoral Request(BaseModel):
+class DireitoAutoralRequest(BaseModel):
     valor_obra: float
     percentual_autor: float = 10.0
 
