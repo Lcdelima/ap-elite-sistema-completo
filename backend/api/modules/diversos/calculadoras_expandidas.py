@@ -1,11 +1,12 @@
-"""Calculadoras Expandidas - Todas as áreas do Direito - Elite Athena"""
+"""Calculadoras Expandidas - 54 Calculadoras para Todas as Áreas do Direito - AP Elite Gravitas"""
 from fastapi import APIRouter
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime, timedelta, date, timezone
+from decimal import Decimal
 import math
 
-router = APIRouter(prefix="/api/calculadoras-expandidas", tags=["calculadoras-expandidas"])
+router = APIRouter(prefix="/api/calculadoras", tags=["calculadoras"])
 
 
 # ========== ELEITORAL ==========
