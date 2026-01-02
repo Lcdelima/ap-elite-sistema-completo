@@ -280,6 +280,9 @@ function AppContent() {
           <Route path="/athena/deadlines" element={<DeadlinesManagement />} />
           <Route path="/athena/forensics-management" element={<ForensicsManagement />} />
           <Route path="/athena/forensics/:caseId" element={<ForensicCaseDetail />} />
+          
+          {/* Aegis/Thanatos Module */}
+          <Route path="/aegis" element={<AegisModule />} />
       </Routes>
       <WhatsAppButton />
       <HybridNotifications />
