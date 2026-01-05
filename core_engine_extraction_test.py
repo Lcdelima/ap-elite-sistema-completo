@@ -275,7 +275,7 @@ class CoreEngineExtractionTestSuite:
                     job_id = data.get("job_id")
                     self.job_ids.append(job_id)
                     tables = extracted_data.get("tables", {})
-                    details = f"Job ID: {job_id}, Tables extracted: {len(tables)}, Custody ID: {result.get('custody_id')}"
+                    details = f"Job ID: {job_id}, Tables extracted: {len(tables)}, Custody ID: {output.get('custody_id')}"
                     self.log_test("Extraction SQLite", "PASS", details)
                 else:
                     failed_checks = [check[0] for check in checks if not check[1]]
