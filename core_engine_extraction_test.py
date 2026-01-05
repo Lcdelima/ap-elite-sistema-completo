@@ -161,7 +161,7 @@ class CoreEngineExtractionTestSuite:
                 if all_passed:
                     job_id = data.get("job_id")
                     self.job_ids.append(job_id)
-                    details = f"Job ID: {job_id}, State: {data.get('state')}, Custody ID: {result.get('custody_id')}"
+                    details = f"Job ID: {job_id}, State: {data.get('state')}, Custody ID: {output.get('custody_id')}"
                     self.log_test("Extraction PDF", "PASS", details)
                 else:
                     failed_checks = [check[0] for check in checks if not check[1]]
