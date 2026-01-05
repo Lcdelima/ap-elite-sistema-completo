@@ -1,0 +1,10 @@
+{
+  "processed": true,
+  "input_validated": true,
+  "output_generated": true,
+  "data": {
+    "alvo": "Jo\u00e3o Silva",
+    "tipo_busca": "pessoa_fisica",
+    "operator": "anonymous@apelite.com"
+  }
+}

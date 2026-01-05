@@ -1,0 +1,29 @@
+{
+  "id": "5d74bc7e-51dc-45f3-841f-8ddeb56a75c5",
+  "module": "osint/osint_avancado",
+  "state": "running",
+  "created_at": "2026-01-05T16:26:48.440897+00:00",
+  "started_at": "2026-01-05T16:26:48.441181+00:00",
+  "completed_at": "2026-01-05T16:26:49.447798+00:00",
+  "output": {
+    "status": "COMPLETED",
+    "module": "OSINT Avan\u00e7ado",
+    "result": {
+      "processed": true,
+      "input_validated": true,
+      "output_generated": true,
+      "data": {
+        "alvo": "Jo\u00e3o Silva",
+        "tipo_busca": "pessoa_fisica",
+        "operator": "anonymous@apelite.com"
+      }
+    },
+    "artifact": {
+      "file": "/app/backend/evidence/osint_osint_avancado/output.json",
+      "size": 175,
+      "hash": "276fbb6f536b970c6e291f89bf9ccbbc17da1d58cbf1e63a887c5e28deff1131"
+    },
+    "completed_at": "2026-01-05T16:26:49.447781+00:00"
+  },
+  "error": null
+}

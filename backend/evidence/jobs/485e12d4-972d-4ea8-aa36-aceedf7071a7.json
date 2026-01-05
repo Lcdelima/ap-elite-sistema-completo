@@ -1,0 +1,29 @@
+{
+  "id": "485e12d4-972d-4ea8-aa36-aceedf7071a7",
+  "module": "gestao/gestao_financeira",
+  "state": "running",
+  "created_at": "2026-01-05T16:26:51.135503+00:00",
+  "started_at": "2026-01-05T16:26:51.135803+00:00",
+  "completed_at": "2026-01-05T16:26:52.138862+00:00",
+  "output": {
+    "status": "COMPLETED",
+    "module": "Gest\u00e3o Financeira",
+    "result": {
+      "processed": true,
+      "input_validated": true,
+      "output_generated": true,
+      "data": {
+        "periodo": "2024-12",
+        "tipo_relatorio": "completo",
+        "operator": "anonymous@apelite.com"
+      }
+    },
+    "artifact": {
+      "file": "/app/backend/evidence/gestao_gestao_financeira/output.json",
+      "size": 169,
+      "hash": "4b07ae3bcaf26c1328c667aa10ab5eed74562d5344ed154d9194ca561bbcc2c3"
+    },
+    "completed_at": "2026-01-05T16:26:52.138847+00:00"
+  },
+  "error": null
+}
