@@ -1,8 +1,8 @@
 {
-  "module_path": "pericia/extracao_dados",
-  "name": "Extra\u00e7\u00e3o de Dados",
+  "module_path": "pericia/interceptacao_telematica_pro",
+  "name": "Intercepta\u00e7\u00f5es Telem\u00e1ticas Pro",
   "category": "Per\u00edcia & Investiga\u00e7\u00e3o",
-  "description": "Extra\u00e7\u00e3o de Dados - Motor execut\u00e1vel completo",
+  "description": "Intercepta\u00e7\u00f5es Telem\u00e1ticas Pro - Motor execut\u00e1vel completo",
   "engine_entrypoint": "engine.execute",
   "states_supported": [
     "CREATED",

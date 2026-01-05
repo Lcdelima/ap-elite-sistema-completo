@@ -1,8 +1,8 @@
 {
-  "module_path": "pericia/extracao_dados",
-  "name": "Extra\u00e7\u00e3o de Dados",
-  "category": "Per\u00edcia & Investiga\u00e7\u00e3o",
-  "description": "Extra\u00e7\u00e3o de Dados - Motor execut\u00e1vel completo",
+  "module_path": "juridico/relatorios_automatizados",
+  "name": "Relat\u00f3rios Automatizados",
+  "category": "Jur\u00eddico & Processos",
+  "description": "Relat\u00f3rios Automatizados - Motor execut\u00e1vel completo",
   "engine_entrypoint": "engine.execute",
   "states_supported": [
     "CREATED",

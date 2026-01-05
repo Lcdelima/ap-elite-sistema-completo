@@ -1,8 +1,8 @@
 {
-  "module_path": "pericia/extracao_dados",
-  "name": "Extra\u00e7\u00e3o de Dados",
-  "category": "Per\u00edcia & Investiga\u00e7\u00e3o",
-  "description": "Extra\u00e7\u00e3o de Dados - Motor execut\u00e1vel completo",
+  "module_path": "gestao/gestao_usuarios",
+  "name": "Gerenciamento de Usu\u00e1rios",
+  "category": "Gest\u00e3o & Administra\u00e7\u00e3o",
+  "description": "Gerenciamento de Usu\u00e1rios - Motor execut\u00e1vel completo",
   "engine_entrypoint": "engine.execute",
   "states_supported": [
     "CREATED",

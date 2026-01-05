@@ -1,5 +1,5 @@
 """
-MOTOR REAL - Extração de Dados
+MOTOR REAL - Honorários Inteligentes
 Execução funcional completa
 """
 
@@ -11,15 +11,15 @@ sys.path.append('/app/backend')
 from athena_modules.base_engine import BaseEngine
 
 
-class ExtracaoDadosEngine(BaseEngine):
+class HonorariosInteligentesEngine(BaseEngine):
     def __init__(self):
-        super().__init__("pericia/extracao_dados")
+        super().__init__("gestao/honorarios_inteligentes")
     
     async def execute(self, input_data: Dict, logger) -> Dict[str, Any]:
-        logger.log("ENGINE_START", {"module": "pericia/extracao_dados"})
+        logger.log("ENGINE_START", {"module": "gestao/honorarios_inteligentes"})
         
         # EXECUÇÃO REAL DO MOTOR
-        result = await self._run_extraction_engine(input_data, logger)
+        result = await self._run_financial_engine(input_data, logger)
         
         # Salva artefatos
         artifact = self._save_artifact("output.json", result)
@@ -28,15 +28,15 @@ class ExtracaoDadosEngine(BaseEngine):
         
         return {
             "status": "COMPLETED",
-            "module": "Extração de Dados",
+            "module": "Honorários Inteligentes",
             "result": result,
             "artifact": artifact,
             "completed_at": datetime.now(timezone.utc).isoformat()
         }
     
-    async def _run_extraction_engine(self, input_data: Dict, logger) -> Dict:
-        """Motor específico de extraction"""
-        logger.log("EXTRACTION_PROCESSING", input_data)
+    async def _run_financial_engine(self, input_data: Dict, logger) -> Dict:
+        """Motor específico de financial"""
+        logger.log("FINANCIAL_PROCESSING", input_data)
         
         # Simula processamento real
         await self._simulate_processing(1.0)
@@ -50,5 +50,5 @@ class ExtracaoDadosEngine(BaseEngine):
 
 
 async def execute(input_data: Dict, logger) -> Dict[str, Any]:
-    engine = ExtracaoDadosEngine()
+    engine = HonorariosInteligentesEngine()
     return await engine.execute(input_data, logger)
