@@ -744,6 +744,7 @@ from api.modules.diversos.transcription_vft import router as transcription_vft_r
 from api.modules.diversos.calculadoras import router as calculadoras_router
 from api.modules.diversos.calculadoras_expandidas import router as calculadoras_expandidas_router
 from api.modules.diversos.calculadoras_completas import router as calculadoras_completas_router
+from athena_mobile_api import router as athena_mobile_router
 from api.billing.billing_service import router as billing_router
 from api.entitlements.entitlements_api import router as entitlements_api_router
 from api.payments.stripe_integration import router as stripe_router
