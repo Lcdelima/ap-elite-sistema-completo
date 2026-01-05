@@ -1,0 +1,62 @@
+{
+  "id": "15eca388-d33a-44a1-8637-6ac9b4ed9271",
+  "module": "pericia/extracao_dados",
+  "state": "running",
+  "created_at": "2026-01-05T19:10:22.377963+00:00",
+  "started_at": "2026-01-05T19:10:22.378209+00:00",
+  "completed_at": "2026-01-05T19:10:22.379126+00:00",
+  "output": {
+    "status": "EXTRACAO_CONCLUIDA",
+    "file_type": "sqlite",
+    "extracted_data": {
+      "items": [
+        "messages",
+        "contacts",
+        "call_log"
+      ],
+      "tables": {
+        "messages": {
+          "rows": 8247,
+          "columns": [
+            "id",
+            "text",
+            "timestamp",
+            "sender"
+          ]
+        },
+        "contacts": {
+          "rows": 423,
+          "columns": [
+            "id",
+            "name",
+            "phone"
+          ]
+        },
+        "call_log": {
+          "rows": 897,
+          "columns": [
+            "id",
+            "number",
+            "duration",
+            "timestamp"
+          ]
+        }
+      },
+      "schema": "WhatsApp database schema",
+      "method": "sqlite3"
+    },
+    "hashes": {
+      "sha256": "ebdab90c0c14aa820f72fa68d1885b4731498f0aa50f337b80f6dfa8ba0cbeae",
+      "sha512": "19c514c5f93703efc2a554e1943924daec8a0d7732af5340864ad470f6f488e048953c02ceeab48a4ca76ea7ae34428a9cd82c6bccc1ecdc7fd96650c64246c2",
+      "md5": "9e15b83a0b81e344d9a59825c3d525b8"
+    },
+    "custody_id": "CUSTODY_TESTE-MOTOR-003_20260105191022",
+    "artifact": {
+      "file": "/app/backend/evidence/pericia_extracao_dados/extraction_result.json",
+      "size": 714,
+      "hash": "6f98214b9763147ff603d382ecd9e11ae10325aed38d17860b762e517c1d50cc"
+    },
+    "completed_at": "2026-01-05T19:10:22.379119+00:00"
+  },
+  "error": null
+}

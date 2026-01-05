@@ -1,0 +1,42 @@
+{
+  "id": "d5b149bc-7b42-4787-9936-3ed5890412e4",
+  "module": "pericia/extracao_dados",
+  "state": "running",
+  "created_at": "2026-01-05T19:10:22.365241+00:00",
+  "started_at": "2026-01-05T19:10:22.365476+00:00",
+  "completed_at": "2026-01-05T19:10:22.366397+00:00",
+  "output": {
+    "status": "EXTRACAO_CONCLUIDA",
+    "file_type": "image",
+    "extracted_data": {
+      "items": [
+        "Metadata EXIF"
+      ],
+      "exif": {
+        "Make": "Samsung",
+        "Model": "Galaxy S23",
+        "DateTime": "2024:12:15 10:30:45",
+        "GPSLatitude": "-23.5505",
+        "GPSLongitude": "-46.6333"
+      },
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "method": "Pillow"
+    },
+    "hashes": {
+      "sha256": "abb79403346b9035361d8ad435ffd5457d2de50b24e09e5f940e510f96bc3131",
+      "sha512": "ab4522621c1f1313c2d44e983cca349c85bdf0c45de24bdd6f660f385a8090561131e39d331d25b9b611ff5ab2df3432290c104627fbf07832b2863a0cceecb5",
+      "md5": "286e8dfa5e3fde40eccec8d455bdd9a3"
+    },
+    "custody_id": "CUSTODY_TESTE-MOTOR-002_20260105191022",
+    "artifact": {
+      "file": "/app/backend/evidence/pericia_extracao_dados/extraction_result.json",
+      "size": 610,
+      "hash": "c04aaeda2c1b60ec9f57f3e0f23983e26e09e4dbe15ca364b8b4acfac974b982"
+    },
+    "completed_at": "2026-01-05T19:10:22.366390+00:00"
+  },
+  "error": null
+}

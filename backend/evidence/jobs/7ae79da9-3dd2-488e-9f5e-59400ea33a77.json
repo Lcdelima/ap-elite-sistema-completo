@@ -1,0 +1,40 @@
+{
+  "id": "7ae79da9-3dd2-488e-9f5e-59400ea33a77",
+  "module": "pericia/extracao_dados",
+  "state": "running",
+  "created_at": "2026-01-05T19:10:22.353741+00:00",
+  "started_at": "2026-01-05T19:10:22.354014+00:00",
+  "completed_at": "2026-01-05T19:10:22.354962+00:00",
+  "output": {
+    "status": "EXTRACAO_CONCLUIDA",
+    "file_type": "pdf",
+    "extracted_data": {
+      "items": [
+        "P\u00e1gina 1",
+        "P\u00e1gina 2",
+        "P\u00e1gina 3"
+      ],
+      "text": "Texto extra\u00eddo do documento PDF...",
+      "pages": 3,
+      "metadata": {
+        "author": "Autor Exemplo",
+        "title": "Documento Forense",
+        "creation_date": "2026-01-05T19:10:22.354377+00:00"
+      },
+      "method": "PyPDF2"
+    },
+    "hashes": {
+      "sha256": "f4a571f7009535eaa947c9f425945ee232b0ff57cd7692f522f8cc48390bc202",
+      "sha512": "b3b54617b18b3dcd328006ef6d5bcef421f25b0285eb0ed998873d8305ab6871e95a542a57b155854f2fcea14e210c8f519a9d99deba9c7047efee73b68ad10d",
+      "md5": "0d97d59eab89e52fca8add797fd9c170"
+    },
+    "custody_id": "CUSTODY_TESTE-MOTOR-001_20260105191022",
+    "artifact": {
+      "file": "/app/backend/evidence/pericia_extracao_dados/extraction_result.json",
+      "size": 640,
+      "hash": "0fc83585d3da38b0cb43b1db5e986c3eb01e0e7a7ac07c8407cd93c0eadaab89"
+    },
+    "completed_at": "2026-01-05T19:10:22.354955+00:00"
+  },
+  "error": null
+}
