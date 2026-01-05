@@ -282,6 +282,9 @@ function AppContent() {
           <Route path="/athena/forensics-management" element={<ForensicsManagement />} />
           <Route path="/athena/forensics/:caseId" element={<ForensicCaseDetail />} />
           
+          {/* Athena Mobile Forensics */}
+          <Route path="/athena/mobile-forensics" element={<AthenaMobileForensics />} />
+          
           {/* Aegis/Thanatos Module */}
           <Route path="/aegis" element={<AegisModule />} />
       </Routes>
