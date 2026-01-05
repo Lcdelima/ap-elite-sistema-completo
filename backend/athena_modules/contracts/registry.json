@@ -1,0 +1,42 @@
+{
+  "pericia/extracao_dados": {
+    "module_path": "pericia/extracao_dados",
+    "name": "Extra\u00e7\u00e3o de Dados",
+    "category": "Per\u00edcia & Investiga\u00e7\u00e3o",
+    "description": "Extra\u00e7\u00e3o forense de dispositivos m\u00f3veis usando Athena Mobile Engine",
+    "engine_entrypoint": "engine.execute",
+    "states_supported": [
+      "CREATED",
+      "VALIDATING_INPUT",
+      "INPUT_VALID",
+      "INITIALIZED",
+      "RUNNING",
+      "PROCESSING",
+      "GENERATING_OUTPUT",
+      "VALIDATING_OUTPUT",
+      "COMPLETED",
+      "FAILED"
+    ],
+    "produces_output": true,
+    "logs_required": true,
+    "requires_auth": true,
+    "input_schema": {
+      "tipo_dispositivo": "string",
+      "marca": "string",
+      "modelo": "string",
+      "caso_id": "string"
+    },
+    "output_schema": {
+      "device_profile": "object",
+      "extraction_mode": "string",
+      "artifacts": "array",
+      "total_artifacts": "number",
+      "custody_chain_integrity": "boolean"
+    },
+    "dependencies": [
+      "athena_mobile"
+    ],
+    "version": "1.0.0",
+    "registered_at": "2026-01-05T15:07:02.789292+00:00"
+  }
+}
