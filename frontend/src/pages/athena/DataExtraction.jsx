@@ -50,26 +50,45 @@ const DataExtraction = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${BACKEND_URL}/api/athena/data-extraction/create`, {
+      
+      // INTEGRAÇÃO COM CORE ENGINE - Motor Real
+      const response = await fetch(`${BACKEND_URL}/api/core-engine/execute`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          module_path: 'pericia/extracao_dados',
+          input_data: {
+            caso_id: formData.case_id,
+            tipo_dispositivo: formData.device_type,
+            dispositivo_marca: formData.extraction_tool,
+            dispositivo_modelo: formData.device_model,
+            filename: `${formData.device_model}.pdf`,
+            imei: formData.imei,
+            observacoes: formData.notes,
+            operator: localStorage.getItem('ap_elite_user') ? JSON.parse(localStorage.getItem('ap_elite_user')).email : 'system'
+          }
+        })
       });
 
-      if (response.ok) {
-        alert('Extração criada com sucesso!');
+      const result = await response.json();
+      
+      if (result.status === 'success') {
+        alert(`✅ Extração executada com sucesso!\n\nJob ID: ${result.job_id}\nEstado: ${result.state}\n\nArtifatos gerados com hash SHA-256!`);
         setShowModal(false);
         setFormData({
           device_type: 'smartphone', device_model: '', imei: '',
           case_id: '', extraction_tool: 'UFED', notes: ''
         });
         fetchExtractions();
+      } else {
+        alert('❌ Erro na extração: ' + (result.message || 'Erro desconhecido'));
       }
     } catch (error) {
       console.error('Error:', error);
+      alert('❌ Erro ao executar extração: ' + error.message);
     }
   };
 
