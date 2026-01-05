@@ -137,11 +137,11 @@ async def list_profiles(
 @router.post("/select-mode/{profile_id}")
 async def select_extraction_mode(
     profile_id: str,
-    user: dict = Header(None, alias="authorization", convert_underscores=False)
+    authorization: str = Header(None)
 ):
     """ETAPA 2: Seleção Inteligente do Modo de Extração"""
     try:
-        user_data = await get_current_user(user)
+        user_data = await get_current_user(authorization)
         
         # Buscar perfil
         profile_doc = await db.athena_device_profiles.find_one(
@@ -184,11 +184,11 @@ async def select_extraction_mode(
 @router.post("/extractions/create")
 async def create_extraction(
     data: ExtractionCreate,
-    user: dict = Header(None, alias="authorization", convert_underscores=False)
+    authorization: str = Header(None)
 ):
     """Criar nova extração com Athena Mobile Engine"""
     try:
-        user_data = await get_current_user(user)
+        user_data = await get_current_user(authorization)
         
         extraction_id = str(uuid.uuid4())
         
@@ -246,11 +246,11 @@ async def create_extraction(
 async def execute_extraction(
     extraction_id: str,
     background_tasks: BackgroundTasks,
-    user: dict = Header(None, alias="authorization", convert_underscores=False)
+    authorization: str = Header(None)
 ):
     """ETAPA 5: Executar Extração de Artefatos"""
     try:
-        user_data = await get_current_user(user)
+        user_data = await get_current_user(authorization)
         
         extraction = await db.athena_extractions.find_one(
             {"id": extraction_id},
@@ -341,11 +341,11 @@ async def execute_extraction_background(extraction_id: str, profile: Dict, mode:
 
 @router.get("/extractions")
 async def list_extractions(
-    user: dict = Header(None, alias="authorization", convert_underscores=False)
+    authorization: str = Header(None)
 ):
     """Lista todas as extrações"""
     try:
-        user_data = await get_current_user(user)
+        user_data = await get_current_user(authorization)
         
         extractions = await db.athena_extractions.find(
             {"user_id": user_data.get("id")},
@@ -367,11 +367,11 @@ async def list_extractions(
 @router.get("/extractions/{extraction_id}")
 async def get_extraction(
     extraction_id: str,
-    user: dict = Header(None, alias="authorization", convert_underscores=False)
+    authorization: str = Header(None)
 ):
     """Obter detalhes de uma extração"""
     try:
-        user_data = await get_current_user(user)
+        user_data = await get_current_user(authorization)
         
         extraction = await db.athena_extractions.find_one(
             {"id": extraction_id},
@@ -399,11 +399,11 @@ async def get_extraction(
 @router.get("/exploits/list")
 async def list_exploits(
     profile_id: Optional[str] = None,
-    user: dict = Header(None, alias="authorization", convert_underscores=False)
+    authorization: str = Header(None)
 ):
     """ETAPA 4: Listar exploits disponíveis"""
     try:
-        user_data = await get_current_user(user)
+        user_data = await get_current_user(authorization)
         
         manager = AthenaExploitManager()
         
@@ -436,11 +436,11 @@ async def list_exploits(
 async def dry_run_exploit(
     extraction_id: str,
     data: ExploitApply,
-    user: dict = Header(None, alias="authorization", convert_underscores=False)
+    authorization: str = Header(None)
 ):
     """Testar exploit sem aplicar"""
     try:
-        user_data = await get_current_user(user)
+        user_data = await get_current_user(authorization)
         
         extraction = await db.athena_extractions.find_one({"id": extraction_id}, {"_id": 0})
         if not extraction:
@@ -464,11 +464,11 @@ async def dry_run_exploit(
 async def apply_exploit(
     extraction_id: str,
     data: ExploitApply,
-    user: dict = Header(None, alias="authorization", convert_underscores=False)
+    authorization: str = Header(None)
 ):
     """ETAPA 4: Aplicar exploit com justificativa OBRIGATÓRIA"""
     try:
-        user_data = await get_current_user(user)
+        user_data = await get_current_user(authorization)
         
         extraction = await db.athena_extractions.find_one({"id": extraction_id}, {"_id": 0})
         if not extraction:
@@ -511,11 +511,11 @@ async def apply_exploit(
 
 @router.get("/stats")
 async def get_stats(
-    user: dict = Header(None, alias="authorization", convert_underscores=False)
+    authorization: str = Header(None)
 ):
     """Estatísticas do Athena Mobile"""
     try:
-        user_data = await get_current_user(user)
+        user_data = await get_current_user(authorization)
         
         total_extractions = await db.athena_extractions.count_documents(
             {"user_id": user_data.get("id")}
