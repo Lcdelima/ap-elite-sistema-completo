@@ -1,0 +1,40 @@
+{
+  "id": "023b0113-2952-4dfc-93d0-24d37fb62c6f",
+  "module": "pericia/extracao_dados",
+  "state": "running",
+  "created_at": "2026-01-05T18:16:19.792299+00:00",
+  "started_at": "2026-01-05T18:16:19.792574+00:00",
+  "completed_at": "2026-01-05T18:16:19.807802+00:00",
+  "output": {
+    "status": "EXTRACAO_CONCLUIDA",
+    "file_type": "pdf",
+    "extracted_data": {
+      "items": [
+        "P\u00e1gina 1",
+        "P\u00e1gina 2",
+        "P\u00e1gina 3"
+      ],
+      "text": "Texto extra\u00eddo do documento PDF...",
+      "pages": 3,
+      "metadata": {
+        "author": "Autor Exemplo",
+        "title": "Documento Forense",
+        "creation_date": "2026-01-05T18:16:19.805648+00:00"
+      },
+      "method": "PyPDF2"
+    },
+    "hashes": {
+      "sha256": "6fbe5bbcb2324443ff0415aa4038c9186b4fd90cee25a82cb9907be0ba9238f7",
+      "sha512": "74f0984e4a0d743de553770ec34f2ee7425d49c0042d1f6d490963ec8e7f812a6276edf33f8c7afe1088c6daca676a8bd042dbb7d3ecb227490f85e28623bbc9",
+      "md5": "4b1350cd346cb961fb5792aad92b7302"
+    },
+    "custody_id": "CUSTODY_FORENSIC-2025-001_20260105181619",
+    "artifact": {
+      "file": "/app/backend/evidence/pericia_extracao_dados/extraction_result.json",
+      "size": 642,
+      "hash": "7981eb7ef0a39928e21c4654b2f27abb234b45295578c3857e8447ab2aa018d0"
+    },
+    "completed_at": "2026-01-05T18:16:19.807791+00:00"
+  },
+  "error": null
+}
