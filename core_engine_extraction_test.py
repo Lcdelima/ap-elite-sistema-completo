@@ -144,14 +144,15 @@ class CoreEngineExtractionTestSuite:
                 checks.append(("job_id", data.get("job_id") is not None))
                 checks.append(("state", data.get("state") is not None))
                 
-                # Check result details
+                # Check result details (data is in result.output)
                 result = data.get("result", {})
-                checks.append(("extracted_data", "extracted_data" in result))
-                checks.append(("hashes", "hashes" in result))
-                checks.append(("custody_id", "custody_id" in result))
+                output = result.get("output", {})
+                checks.append(("extracted_data", "extracted_data" in output))
+                checks.append(("hashes", "hashes" in output))
+                checks.append(("custody_id", "custody_id" in output))
                 
                 # Verify hashes
-                hashes = result.get("hashes", {})
+                hashes = output.get("hashes", {})
                 checks.append(("sha256", "sha256" in hashes))
                 checks.append(("sha512", "sha512" in hashes))
                 
