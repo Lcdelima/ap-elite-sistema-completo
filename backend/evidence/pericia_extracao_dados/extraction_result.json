@@ -1,24 +1,46 @@
 {
   "extracted_data": {
     "items": [
-      "P\u00e1gina 1",
-      "P\u00e1gina 2",
-      "P\u00e1gina 3"
+      "messages",
+      "contacts",
+      "call_log"
     ],
-    "text": "Texto extra\u00eddo do documento PDF...",
-    "pages": 3,
-    "metadata": {
-      "author": "Autor Exemplo",
-      "title": "Documento Forense",
-      "creation_date": "2026-01-05T18:16:19.805648+00:00"
+    "tables": {
+      "messages": {
+        "rows": 8247,
+        "columns": [
+          "id",
+          "text",
+          "timestamp",
+          "sender"
+        ]
+      },
+      "contacts": {
+        "rows": 423,
+        "columns": [
+          "id",
+          "name",
+          "phone"
+        ]
+      },
+      "call_log": {
+        "rows": 897,
+        "columns": [
+          "id",
+          "number",
+          "duration",
+          "timestamp"
+        ]
+      }
     },
-    "method": "PyPDF2"
+    "schema": "WhatsApp database schema",
+    "method": "sqlite3"
   },
   "hashes": {
-    "sha256": "6fbe5bbcb2324443ff0415aa4038c9186b4fd90cee25a82cb9907be0ba9238f7",
-    "sha512": "74f0984e4a0d743de553770ec34f2ee7425d49c0042d1f6d490963ec8e7f812a6276edf33f8c7afe1088c6daca676a8bd042dbb7d3ecb227490f85e28623bbc9",
-    "md5": "4b1350cd346cb961fb5792aad92b7302"
+    "sha256": "ebdab90c0c14aa820f72fa68d1885b4731498f0aa50f337b80f6dfa8ba0cbeae",
+    "sha512": "19c514c5f93703efc2a554e1943924daec8a0d7732af5340864ad470f6f488e048953c02ceeab48a4ca76ea7ae34428a9cd82c6bccc1ecdc7fd96650c64246c2",
+    "md5": "9e15b83a0b81e344d9a59825c3d525b8"
   },
-  "custody_id": "CUSTODY_FORENSIC-2025-001_20260105181619",
-  "file_type": "pdf"
+  "custody_id": "CUSTODY_TESTE-MOTOR-003_20260105190929",
+  "file_type": "sqlite"
 }
