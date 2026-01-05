@@ -202,14 +202,15 @@ class CoreEngineExtractionTestSuite:
                 checks.append(("status", data.get("status") == "success"))
                 checks.append(("job_id", data.get("job_id") is not None))
                 
-                # Check result details
+                # Check result details (data is in result.output)
                 result = data.get("result", {})
-                extracted_data = result.get("extracted_data", {})
+                output = result.get("output", {})
+                extracted_data = output.get("extracted_data", {})
                 
                 # Verify EXIF extraction
                 checks.append(("exif_data", "exif" in extracted_data))
-                checks.append(("hashes", "hashes" in result))
-                checks.append(("custody_id", "custody_id" in result))
+                checks.append(("hashes", "hashes" in output))
+                checks.append(("custody_id", "custody_id" in output))
                 
                 all_passed = all(check[1] for check in checks)
                 
