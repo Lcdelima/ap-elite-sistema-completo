@@ -1,0 +1,14 @@
+{
+  "module_path": "pericia/pericia_digital",
+  "name": "Perícia Digital",
+  "category": "Perícia & Investigação",
+  "description": "Análise forense completa de dispositivos digitais",
+  "engine_entrypoint": "engine.execute",
+  "states_supported": ["CREATED", "VALIDATING_INPUT", "INPUT_VALID", "INITIALIZED", "RUNNING", "PROCESSING", "GENERATING_OUTPUT", "VALIDATING_OUTPUT", "COMPLETED", "FAILED"],
+  "produces_output": true,
+  "logs_required": true,
+  "requires_auth": true,
+  "input_schema": {"dispositivo_tipo": "string", "dispositivo_marca": "string", "dispositivo_modelo": "string", "sistema_operacional": "string", "caso_id": "string"},
+  "output_schema": {"device_analysis": "object", "extraction": "object", "analysis": "object", "report": "object"},
+  "version": "1.0.0"
+}
