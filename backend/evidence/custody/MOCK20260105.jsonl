@@ -1,0 +1,1 @@
+{"timestamp": "2026-01-05T15:08:45.017426+00:00", "evidence_id": "MOCK20260105", "event_type": "EXTRACAO_COMPLETA", "actor": "anonymous@apelite.com", "details": {"artifacts": 10909, "mode": "logical"}, "prev_hash": null, "event_hash": "72850e6a1b9a05cc5af9f77816355105a4ee2c227f376afd3977732f363c5bd7"}

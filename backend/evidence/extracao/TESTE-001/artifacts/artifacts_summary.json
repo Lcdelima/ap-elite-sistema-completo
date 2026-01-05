@@ -1,0 +1,65 @@
+{
+  "device_id": "MOCK20260105",
+  "extraction_timestamp": "2026-01-05T15:08:45.017024+00:00",
+  "artifacts_extracted": [
+    {
+      "artifact_type": "WHATSAPP",
+      "count": 8247,
+      "db_path": "/app/backend/evidence/extracao/TESTE-001/data/data/com.whatsapp/databases/msgstore.db",
+      "hash": "cd08656fa54981ea30ae978758a02493f2c13b7e8b539a0965ece3a4ceb3cda8",
+      "extraction_method": "SQLite direct access",
+      "tables_extracted": [
+        "messages",
+        "message_media",
+        "chat_list"
+      ],
+      "date_range": {
+        "earliest": "2023-01-01",
+        "latest": "2024-12-31"
+      },
+      "status": "EXTRACTED",
+      "priority": "HIGH"
+    },
+    {
+      "artifact_type": "SMS_MMS",
+      "count": 1342,
+      "db_path": "/app/backend/evidence/extracao/TESTE-001/data/data/com.android.providers.telephony/databases/mmssms.db",
+      "hash": "8cf428044f89b946f59bd66a699d32781c2f7fd20e69ffbda606b05f0e62e830",
+      "extraction_method": "Content Provider + SQLite",
+      "tables_extracted": [
+        "sms",
+        "mms",
+        "threads"
+      ],
+      "status": "EXTRACTED",
+      "priority": "HIGH"
+    },
+    {
+      "artifact_type": "CONTACTS",
+      "count": 423,
+      "db_path": "/app/backend/evidence/extracao/TESTE-001/data/data/com.android.providers.contacts/databases/contacts2.db",
+      "hash": "590bc59f3e52737af3a90250f128777ef3e27473f443c59e4df5723abce6be91",
+      "extraction_method": "Contacts Provider",
+      "tables_extracted": [
+        "contacts",
+        "raw_contacts",
+        "data"
+      ],
+      "status": "EXTRACTED",
+      "priority": "MEDIUM"
+    },
+    {
+      "artifact_type": "CALL_LOG",
+      "count": 897,
+      "db_path": "/app/backend/evidence/extracao/TESTE-001/data/data/com.android.providers.contacts/databases/calllog.db",
+      "hash": "e8ab8c50b4758aeb5ddeb9b40dbcf476c6677872a42b875a978049a9f06f7e02",
+      "extraction_method": "Call Log Provider",
+      "tables_extracted": [
+        "calls"
+      ],
+      "status": "EXTRACTED",
+      "priority": "HIGH"
+    }
+  ],
+  "total_count": 10909
+}
