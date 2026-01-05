@@ -77,11 +77,11 @@ class ExploitApply(BaseModel):
 @router.post("/identify")
 async def identify_device(
     device_type: str = "auto",
-    user: dict = Header(None, alias="authorization", convert_underscores=False)
+    authorization: str = Header(None)
 ):
     """ETAPA 1: Identificação Forense do Dispositivo"""
     try:
-        user_data = await get_current_user(user)
+        user_data = await get_current_user(authorization)
         
         identifier = AthenaDeviceIdentifier(EVIDENCE_BASE)
         profile = await identifier.identify_device(device_type)
