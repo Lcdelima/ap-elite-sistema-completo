@@ -30,8 +30,8 @@ import os
 # Configuration
 BASE_URL = "https://legalgravitas.preview.emergentagent.com/api"
 AUTH_EMAIL = "laura@apelite.com"
-AUTH_PASSWORD = "laura2024"
-AUTH_ROLE = "administrator"
+AUTH_PASSWORD = "Secure2024!"
+AUTH_ROLE = "admin"
 
 class CoreEngineExtractionTestSuite:
     def __init__(self):
