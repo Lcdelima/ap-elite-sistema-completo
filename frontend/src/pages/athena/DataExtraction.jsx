@@ -28,22 +28,32 @@ const DataExtraction = () => {
   const fetchExtractions = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${BACKEND_URL}/api/athena/data-extraction/list`, {
+      
+      // Buscar jobs do Core Engine
+      const response = await fetch(`${BACKEND_URL}/api/core-engine/jobs?module_path=pericia/extracao_dados`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
+      
       const data = await response.json();
-      setExtractions(data.extractions || []);
+      
+      if (data.status === 'success') {
+        setExtractions(data.jobs || []);
+        
+        // Atualizar stats baseado nos jobs
+        const total = data.jobs.length;
+        const completed = data.jobs.filter(j => j.state === 'completed').length;
+        const in_progress = data.jobs.filter(j => j.state === 'running').length;
+        
+        setStats({ total, completed, in_progress });
+      }
     } catch (error) {
       console.error('Error:', error);
+      setExtractions([]);
     }
   };
 
   const fetchStats = async () => {
-    setStats({
-      total: 0,
-      completed: 0,
-      in_progress: 0
-    });
+    // Stats agora vêm do fetchExtractions
   };
 
   const handleSubmit = async (e) => {
