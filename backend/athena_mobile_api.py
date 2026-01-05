@@ -109,11 +109,11 @@ async def identify_device(
 
 @router.get("/profiles")
 async def list_profiles(
-    user: dict = Header(None, alias="authorization", convert_underscores=False)
+    authorization: str = Header(None)
 ):
     """Lista perfis de dispositivos identificados"""
     try:
-        user_data = await get_current_user(user)
+        user_data = await get_current_user(authorization)
         
         profiles = await db.athena_device_profiles.find(
             {"user_id": user_data.get("id")},
