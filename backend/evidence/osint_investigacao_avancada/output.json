@@ -1,0 +1,10 @@
+{
+  "processed": true,
+  "input_validated": true,
+  "output_generated": true,
+  "data": {
+    "alvo": "Empresa XYZ",
+    "tipo": "pessoa_juridica",
+    "operator": "anonymous@apelite.com"
+  }
+}

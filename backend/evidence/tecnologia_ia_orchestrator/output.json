@@ -1,0 +1,10 @@
+{
+  "processed": true,
+  "input_validated": true,
+  "output_generated": true,
+  "data": {
+    "tarefa": "An\u00e1lise de documentos",
+    "modelo": "gpt-5",
+    "operator": "anonymous@apelite.com"
+  }
+}

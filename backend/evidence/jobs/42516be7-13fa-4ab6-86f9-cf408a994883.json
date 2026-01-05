@@ -1,0 +1,29 @@
+{
+  "id": "42516be7-13fa-4ab6-86f9-cf408a994883",
+  "module": "osint/investigacao_avancada",
+  "state": "running",
+  "created_at": "2026-01-05T15:16:34.746450+00:00",
+  "started_at": "2026-01-05T15:16:34.746746+00:00",
+  "completed_at": "2026-01-05T15:16:35.748135+00:00",
+  "output": {
+    "status": "COMPLETED",
+    "module": "Investiga\u00e7\u00e3o Avan\u00e7ada",
+    "result": {
+      "processed": true,
+      "input_validated": true,
+      "output_generated": true,
+      "data": {
+        "alvo": "Empresa XYZ",
+        "tipo": "pessoa_juridica",
+        "operator": "anonymous@apelite.com"
+      }
+    },
+    "artifact": {
+      "file": "/app/backend/evidence/osint_investigacao_avancada/output.json",
+      "size": 167,
+      "hash": "69ececc28a6d827737f7fd604a500d75fb6506f0e942d33b8c78a53bb290e36f"
+    },
+    "completed_at": "2026-01-05T15:16:35.748121+00:00"
+  },
+  "error": null
+}

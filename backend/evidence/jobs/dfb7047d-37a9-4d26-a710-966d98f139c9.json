@@ -1,0 +1,29 @@
+{
+  "id": "dfb7047d-37a9-4d26-a710-966d98f139c9",
+  "module": "juridico/gerador_contratos",
+  "state": "running",
+  "created_at": "2026-01-05T15:16:33.411147+00:00",
+  "started_at": "2026-01-05T15:16:33.411419+00:00",
+  "completed_at": "2026-01-05T15:16:34.413487+00:00",
+  "output": {
+    "status": "COMPLETED",
+    "module": "Gerador de Contratos",
+    "result": {
+      "processed": true,
+      "input_validated": true,
+      "output_generated": true,
+      "data": {
+        "tipo": "Procura\u00e7\u00e3o",
+        "cliente": "Jo\u00e3o Silva",
+        "operator": "anonymous@apelite.com"
+      }
+    },
+    "artifact": {
+      "file": "/app/backend/evidence/juridico_gerador_contratos/output.json",
+      "size": 179,
+      "hash": "4a26729286449e2e351736c53994fd2524e54bd34127cfdb76900a4dff44556d"
+    },
+    "completed_at": "2026-01-05T15:16:34.413471+00:00"
+  },
+  "error": null
+}

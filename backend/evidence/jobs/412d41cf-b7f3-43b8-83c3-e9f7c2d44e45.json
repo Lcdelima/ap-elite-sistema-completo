@@ -1,0 +1,29 @@
+{
+  "id": "412d41cf-b7f3-43b8-83c3-e9f7c2d44e45",
+  "module": "tecnologia/ia_orchestrator",
+  "state": "running",
+  "created_at": "2026-01-05T15:16:36.067575+00:00",
+  "started_at": "2026-01-05T15:16:36.067843+00:00",
+  "completed_at": "2026-01-05T15:16:37.069237+00:00",
+  "output": {
+    "status": "COMPLETED",
+    "module": "IA Orchestrator",
+    "result": {
+      "processed": true,
+      "input_validated": true,
+      "output_generated": true,
+      "data": {
+        "tarefa": "An\u00e1lise de documentos",
+        "modelo": "gpt-5",
+        "operator": "anonymous@apelite.com"
+      }
+    },
+    "artifact": {
+      "file": "/app/backend/evidence/tecnologia_ia_orchestrator/output.json",
+      "size": 176,
+      "hash": "f33205ca6040ee26cad712eee5815717a36815075a1fbd1496574f1e064de8ad"
+    },
+    "completed_at": "2026-01-05T15:16:37.069224+00:00"
+  },
+  "error": null
+}
