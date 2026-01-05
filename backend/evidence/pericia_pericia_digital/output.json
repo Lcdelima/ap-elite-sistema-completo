@@ -3,7 +3,7 @@
   "input_validated": true,
   "output_generated": true,
   "data": {
-    "alvo": "Teste",
+    "caso_id": "VERIFICACAO-001",
     "operator": "anonymous@apelite.com"
   }
 }

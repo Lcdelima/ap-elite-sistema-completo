@@ -1,0 +1,28 @@
+{
+  "id": "c0e5544e-6afc-4b83-9869-962afddfe69f",
+  "module": "pericia/pericia_digital",
+  "state": "running",
+  "created_at": "2026-01-05T16:46:55.283940+00:00",
+  "started_at": "2026-01-05T16:46:55.284224+00:00",
+  "completed_at": "2026-01-05T16:46:56.285568+00:00",
+  "output": {
+    "status": "COMPLETED",
+    "module": "Per\u00edcia Digital",
+    "result": {
+      "processed": true,
+      "input_validated": true,
+      "output_generated": true,
+      "data": {
+        "caso_id": "VERIFICACAO-001",
+        "operator": "anonymous@apelite.com"
+      }
+    },
+    "artifact": {
+      "file": "/app/backend/evidence/pericia_pericia_digital/output.json",
+      "size": 147,
+      "hash": "fde87b240edd6e4f4a7d38a50c23f706d70142d815b37472e29cdb055cdc9595"
+    },
+    "completed_at": "2026-01-05T16:46:56.285551+00:00"
+  },
+  "error": null
+}

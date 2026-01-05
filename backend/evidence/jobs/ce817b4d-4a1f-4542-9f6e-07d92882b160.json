@@ -1,0 +1,28 @@
+{
+  "id": "ce817b4d-4a1f-4542-9f6e-07d92882b160",
+  "module": "osint/investigacao_avancada",
+  "state": "running",
+  "created_at": "2026-01-05T16:46:56.305701+00:00",
+  "started_at": "2026-01-05T16:46:56.305953+00:00",
+  "completed_at": "2026-01-05T16:46:57.306693+00:00",
+  "output": {
+    "status": "COMPLETED",
+    "module": "Investiga\u00e7\u00e3o Avan\u00e7ada",
+    "result": {
+      "processed": true,
+      "input_validated": true,
+      "output_generated": true,
+      "data": {
+        "alvo": "Teste",
+        "operator": "anonymous@apelite.com"
+      }
+    },
+    "artifact": {
+      "file": "/app/backend/evidence/osint_investigacao_avancada/output.json",
+      "size": 134,
+      "hash": "46b2cfeba857afd873b94b1dacec179fb2ee450946be10e3d2499bc41293e87a"
+    },
+    "completed_at": "2026-01-05T16:46:57.306680+00:00"
+  },
+  "error": null
+}
