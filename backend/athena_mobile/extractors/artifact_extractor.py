@@ -6,7 +6,7 @@ WhatsApp, SMS, Contatos, Localização, Timeline
 import json
 import sqlite3
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
 from datetime import datetime, timezone
 import hashlib
 
