@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1100" role="img" aria-labelledby="title desc">
+  <title id="title">Portal institucional Elite Intelligence 360</title>
+  <desc id="desc">Arquitetura abstrata em azul profundo, preto e dourado integrando Direito, Inteligência e Tecnologia.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#020812"/>
+      <stop offset="0.52" stop-color="#061523"/>
+      <stop offset="1" stop-color="#02070d"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#76531f"/>
+      <stop offset="0.35" stop-color="#e4c47c"/>
+      <stop offset="0.68" stop-color="#b78b3d"/>
+      <stop offset="1" stop-color="#5d4018"/>
+    </linearGradient>
+    <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#18d8ff" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#18d8ff" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#18d8ff" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="doorGlow" cx="50%" cy="45%" r="60%">
+      <stop offset="0" stop-color="#e8d6a2" stop-opacity="0.42"/>
+      <stop offset="0.38" stop-color="#18c8f2" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#06111c" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="46" height="46" patternUnits="userSpaceOnUse">
+      <path d="M46 0H0V46" fill="none" stroke="#4ecff0" stroke-opacity="0.08" stroke-width="1"/>
+    </pattern>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="2" seed="19"/>
+      <feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 .06 0"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="1100" fill="url(#bg)"/>
+  <rect width="1600" height="1100" fill="url(#grid)" opacity="0.42"/>
+  <rect width="1600" height="1100" filter="url(#grain)" opacity="0.28"/>
+  <ellipse cx="1180" cy="530" rx="520" ry="470" fill="url(#doorGlow)"/>
+
+  <!-- perspective floor -->
+  <g opacity="0.23" stroke="#5ccde8" stroke-width="1">
+    <path d="M0 1080L1110 650"/><path d="M260 1100L1140 650"/><path d="M590 1100L1170 650"/><path d="M900 1100L1200 650"/><path d="M1260 1100L1230 650"/><path d="M1580 1100L1260 650"/>
+    <path d="M160 1000H1540"/><path d="M360 900H1480"/><path d="M565 820H1420"/><path d="M770 755H1365"/><path d="M930 705H1320"/>
+  </g>
+
+  <!-- data architecture -->
+  <g opacity="0.66">
+    <rect x="735" y="205" width="260" height="150" rx="4" fill="#071621" stroke="#2aa9c7" stroke-opacity="0.42"/>
+    <rect x="760" y="232" width="150" height="8" fill="#d6b76f" opacity="0.68"/>
+    <rect x="760" y="258" width="205" height="4" fill="#61d9f4" opacity="0.36"/>
+    <rect x="760" y="277" width="180" height="4" fill="#61d9f4" opacity="0.22"/>
+    <rect x="760" y="304" width="58" height="27" fill="#102735"/>
+    <rect x="828" y="304" width="58" height="27" fill="#102735"/>
+    <rect x="896" y="304" width="69" height="27" fill="#102735"/>
+    <path d="M782 319l16-7 15 5 18-12 17 6 20-15 18 3 22-12 24 7" fill="none" stroke="#28c9ea" stroke-width="2"/>
+  </g>
+
+  <!-- monumental portal -->
+  <g transform="translate(910 95)">
+    <rect x="0" y="45" width="595" height="760" fill="#03080d" stroke="#644c27" stroke-width="2"/>
+    <rect x="30" y="76" width="535" height="700" fill="#07121b" stroke="#b38a45" stroke-opacity="0.55"/>
+    <rect x="58" y="105" width="479" height="641" fill="#02070c" stroke="#283e49"/>
+    <path d="M104 714V330c0-145 103-226 194-226s194 81 194 226v384" fill="#07141d" stroke="url(#gold)" stroke-width="5"/>
+    <path d="M132 714V341c0-119 82-190 166-190s166 71 166 190v373" fill="#06111a" stroke="#6c532a" stroke-width="2"/>
+    <path d="M158 714V353c0-93 64-153 140-153s140 60 140 153v361" fill="#081722" stroke="#1d5160" stroke-width="2"/>
+    <rect x="179" y="376" width="238" height="338" fill="#03080d" stroke="#b48b48" stroke-opacity="0.55"/>
+    <rect x="193" y="391" width="210" height="323" fill="#05131d"/>
+    <path d="M196 397h204v312H196z" fill="url(#grid)" opacity="0.34"/>
+    <rect x="286" y="391" width="24" height="323" fill="url(#cyan)" opacity="0.58"/>
+    <rect x="28" y="735" width="540" height="15" fill="url(#gold)" opacity="0.82"/>
+    <rect x="0" y="775" width="595" height="30" fill="#02060a" stroke="#6a5029"/>
+
+    <!-- columns -->
+    <g fill="#071019" stroke="#8b6937" stroke-opacity="0.65">
+      <rect x="21" y="74" width="70" height="702"/>
+      <rect x="504" y="74" width="70" height="702"/>
+      <rect x="13" y="64" width="86" height="24" fill="#0b1720"/>
+      <rect x="496" y="64" width="86" height="24" fill="#0b1720"/>
+      <rect x="11" y="748" width="90" height="28" fill="#0b1720"/>
+      <rect x="494" y="748" width="90" height="28" fill="#0b1720"/>
+    </g>
+
+    <!-- scale of justice -->
+    <g transform="translate(298 445)" fill="none" stroke="url(#gold)" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M0-88V98" stroke-width="8"/>
+      <path d="M-104-42H104" stroke-width="7"/>
+      <path d="M0-92l-16 18h32z" fill="#c8a35a" stroke="none"/>
+      <path d="M-76-40l-46 108M-76-40l46 108M76-40L30 68M76-40l46 108" stroke-width="3"/>
+      <path d="M-138 68h64c-6 34-58 34-64 0zM74 68h64c-6 34-58 34-64 0z" fill="#7d5e2d" fill-opacity="0.3" stroke-width="3"/>
+      <path d="M-40 101h80M-60 119h120" stroke-width="7"/>
+    </g>
+  </g>
+
+  <!-- left light rails and interface marks -->
+  <g opacity="0.62">
+    <rect x="80" y="220" width="7" height="540" fill="#caa65f"/>
+    <rect x="101" y="220" width="1" height="540" fill="#63d9f4"/>
+    <rect x="126" y="220" width="360" height="1" fill="url(#cyan)"/>
+    <rect x="126" y="759" width="420" height="1" fill="url(#cyan)"/>
+    <path d="M126 300h92M126 332h58M126 364h124" stroke="#5bd5f1" stroke-width="2" opacity="0.38"/>
+    <path d="M126 684h148M126 716h96" stroke="#c6a15a" stroke-width="2" opacity="0.48"/>
+  </g>
+
+  <rect x="0" y="0" width="640" height="1100" fill="url(#bg)" opacity="0.62"/>
+  <rect x="0" y="0" width="1600" height="1100" fill="none" stroke="#b38c4d" stroke-opacity="0.12" stroke-width="2"/>
+</svg>
