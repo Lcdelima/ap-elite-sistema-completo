@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Interface do sistema Elite 360</title>
+  <desc id="desc">Mockup institucional do sistema de gestão, inteligência e tecnologia Elite 360 em computador, tablet e celular.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#030a12"/><stop offset="1" stop-color="#071a28"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#7a571f"/><stop offset="0.45" stop-color="#e1c176"/><stop offset="1" stop-color="#8d6727"/>
+    </linearGradient>
+    <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1fd8ff"/><stop offset="1" stop-color="#14759d"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="22"/></filter>
+    <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="#5bdaf5" stroke-opacity="0.08"/></pattern>
+  </defs>
+  <rect width="1500" height="1000" rx="34" fill="url(#bg)"/>
+  <rect width="1500" height="1000" rx="34" fill="url(#grid)"/>
+  <ellipse cx="750" cy="840" rx="620" ry="105" fill="#19c8ef" opacity="0.08" filter="url(#shadow)"/>
+
+  <!-- desktop -->
+  <g transform="translate(115 110)">
+    <rect x="0" y="0" width="1010" height="650" rx="28" fill="#05090e" stroke="#b78b43" stroke-width="3"/>
+    <rect x="26" y="26" width="958" height="598" rx="14" fill="#07131d" stroke="#1d4352"/>
+    <rect x="26" y="26" width="958" height="62" rx="14" fill="#0b1823"/>
+    <rect x="26" y="77" width="958" height="11" fill="url(#gold)" opacity="0.82"/>
+    <g transform="translate(55 46)">
+      <path d="M0 24L18 0l18 24H25l-7-9-7 9z" fill="none" stroke="#ddb96c" stroke-width="3"/>
+      <text x="48" y="21" fill="#eef7fb" font-family="Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="4">ELITE 360</text>
+    </g>
+    <g fill="#718493" font-family="Arial, sans-serif" font-size="12" letter-spacing="1.5">
+      <text x="695" y="62">BUSCA GLOBAL</text><text x="825" y="62">LAURA C. LIMA</text>
+    </g>
+
+    <!-- sidebar -->
+    <rect x="26" y="88" width="206" height="536" fill="#071019"/>
+    <g font-family="Arial, sans-serif" font-size="13">
+      <text x="54" y="128" fill="#d9b76e" font-size="10" letter-spacing="2">COMANDO</text>
+      <g fill="#e6edf1">
+        <text x="77" y="172">Visão 360</text><text x="77" y="215">Clientes & CRM</text><text x="77" y="258">Processos</text><text x="77" y="301">Documentos</text><text x="77" y="344">Financeiro</text><text x="77" y="387">Perícia & Evidências</text><text x="77" y="430">Inteligência</text><text x="77" y="473">Planejamento</text><text x="77" y="516">Elite IA</text><text x="77" y="559">Administração</text>
+      </g>
+      <g fill="none" stroke="#26c9e8" stroke-width="2">
+        <rect x="49" y="153" width="17" height="17"/><rect x="49" y="196" width="17" height="17"/><rect x="49" y="239" width="17" height="17"/><rect x="49" y="282" width="17" height="17"/><rect x="49" y="325" width="17" height="17"/><rect x="49" y="368" width="17" height="17"/><rect x="49" y="411" width="17" height="17"/><rect x="49" y="454" width="17" height="17"/><rect x="49" y="497" width="17" height="17"/><rect x="49" y="540" width="17" height="17"/>
+      </g>
+      <rect x="40" y="140" width="178" height="45" rx="8" fill="#13303d" opacity="0.62"/>
+    </g>
+
+    <!-- main header -->
+    <g transform="translate(262 122)">
+      <text x="0" y="0" fill="#8295a4" font-family="Arial, sans-serif" font-size="11" letter-spacing="2">CENTRO DE DECISÃO</text>
+      <text x="0" y="46" fill="#f0f4f6" font-family="Georgia, serif" font-size="34">Sua operação, inteira, em um só lugar.</text>
+      <text x="0" y="78" fill="#8fa2ae" font-family="Arial, sans-serif" font-size="14">Direito, gestão, inteligência e tecnologia conectados por contexto.</text>
+    </g>
+
+    <!-- stats -->
+    <g transform="translate(262 236)" font-family="Arial, sans-serif">
+      <g><rect width="212" height="102" rx="12" fill="#0b1a25" stroke="#203e4c"/><text x="18" y="28" fill="#7d919e" font-size="11" letter-spacing="1.5">CASOS ATIVOS</text><text x="18" y="72" fill="#e5c57d" font-size="34" font-family="Georgia, serif">128</text><text x="152" y="72" fill="#35d29b" font-size="12">+8,4%</text></g>
+      <g transform="translate(232 0)"><rect width="212" height="102" rx="12" fill="#0b1a25" stroke="#203e4c"/><text x="18" y="28" fill="#7d919e" font-size="11" letter-spacing="1.5">PRAZOS CRÍTICOS</text><text x="18" y="72" fill="#f1f5f7" font-size="34" font-family="Georgia, serif">07</text><text x="152" y="72" fill="#f0b85e" font-size="12">HOJE</text></g>
+      <g transform="translate(464 0)"><rect width="212" height="102" rx="12" fill="#0b1a25" stroke="#203e4c"/><text x="18" y="28" fill="#7d919e" font-size="11" letter-spacing="1.5">PREVISÃO FINANCEIRA</text><text x="18" y="72" fill="#e5c57d" font-size="28" font-family="Georgia, serif">R$ 286 mil</text></g>
+    </g>
+
+    <!-- timeline and modules -->
+    <g transform="translate(262 366)">
+      <rect width="436" height="220" rx="14" fill="#081721" stroke="#203e4c"/>
+      <text x="20" y="30" fill="#e9eef1" font-family="Arial, sans-serif" font-size="14" font-weight="700">FLUXO OPERACIONAL</text>
+      <text x="20" y="50" fill="#718794" font-family="Arial, sans-serif" font-size="10" letter-spacing="1.4">CASOS · TAREFAS · DOCUMENTOS · PRAZOS</text>
+      <g transform="translate(25 82)">
+        <path d="M0 85L56 64l56 14 56-43 56 18 56-37 56 12 56-54" fill="none" stroke="url(#cyan)" stroke-width="4"/>
+        <path d="M0 116H380M0 76H380M0 36H380" stroke="#213642"/>
+        <g fill="#d7b86e"><rect x="-2" y="80" width="8" height="8"/><rect x="52" y="60" width="8" height="8"/><rect x="108" y="74" width="8" height="8"/><rect x="164" y="31" width="8" height="8"/><rect x="220" y="49" width="8" height="8"/><rect x="276" y="12" width="8" height="8"/><rect x="332" y="24" width="8" height="8"/><rect x="376" y="-2" width="8" height="8"/></g>
+      </g>
+      <g transform="translate(456 0)">
+        <rect width="266" height="220" rx="14" fill="#081721" stroke="#203e4c"/>
+        <text x="20" y="30" fill="#e9eef1" font-family="Arial, sans-serif" font-size="14" font-weight="700">ELITE IA</text>
+        <text x="20" y="52" fill="#718794" font-family="Arial, sans-serif" font-size="10" letter-spacing="1.2">ASSISTÊNCIA SUPERVISIONADA</text>
+        <rect x="20" y="78" width="226" height="48" rx="8" fill="#102735"/><rect x="20" y="137" width="168" height="12" rx="6" fill="#234657"/><rect x="20" y="160" width="204" height="12" rx="6" fill="#183542"/><rect x="20" y="183" width="133" height="12" rx="6" fill="#183542"/>
+        <path d="M205 85l12 12-12 12-12-12z" fill="#d8b66c"/>
+      </g>
+    </g>
+
+    <!-- stand -->
+    <rect x="430" y="650" width="150" height="54" rx="10" fill="#070b10" stroke="#7f622e"/>
+    <path d="M405 708h200l55 24H350z" fill="#05080c" stroke="#8d6c35"/>
+  </g>
+
+  <!-- tablet -->
+  <g transform="translate(1005 275) rotate(4)">
+    <rect width="340" height="510" rx="28" fill="#05080c" stroke="#c29b50" stroke-width="3"/>
+    <rect x="18" y="22" width="304" height="466" rx="14" fill="#07151f"/>
+    <text x="40" y="66" fill="#e6c57b" font-family="Arial, sans-serif" font-size="12" letter-spacing="2">ELITE 360 · MOBILE DESK</text>
+    <text x="40" y="108" fill="#f2f6f7" font-family="Georgia, serif" font-size="25">Hoje</text>
+    <rect x="40" y="135" width="242" height="84" rx="12" fill="#0d2230" stroke="#234b5b"/>
+    <text x="58" y="162" fill="#7f949f" font-family="Arial, sans-serif" font-size="10">PRÓXIMO PRAZO</text><text x="58" y="195" fill="#e7c67b" font-family="Georgia, serif" font-size="24">14:30</text>
+    <g fill="#0d2230" stroke="#234b5b"><rect x="40" y="238" width="112" height="105" rx="12"/><rect x="170" y="238" width="112" height="105" rx="12"/><rect x="40" y="360" width="242" height="88" rx="12"/></g>
+    <g fill="#1fd4f5"><rect x="58" y="260" width="38" height="6"/><rect x="188" y="260" width="38" height="6"/><rect x="58" y="384" width="88" height="6"/></g>
+  </g>
+
+  <!-- phone -->
+  <g transform="translate(1225 505) rotate(-6)">
+    <rect width="190" height="375" rx="38" fill="#030609" stroke="#d0a95b" stroke-width="3"/>
+    <rect x="12" y="15" width="166" height="345" rx="28" fill="#07151f"/>
+    <rect x="70" y="25" width="50" height="7" rx="4" fill="#263b45"/>
+    <text x="30" y="75" fill="#ddb96d" font-family="Arial, sans-serif" font-size="11" letter-spacing="2">ELITE APP</text>
+    <rect x="28" y="99" width="134" height="70" rx="12" fill="#0e2633"/>
+    <text x="43" y="125" fill="#8296a1" font-family="Arial, sans-serif" font-size="8">CASO PRIORITÁRIO</text><text x="43" y="151" fill="#eef4f5" font-family="Georgia, serif" font-size="18">Operação 360</text>
+    <g fill="#0e2633"><rect x="28" y="187" width="58" height="58" rx="12"/><rect x="104" y="187" width="58" height="58" rx="12"/><rect x="28" y="262" width="134" height="58" rx="12"/></g>
+    <rect x="68" y="338" width="54" height="4" rx="2" fill="#8d9da4"/>
+  </g>
+
+  <rect x="18" y="18" width="1464" height="964" rx="26" fill="none" stroke="#b48a43" stroke-opacity="0.24" stroke-width="2"/>
+</svg>
